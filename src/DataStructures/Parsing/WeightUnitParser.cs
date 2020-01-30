@@ -1,82 +1,22 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 namespace DataStructures.Parsing
 {
-    public class WeightUnitParser : IParser<WeightUnit>
+    public class WeightUnitParser : IParser<WeightUnit>, IFormattedParser<WeightUnit>
     {
-        private static readonly Lazy<WeightUnitParser> _staticParser =
-            new Lazy<WeightUnitParser>(() =>
-                new WeightUnitParser(), true);
+        private readonly SimpleWeightUnitParser _parser = new SimpleWeightUnitParser();
+        private readonly FormattedWeightUnitParser _formattedParser = new FormattedWeightUnitParser();
 
-        private readonly Dictionary<string, WeightUnit> _unitsByNames;
-        private readonly Dictionary<string, WeightUnit> _unitsByAbbreviations;
+        public WeightUnit Parse(string value) =>
+            _parser.Parse(value);
 
-        public WeightUnitParser()
-            : this(GetParsableUnitsByNames(), GetParsableUnitsByAbbreviations()) { }
-        private WeightUnitParser(
-            Dictionary<string, WeightUnit> unitsByNames,
-            Dictionary<string, WeightUnit> unitsByAbbreviations)
-        {
-            _unitsByNames = unitsByNames ?? throw new ArgumentNullException(nameof(unitsByNames));
-            _unitsByAbbreviations = unitsByAbbreviations ?? throw new ArgumentNullException(nameof(unitsByAbbreviations));
-        }
+        public bool TryParse(string value, out WeightUnit result) =>
+            _parser.TryParse(value, out result);
 
-        public WeightUnit Parse(string value)
-        {
-            Assert.IsNotNullOrWhiteSpace(value, nameof(value));
-            var weightUnit =
-                ParseByName(value)
-                ?? ParseByAbbreviation(value);
+        public WeightUnit ParseExact(string value, string format, IFormatProvider formatProvider) =>
+            _formattedParser.ParseExact(value, format, formatProvider);
 
-            return weightUnit
-                ?? throw new FormatException($"'{value}' is not a correct weight unit.");
-        }
-
-        public bool TryParse(string value, out WeightUnit result)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                result = default(WeightUnit);
-                return false;
-            }
-
-            var weightUnit =
-                ParseByName(value)
-                ?? ParseByAbbreviation(value);
-
-            if (weightUnit != null)
-            {
-                result = weightUnit.Value;
-                return true;
-            }
-            else
-            {
-                result = default(WeightUnit);
-                return false;
-            }
-        }
-
-        private WeightUnit? ParseByName(string name) =>
-            _unitsByNames.TryGetValue(name, out var unit)
-            ? unit
-            : (WeightUnit?)null;
-
-        private WeightUnit? ParseByAbbreviation(string abbreviation) =>
-            _unitsByAbbreviations.TryGetValue(abbreviation, out var unit)
-            ? unit
-            : (WeightUnit?)null;
-
-        private static Dictionary<string, WeightUnit> GetParsableUnitsByNames() =>
-            WeightUnit
-            .GetParsableUnits()
-            .ToDictionary(e => e.Name);
-
-        private static Dictionary<string, WeightUnit> GetParsableUnitsByAbbreviations() =>
-            WeightUnit
-            .GetParsableUnits()
-            .ToDictionary(e => e.Abbreviation);
+        public bool TryParseExact(string value, string format, IFormatProvider formatProvider, out WeightUnit result) =>
+            _formattedParser.TryParseExact(value, format, formatProvider, out result);
     }
 }
