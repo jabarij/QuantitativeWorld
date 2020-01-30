@@ -1,32 +1,15 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
-using System;
+﻿using System;
 
 namespace DataStructures.Globalization
 {
-    public class WeightUnitFormatter : IFormatProvider, ICustomFormatter
+    public class WeightUnitFormatter : FormatterBase<WeightUnit>
     {
-        internal const string DefaultFormat = "s";
+        private readonly StandardWeightUnitFormatter _standardFormatter = new StandardWeightUnitFormatter();
 
-        public string Format(string format, WeightUnit weightUnit)
-        {
-            Assert.IsNotNullOrWhiteSpace(format, nameof(format));
-            switch (format)
-            {
-                case "s":
-                case "S":
-                    return weightUnit.Abbreviation;
-                case "f":
-                case "F":
-                    return weightUnit.Name;
-                default:
-                    throw new FormatException($"Unknown weight unit format '{format}'.");
-            }
-        }
+        public override bool TryFormat(string format, WeightUnit weightUnit, IFormatProvider formatProvider, out string result) =>
+            _standardFormatter.TryFormat(format, weightUnit, formatProvider, out result);
 
-        object IFormatProvider.GetFormat(Type formatType) =>
-            formatType == GetType() ? this : null;
-
-        string ICustomFormatter.Format(string format, object arg, IFormatProvider formatProvider) =>
-            Format(format, (WeightUnit)arg);
+        protected internal override FormatException GetUnknownFormatException(string unknownFormat) =>
+            new FormatException($"Unknown weight unit format '{unknownFormat}'. See inner exception for more details.", _standardFormatter.GetUnknownFormatException(unknownFormat));
     }
 }

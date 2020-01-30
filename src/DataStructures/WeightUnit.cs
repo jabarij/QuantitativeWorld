@@ -1,11 +1,11 @@
-﻿using DataStructures.Globalization;
-using Plant.QAM.BusinessLogic.PublishedLanguage;
-using System;
+﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
 
 namespace DataStructures
 {
-    public partial struct WeightUnit : IUnit, IFormattable
+    public partial struct WeightUnit : ILinearUnit
     {
+        public static readonly WeightUnit Empty = new WeightUnit();
+
         public WeightUnit(string name, string abbreviation, decimal valueInKilograms)
         {
             Name = Assert.IsNotNullOrWhiteSpace(name, nameof(name));
@@ -17,20 +17,9 @@ namespace DataStructures
         public string Abbreviation { get; }
         public decimal ValueInKilograms { get; }
 
-        decimal IUnit.ValueInBaseUnit => ValueInKilograms;
+        public bool IsEmpty() =>
+            Equals(Empty);
 
-        public override string ToString() =>
-            ToString(WeightUnitFormatter.DefaultFormat);
-        public string ToString(string format) =>
-            ToString(format, new WeightUnitFormatter());
-        public string ToString(IFormatProvider formatProvider) =>
-            ToString(WeightUnitFormatter.DefaultFormat, formatProvider);
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            var formatter =
-                (ICustomFormatter)formatProvider.GetFormat(typeof(ICustomFormatter))
-                ?? new WeightUnitFormatter();
-            return formatter.Format(format, this, formatProvider);
-        }
+        decimal ILinearUnit.ValueInBaseUnit => ValueInKilograms;
     }
 }

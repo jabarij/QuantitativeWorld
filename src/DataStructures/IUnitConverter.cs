@@ -1,9 +1,7 @@
 ﻿namespace DataStructures
 {
-    public interface IUnitConverter<TQuantity, TUnit>
-        where TQuantity : IQuantity<TUnit>
-        where TUnit: IUnit
+    public interface IUnitConverter<TUnit>
     {
-        TQuantity Convert(TQuantity quantity, TUnit targetUnit);
+        decimal ConvertValue(decimal value, TUnit sourceUnit, TUnit targetUnit);
     }
 }

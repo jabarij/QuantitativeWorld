@@ -5,23 +5,23 @@ namespace DataStructures
 {
     public class UnitSystem
     {
-        public static readonly UnitSystem CGS = new UnitSystem(
+        public static UnitSystem CGS => new UnitSystem(
             id: "CGS",
             baseWeightUnit: WeightUnit.Gram,
             baseLengthUnit: LengthUnit.Centimetre);
-        public static readonly UnitSystem IMPERIAL = new UnitSystem(
+        public static UnitSystem IMPERIAL => new UnitSystem(
             id: "IMPERIAL",
             baseWeightUnit: WeightUnit.Pound,
             baseLengthUnit: LengthUnit.Yard);
-        public static readonly UnitSystem MKS = new UnitSystem(
+        public static UnitSystem MKS => new UnitSystem(
             id: "MKS",
             baseWeightUnit: WeightUnit.Kilogram,
             baseLengthUnit: LengthUnit.Metre);
-        public static readonly UnitSystem MTS = new UnitSystem(
+        public static UnitSystem MTS => new UnitSystem(
             id: "MTS",
             baseWeightUnit: WeightUnit.Ton,
             baseLengthUnit: LengthUnit.Metre);
-        public static readonly UnitSystem SI = new UnitSystem(
+        public static UnitSystem SI => new UnitSystem(
             id: "SI",
             baseWeightUnit: WeightUnit.Kilogram,
             baseLengthUnit: LengthUnit.Metre);

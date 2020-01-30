@@ -2,7 +2,7 @@
 
 namespace DataStructures
 {
-    public partial struct LengthUnit : IUnit
+    public partial struct LengthUnit : ILinearUnit
     {
         public LengthUnit(string name, string abbreviation, decimal valueInMetres)
         {
@@ -15,6 +15,6 @@ namespace DataStructures
         public string Abbreviation { get; }
         public decimal ValueInMetres { get; }
 
-        decimal IUnit.ValueInBaseUnit => ValueInMetres;
+        decimal ILinearUnit.ValueInBaseUnit => ValueInMetres;
     }
 }

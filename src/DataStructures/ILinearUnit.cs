@@ -1,6 +1,6 @@
 ﻿namespace DataStructures
 {
-    public interface IUnit
+    public interface ILinearUnit
     {
         decimal ValueInBaseUnit { get; }
     }

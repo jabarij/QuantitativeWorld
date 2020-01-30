@@ -7,20 +7,16 @@ namespace DataStructures
     partial struct Weight : IEquatable<Weight>, IComparable<Weight>
     {
         public bool Equals(Weight other) =>
-            Unit.IsEquivalentOf(other.Unit)
-            ? Value.Equals(other.Value)
-            : Value.Equals(UnitConverter.GetValue(other, Unit));
+            Kilograms == other.Kilograms;
         public override bool Equals(object obj) =>
             Equality.IsStructureEqualToObject(this, obj);
         public override int GetHashCode() =>
             new HashCode()
-            .Append(Value, Unit)
+            .Append(Kilograms)
             .CurrentHash;
 
         public int CompareTo(Weight other) =>
-            Unit.IsEquivalentOf(other.Unit)
-            ? Value.CompareTo(other.Value)
-            : Value.CompareTo(UnitConverter.GetValue(other, Unit));
+            Kilograms.CompareTo(other.Kilograms);
 
         public static bool operator ==(Weight left, Weight right) =>
             Equality.AreEqualStructures(left, right);

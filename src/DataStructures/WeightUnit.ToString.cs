@@ -3,13 +3,13 @@ using System;
 
 namespace DataStructures
 {
-    partial struct Weight : IFormattableAsFuck
+    partial struct WeightUnit : IFormattableAsFuck
     {
         public override string ToString() =>
             ToString(format: null);
         public string ToString(string format)
         {
-            var formatter = new WeightFormatter();
+            var formatter = new WeightUnitFormatter();
             return ToString(format, formatter, formatter);
         }
         public string ToString(IFormatProvider formatProvider) =>
@@ -18,9 +18,9 @@ namespace DataStructures
             ToString(
                 format: format,
                 formatter:
-                    formatProvider.GetFormat<ICustomFormatter<Weight>>()
+                    formatProvider.GetFormat<ICustomFormatter<WeightUnit>>()
                     ?? formatProvider.GetFormat<ICustomFormatter>()
-                    ?? new WeightFormatter(),
+                    ?? new WeightUnitFormatter(),
                 formatProvider: formatProvider);
         private string ToString(string format, ICustomFormatter formatter, IFormatProvider formatProvider) =>
             formatter.Format(format, this, formatProvider);
