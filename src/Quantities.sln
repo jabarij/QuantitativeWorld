@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructures", "DataStructures\DataStructures.csproj", "{D58B08FC-ACF9-4F85-8C6D-F89D27D8395A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld", "DataStructures\QuantitativeWorld.csproj", "{D58B08FC-ACF9-4F85-8C6D-F89D27D8395A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructures.Tests", "DataStructures.Tests\DataStructures.Tests.csproj", "{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Tests", "DataStructures.Tests\QuantitativeWorld.Tests.csproj", "{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeWorld.Interfaces", "QuantitativeWorld.Interfaces\QuantitativeWorld.Interfaces.csproj", "{83679A80-7005-44B6-8D42-0A8FBEFD027C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83679A80-7005-44B6-8D42-0A8FBEFD027C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83679A80-7005-44B6-8D42-0A8FBEFD027C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83679A80-7005-44B6-8D42-0A8FBEFD027C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83679A80-7005-44B6-8D42-0A8FBEFD027C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

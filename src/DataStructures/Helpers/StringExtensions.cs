@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Plant.QAM.BusinessLogic.PublishedLanguage.Strings
 {
-    public static class StringExtensions
+    static class StringExtensions
     {
         public static string UppercaseFirstLetter(this string value)
         {
@@ -45,6 +45,21 @@ namespace Plant.QAM.BusinessLogic.PublishedLanguage.Strings
                 ? characters.Any(c => c.Equals(char.ToLower(lastChar)) || c.Equals(char.ToUpper(lastChar)))
                 : characters.Any(c => c.Equals(lastChar));
         }
+
+        public static bool EndsWithAny(this string value, bool ignoreCase, params string[] suffixes)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+
+            var comparisonType =
+                ignoreCase
+                ? StringComparison.OrdinalIgnoreCase
+                : StringComparison.Ordinal;
+            return suffixes.Any(s => value.EndsWith(s, comparisonType));
+        }
+
+        public static bool EndsWithAny(this string value, params string[] suffixes) =>
+            EndsWithAny(value, false, suffixes);
 
         public static bool EndsWithWhiteSpace(this string value) =>
             EndsWith(value, char.IsWhiteSpace);

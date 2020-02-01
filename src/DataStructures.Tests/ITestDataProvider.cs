@@ -1,4 +1,4 @@
-﻿namespace DataStructures.Tests
+﻿namespace QuantitativeWorld.Tests
 {
     internal interface ITestDataProvider
     {

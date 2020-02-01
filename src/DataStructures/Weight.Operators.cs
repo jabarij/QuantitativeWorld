@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     partial struct Weight
     {

@@ -1,4 +1,4 @@
-﻿namespace DataStructures.Globalization
+﻿namespace QuantitativeWorld.Globalization
 {
     internal interface IPluralizer
     {

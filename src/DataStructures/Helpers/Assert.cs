@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Plant.QAM.BusinessLogic.PublishedLanguage
 {
-    public static class Assert
+    static class Assert
     {
         public static T IsGreaterThan<T>(T value, T min, string paramName) where T : struct, IComparable<T>
         {

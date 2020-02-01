@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Plant.QAM.BusinessLogic.PublishedLanguage.Collections
 {
-    public static class EnumerableExtensions
+    static class EnumerableExtensions
     {
         public static int MaxOrDefault<T>(this IEnumerable<T> source, Func<T, int> selector, int defaultValue = 0) =>
             source.MaxOrDefault(e => (int?)selector(e), defaultValue);

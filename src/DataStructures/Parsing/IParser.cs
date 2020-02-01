@@ -1,4 +1,4 @@
-﻿namespace DataStructures.Parsing
+﻿namespace QuantitativeWorld.Parsing
 {
     public interface IParser<T>
     {

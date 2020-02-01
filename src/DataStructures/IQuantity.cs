@@ -1,4 +1,4 @@
-﻿namespace DataStructures
+﻿namespace QuantitativeWorld
 {
     public interface IQuantity<TUnit>
         where TUnit : ILinearUnit

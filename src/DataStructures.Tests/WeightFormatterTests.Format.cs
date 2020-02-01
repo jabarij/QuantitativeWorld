@@ -1,9 +1,9 @@
-using DataStructures.Globalization;
+using QuantitativeWorld.Formatting;
 using FluentAssertions;
 using System.Globalization;
 using Xunit;
 
-namespace DataStructures.Tests
+namespace QuantitativeWorld.Tests
 {
     partial class WeightFormatterTests
     {

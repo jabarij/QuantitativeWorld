@@ -1,11 +1,11 @@
 using AutoFixture;
-using DataStructures.Parsing;
+using QuantitativeWorld.Parsing;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace DataStructures.Tests.Parsing
+namespace QuantitativeWorld.Tests.Parsing
 {
     partial class WeightUnitParserTests
     {

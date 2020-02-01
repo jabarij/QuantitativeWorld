@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace DataStructures.Tests
+namespace QuantitativeWorld.Tests
 {
     partial class WeightTests
     {

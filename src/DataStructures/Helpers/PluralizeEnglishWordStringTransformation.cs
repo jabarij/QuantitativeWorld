@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Plant.QAM.BusinessLogic.PublishedLanguage.Transformations
 {
-    public class PluralizeEnglishWordStringTransformation : ITransformation<string>
+    class PluralizeEnglishWordStringTransformation : ITransformation<string>
     {
         public string Transform(string value)
         {
@@ -15,7 +15,8 @@ namespace Plant.QAM.BusinessLogic.PublishedLanguage.Transformations
 
             bool toUpper = char.IsUpper(value.Last());
             string pluralizedName;
-            if (value.EndsWithAny(true, 's', 'x'))
+            if (value.EndsWithAny(true, 's', 'x')
+                || value.EndsWithAny("ch"))
             {
                 string suffix = toUpper ? "ES" : "es";
                 pluralizedName = string.Concat(value, suffix);

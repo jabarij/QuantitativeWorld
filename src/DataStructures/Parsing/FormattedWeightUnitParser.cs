@@ -1,9 +1,9 @@
-﻿using DataStructures.Globalization;
+﻿using QuantitativeWorld.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DataStructures.Parsing
+namespace QuantitativeWorld.Parsing
 {
     internal class FormattedWeightUnitParser : IFormattedParser<WeightUnit>
     {
@@ -12,7 +12,7 @@ namespace DataStructures.Parsing
         private readonly Dictionary<string, WeightUnit> _unitsByPluralizedNames;
 
         public FormattedWeightUnitParser()
-            : this(new EnglishPluralizer()) { }
+            : this(new EnglishUnitsPluralizer()) { }
         public FormattedWeightUnitParser(IPluralizer pluralizer)
             : this(
                   unitsByNames: GetParsableUnitsByNames(),

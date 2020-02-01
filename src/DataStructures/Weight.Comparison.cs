@@ -2,7 +2,7 @@
 using Plant.QAM.BusinessLogic.PublishedLanguage.Runtime;
 using System;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     partial struct Weight : IEquatable<Weight>, IComparable<Weight>
     {

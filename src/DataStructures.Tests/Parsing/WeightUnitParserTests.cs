@@ -1,4 +1,4 @@
-﻿namespace DataStructures.Tests.Parsing
+﻿namespace QuantitativeWorld.Tests.Parsing
 {
     public partial class WeightUnitParserTests : TestsBase
     {

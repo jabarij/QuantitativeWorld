@@ -1,7 +1,7 @@
 ﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
 using System;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     public struct MetricPrefix
     {

@@ -2,7 +2,7 @@
 
 namespace Plant.QAM.BusinessLogic.PublishedLanguage.Comparison
 {
-    public static class Equality
+    static class Equality
     {
         public static bool AreEqual<T>(T left, T right) =>
             ReferenceEquals(left, right)

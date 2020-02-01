@@ -1,7 +1,8 @@
-﻿using DataStructures.Globalization;
+﻿using QuantitativeWorld.Formatting;
+using QuantitativeWorld.Formatting.Interfaces;
 using System;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     partial struct Weight : IFormattableAsFuck
     {

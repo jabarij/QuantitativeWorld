@@ -1,6 +1,6 @@
 ﻿namespace Plant.QAM.BusinessLogic.PublishedLanguage.Runtime
 {
-    public static class HashCodeExtensions
+    static class HashCodeExtensions
     {
         public static HashCode Append<T>(this HashCode hashCode, T value)
         {

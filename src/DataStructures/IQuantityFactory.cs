@@ -1,4 +1,4 @@
-﻿namespace DataStructures
+﻿namespace QuantitativeWorld
 {
     public interface IQuantityFactory<TQuantity, TUnit>
         where TQuantity : IQuantity<TUnit>

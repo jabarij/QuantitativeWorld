@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     partial struct WeightUnit
     {

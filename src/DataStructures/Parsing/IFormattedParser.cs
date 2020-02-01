@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataStructures.Parsing
+namespace QuantitativeWorld.Parsing
 {
     public interface IFormattedParser<T>
     {

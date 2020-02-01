@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataStructures.Parsing
+namespace QuantitativeWorld.Parsing
 {
     public class WeightUnitParser : IParser<WeightUnit>, IFormattedParser<WeightUnit>
     {

@@ -1,6 +1,6 @@
 ﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     public partial struct WeightUnit : ILinearUnit
     {

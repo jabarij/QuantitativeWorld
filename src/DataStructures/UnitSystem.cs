@@ -1,7 +1,7 @@
 ﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
 using System;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     public class UnitSystem
     {
@@ -12,7 +12,7 @@ namespace DataStructures
         public static UnitSystem IMPERIAL => new UnitSystem(
             id: "IMPERIAL",
             baseWeightUnit: WeightUnit.Pound,
-            baseLengthUnit: LengthUnit.Yard);
+            baseLengthUnit: LengthUnit.Foot);
         public static UnitSystem MKS => new UnitSystem(
             id: "MKS",
             baseWeightUnit: WeightUnit.Kilogram,

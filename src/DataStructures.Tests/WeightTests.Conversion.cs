@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace DataStructures.Tests
+namespace QuantitativeWorld.Tests
 {
     partial class WeightTests
     {

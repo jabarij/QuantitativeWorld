@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using System;
 
-namespace DataStructures.Tests
+namespace QuantitativeWorld.Tests
 {
     public class TestFixture
     {

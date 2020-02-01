@@ -2,7 +2,7 @@
 
 namespace Plant.QAM.BusinessLogic.PublishedLanguage.Runtime
 {
-    public class HashCode
+    class HashCode
     {
         public const int DefaultInitialHash = -2128831035;
         public const int DefaultOffset = 16777619;

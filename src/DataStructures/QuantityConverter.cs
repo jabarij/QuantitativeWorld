@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataStructures
+namespace QuantitativeWorld
 {
     public class QuantityConverter<TQuantity, TUnit> : IQuantityConverter<TQuantity, TUnit>
         where TQuantity : IQuantity<TUnit>

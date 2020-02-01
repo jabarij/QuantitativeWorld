@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
-namespace DataStructures.Tests
+namespace QuantitativeWorld.Tests
 {
     public class TestsBase : IClassFixture<TestFixture>
     {
