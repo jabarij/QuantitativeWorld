@@ -1,4 +1,4 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
+﻿using QuantitativeWorld.DotNetExtensions;
 
 namespace QuantitativeWorld
 {
@@ -8,9 +8,13 @@ namespace QuantitativeWorld
 
         public LengthUnit(string name, string abbreviation, decimal valueInMetres)
         {
-            Name = Assert.IsNotNullOrWhiteSpace(name, nameof(name));
-            Abbreviation = Assert.IsNotNullOrWhiteSpace(abbreviation, nameof(abbreviation));
-            ValueInMetres = Assert.IsGreaterThan(valueInMetres, 0m, nameof(valueInMetres));
+            Assert.IsNotNullOrWhiteSpace(name, nameof(name));
+            Assert.IsNotNullOrWhiteSpace(abbreviation, nameof(abbreviation));
+            Assert.IsGreaterThan(valueInMetres, 0m, nameof(valueInMetres));
+
+            Name = name;
+            Abbreviation = abbreviation;
+            ValueInMetres = valueInMetres;
         }
 
         public string Name { get; }

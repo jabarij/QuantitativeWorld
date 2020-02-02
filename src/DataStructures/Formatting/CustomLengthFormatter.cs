@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuantitativeWorld.DotNetExtensions;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,6 +10,18 @@ namespace QuantitativeWorld.Formatting
     class CustomLengthFormatter : FormatterBase<Length>
     {
         private const string FormatTokenSeparator = "|";
+
+        private static readonly OrderedDictionary<string, LengthUnit> _formattableUnits =
+            LengthUnit.GetParsableUnits()
+            .OrderByDescending(e => e.Abbreviation.Length)
+            .Aggregate(
+                seed: new OrderedDictionary<string, LengthUnit>(),
+                func: (acc, e) =>
+                {
+                    acc.Add(e.Abbreviation, e);
+                    return acc;
+                });
+        private static readonly IList<string> _formattableUnitKeys = _formattableUnits.GetKeys();
 
         public override bool TryFormat(string format, Length length, IFormatProvider formatProvider, out string result)
         {
@@ -35,7 +48,7 @@ namespace QuantitativeWorld.Formatting
                     index += separator.Length;
                     continue;
                 }
-                else if (MatchesAnyUnitToken(format, index, out token, out var unit))
+                else if (MatchesAnyFormattableUnitToken(format, index, out token, out var unit))
                     lengthConverter = e => e.Convert(unit);
                 else if (MatchesTokenBegin(format, index, "v", CanReadTokenUntilNextSeparator, out token))
                     valueFormat = token.Substring(1);
@@ -51,18 +64,10 @@ namespace QuantitativeWorld.Formatting
             return true;
         }
 
-        private static readonly OrderedDictionary<string, LengthUnit> _formattableUnits =
-            LengthUnit.GetParsableUnits()
-            .OrderByDescending(e => e.Abbreviation.Length)
-            .Aggregate(
-                seed: new OrderedDictionary<string, LengthUnit>(),
-                func: (acc, e) =>
-                {
-                    acc.Add(e.Abbreviation, e);
-                    return acc;
-                });
-        private static readonly IList<string> _formattableUnitKeys = _formattableUnits.GetKeys();
-        private bool MatchesAnyUnitToken(string format, int position, out string token, out LengthUnit unit)
+        private bool IsTokenSeparator(string format, int position, out string tokenSeparator) =>
+            MatchesToken(format, position, FormatTokenSeparator, out tokenSeparator);
+
+        private bool MatchesAnyFormattableUnitToken(string format, int position, out string token, out LengthUnit unit)
         {
             for (int index = 0; index < _formattableUnitKeys.Count; index++)
             {
@@ -80,13 +85,10 @@ namespace QuantitativeWorld.Formatting
             return false;
         }
 
-        private bool IsTokenSeparator(string format, int position, out string tokenSeparator) =>
-            MatchesToken(format, position, FormatTokenSeparator, out tokenSeparator);
-
         private bool MatchesToken(string format, int position, string tokenCandidate, out string realToken)
         {
             if (position + tokenCandidate.Length <= format.Length
-                && string.Equals(tokenCandidate, format.Substring(position, tokenCandidate.Length), StringComparison.Ordinal))
+                && format.ContainsAt(tokenCandidate, position))
             {
                 realToken = tokenCandidate;
                 return true;
@@ -96,11 +98,10 @@ namespace QuantitativeWorld.Formatting
             return false;
         }
 
-
         private bool MatchesTokenBegin(string format, int position, string tokenCandidate, TokenReader canReadToken, out string realToken)
         {
             if (position + tokenCandidate.Length <= format.Length
-                && string.Equals(tokenCandidate, format.Substring(position, tokenCandidate.Length), StringComparison.Ordinal)
+                && format.ContainsAt(tokenCandidate, position)
                 && canReadToken(format, position, out realToken))
                 return true;
 

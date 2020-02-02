@@ -1,4 +1,4 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage;
+﻿using QuantitativeWorld.DotNetExtensions;
 using System;
 
 namespace QuantitativeWorld

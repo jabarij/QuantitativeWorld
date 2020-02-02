@@ -1,61 +1,87 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage.Collections;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace Plant.QAM.BusinessLogic.PublishedLanguage
+namespace QuantitativeWorld.DotNetExtensions
 {
+    [Pure]
     static class Assert
     {
         public static T IsGreaterThan<T>(T value, T min, string paramName) where T : struct, IComparable<T>
         {
-            if (value.CompareTo(min) <= 0)
-                throw new ArgumentOutOfRangeException(paramName, value, $"Expected param to be greater than {min}.");
+            if (!Check.IsGreaterThan(value, min))
+                throw Error.ArgumentNotGreaterThan(value, min, paramName);
             return value;
         }
+
         public static T IsGreaterThanOrEqual<T>(T value, T min, string paramName) where T : struct, IComparable<T>
         {
-            if (value.CompareTo(min) < 0)
-                throw new ArgumentOutOfRangeException(paramName, value, $"Expected param to be greater than or equal to {min}.");
+            if (!Check.IsGreaterThanOrEqual(value, min))
+                throw Error.ArgumentNotGreaterThanOrEqual(value, min, paramName);
             return value;
         }
-        public static T IsLowerThan<T>(T value, T min, string paramName) where T : struct, IComparable<T>
+        public static T IsLowerThan<T>(T value, T max, string paramName) where T : struct, IComparable<T>
         {
-            if (value.CompareTo(min) >= 0)
-                throw new ArgumentOutOfRangeException(paramName, value, $"Expected param to be lower than {min}.");
+            if (!Check.IsLowerThan(value, max))
+                throw Error.ArgumentNotLowerThan(value, max, paramName);
             return value;
         }
-        public static T IsLowerThanOrEqual<T>(T value, T min, string paramName) where T : struct, IComparable<T>
+        public static T IsLowerThanOrEqual<T>(T value, T max, string paramName) where T : struct, IComparable<T>
         {
-            if (value.CompareTo(min) > 0)
-                throw new ArgumentOutOfRangeException(paramName, value, $"Expected param to be lower than or equal to {min}.");
+            if (!Check.IsLowerThanOrEqual(value, max))
+                throw Error.ArgumentNotLowerThanOrEqual(value, max, paramName);
             return value;
         }
         public static T IsInRange<T>(T value, T min, T max, string paramName) where T : struct, IComparable<T>
         {
-            if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
-                throw new ArgumentOutOfRangeException(paramName, value, $"Expected param to be inclusively in range {min}-{max}.");
+            if (!Check.IsInRange(value, min, max))
+                throw Error.ArgumentNotInRange(value, min, max, paramName);
             return value;
         }
         public static T IsBetween<T>(T value, T min, T max, string paramName) where T : struct, IComparable<T>
         {
-            if (value.CompareTo(min) <= 0 || value.CompareTo(max) >= 0)
-                throw new ArgumentOutOfRangeException(paramName, value, $"Expected param to be between {min} and {max}.");
+            if (!Check.IsBetween(value, min, max))
+                throw Error.ArgumentNotBetween(value, min, max, paramName);
             return value;
         }
 
-        public static T? IsNullOrGreaterThan<T>(T? value, T min, string paramName) where T : struct, IComparable<T> =>
-            value.HasValue ? IsGreaterThan(value.Value, min, paramName) : value;
-        public static T? IsNullOrGreaterThanOrEqual<T>(T? value, T min, string paramName) where T : struct, IComparable<T> =>
-            value.HasValue ? IsGreaterThanOrEqual(value.Value, min, paramName) : value;
-        public static T? IsNullOrLowerThan<T>(T? value, T min, string paramName) where T : struct, IComparable<T> =>
-            value.HasValue ? IsLowerThan(value.Value, min, paramName) : value;
-        public static T? IsNullOrLowerThanOrEqual<T>(T? value, T min, string paramName) where T : struct, IComparable<T> =>
-            value.HasValue ? IsLowerThanOrEqual(value.Value, min, paramName) : value;
-        public static T? IsNullOrInRange<T>(T? value, T min, T max, string paramName) where T : struct, IComparable<T> =>
-            value.HasValue ? IsInRange(value.Value, min, max, paramName) : value;
-        public static T? IsNullOrBetween<T>(T? value, T min, T max, string paramName) where T : struct, IComparable<T> =>
-            value.HasValue ? IsBetween(value.Value, min, max, paramName) : value;
+        public static T? IsNullOrGreaterThan<T>(T? value, T min, string paramName) where T : struct, IComparable<T>
+        {
+            if (!Check.IsNullOrGreaterThan(value, min))
+                throw Error.ArgumentNotNullOrGreaterThan(value, min, paramName);
+            return value;
+        }
+        public static T? IsNullOrGreaterThanOrEqual<T>(T? value, T min, string paramName) where T : struct, IComparable<T>
+        {
+            if (!Check.IsNullOrGreaterThanOrEqual(value, min))
+                throw Error.ArgumentNotNullOrGreaterThanOrEqual(value, min, paramName);
+            return value;
+        }
+        public static T? IsNullOrLowerThan<T>(T? value, T max, string paramName) where T : struct, IComparable<T>
+        {
+            if (!Check.IsNullOrLowerThan(value, max))
+                throw Error.ArgumentNotNullOrLowerThan(value, max, paramName);
+            return value;
+        }
+        public static T? IsNullOrLowerThanOrEqual<T>(T? value, T max, string paramName) where T : struct, IComparable<T>
+        {
+            if (!Check.IsNullOrLowerThanOrEqual(value, max))
+                throw Error.ArgumentNotNullOrLowerThanOrEqual(value, max, paramName);
+            return value;
+        }
+        public static T? IsNullOrInRange<T>(T? value, T min, T max, string paramName) where T : struct, IComparable<T>
+        {
+            if (!Check.IsNullOrInRange(value, min, max))
+                throw Error.ArgumentNotNullOrInRange(value, min, max, paramName);
+            return value;
+        }
+        public static T? IsNullOrBetween<T>(T? value, T min, T max, string paramName) where T : struct, IComparable<T>
+        {
+            if (!Check.IsNullOrBetween(value, min, max))
+                throw Error.ArgumentNotNullOrBetween(value, min, max, paramName);
+            return value;
+        }
 
         public static T? IsNotNullAndGreaterThan<T>(T? value, T min, string paramName) where T : struct, IComparable<T> =>
             IsGreaterThan(IsNotNull(value, paramName).Value, min, paramName);

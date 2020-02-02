@@ -1,5 +1,6 @@
 ﻿using QuantitativeWorld.Globalization;
 using System;
+using System.Collections.Generic;
 
 namespace QuantitativeWorld.Formatting
 {
@@ -7,7 +8,16 @@ namespace QuantitativeWorld.Formatting
     {
         internal const string DefaultFormat = "s";
 
-        private readonly IPluralizer _standardPluralizer = new EnglishUnitsPluralizer();
+        private readonly IPluralizer _standardPluralizer;
+
+        public StandardWeightUnitFormatter()
+        {
+            _standardPluralizer = new DictionaryPluralizer(
+                irregularPlurals: new Dictionary<string, string>
+                {
+
+                });
+        }
 
         public override bool TryFormat(string format, WeightUnit weightUnit, IFormatProvider formatProvider, out string result)
         {

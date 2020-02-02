@@ -1,5 +1,4 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage.Comparison;
-using Plant.QAM.BusinessLogic.PublishedLanguage.Runtime;
+﻿using QuantitativeWorld.DotNetExtensions;
 using System;
 
 namespace QuantitativeWorld

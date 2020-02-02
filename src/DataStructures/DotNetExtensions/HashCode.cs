@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Plant.QAM.BusinessLogic.PublishedLanguage.Runtime
+namespace QuantitativeWorld.DotNetExtensions
 {
     class HashCode
     {

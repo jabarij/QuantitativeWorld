@@ -1,10 +1,20 @@
 ﻿using System;
 using System.Linq;
 
-namespace Plant.QAM.BusinessLogic.PublishedLanguage.Strings
+namespace QuantitativeWorld.DotNetExtensions
 {
     static class StringExtensions
     {
+        public static string LowercaseFirstLetter(this string value)
+        {
+            if (!StartsWith(value, char.IsUpper))
+                return value;
+
+            char[] valueCharacters = value.ToCharArray();
+            valueCharacters[0] = char.ToLower(valueCharacters[0]);
+            return new string(valueCharacters);
+        }
+
         public static string UppercaseFirstLetter(this string value)
         {
             if (!StartsWith(value, char.IsLower))
@@ -15,15 +25,13 @@ namespace Plant.QAM.BusinessLogic.PublishedLanguage.Strings
             return new string(valueCharacters);
         }
 
-        public static string LowercaseFirstLetter(this string value)
+        public static bool ContainsAt(this string value, string pattern, int index)
         {
-            if (!StartsWith(value, char.IsUpper))
-                return value;
-
-            char[] valueCharacters = value.ToCharArray();
-            valueCharacters[0] = char.ToLower(valueCharacters[0]);
-            return new string(valueCharacters);
+            char[] valueCharsAt = ToCharArray(value, index, pattern.Length);
+            char[] patternChars = pattern.ToCharArray();
+            return valueCharsAt.ArrayEqual(patternChars);
         }
+
 
         public static bool StartsWith(this string value, Predicate<char> characterCheck) =>
             !string.IsNullOrEmpty(value) && characterCheck(value.First());
@@ -63,6 +71,13 @@ namespace Plant.QAM.BusinessLogic.PublishedLanguage.Strings
 
         public static bool EndsWithWhiteSpace(this string value) =>
             EndsWith(value, char.IsWhiteSpace);
+        public static char[] ToCharArray(this string value, int startIndex, int length)
+        {
+            char[] result = new char[length];
+            for (int index = 0; index < length; index++)
+                result[index] = value[index + startIndex];
+            return result;
+        }
 
         public static string SubstringBefore(this string value, int index)
         {

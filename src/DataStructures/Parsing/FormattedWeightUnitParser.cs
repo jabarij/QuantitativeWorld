@@ -12,12 +12,12 @@ namespace QuantitativeWorld.Parsing
         private readonly Dictionary<string, WeightUnit> _unitsByPluralizedNames;
 
         public FormattedWeightUnitParser()
-            : this(new EnglishUnitsPluralizer()) { }
+            : this(new DictionaryPluralizer()) { }
         public FormattedWeightUnitParser(IPluralizer pluralizer)
             : this(
                   unitsByNames: GetParsableUnitsByNames(),
                   unitsByAbbreviations: GetParsableUnitsByAbbreviations(),
-                  unitsByPluralizedNames: GetParsableUnitsByPluralizedNames(pluralizer ?? throw new ArgumentNullException(nameof(pluralizer))))
+                  unitsByPluralizedNames: GetParsableUnitsByPluralizedNames(pluralizer))
         { }
         private FormattedWeightUnitParser(
             Dictionary<string, WeightUnit> unitsByNames,

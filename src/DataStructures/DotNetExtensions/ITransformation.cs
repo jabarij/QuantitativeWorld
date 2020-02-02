@@ -1,4 +1,4 @@
-﻿namespace Plant.QAM.BusinessLogic.PublishedLanguage.Transformations
+﻿namespace QuantitativeWorld.DotNetExtensions
 {
     interface ITransformation<T>
     {

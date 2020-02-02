@@ -1,5 +1,8 @@
-﻿using System;
+﻿using QuantitativeWorld.DotNetExtensions;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace QuantitativeWorld.Formatting
@@ -7,6 +10,18 @@ namespace QuantitativeWorld.Formatting
     class CustomWeightFormatter : FormatterBase<Weight>
     {
         private const string FormatTokenSeparator = "|";
+
+        private static readonly OrderedDictionary<string, WeightUnit> _formattableUnits =
+            WeightUnit.GetParsableUnits()
+            .OrderByDescending(e => e.Abbreviation.Length)
+            .Aggregate(
+                seed: new OrderedDictionary<string, WeightUnit>(),
+                func: (acc, e) =>
+                {
+                    acc.Add(e.Abbreviation, e);
+                    return acc;
+                });
+        private static readonly IList<string> _formattableUnitKeys = _formattableUnits.GetKeys();
 
         public override bool TryFormat(string format, Weight weight, IFormatProvider formatProvider, out string result)
         {
@@ -60,10 +75,28 @@ namespace QuantitativeWorld.Formatting
         private bool IsTokenSeparator(string format, int position, out string tokenSeparator) =>
             MatchesToken(format, position, FormatTokenSeparator, out tokenSeparator);
 
+        private bool MatchesAnyFormattableUnitToken(string format, int position, out string token, out WeightUnit unit)
+        {
+            for (int index = 0; index < _formattableUnitKeys.Count; index++)
+            {
+                string currentToken = _formattableUnitKeys[index];
+                if (MatchesToken(format, position, currentToken, out var realToken))
+                {
+                    token = realToken;
+                    unit = _formattableUnits[index];
+                    return true;
+                }
+            }
+
+            token = null;
+            unit = default(WeightUnit);
+            return false;
+        }
+
         private bool MatchesToken(string format, int position, string tokenCandidate, out string realToken)
         {
             if (position + tokenCandidate.Length <= format.Length
-                && string.Equals(tokenCandidate, format.Substring(position, tokenCandidate.Length), StringComparison.Ordinal))
+                && format.ContainsAt(tokenCandidate, position))
             {
                 realToken = tokenCandidate;
                 return true;
@@ -73,11 +106,10 @@ namespace QuantitativeWorld.Formatting
             return false;
         }
 
-
         private bool MatchesTokenBegin(string format, int position, string tokenCandidate, TokenReader canReadToken, out string realToken)
         {
             if (position + tokenCandidate.Length <= format.Length
-                && string.Equals(tokenCandidate, format.Substring(position, tokenCandidate.Length), StringComparison.Ordinal)
+                && format.ContainsAt(tokenCandidate, position)
                 && canReadToken(format, position, out realToken))
                 return true;
 
@@ -120,6 +152,24 @@ namespace QuantitativeWorld.Formatting
             string valueStr = formattedWeight.Value.ToString(formatInfo.ValueFormat, ResolveValueFormatProvider(formatProvider));
             string unitStr = formattedWeight.Unit.ToString(formatInfo.UnitFormat, ResolveUnitFormatProvider(formatProvider));
             return string.Concat(valueStr, " ", unitStr);
+        }
+
+        private bool MatchesAnyUnitToken(string format, int position, out string token, out WeightUnit unit)
+        {
+            for (int index = 0; index < _formattableUnitKeys.Count; index++)
+            {
+                string currentToken = _formattableUnitKeys[index];
+                if (MatchesToken(format, position, currentToken, out var realToken))
+                {
+                    token = realToken;
+                    unit = _formattableUnits[index];
+                    return true;
+                }
+            }
+
+            token = null;
+            unit = default(WeightUnit);
+            return false;
         }
     }
 }

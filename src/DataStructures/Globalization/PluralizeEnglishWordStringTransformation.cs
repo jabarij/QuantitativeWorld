@@ -1,7 +1,7 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage.Strings;
+﻿using QuantitativeWorld.DotNetExtensions;
 using System.Linq;
 
-namespace Plant.QAM.BusinessLogic.PublishedLanguage.Transformations
+namespace QuantitativeWorld.Globalization
 {
     class PluralizeEnglishWordStringTransformation : ITransformation<string>
     {

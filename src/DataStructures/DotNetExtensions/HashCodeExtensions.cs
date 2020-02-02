@@ -1,4 +1,4 @@
-﻿namespace Plant.QAM.BusinessLogic.PublishedLanguage.Runtime
+﻿namespace QuantitativeWorld.DotNetExtensions
 {
     static class HashCodeExtensions
     {

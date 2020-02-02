@@ -1,20 +1,23 @@
-﻿using Plant.QAM.BusinessLogic.PublishedLanguage.Transformations;
+﻿using QuantitativeWorld.DotNetExtensions;
 using System.Collections.Generic;
 
 namespace QuantitativeWorld.Globalization
 {
-    class EnglishUnitsPluralizer : IPluralizer
+    class DictionaryPluralizer : IPluralizer
     {
-        private readonly ITransformation<string> _pluralizer = new PluralizeEnglishWordStringTransformation();
+        private readonly ITransformation<string> _pluralizer;
 
-        private readonly Dictionary<string, string> _irregularPlurals = new Dictionary<string, string>
+        public DictionaryPluralizer()
+            : this(new Dictionary<string, string>()) { }
+        public DictionaryPluralizer(IDictionary<string, string> irregularPlurals)
         {
-            { "foot", "feet" }
-        };
+            Assert.IsNotNull(irregularPlurals, nameof(irregularPlurals));
 
-        public string Pluralize(string word) =>
-            _irregularPlurals.TryGetValue(word, out string result)
-            ? result
-            : _pluralizer.Transform(word);
+            _pluralizer = new DictionaryTransformationWrapper<string>(
+                dictionary: irregularPlurals,
+                transformation: new PluralizeEnglishWordStringTransformation());
+        }
+
+        public string Pluralize(string word) => _pluralizer.Transform(word);
     }
 }

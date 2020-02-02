@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Plant.QAM.BusinessLogic.PublishedLanguage.Comparison
+namespace QuantitativeWorld.DotNetExtensions
 {
     static class Equality
     {

@@ -2,12 +2,15 @@
 {
     static class Constants
     {
-        public const decimal GramsInKilogram = 1000m;
+        public const decimal KilogramsPerGram = 0.001m;
+        public const decimal KilogramsPerQuintal = 100m;
+        public const decimal KilogramsPerTon = 1000m;
 
-        public const decimal KilogramsInTon = 1000m;
-
-        public const decimal KilogramsInAvoirdupoisPounds = 0.45359237m;
-        public const decimal AvoirdupoisOuncesInPound = 16m;
+        public const decimal KilogramsPerPound = 0.45359237m;
+        public const decimal OuncesPerPound = 16m;
+        public const decimal PoundsPerStone = 14m;
+        public const decimal PoundsPerCental = 100m;
+        public const decimal StonesPerHundredweight = 8m;
 
         public const decimal CentimetersInMeter = 100m;
         public const decimal MetresInKilometer = 1000m;

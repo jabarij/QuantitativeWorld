@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Plant.QAM.BusinessLogic.PublishedLanguage.Collections
+namespace QuantitativeWorld.DotNetExtensions
 {
     static class EnumerableExtensions
     {

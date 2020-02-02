@@ -1,4 +1,5 @@
-﻿using QuantitativeWorld.Globalization;
+﻿using QuantitativeWorld.DotNetExtensions;
+using QuantitativeWorld.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +13,21 @@ namespace QuantitativeWorld.Parsing
         private readonly Dictionary<string, LengthUnit> _unitsByPluralizedNames;
 
         public FormattedLengthUnitParser()
-            : this(new EnglishUnitsPluralizer()) { }
+            : this(new DictionaryPluralizer()) { }
         public FormattedLengthUnitParser(IPluralizer pluralizer)
             : this(
                   unitsByNames: GetParsableUnitsByNames(),
                   unitsByAbbreviations: GetParsableUnitsByAbbreviations(),
-                  unitsByPluralizedNames: GetParsableUnitsByPluralizedNames(pluralizer ?? throw new ArgumentNullException(nameof(pluralizer))))
+                  unitsByPluralizedNames: GetParsableUnitsByPluralizedNames(pluralizer))
         { }
         private FormattedLengthUnitParser(
             Dictionary<string, LengthUnit> unitsByNames,
             Dictionary<string, LengthUnit> unitsByAbbreviations,
             Dictionary<string, LengthUnit> unitsByPluralizedNames)
         {
-            _unitsByNames = unitsByNames ?? throw new ArgumentNullException(nameof(unitsByNames));
-            _unitsByAbbreviations = unitsByAbbreviations ?? throw new ArgumentNullException(nameof(unitsByAbbreviations));
-            _unitsByPluralizedNames = unitsByPluralizedNames ?? throw new ArgumentNullException(nameof(unitsByPluralizedNames));
+            _unitsByNames = unitsByNames;
+            _unitsByAbbreviations = unitsByAbbreviations;
+            _unitsByPluralizedNames = unitsByPluralizedNames;
         }
 
         public LengthUnit ParseExact(string value, string format, IFormatProvider formatProvider) =>
