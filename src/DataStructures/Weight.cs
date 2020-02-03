@@ -1,5 +1,4 @@
 ﻿using QuantitativeWorld.DotNetExtensions;
-using System;
 
 namespace QuantitativeWorld
 {
@@ -10,8 +9,6 @@ namespace QuantitativeWorld
 
         public static readonly WeightUnit DefaultUnit = WeightUnit.Kilogram;
 
-        public static readonly Weight Empty = new Weight();
-
         private readonly WeightUnit? _formatUnit;
 
         public Weight(decimal kilograms)
@@ -20,8 +17,6 @@ namespace QuantitativeWorld
             : this(formatUnit: unit, kilograms: GetKilograms(value, unit)) { }
         private Weight(WeightUnit formatUnit, decimal kilograms)
         {
-            if (formatUnit.IsEmpty())
-                throw new ArgumentException("Unit cannot be empty.", nameof(formatUnit));
             Assert.IsInRange(kilograms, MinValue, MaxValue, nameof(kilograms));
 
             _formatUnit = formatUnit;

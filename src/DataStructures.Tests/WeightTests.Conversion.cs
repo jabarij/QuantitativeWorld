@@ -50,8 +50,8 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Weight(123.456m, WeightUnit.Kilogram), WeightUnit.Decagram, new Weight(1234.56m, WeightUnit.Decagram));
-                yield return new ConvertTestData(new Weight(1234.56m, WeightUnit.Decagram), WeightUnit.Kilogram, new Weight(123.456m, WeightUnit.Kilogram));
+                yield return new ConvertTestData(new Weight(123.456m, WeightUnit.Kilogram), WeightUnit.Decagram, new Weight(12345.6m, WeightUnit.Decagram));
+                yield return new ConvertTestData(new Weight(12345.6m, WeightUnit.Decagram), WeightUnit.Kilogram, new Weight(123.456m, WeightUnit.Kilogram));
 
                 yield return new ConvertTestData(new Weight(123.456m, WeightUnit.Kilogram), WeightUnit.Ton, new Weight(0.123456m, WeightUnit.Ton));
                 yield return new ConvertTestData(new Weight(0.123456m, WeightUnit.Ton), WeightUnit.Kilogram, new Weight(123.456m, WeightUnit.Kilogram));

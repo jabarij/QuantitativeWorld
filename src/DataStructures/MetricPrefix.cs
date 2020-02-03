@@ -31,8 +31,11 @@ namespace QuantitativeWorld
 
         private MetricPrefix(string name, string symbol, int exponent)
         {
-            Name = Assert.IsNotNullOrWhiteSpace(name, nameof(name));
-            Symbol = Assert.IsNotNullOrWhiteSpace(symbol, nameof(symbol));
+            Assert.IsNotNullOrWhiteSpace(name, nameof(name));
+            Assert.IsNotNullOrWhiteSpace(symbol, nameof(symbol));
+
+            Name = name;
+            Symbol = symbol;
             Factor = Base.Pow(exponent);
         }
 

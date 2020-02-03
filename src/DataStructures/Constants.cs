@@ -5,6 +5,8 @@
         public const decimal KilogramsPerGram = 0.001m;
         public const decimal KilogramsPerQuintal = 100m;
         public const decimal KilogramsPerTon = 1000m;
+        public const decimal MilligramsPerGram = 1000m;
+        public const decimal GramsPerDecagram = 10m;
 
         public const decimal KilogramsPerPound = 0.45359237m;
         public const decimal OuncesPerPound = 16m;
@@ -12,8 +14,10 @@
         public const decimal PoundsPerCental = 100m;
         public const decimal StonesPerHundredweight = 8m;
 
-        public const decimal CentimetersInMeter = 100m;
-        public const decimal MetresInKilometer = 1000m;
+        public const decimal MetresPerMillimetre = 0.001m;
+        public const decimal MetresPerCentimetre = 0.01m;
+        public const decimal MetresPerDecimetre = 0.1m;
+        public const decimal MetresPerKilometre = 1000m;
         public const decimal MetresPerInch = 0.0254m;
         public const decimal MetresPerFoot = 0.3048m;
         public const decimal MetresPerYard = 0.9144m;

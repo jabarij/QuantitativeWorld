@@ -8,11 +8,11 @@ namespace QuantitativeWorld.Tests
         public class Equality
         {
             [Fact]
-            public void DefaultLengthAndEmptyWeigth_ShouldBeEqual()
+            public void DefaultLength_ShouldBeEqualToZeroMetres()
             {
                 // arrange
                 var defaultLength = new Length();
-                var emptyLength = Length.Empty;
+                var emptyLength = new Length(0m);
 
                 // act
                 bool defaultEqualsEmpty = defaultLength.Equals(emptyLength);

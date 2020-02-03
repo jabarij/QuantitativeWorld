@@ -1,5 +1,4 @@
 ﻿using QuantitativeWorld.DotNetExtensions;
-using System;
 
 namespace QuantitativeWorld
 {
@@ -10,8 +9,6 @@ namespace QuantitativeWorld
 
         public static readonly LengthUnit DefaultUnit = LengthUnit.Metre;
 
-        public static readonly Length Empty = new Length();
-
         private readonly LengthUnit? _formatUnit;
 
         public Length(decimal metres)
@@ -20,8 +17,6 @@ namespace QuantitativeWorld
             : this(formatUnit: unit, metres: GetMetres(value, unit)) { }
         private Length(LengthUnit formatUnit, decimal metres)
         {
-            if (formatUnit.IsEmpty())
-                throw new ArgumentException("Unit cannot be empty.", nameof(formatUnit));
             Assert.IsInRange(metres, MinValue, MaxValue, nameof(metres));
 
             _formatUnit = formatUnit;

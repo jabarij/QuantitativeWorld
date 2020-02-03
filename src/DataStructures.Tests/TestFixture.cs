@@ -14,10 +14,16 @@ namespace QuantitativeWorld.Tests
         }
 
         public IFixture Fixture { get; }
+        public decimal DecimalPrecision => 0.0000000000000000000000001m;
 
         private void CustomizeFixture(Fixture fixture)
         {
             // Customize common fixture setup here
+            fixture.Customize<WeightUnit>(e => e.FromFactory(() => fixture.CreateFromSet(WeightUnit.GetKnownUnits())));
+            fixture.Customize<Weight>(e => e.FromFactory(() => new Weight(fixture.Create<decimal>(), fixture.Create<WeightUnit>())));
+
+            fixture.Customize<LengthUnit>(e => e.FromFactory(() => fixture.CreateFromSet(LengthUnit.GetKnownUnits())));
+            fixture.Customize<Length>(e => e.FromFactory(() => new Length(fixture.Create<decimal>(), fixture.Create<LengthUnit>())));
         }
 
         private bool _isDisposed;

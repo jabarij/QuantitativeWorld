@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuantitativeWorld.DotNetExtensions;
+using System;
 using System.Globalization;
 
 namespace QuantitativeWorld.Formatting
@@ -14,7 +15,9 @@ namespace QuantitativeWorld.Formatting
             : this(CultureInfo.CurrentCulture) { }
         public LengthFormatter(CultureInfo cultureInfo)
         {
-            _cultureInfo = cultureInfo ?? throw new ArgumentNullException(nameof(cultureInfo));
+            Assert.IsNotNull(cultureInfo, nameof(cultureInfo));
+
+            _cultureInfo = cultureInfo;
         }
 
         public override bool TryFormat(string format, Length length, IFormatProvider formatProvider, out string result) =>

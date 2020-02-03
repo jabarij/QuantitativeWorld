@@ -44,7 +44,7 @@ namespace QuantitativeWorld.Tests
             {
                 yield return new ConstructorForValueAndUnitTestData(1m, WeightUnit.Kilogram, 1m);
                 yield return new ConstructorForValueAndUnitTestData(1000m, WeightUnit.Gram, 1m);
-                yield return new ConstructorForValueAndUnitTestData(10m, WeightUnit.Decagram, 1m);
+                yield return new ConstructorForValueAndUnitTestData(100m, WeightUnit.Decagram, 1m);
                 yield return new ConstructorForValueAndUnitTestData(1 / 0.45359237m, WeightUnit.Pound, 1m);
                 yield return new ConstructorForValueAndUnitTestData(1 / (0.45359237m / 16m), WeightUnit.Ounce, 1m);
             }

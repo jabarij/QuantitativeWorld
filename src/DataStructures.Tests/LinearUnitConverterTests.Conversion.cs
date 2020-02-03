@@ -1,6 +1,5 @@
 using FluentAssertions;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Xunit;
 
 namespace QuantitativeWorld.Tests
@@ -23,16 +22,15 @@ namespace QuantitativeWorld.Tests
                 decimal actualValue = converter.ConvertValue(testData.Value, testData.SourceUnit, testData.TargetUnit);
 
                 // assert
-                actualValue.Should().Be(testData.ExpectedValue);
+                actualValue.Should().BeApproximately(testData.ExpectedValue, DecimalPrecision);
             }
 
             private static IEnumerable<ConvertValueTestData> GetConvertTestData()
             {
-                yield return new ConvertValueTestData(1 / (0.0254m * 12m * 3m * 22m * 80m), LengthUnit.Mile, LengthUnit.Metre, 1m);
-                //yield return new ConvertValueTestData(0.0006213711922373339696174342m, LengthUnit.Mile, LengthUnit.Metre, 1m);
+                yield return new ConvertValueTestData(1 / (0.0254m * 12m * 3m * 5.5m * 4m * 10m * 8m), LengthUnit.Mile, LengthUnit.Metre, 1m);
+                yield return new ConvertValueTestData(0.0006213711922373339696174342m, LengthUnit.Mile, LengthUnit.Metre, 1m);
             }
 
-            [DebuggerDisplay("{Value} {SourceUnit} should be {ExpectedValue} {TargetUnit}")]
             public class ConvertValueTestData
             {
                 public ConvertValueTestData(decimal value, LengthUnit sourceUnit, LengthUnit targetUnit, decimal expectedValue)
@@ -47,6 +45,9 @@ namespace QuantitativeWorld.Tests
                 public LengthUnit SourceUnit { get; }
                 public LengthUnit TargetUnit { get; }
                 public decimal ExpectedValue { get; }
+
+                public override string ToString() =>
+                    $"{Value} {SourceUnit} should be {ExpectedValue} {TargetUnit}";
             }
         }
     }

@@ -18,6 +18,7 @@ namespace QuantitativeWorld.Tests
         }
 
         protected IFixture Fixture => _testFixture.Fixture;
+        protected decimal DecimalPrecision => _testFixture.DecimalPrecision;
 
         public static IEnumerable<object[]> GetTestData(Type sourceType, string dataSourceName)
         {

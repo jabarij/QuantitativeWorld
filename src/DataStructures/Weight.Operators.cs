@@ -28,6 +28,6 @@ namespace QuantitativeWorld
         }
 
         private Weight WithValue(decimal newValue) =>
-            new Weight(newValue);
+            new Weight(Unit, newValue);
     }
 }

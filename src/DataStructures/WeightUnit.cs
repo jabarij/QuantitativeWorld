@@ -4,21 +4,28 @@ namespace QuantitativeWorld
 {
     public partial struct WeightUnit : ILinearUnit
     {
-        public static readonly WeightUnit Empty = new WeightUnit();
+        private readonly string _name;
+        private readonly string _abbreviation;
+        private readonly decimal? _valueInKilograms;
 
         public WeightUnit(string name, string abbreviation, decimal valueInKilograms)
+            : this(name, abbreviation, valueInKilograms, false) { }
+        private WeightUnit(string name, string abbreviation, decimal valueInKilograms, bool isDefined)
         {
-            Name = Assert.IsNotNullOrWhiteSpace(name, nameof(name));
-            Abbreviation = Assert.IsNotNullOrWhiteSpace(abbreviation, nameof(abbreviation));
-            ValueInKilograms = Assert.IsGreaterThan(valueInKilograms, 0m, nameof(valueInKilograms));
+            Assert.IsNotNullOrWhiteSpace(name, nameof(name));
+            Assert.IsNotNullOrWhiteSpace(abbreviation, nameof(abbreviation));
+            Assert.IsGreaterThan(valueInKilograms, 0m, nameof(valueInKilograms));
+
+            _name = name;
+            _abbreviation = abbreviation;
+            _valueInKilograms = valueInKilograms;
+            IsPreDefined = isDefined;
         }
 
-        public string Name { get; }
-        public string Abbreviation { get; }
-        public decimal ValueInKilograms { get; }
-
-        public bool IsEmpty() =>
-            Equals(Empty);
+        public string Name => _name ?? Kilogram._name;
+        public string Abbreviation => _abbreviation ?? Kilogram._abbreviation;
+        public decimal ValueInKilograms => _valueInKilograms ?? Kilogram._valueInKilograms.Value;
+        internal bool IsPreDefined { get; }
 
         decimal ILinearUnit.ValueInBaseUnit => ValueInKilograms;
     }

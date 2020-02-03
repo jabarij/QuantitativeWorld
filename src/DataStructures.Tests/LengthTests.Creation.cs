@@ -36,7 +36,7 @@ namespace QuantitativeWorld.Tests
                 var length = new Length(testData.Value, testData.Unit);
 
                 // assert
-                length.Metres.Should().BeApproximately(testData.ExpectedMetres, 0.0000000000000000000000001m);
+                length.Metres.Should().BeApproximately(testData.ExpectedMetres, DecimalPrecision);
                 length.Value.Should().Be(testData.Value);
                 length.Unit.Should().Be(testData.Unit);
             }
