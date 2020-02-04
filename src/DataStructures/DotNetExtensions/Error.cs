@@ -44,5 +44,9 @@ namespace QuantitativeWorld.DotNetExtensions
 
         public static Exception ArgumentIsNaN(string paramName) =>
             new ArgumentException("Param is not a number (NaN).", paramName);
+        public static Exception IncorrectFormat(string message) =>
+            new FormatException(message);
+        public static Exception ArgumentOutOfRange(string paramName, string message) =>
+            new ArgumentOutOfRangeException(paramName, message);
     }
 }

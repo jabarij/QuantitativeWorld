@@ -32,7 +32,6 @@ namespace QuantitativeWorld.DotNetExtensions
             return valueCharsAt.ArrayEqual(patternChars);
         }
 
-
         public static bool StartsWith(this string value, Predicate<char> characterCheck) =>
             !string.IsNullOrEmpty(value) && characterCheck(value.First());
 
@@ -86,6 +85,47 @@ namespace QuantitativeWorld.DotNetExtensions
                 return string.Empty;
 
             return value.Substring(0, index);
+        }
+
+        public static int IndexOf(this string value, Predicate<char> charMatch)
+        {
+            if (string.IsNullOrEmpty(value))
+                return -1;
+
+            int index = -1;
+            while (index++ < value.Length)
+                if (charMatch(value[index]))
+                    return index;
+            return -1;
+        }
+
+        public static int LastIndexOf(this string value, Predicate<char> charMatch)
+        {
+            if (string.IsNullOrEmpty(value))
+                return -1;
+
+            int index = value.Length;
+            while (index-- > 0)
+                if (charMatch(value[index]))
+                    return index;
+            return -1;
+        }
+
+        public static (string left, string right) SplitAt(this string value, int rightStartIndex)
+        {
+            Assert.IsNotNullOrEmpty(value, nameof(value));
+            if (rightStartIndex >= value.Length)
+                throw Error.ArgumentOutOfRange(nameof(rightStartIndex), $"Index is out of range.");
+
+            char[] leftPart = new char[rightStartIndex];
+            for (int index = 0; index < leftPart.Length; index++)
+                leftPart[index] = value[index];
+
+            char[] rightPart = new char[value.Length - rightStartIndex - 1];
+            for (int index = 0; index < rightPart.Length; index++)
+                rightPart[index] = value[index + rightStartIndex];
+
+            return (new string(leftPart), new string(rightPart));
         }
     }
 }
