@@ -20,8 +20,21 @@ namespace QuantitativeWorld.Tests
 
                 // act
                 // assert
-                kilogram.Equals(defaultWeightUnit).Should().BeTrue(because: "'new Weight(0m)' should be equal 'default(Weight)'");
-                defaultWeightUnit.Equals(kilogram).Should().BeTrue(because: "'default(Weight)' should be equal 'new Weight(0m)'");
+                kilogram.Equals(defaultWeightUnit).Should().BeTrue(because: "'WeightUnit.Kilogram' should be equal 'default(WeightUnit)'");
+                defaultWeightUnit.Equals(kilogram).Should().BeTrue(because: "'default(WeightUnit)' should be equal 'WeightUnit.Kilogram'");
+            }
+
+            [Fact]
+            public void ParamlessConstructedWeightUnit_ShouldBeEqualToKilogram()
+            {
+                // arrange
+                var paramlessConstructedWeightUnit = new WeightUnit();
+                var kilogram = WeightUnit.Kilogram;
+
+                // act
+                // assert
+                kilogram.Equals(paramlessConstructedWeightUnit).Should().BeTrue(because: "'WeightUnit.Kilogram' should be equal 'new WeightUnit()'");
+                paramlessConstructedWeightUnit.Equals(kilogram).Should().BeTrue(because: "'new WeightUnit()' should be equal 'WeightUnit.Kilogram'");
             }
         }
     }
