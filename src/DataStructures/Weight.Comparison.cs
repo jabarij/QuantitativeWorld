@@ -3,10 +3,10 @@ using System;
 
 namespace QuantitativeWorld
 {
-    partial struct Weight : IEquatable<Weight>, IComparable<Weight>
+    partial struct Weight : IEquatable<Weight>, IComparable<Weight>, IComparable
     {
         public bool Equals(Weight other) =>
-            Kilograms == other.Kilograms;
+            Kilograms.Equals(other.Kilograms);
         public override bool Equals(object obj) =>
             Equality.IsStructureEqualToObject(this, obj);
         public override int GetHashCode() =>
@@ -16,6 +16,10 @@ namespace QuantitativeWorld
 
         public int CompareTo(Weight other) =>
             Kilograms.CompareTo(other.Kilograms);
+        public int CompareTo(object obj) =>
+            obj is Weight weight
+            ? CompareTo(weight)
+            : throw Error.ArgumentIsOfUnexpectedType(obj, typeof(Weight), nameof(obj));
 
         public static bool operator ==(Weight left, Weight right) =>
             Equality.AreEqualStructures(left, right);

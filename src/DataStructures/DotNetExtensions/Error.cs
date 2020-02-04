@@ -6,6 +6,9 @@ namespace QuantitativeWorld.DotNetExtensions
     [Pure]
     static class Error
     {
+        public static Exception ArgumentIsOfUnexpectedType(object value, Type expectedType, string paramName) =>
+            new ArgumentException($"Expected param to be of type {expectedType.FullName} but found {value.GetType().FullName}.", paramName);
+
         public static Exception ArgumentNotGreaterThan<T>(T value, T min, string paramName) =>
             new ArgumentOutOfRangeException(paramName, value, $"Expected param to be greater than {min}.");
         public static Exception ArgumentNotGreaterThanOrEqual<T>(T value, T min, string paramName) where T : struct =>

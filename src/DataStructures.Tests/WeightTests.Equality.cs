@@ -1,6 +1,5 @@
 using AutoFixture;
 using FluentAssertions;
-using System.Linq;
 using Xunit;
 
 namespace QuantitativeWorld.Tests
@@ -13,37 +12,60 @@ namespace QuantitativeWorld.Tests
                 : base(testFixture) { }
 
             [Fact]
-            public void DefaultWeight_ShouldBeEqualToZeroInAnyUnit()
+            public void DefaultWeight_ShouldBeEqualToZeroKilograms()
             {
                 // arrange
-                var defaultWeight = new Weight();
-                var zero = new Weight(
-                    value: 0m,
-                    unit: Fixture.Create<WeightUnit>());
+                var defaultWeight = default(Weight);
+                var zeroKilogramsWeight = new Weight(0m);
 
                 // act
-                bool defaultEqualsZero = defaultWeight.Equals(zero);
-                bool zeroEqualsDefault = zero.Equals(defaultWeight);
-
                 // assert
-                defaultEqualsZero.Should().BeTrue();
-                zeroEqualsDefault.Should().BeTrue();
+                zeroKilogramsWeight.Equals(defaultWeight).Should().BeTrue(because: "'new Weight(0m)' should be equal 'default(Weight)'");
+                defaultWeight.Equals(zeroKilogramsWeight).Should().BeTrue(because: "'default(Weight)' should be equal 'new Weight(0m)'");
+            }
+
+            [Fact]
+            public void WeightCreateUtinsParamlessConstructor_ShouldBeEqualToZeroKilograms()
+            {
+                // arrange
+                var zeroKilogramsWeight = new Weight(0m);
+                var paramlessConstructedWeight = new Weight();
+
+                // act
+                // assert
+                zeroKilogramsWeight.Equals(paramlessConstructedWeight).Should().BeTrue(because: "'new Weight(0m)' should be equal 'new Weight()'");
+                paramlessConstructedWeight.Equals(zeroKilogramsWeight).Should().BeTrue(because: "'new Weight()' should be equal 'new Weight(0m)'");
+            }
+
+            [Fact]
+            public void ZeroUnitsWeight_ShouldBeEqualToZeroKilograms()
+            {
+                // arrange
+                var zeroKilogramsWeight = new Weight(0m);
+                var zeroUnitsWeight = new Weight(0m, CreateUnitOtherThan(WeightUnit.Kilogram));
+
+                // act
+                // assert
+                zeroKilogramsWeight.Equals(zeroUnitsWeight).Should().BeTrue(because: "'new Weight(0m)' should be equal 'new Weight(0m, SomeUnit)'");
+                zeroUnitsWeight.Equals(zeroKilogramsWeight).Should().BeTrue(because: "'new Weight(0m, SomeUnit)' should be equal 'new Weight(0m)'");
             }
 
             [Fact]
             public void WeightsOfDifferentUnitsEqualInKilograms_ShouldBeEqual()
             {
                 // arrange
-                var weight1 = Fixture.Create<Weight>();
-                var differentUnit = Fixture.CreateFromSet(WeightUnit.GetKnownUnits().Except(new[] { weight1.Unit }));
+                var weight1 = new Weight(
+                    value: Fixture.Create<decimal>(),
+                    unit: WeightUnit.Ton);
                 var weight2 = new Weight(
-                    value: weight1.Kilograms / differentUnit.ValueInKilograms,
-                    unit: differentUnit);
+                    value: weight1.Kilograms * 1000m,
+                    unit: WeightUnit.Gram);
 
                 // act
+                bool equalsResult = weight1.Equals(weight2);
+
                 // assert
-                weight1.Equals(weight2).Should().BeTrue();
-                weight2.Equals(weight1).Should().BeTrue();
+                equalsResult.Should().BeTrue(because: $"{weight1.Value} {weight1.Unit} ({weight1.Kilograms} kg) == {weight2.Value} {weight2.Unit} ({weight2.Kilograms} kg)");
             }
         }
     }

@@ -1,130 +1,96 @@
 using AutoFixture;
 using FluentAssertions;
-using System.Linq;
+using System;
 using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
     partial class WeightTests
     {
-        public class Addition : WeightTests
+        public class Operator_Add : WeightTests
         {
-            public Addition(TestFixture testFixture)
+            public Operator_Add(TestFixture testFixture)
                 : base(testFixture) { }
 
             [Fact]
-            public void WeightsOfSameUnit_ShouldProduceValidResultInKilograms()
+            public void WeightsOfSameUnit_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight1 = Fixture.Create<Weight>();
-                var weight2 = new Weight(Fixture.Create<decimal>(), weight1.Unit);
+                var weight1 = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                var weight2 = CreateWeightInUnit(weight1.Unit);
 
                 // act
                 var result = weight1 + weight2;
 
                 // assert
                 result.Kilograms.Should().Be(weight1.Kilograms + weight2.Kilograms);
+                result.Value.Should().Be(weight1.Value + weight2.Value);
+                result.Unit.Should().Be(weight1.Unit);
             }
 
             [Fact]
-            public void WeightOfDifferentUnits_ShouldProduceValidResultInKilograms()
+            public void WeightOfDifferentUnits_ShouldProduceValidResultInUnitOfLeftOperand()
             {
                 // arrange
-                var weight1 = Fixture.Create<Weight>();
-                var weight2 = new Weight(
-                    value: Fixture.Create<decimal>(),
-                    unit: Fixture.CreateFromSet(WeightUnit.GetKnownUnits().Except(new[] { weight1.Unit })));
-                weight1.Unit.Should().NotBe(weight2.Unit, because: "test assumes that two weight of different units are added");
+                var weight1 = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                var weight2 = CreateWeightInUnitOtherThan(WeightUnit.Kilogram, weight1.Unit);
 
                 // act
                 var result = weight1 + weight2;
 
                 // assert
                 result.Kilograms.Should().Be(weight1.Kilograms + weight2.Kilograms);
-            }
-
-            [Fact]
-            public void WeightOfDifferentUnits_ShouldProduceResultOfSameUnitAsLeftOperand()
-            {
-                // arrange
-                var weight1 = Fixture.Create<Weight>();
-                var weight2 = new Weight(
-                    value: Fixture.Create<decimal>(),
-                    unit: Fixture.CreateFromSet(WeightUnit.GetKnownUnits().Except(new[] { weight1.Unit })));
-                weight1.Unit.Should().NotBe(weight2.Unit, because: "test assumes that two weight of different units are added");
-
-                // act
-                var result = weight1 + weight2;
-
-                // assert
                 result.Unit.Should().Be(weight1.Unit);
             }
         }
 
-        public class Subtraction : WeightTests
+        public class Operator_Subtract : WeightTests
         {
-            public Subtraction(TestFixture testFixture)
+            public Operator_Subtract(TestFixture testFixture)
                 : base(testFixture) { }
 
             [Fact]
-            public void WeightsOfSameUnit_ShouldProduceValidResultInKilograms()
+            public void WeightsOfSameUnit_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight1 = Fixture.Create<Weight>();
-                var weight2 = new Weight(Fixture.Create<decimal>(), weight1.Unit);
+                var weight1 = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                var weight2 = CreateWeightInUnit(weight1.Unit);
 
                 // act
                 var result = weight1 - weight2;
 
                 // assert
                 result.Kilograms.Should().Be(weight1.Kilograms - weight2.Kilograms);
+                result.Value.Should().Be(weight1.Value - weight2.Value);
+                result.Unit.Should().Be(weight1.Unit);
             }
 
             [Fact]
-            public void WeightOfDifferentUnits_ShouldProduceValidResultInKilograms()
+            public void WeightOfDifferentUnits_ShouldProduceValidResultInUnitOfLeftOperand()
             {
                 // arrange
-                var weight1 = Fixture.Create<Weight>();
-                var weight2 = new Weight(
-                    value: Fixture.Create<decimal>(),
-                    unit: Fixture.CreateFromSet(WeightUnit.GetKnownUnits().Except(new[] { weight1.Unit })));
-                weight1.Unit.Should().NotBe(weight2.Unit, because: "test assumes that two weight of different units are subtracted");
+                var weight1 = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                var weight2 = CreateWeightInUnitOtherThan(WeightUnit.Kilogram, weight1.Unit);
 
                 // act
                 var result = weight1 - weight2;
 
                 // assert
                 result.Kilograms.Should().Be(weight1.Kilograms - weight2.Kilograms);
-            }
-
-            [Fact]
-            public void WeightOfDifferentUnits_ShouldProduceResultOfSameUnitAsLeftOperand()
-            {
-                // arrange
-                var weight1 = Fixture.Create<Weight>();
-                var weight2 = new Weight(
-                    value: Fixture.Create<decimal>(),
-                    unit: Fixture.CreateFromSet(WeightUnit.GetKnownUnits().Except(new[] { weight1.Unit })));
-                weight1.Unit.Should().NotBe(weight2.Unit, because: "test assumes that two weight of different units are subtracted");
-
-                // act
-                var result = weight1 - weight2;
-
-                // assert
                 result.Unit.Should().Be(weight1.Unit);
             }
         }
 
-        public class Multiplication : WeightTests
+        public class Operator_Multiply : WeightTests
         {
-            public Multiplication(TestFixture testFixture)
+            public Operator_Multiply(TestFixture testFixture)
                 : base(testFixture) { }
 
             [Fact]
-            public void MultiplyByDecimal_ShouldProduceValidResultInKilograms()
+            public void MultiplyByDecimal_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight = Fixture.Create<Weight>();
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
                 decimal factor = Fixture.Create<decimal>();
 
                 // act
@@ -132,54 +98,71 @@ namespace QuantitativeWorld.Tests
 
                 // assert
                 result.Kilograms.Should().Be(weight.Kilograms * factor);
-            }
-
-            [Fact]
-            public void MultiplyByDecimal_ShouldProduceResultWithSameUnit()
-            {
-                // arrange
-                var weight = Fixture.Create<Weight>();
-                decimal factor = Fixture.Create<decimal>();
-
-                // act
-                var result = weight * factor;
-
-                // assert
+                result.Value.Should().Be(weight.Value * factor);
                 result.Unit.Should().Be(weight.Unit);
             }
         }
 
-        public class Division : WeightTests
+        public class Operator_Divide : WeightTests
         {
-            public Division(TestFixture testFixture)
+            public Operator_Divide(TestFixture testFixture)
                 : base(testFixture) { }
 
             [Fact]
-            public void DivideByDecimal_ShouldProduceValidResultInKilograms()
+            public void DivideByZeroDecimal_ShouldThrow()
             {
                 // arrange
-                var weight = Fixture.Create<Weight>();
-                decimal denominator = Fixture.CreateNonZero();
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+
+                // act
+                Func<Weight> divideByZero = () => weight / decimal.Zero;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByDecimal_ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                decimal denominator = Fixture.CreateNonZeroDecimal();
 
                 // act
                 var result = weight / denominator;
 
                 // assert
-                result.Kilograms.Should().Be(weight.Kilograms / denominator);
+                result.Kilograms.Should().BeApproximately(weight.Kilograms / denominator, DecimalPrecision);
+                result.Unit.Should().Be(weight.Unit);
             }
 
             [Fact]
-            public void DivideByDecimal_ShouldProduceResultWithSameUnit()
+            public void DivideByZeroWeight_ShouldThrow()
             {
                 // arrange
-                var weight = Fixture.Create<Weight>();
-                decimal denominator = Fixture.CreateNonZero();
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
 
                 // act
-                var result = weight * denominator;
+                Func<decimal> divideByZero = () => weight / new Weight(decimal.Zero);
 
                 // assert
-                result.Unit.Should().Be(weight.Unit);
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByWeight_ShouldProduceValidDecimalResult()
+            {
+                // arrange
+                var nominator = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                var denominator = new Weight(
+                    value: Fixture.CreateNonZeroDecimal(),
+                    unit: CreateUnitOtherThan(WeightUnit.Kilogram, nominator.Unit));
+
+                // act
+                decimal result = nominator / denominator;
+
+                // assert
+                result.Should().BeApproximately(nominator.Kilograms / denominator.Kilograms, DecimalPrecision);
             }
         }
     }

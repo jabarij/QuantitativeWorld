@@ -1,4 +1,5 @@
 ﻿using QuantitativeWorld.DotNetExtensions;
+using QuantitativeWorld.Interfaces;
 
 namespace QuantitativeWorld
 {
@@ -9,8 +10,6 @@ namespace QuantitativeWorld
         private readonly decimal? _valueInKilograms;
 
         public WeightUnit(string name, string abbreviation, decimal valueInKilograms)
-            : this(name, abbreviation, valueInKilograms, false) { }
-        private WeightUnit(string name, string abbreviation, decimal valueInKilograms, bool isDefined)
         {
             Assert.IsNotNullOrWhiteSpace(name, nameof(name));
             Assert.IsNotNullOrWhiteSpace(abbreviation, nameof(abbreviation));
@@ -19,13 +18,11 @@ namespace QuantitativeWorld
             _name = name;
             _abbreviation = abbreviation;
             _valueInKilograms = valueInKilograms;
-            IsPreDefined = isDefined;
         }
 
         public string Name => _name ?? Kilogram._name;
         public string Abbreviation => _abbreviation ?? Kilogram._abbreviation;
         public decimal ValueInKilograms => _valueInKilograms ?? Kilogram._valueInKilograms.Value;
-        internal bool IsPreDefined { get; }
 
         decimal ILinearUnit.ValueInBaseUnit => ValueInKilograms;
     }

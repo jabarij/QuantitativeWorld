@@ -59,7 +59,7 @@ namespace QuantitativeWorld.Tests
                 ? result - _decimalEpsilon
                 : result;
         }
-        public static decimal CreateNonZero(this IFixture fixture) =>
+        public static decimal CreateNonZeroDecimal(this IFixture fixture) =>
             fixture.Create<bool>()
             ? fixture.CreateGreaterThan(0m)
             : fixture.CreateLowerThan(0m);

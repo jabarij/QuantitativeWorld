@@ -19,8 +19,8 @@ namespace QuantitativeWorld
             ToString(
                 format: format,
                 formatter:
-                    formatProvider.GetFormat<ICustomFormatter<LengthUnit>>()
-                    ?? formatProvider.GetFormat<ICustomFormatter>()
+                    formatProvider?.GetFormat<ICustomFormatter<LengthUnit>>()
+                    ?? formatProvider?.GetFormat<ICustomFormatter>()
                     ?? new LengthUnitFormatter(),
                 formatProvider: formatProvider);
         private string ToString(string format, ICustomFormatter formatter, IFormatProvider formatProvider) =>

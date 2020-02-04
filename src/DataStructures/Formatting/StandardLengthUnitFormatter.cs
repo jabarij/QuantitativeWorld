@@ -1,4 +1,5 @@
-﻿using QuantitativeWorld.Globalization;
+﻿using QuantitativeWorld.DotNetExtensions;
+using QuantitativeWorld.Globalization;
 using System;
 using System.Collections.Generic;
 
@@ -11,12 +12,16 @@ namespace QuantitativeWorld.Formatting
         private readonly IPluralizer _standardPluralizer;
 
         public StandardLengthUnitFormatter()
-        {
-            _standardPluralizer = new DictionaryPluralizer(
+            : this(new DictionaryPluralizer(
                 irregularPlurals: new Dictionary<string, string>
                 {
                     { "foot", "feet" }
-                });
+                }))
+        { }
+        public StandardLengthUnitFormatter(IPluralizer pluralizer)
+        {
+            Assert.IsNotNull(pluralizer, nameof(pluralizer));
+            _standardPluralizer = pluralizer;
         }
 
         public override bool TryFormat(string format, LengthUnit lengthUnit, IFormatProvider formatProvider, out string result)

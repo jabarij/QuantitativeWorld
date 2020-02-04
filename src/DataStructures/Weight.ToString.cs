@@ -19,8 +19,8 @@ namespace QuantitativeWorld
             ToString(
                 format: format,
                 formatter:
-                    formatProvider.GetFormat<ICustomFormatter<Weight>>()
-                    ?? formatProvider.GetFormat<ICustomFormatter>()
+                    formatProvider?.GetFormat<ICustomFormatter<Weight>>()
+                    ?? formatProvider?.GetFormat<ICustomFormatter>()
                     ?? new WeightFormatter(),
                 formatProvider: formatProvider);
         private string ToString(string format, ICustomFormatter formatter, IFormatProvider formatProvider) =>

@@ -1,6 +1,6 @@
 using AutoFixture;
-using QuantitativeWorld.Parsing;
 using FluentAssertions;
+using QuantitativeWorld.Parsing;
 using System.Collections.Generic;
 using Xunit;
 
@@ -29,51 +29,38 @@ namespace QuantitativeWorld.Tests.Parsing
 
             [Theory]
             [MemberData(nameof(GetTestData), typeof(TryParse), nameof(GetParsableUnitsTestData))]
-            public void KnownUnit_ShouldParseToExpectedUnitAndReturnTrue(string knownUnit, WeightUnit expectedUnit)
+            public void PredefinedUnit_ShouldParseToExpectedUnitAndReturnTrue(TryParsWeightUnitTestData testData)
             {
                 // arrange
                 var parser = new WeightUnitParser();
 
                 // act
-                bool result = parser.TryParse(knownUnit, out var actualUnit);
+                bool result = parser.TryParse(testData.ParseValue, out var actualUnit);
 
                 // assert
-                actualUnit.Should().Be(expectedUnit);
+                actualUnit.Should().Be(testData.ExpectedUnit);
                 result.Should().BeTrue();
             }
 
-            private static IEnumerable<ITestDataProvider> GetParsableUnitsTestData()
+            private static IEnumerable<TryParsWeightUnitTestData> GetParsableUnitsTestData()
             {
-                yield return new ParsableUnitTestData(WeightUnit.Decagram.Name, WeightUnit.Decagram);
-                yield return new ParsableUnitTestData(WeightUnit.Gram.Name, WeightUnit.Gram);
-                yield return new ParsableUnitTestData(WeightUnit.Kilogram.Name, WeightUnit.Kilogram);
-                yield return new ParsableUnitTestData(WeightUnit.Milligram.Name, WeightUnit.Milligram);
-                yield return new ParsableUnitTestData(WeightUnit.Ounce.Name, WeightUnit.Ounce);
-                yield return new ParsableUnitTestData(WeightUnit.Pound.Name, WeightUnit.Pound);
-                yield return new ParsableUnitTestData(WeightUnit.Ton.Name, WeightUnit.Ton);
-
-                yield return new ParsableUnitTestData(WeightUnit.Decagram.Abbreviation, WeightUnit.Decagram);
-                yield return new ParsableUnitTestData(WeightUnit.Gram.Abbreviation, WeightUnit.Gram);
-                yield return new ParsableUnitTestData(WeightUnit.Kilogram.Abbreviation, WeightUnit.Kilogram);
-                yield return new ParsableUnitTestData(WeightUnit.Milligram.Abbreviation, WeightUnit.Milligram);
-                yield return new ParsableUnitTestData(WeightUnit.Ounce.Abbreviation, WeightUnit.Ounce);
-                yield return new ParsableUnitTestData(WeightUnit.Pound.Abbreviation, WeightUnit.Pound);
-                yield return new ParsableUnitTestData(WeightUnit.Ton.Abbreviation, WeightUnit.Ton);
+                foreach (var predefinedUnit in WeightUnit.GetPredefinedUnits())
+                {
+                    yield return new TryParsWeightUnitTestData(predefinedUnit, predefinedUnit.Name);
+                    yield return new TryParsWeightUnitTestData(predefinedUnit, predefinedUnit.Abbreviation);
+                }
             }
 
-            class ParsableUnitTestData : ITestDataProvider
+            public class TryParsWeightUnitTestData
             {
-                public ParsableUnitTestData(string parsedValue, WeightUnit expectedUnit)
+                public TryParsWeightUnitTestData(WeightUnit expectedUnit, string parseValue)
                 {
-                    ParsedValue = parsedValue;
                     ExpectedUnit = expectedUnit;
+                    ParseValue = parseValue;
                 }
 
-                public string ParsedValue { get; }
                 public WeightUnit ExpectedUnit { get; }
-
-                public object[] SerializeTestData() =>
-                    new[] { (object)ParsedValue, ExpectedUnit };
+                public string ParseValue { get; }
             }
         }
     }

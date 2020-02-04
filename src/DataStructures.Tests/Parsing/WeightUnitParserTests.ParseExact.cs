@@ -1,6 +1,6 @@
 using AutoFixture;
-using QuantitativeWorld.Parsing;
 using FluentAssertions;
+using QuantitativeWorld.Parsing;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -42,13 +42,13 @@ namespace QuantitativeWorld.Tests.Parsing
 
             [Theory]
             [MemberData(nameof(GetTestData), typeof(ParseExact), nameof(GetExactlyParsableUnitsTestData))]
-            public void KnownUnit_ShouldParseExactToExpectedUnit(ExactlyParsableUnitTestData testData)
+            public void PredefinedUnit_ShouldParseExactToExpectedUnit(ExactlyParsableUnitTestData testData)
             {
                 // arrange
                 var parser = new WeightUnitParser();
 
                 // act
-                var actualUnit = parser.ParseExact(testData.ParsedValue, testData.ParseFormat, null);
+                var actualUnit = parser.ParseExact(testData.ParseValue, testData.ParseFormat, null);
 
                 // assert
                 actualUnit.Should().Be(testData.ExpectedUnit);
@@ -56,18 +56,7 @@ namespace QuantitativeWorld.Tests.Parsing
 
             private static IEnumerable<ExactlyParsableUnitTestData> GetExactlyParsableUnitsTestData()
             {
-                var units = new List<WeightUnit>
-                {
-                    WeightUnit.Decagram,
-                    WeightUnit.Gram,
-                    WeightUnit.Kilogram,
-                    WeightUnit.Milligram,
-                    WeightUnit.Ounce,
-                    WeightUnit.Pound,
-                    WeightUnit.Ton
-                };
-
-                foreach (var unit in units)
+                foreach (var unit in WeightUnit.GetPredefinedUnits())
                 {
                     yield return new ExactlyParsableUnitTestData(unit.Name, "l", unit);
                     yield return new ExactlyParsableUnitTestData(unit.Abbreviation, "s", unit);
@@ -77,14 +66,14 @@ namespace QuantitativeWorld.Tests.Parsing
 
             public class ExactlyParsableUnitTestData
             {
-                public ExactlyParsableUnitTestData(string parsedValue, string parseFormat, WeightUnit expectedUnit)
+                public ExactlyParsableUnitTestData(string parseValue, string parseFormat, WeightUnit expectedUnit)
                 {
-                    ParsedValue = parsedValue;
+                    ParseValue = parseValue;
                     ParseFormat = parseFormat;
                     ExpectedUnit = expectedUnit;
                 }
 
-                public string ParsedValue { get; }
+                public string ParseValue { get; }
                 public string ParseFormat { get; }
                 public WeightUnit ExpectedUnit { get; }
             }

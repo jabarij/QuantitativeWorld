@@ -1,23 +1,26 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using QuantitativeWorld.Interfaces;
+using QuantitativeWorld.DotNetExtensions;
 
 namespace QuantitativeWorld
 {
     public partial struct Length : IQuantity<LengthUnit>
     {
-        public const decimal MinValue = decimal.MinValue;
-        public const decimal MaxValue = decimal.MaxValue;
+        public static readonly Weight MinValue = new Weight(MinMetres);
+        public static readonly Weight MaxValue = new Weight(MaxMetres);
+        private const decimal MinMetres = decimal.MinValue;
+        private const decimal MaxMetres = decimal.MaxValue;
 
         public static readonly LengthUnit DefaultUnit = LengthUnit.Metre;
 
         private readonly LengthUnit? _formatUnit;
 
         public Length(decimal metres)
-            : this(formatUnit: DefaultUnit, metres: metres) { }
+            : this(formatUnit: null, metres: metres) { }
         public Length(decimal value, LengthUnit unit)
             : this(formatUnit: unit, metres: GetMetres(value, unit)) { }
-        private Length(LengthUnit formatUnit, decimal metres)
+        private Length(LengthUnit? formatUnit, decimal metres)
         {
-            Assert.IsInRange(metres, MinValue, MaxValue, nameof(metres));
+            Assert.IsInRange(metres, MinMetres, MaxMetres, nameof(metres));
 
             _formatUnit = formatUnit;
             Metres = metres;

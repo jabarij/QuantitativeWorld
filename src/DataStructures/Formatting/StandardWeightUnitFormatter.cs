@@ -1,6 +1,6 @@
-﻿using QuantitativeWorld.Globalization;
+﻿using QuantitativeWorld.DotNetExtensions;
+using QuantitativeWorld.Globalization;
 using System;
-using System.Collections.Generic;
 
 namespace QuantitativeWorld.Formatting
 {
@@ -11,12 +11,12 @@ namespace QuantitativeWorld.Formatting
         private readonly IPluralizer _standardPluralizer;
 
         public StandardWeightUnitFormatter()
+            : this(new DictionaryPluralizer()) { }
+        public StandardWeightUnitFormatter(IPluralizer pluralizer)
         {
-            _standardPluralizer = new DictionaryPluralizer(
-                irregularPlurals: new Dictionary<string, string>
-                {
+            Assert.IsNotNull(pluralizer, nameof(pluralizer));
 
-                });
+            _standardPluralizer = pluralizer;
         }
 
         public override bool TryFormat(string format, WeightUnit weightUnit, IFormatProvider formatProvider, out string result)

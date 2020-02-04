@@ -1,5 +1,4 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Globalization;
+﻿using QuantitativeWorld.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,12 @@ namespace QuantitativeWorld.Parsing
         private readonly Dictionary<string, LengthUnit> _unitsByPluralizedNames;
 
         public FormattedLengthUnitParser()
-            : this(new DictionaryPluralizer()) { }
+            : this(new DictionaryPluralizer(
+                irregularPlurals: new Dictionary<string, string>
+                {
+                    { "foot", "feet" }
+                }))
+        { }
         public FormattedLengthUnitParser(IPluralizer pluralizer)
             : this(
                   unitsByNames: GetParsableUnitsByNames(),
