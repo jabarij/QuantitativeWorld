@@ -1,5 +1,6 @@
 ﻿using QuantitativeWorld.DotNetExtensions;
 using QuantitativeWorld.Interfaces;
+using System;
 
 namespace QuantitativeWorld
 {
@@ -35,6 +36,11 @@ namespace QuantitativeWorld
 
         public bool IsZero() =>
             Kilograms == decimal.Zero;
+
+        public override string ToString() =>
+            QuantityFormatter.ToString<Weight, WeightUnit>(this);
+        public string ToString(IFormatProvider formatProvider) =>
+            QuantityFormatter.ToString<Weight, WeightUnit>(formatProvider, this);
 
         private static decimal GetKilograms(decimal value, WeightUnit sourceUnit) =>
             value * sourceUnit.ValueInKilograms;

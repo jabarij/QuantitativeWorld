@@ -24,6 +24,8 @@ namespace QuantitativeWorld
         public string Abbreviation => _abbreviation ?? Metre._abbreviation;
         public decimal ValueInMetres => _valueInMetres ?? Metre._valueInMetres.Value;
 
+        public override string ToString() => Abbreviation;
+
         decimal ILinearUnit.ValueInBaseUnit => ValueInMetres;
     }
 }

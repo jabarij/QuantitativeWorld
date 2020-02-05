@@ -1,9 +1,24 @@
-﻿using System;
+﻿using QuantitativeWorld.DotNetExtensions;
+using System;
 
 namespace QuantitativeWorld
 {
     partial struct Length
     {
+        public static bool operator ==(Length left, Length right) =>
+            Equality.AreEqualStructures(left, right);
+        public static bool operator !=(Length left, Length right) =>
+            !Equality.AreEqualStructures(left, right);
+
+        public static bool operator >(Length left, Length right) =>
+            Equality.IsStructureGreaterThan(left, right);
+        public static bool operator >=(Length left, Length right) =>
+            Equality.IsStructureGreaterThanOrEqual(left, right);
+        public static bool operator <(Length left, Length right) =>
+            Equality.IsStructureLowerThan(left, right);
+        public static bool operator <=(Length left, Length right) =>
+            Equality.IsStructureLowerThanOrEqual(left, right);
+
         public static Length operator +(Length left, Length right) =>
             new Length(formatUnit: left.Unit, metres: left.Metres + right.Metres);
         public static Length operator -(Length left, Length right) =>

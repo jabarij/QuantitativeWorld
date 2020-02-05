@@ -20,19 +20,5 @@ namespace QuantitativeWorld
             obj is Length length
             ? CompareTo(length)
             : throw Error.ArgumentIsOfUnexpectedType(obj, typeof(Length), nameof(obj));
-
-        public static bool operator ==(Length left, Length right) =>
-            Equality.AreEqualStructures(left, right);
-        public static bool operator !=(Length left, Length right) =>
-            !Equality.AreEqualStructures(left, right);
-
-        public static bool operator >(Length left, Length right) =>
-            Equality.IsStructureGreaterThan(left, right);
-        public static bool operator >=(Length left, Length right) =>
-            Equality.IsStructureGreaterThanOrEqual(left, right);
-        public static bool operator <(Length left, Length right) =>
-            Equality.IsStructureLowerThan(left, right);
-        public static bool operator <=(Length left, Length right) =>
-            Equality.IsStructureLowerThanOrEqual(left, right);
     }
 }

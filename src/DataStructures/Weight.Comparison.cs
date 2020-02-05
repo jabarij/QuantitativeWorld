@@ -20,19 +20,5 @@ namespace QuantitativeWorld
             obj is Weight weight
             ? CompareTo(weight)
             : throw Error.ArgumentIsOfUnexpectedType(obj, typeof(Weight), nameof(obj));
-
-        public static bool operator ==(Weight left, Weight right) =>
-            Equality.AreEqualStructures(left, right);
-        public static bool operator !=(Weight left, Weight right) =>
-            !Equality.AreEqualStructures(left, right);
-
-        public static bool operator >(Weight left, Weight right) =>
-            Equality.IsStructureGreaterThan(left, right);
-        public static bool operator >=(Weight left, Weight right) =>
-            Equality.IsStructureGreaterThanOrEqual(left, right);
-        public static bool operator <(Weight left, Weight right) =>
-            Equality.IsStructureLowerThan(left, right);
-        public static bool operator <=(Weight left, Weight right) =>
-            Equality.IsStructureLowerThanOrEqual(left, right);
     }
 }

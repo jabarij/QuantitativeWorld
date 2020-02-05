@@ -1,3 +1,5 @@
+using QuantitativeWorld.TestAbstractions;
+
 namespace QuantitativeWorld.Tests.BasicImplementations
 {
     public partial class LinearUnitConverterTests : TestsBase

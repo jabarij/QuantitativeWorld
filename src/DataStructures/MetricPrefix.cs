@@ -72,11 +72,16 @@ namespace QuantitativeWorld
             }
         }
 
+        public static decimal operator *(decimal value, MetricPrefix prefix) =>
+            value * prefix.Factor;
+        public static decimal operator *(MetricPrefix prefix, decimal value) =>
+            value * prefix;
+
         public static LengthUnit operator *(LengthUnit unit, MetricPrefix prefix) =>
             new LengthUnit(
                 name: string.Concat(prefix.Name, unit.Name),
                 abbreviation: string.Concat(prefix.Symbol, unit.Abbreviation),
-                valueInMetres: unit.ValueInMetres * prefix.Factor);
+                valueInMetres: unit.ValueInMetres * prefix);
         public static LengthUnit operator *(MetricPrefix prefix, LengthUnit unit) =>
             unit * prefix;
 
@@ -84,7 +89,7 @@ namespace QuantitativeWorld
             new WeightUnit(
                 name: string.Concat(prefix.Name, unit.Name),
                 abbreviation: string.Concat(prefix.Symbol, unit.Abbreviation),
-                valueInKilograms: unit.ValueInKilograms * prefix.Factor);
+                valueInKilograms: unit.ValueInKilograms * prefix);
         public static WeightUnit operator *(MetricPrefix prefix, WeightUnit unit) =>
             unit * prefix;
     }

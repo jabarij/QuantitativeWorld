@@ -1,5 +1,6 @@
 using FluentAssertions;
 using QuantitativeWorld.BasicImplementations;
+using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using Xunit;
 

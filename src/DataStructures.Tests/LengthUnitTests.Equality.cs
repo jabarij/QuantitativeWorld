@@ -1,4 +1,5 @@
 using FluentAssertions;
+using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
 namespace QuantitativeWorld.Tests

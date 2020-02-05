@@ -24,6 +24,8 @@ namespace QuantitativeWorld
         public string Abbreviation => _abbreviation ?? Kilogram._abbreviation;
         public decimal ValueInKilograms => _valueInKilograms ?? Kilogram._valueInKilograms.Value;
 
+        public override string ToString() => Abbreviation;
+
         decimal ILinearUnit.ValueInBaseUnit => ValueInKilograms;
     }
 }

@@ -1,5 +1,6 @@
-﻿using QuantitativeWorld.Interfaces;
-using QuantitativeWorld.DotNetExtensions;
+﻿using QuantitativeWorld.DotNetExtensions;
+using QuantitativeWorld.Interfaces;
+using System;
 
 namespace QuantitativeWorld
 {
@@ -35,6 +36,11 @@ namespace QuantitativeWorld
 
         public bool IsZero() =>
             Metres == decimal.Zero;
+
+        public override string ToString() =>
+            QuantityFormatter.ToString<Length, LengthUnit>(this);
+        public string ToString(IFormatProvider formatProvider) =>
+            QuantityFormatter.ToString<Length, LengthUnit>(formatProvider, this);
 
         private static decimal GetMetres(decimal value, LengthUnit sourceUnit) =>
             value * sourceUnit.ValueInMetres;

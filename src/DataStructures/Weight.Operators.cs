@@ -1,9 +1,24 @@
-﻿using System;
+﻿using QuantitativeWorld.DotNetExtensions;
+using System;
 
 namespace QuantitativeWorld
 {
     partial struct Weight
     {
+        public static bool operator ==(Weight left, Weight right) =>
+            Equality.AreEqualStructures(left, right);
+        public static bool operator !=(Weight left, Weight right) =>
+            !Equality.AreEqualStructures(left, right);
+
+        public static bool operator >(Weight left, Weight right) =>
+            Equality.IsStructureGreaterThan(left, right);
+        public static bool operator >=(Weight left, Weight right) =>
+            Equality.IsStructureGreaterThanOrEqual(left, right);
+        public static bool operator <(Weight left, Weight right) =>
+            Equality.IsStructureLowerThan(left, right);
+        public static bool operator <=(Weight left, Weight right) =>
+            Equality.IsStructureLowerThanOrEqual(left, right);
+
         public static Weight operator +(Weight left, Weight right) =>
             new Weight(formatUnit: left.Unit, kilograms: left.Kilograms + right.Kilograms);
         public static Weight operator -(Weight left, Weight right) =>
