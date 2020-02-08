@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld", "DataStructures\QuantitativeWorld.csproj", "{D58B08FC-ACF9-4F85-8C6D-F89D27D8395A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld", "QuantitativeWorld\QuantitativeWorld.csproj", "{D58B08FC-ACF9-4F85-8C6D-F89D27D8395A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Tests", "DataStructures.Tests\QuantitativeWorld.Tests.csproj", "{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Tests", "QuantitativeWorld.Tests\QuantitativeWorld.Tests.csproj", "{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Text", "QuantitativeWorld.Parsing\QuantitativeWorld.Text.csproj", "{2B6849A7-B6E4-4DF4-A90B-992081A1358F}"
 EndProject
