@@ -1,7 +1,7 @@
 ﻿namespace QuantitativeWorld.Interfaces
 {
-    public interface IQuantityFactory<TQuantity, TUnit>
-        where TQuantity : IQuantity<TUnit>
+    public interface ILinearQuantityFactory<TQuantity, TUnit>
+        where TQuantity : ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
         TQuantity Create(decimal value, TUnit unit);

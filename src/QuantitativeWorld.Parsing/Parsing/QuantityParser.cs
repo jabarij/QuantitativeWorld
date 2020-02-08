@@ -5,16 +5,16 @@ using System.Linq;
 namespace QuantitativeWorld.Text.Parsing
 {
     public class QuantityParser<TQuantity, TUnit> : IParser<TQuantity>
-        where TQuantity : IQuantity<TUnit>
+        where TQuantity : ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
         private readonly IParser<decimal> _valueParser;
         private readonly IParser<TUnit> _unitParser;
-        private readonly IQuantityFactory<TQuantity, TUnit> _quantityFactory;
+        private readonly ILinearQuantityFactory<TQuantity, TUnit> _quantityFactory;
 
         public QuantityParser(
             IParser<TUnit> unitParser,
-            IQuantityFactory<TQuantity, TUnit> quantityFactory)
+            ILinearQuantityFactory<TQuantity, TUnit> quantityFactory)
             : this(
                  valueParser: new DecimalParser(),
                  unitParser: unitParser,
@@ -23,7 +23,7 @@ namespace QuantitativeWorld.Text.Parsing
         public QuantityParser(
             IParser<decimal> valueParser,
             IParser<TUnit> unitParser,
-            IQuantityFactory<TQuantity, TUnit> quantityFactory)
+            ILinearQuantityFactory<TQuantity, TUnit> quantityFactory)
         {
             Assert.IsNotNull(valueParser, nameof(valueParser));
             Assert.IsNotNull(unitParser, nameof(unitParser));

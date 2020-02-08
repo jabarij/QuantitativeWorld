@@ -1,8 +1,8 @@
 ﻿using QuantitativeWorld.Interfaces;
 
-namespace QuantitativeWorld.BasicImplementations
+namespace QuantitativeWorld.Conversion
 {
-    public class LengthConverter : IQuantityConverter<Length, LengthUnit>
+    public class LengthConverter : ILinearQuantityConverter<Length, LengthUnit>
     {
         public Length Convert(Length length, LengthUnit targetUnit) =>
             length.Convert(targetUnit);

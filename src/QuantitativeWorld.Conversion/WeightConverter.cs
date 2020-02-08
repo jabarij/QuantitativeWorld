@@ -1,8 +1,8 @@
 ﻿using QuantitativeWorld.Interfaces;
 
-namespace QuantitativeWorld.BasicImplementations
+namespace QuantitativeWorld.Conversion
 {
-    public class WeightConverter : IQuantityConverter<Weight, WeightUnit>
+    public class WeightConverter : ILinearQuantityConverter<Weight, WeightUnit>
     {
         public Weight Convert(Weight weight, WeightUnit targetUnit) =>
             weight.Convert(targetUnit);

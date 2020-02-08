@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Interfaces
 {
-    public interface IQuantity<TUnit>
+    public interface ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
         decimal Value { get; }

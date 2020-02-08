@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataStructures\QuantitativeWorld.csproj" />
-    <ProjectReference Include="..\QuantitativeWorld.Conversion\QuantitativeWorld.Conversion.csproj" />
-    <ProjectReference Include="..\QuantitativeWorld.DotNetExtensions\QuantitativeWorld.DotNetExtensions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,8 @@
 ﻿using QuantitativeWorld.Interfaces;
 
-namespace QuantitativeWorld.BasicImplementations
+namespace QuantitativeWorld
 {
-    public class LengthFactory : IQuantityFactory<Length, LengthUnit>
+    public class LengthFactory : ILinearQuantityFactory<Length, LengthUnit>
     {
         public Length Create(decimal value, LengthUnit unit) =>
             new Length(value, unit);

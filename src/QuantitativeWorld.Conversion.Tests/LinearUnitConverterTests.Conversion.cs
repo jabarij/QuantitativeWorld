@@ -1,10 +1,9 @@
 using FluentAssertions;
-using QuantitativeWorld.BasicImplementations;
 using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using Xunit;
 
-namespace QuantitativeWorld.Tests.BasicImplementations
+namespace QuantitativeWorld.Conversion.Tests
 {
     partial class LinearUnitConverterTests
     {

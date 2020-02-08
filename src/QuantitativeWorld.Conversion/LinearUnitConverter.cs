@@ -1,6 +1,6 @@
 ﻿using QuantitativeWorld.Interfaces;
 
-namespace QuantitativeWorld.BasicImplementations
+namespace QuantitativeWorld.Conversion
 {
     public class LinearUnitConverter<TUnit> : IUnitConverter<TUnit>
         where TUnit : ILinearUnit

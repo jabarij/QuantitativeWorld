@@ -1,6 +1,6 @@
 using QuantitativeWorld.TestAbstractions;
 
-namespace QuantitativeWorld.Tests.BasicImplementations
+namespace QuantitativeWorld.Conversion.Tests
 {
     public partial class LinearUnitConverterTests : TestsBase
     {

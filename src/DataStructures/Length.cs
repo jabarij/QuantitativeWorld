@@ -4,7 +4,7 @@ using System;
 
 namespace QuantitativeWorld
 {
-    public partial struct Length : IQuantity<LengthUnit>
+    public partial struct Length : ILinearQuantity<LengthUnit>
     {
         public static readonly Weight MinValue = new Weight(MinMetres);
         public static readonly Weight MaxValue = new Weight(MaxMetres);
@@ -38,9 +38,9 @@ namespace QuantitativeWorld
             Metres == decimal.Zero;
 
         public override string ToString() =>
-            QuantityFormatter.ToString<Length, LengthUnit>(this);
+            DummyStaticQuantityFormatter.ToString<Length, LengthUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            QuantityFormatter.ToString<Length, LengthUnit>(formatProvider, this);
+            DummyStaticQuantityFormatter.ToString<Length, LengthUnit>(formatProvider, this);
 
         private static decimal GetMetres(decimal value, LengthUnit sourceUnit) =>
             value * sourceUnit.ValueInMetres;

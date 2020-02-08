@@ -1,17 +1,17 @@
 ﻿using QuantitativeWorld.Interfaces;
 using System;
 
-namespace QuantitativeWorld.BasicImplementations
+namespace QuantitativeWorld.Conversion
 {
-    public class QuantityConverter<TQuantity, TUnit> : IQuantityConverter<TQuantity, TUnit>
-        where TQuantity : IQuantity<TUnit>
+    public class LinearQuantityConverter<TQuantity, TUnit> : ILinearQuantityConverter<TQuantity, TUnit>
+        where TQuantity : ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
-        private readonly IQuantityFactory<TQuantity, TUnit> _quantityFactory;
+        private readonly ILinearQuantityFactory<TQuantity, TUnit> _quantityFactory;
         private readonly IUnitConverter<TUnit> _unitConverter;
 
-        public QuantityConverter(
-            IQuantityFactory<TQuantity, TUnit> quantityFactory,
+        public LinearQuantityConverter(
+            ILinearQuantityFactory<TQuantity, TUnit> quantityFactory,
             IUnitConverter<TUnit> unitConverter)
         {
             _quantityFactory = quantityFactory ?? throw new ArgumentNullException(nameof(quantityFactory));
