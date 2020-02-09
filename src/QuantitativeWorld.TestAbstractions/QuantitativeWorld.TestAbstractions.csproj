@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataStructures\QuantitativeWorld.csproj" />
+    <ProjectReference Include="..\QuantitativeWorld\QuantitativeWorld.csproj" />
   </ItemGroup>
 
 </Project>
