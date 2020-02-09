@@ -14,6 +14,38 @@ namespace QuantitativeWorld.Tests
                 : base(testFixture) { }
 
             [Fact]
+            public void TwoDefaultLengths_ShouldProduceDefaultLength()
+            {
+                // arrange
+                var length1 = default(Length);
+                var length2 = default(Length);
+
+                // act
+                var result = length1 + length2;
+
+                // assert
+                result.Should().Be(default(Length));
+            }
+
+            [Fact]
+            public void DefaultLengthAndZeroWithOtherUnit_ShouldProduceZeroWithOtherUnit()
+            {
+                // arrange
+                var defaultLength = default(Length);
+                var zeroKilometres = new Length(0m, LengthUnit.Kilometre);
+
+                // act
+                var result1 = defaultLength + zeroKilometres;
+                var result2 = zeroKilometres + defaultLength;
+
+                // assert
+                result1.IsZero().Should().BeTrue();
+                result1.Unit.Should().Be(zeroKilometres.Unit);
+                result2.IsZero().Should().BeTrue();
+                result2.Unit.Should().Be(zeroKilometres.Unit);
+            }
+
+            [Fact]
             public void LengthsOfSameUnit_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
@@ -49,6 +81,38 @@ namespace QuantitativeWorld.Tests
         {
             public Operator_Subtract(TestFixture testFixture)
                 : base(testFixture) { }
+
+            [Fact]
+            public void TwoDefaultLengths_ShouldProduceDefaultLength()
+            {
+                // arrange
+                var length1 = default(Length);
+                var length2 = default(Length);
+
+                // act
+                var result = length1 - length2;
+
+                // assert
+                result.Should().Be(default(Length));
+            }
+
+            [Fact]
+            public void DefaultLengthAndZeroWithOtherUnit_ShouldProduceZeroWithOtherUnit()
+            {
+                // arrange
+                var defaultLength = default(Length);
+                var zeroKilometres = new Length(0m, LengthUnit.Kilometre);
+
+                // act
+                var result1 = defaultLength - zeroKilometres;
+                var result2 = zeroKilometres - defaultLength;
+
+                // assert
+                result1.IsZero().Should().BeTrue();
+                result1.Unit.Should().Be(zeroKilometres.Unit);
+                result2.IsZero().Should().BeTrue();
+                result2.Unit.Should().Be(zeroKilometres.Unit);
+            }
 
             [Fact]
             public void LengthsOfSameUnit_ShouldProduceValidResultInSameUnit()

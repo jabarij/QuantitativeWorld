@@ -40,9 +40,9 @@ namespace QuantitativeWorld.Tests
 
                 // assert
                 result1.IsZero().Should().BeTrue();
-                result1.Unit.Should().Be(WeightUnit.Ton);
+                result1.Unit.Should().Be(zeroTons);
                 result2.IsZero().Should().BeTrue();
-                result2.Unit.Should().Be(WeightUnit.Ton);
+                result2.Unit.Should().Be(zeroTons);
             }
 
             [Fact]
