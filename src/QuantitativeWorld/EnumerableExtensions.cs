@@ -19,5 +19,18 @@ namespace QuantitativeWorld
             Assert.IsNotNull(selector, nameof(selector));
             return source.Aggregate(default(Weight), (acc, e) => acc + selector(e));
         }
+
+        public static Length Sum(this IEnumerable<Length> source)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            return source.Aggregate(default(Length), (acc, e) => acc + e);
+        }
+
+        public static Length Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, Length> selector)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(selector, nameof(selector));
+            return source.Aggregate(default(Length), (acc, e) => acc + selector(e));
+        }
     }
 }

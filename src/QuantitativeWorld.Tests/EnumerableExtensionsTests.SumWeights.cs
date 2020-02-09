@@ -64,9 +64,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 IEnumerable<TestObject<Weight>> objects = null;
+                Func<TestObject<Weight>, Weight> selector = e => e.Property;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum(objects, e => e.Property);
+                Action sum = () => EnumerableExtensions.Sum(objects, selector);
 
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
@@ -78,9 +79,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var objects = Enumerable.Empty<TestObject<Weight>>();
+                Func<TestObject<Weight>, Weight> selector = null;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum(objects, null);
+                Action sum = () => EnumerableExtensions.Sum(objects, selector);
 
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
