@@ -6,5 +6,15 @@ namespace QuantitativeWorld.Tests
     {
         public EnumerableExtensionsTests(TestFixture testFixture)
             : base(testFixture) { }
+
+        class TestObject<T>
+        {
+            public TestObject(T property)
+            {
+                Property = property;
+            }
+
+            public T Property { get; }
+        }
     }
 }

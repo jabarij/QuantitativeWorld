@@ -10,9 +10,9 @@ namespace QuantitativeWorld.Tests
 {
     partial class EnumerableExtensionsTests
     {
-        public class Sum : EnumerableExtensionsTests
+        public class SumWeights : EnumerableExtensionsTests
         {
-            public Sum(TestFixture testFixture) : base(testFixture) { }
+            public SumWeights(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void Weights_NullSource_ShouldThrow()
@@ -116,16 +116,6 @@ namespace QuantitativeWorld.Tests
                 result.Kilograms.Should().Be(expectedResult.Kilograms);
                 result.Unit.Should().Be(expectedResult.Unit);
                 result.Value.Should().Be(expectedResult.Value);
-            }
-
-            class TestObject<T>
-            {
-                public TestObject(T property)
-                {
-                    Property = property;
-                }
-
-                public T Property { get; }
             }
         }
     }
