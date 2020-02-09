@@ -14,8 +14,4 @@
     <PackageTags>quantity weight length</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\QuantitativeWorld.DotNetExtensions\QuantitativeWorld.DotNetExtensions.csproj" />
-  </ItemGroup>
-
 </Project>
