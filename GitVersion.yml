@@ -1,0 +1,14 @@
+mode: ContinuousDeployment
+branches:
+  feature:
+    increment: Patch
+    regex: feature?[/-]
+  release:
+    increment: Minor
+    regex: release?[/-]
+  develop:
+    regex: develop$
+  master:
+    regex: master$
+ignore:
+  sha: []
