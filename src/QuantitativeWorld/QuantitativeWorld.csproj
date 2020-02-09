@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>SoterDevelopment.QuantitativeWorld</PackageId>
+    <Authors>Bartłomiej Soter (soter.development@gmail.com)</Authors>
+    <Company>SoterDevelopment</Company>
+    <Description>Library containing quantities with units and basic algebra.</Description>
+    <Copyright>Copyright © SoterDevelopment 2020</Copyright>
+    <PackageProjectUrl>https://github.com/jabarij/QuantitativeWorld</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jabarij/QuantitativeWorld.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>quantity weight length</PackageTags>
+  </PropertyGroup>
+
+</Project>
