@@ -29,6 +29,19 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
+            public void Weights_EmptySource_ShouldReturnDefaultWeight()
+            {
+                // arrange
+                var weights = Enumerable.Empty<Weight>();
+
+                // act
+                var result = EnumerableExtensions.Sum(weights);
+
+                // assert
+                result.Should().Be(default(Weight));
+            }
+
+            [Fact]
             public void Weights_ShouldReturnValidResult()
             {
                 // arrange
@@ -72,6 +85,19 @@ namespace QuantitativeWorld.Tests
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
                     .And.ParamName.Should().Be("selector");
+            }
+
+            [Fact]
+            public void SelectedWeights_EmptySource_ShouldReturnDefaultWeight()
+            {
+                // arrange
+                var objects = Enumerable.Empty<TestObject<Weight>>();
+
+                // act
+                var result = EnumerableExtensions.Sum(objects, e => e.Property);
+
+                // assert
+                result.Should().Be(default(Weight));
             }
 
             [Fact]
