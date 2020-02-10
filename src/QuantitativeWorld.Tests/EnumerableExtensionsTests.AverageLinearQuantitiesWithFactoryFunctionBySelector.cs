@@ -18,12 +18,12 @@ namespace QuantitativeWorld.Tests
             public void NullSource_ShouldThrow()
             {
                 // arrange
-                IEnumerable<TestObject<Power>> objects = null;
+                IEnumerable<TestObject<Power>> source = null;
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
                 // act
-                Action average = () => EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                Action average = () => EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(source, factory, selector);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -34,12 +34,12 @@ namespace QuantitativeWorld.Tests
             public void NullSelector_ShouldThrow()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Power>>();
+                var source = Enumerable.Empty<TestObject<Power>>();
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = null;
 
                 // act
-                Action average = () => EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                Action average = () => EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(source, factory, selector);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -50,12 +50,12 @@ namespace QuantitativeWorld.Tests
             public void NullFactory_ShouldThrow()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Power>>();
+                var source = Enumerable.Empty<TestObject<Power>>();
                 Func<decimal, PowerUnit, Power> factory = null;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
                 // act
-                Action average = () => EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                Action average = () => EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(source, factory, selector);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -63,34 +63,34 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void EmptySource_ShouldReturnDefaultTestQuantity()
+            public void EmptySource_ShouldThrow()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Power>>();
+                var source = Enumerable.Empty<TestObject<Power>>();
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
                 // act
-                var result = EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                Action average = () => EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(source, factory, selector);
 
                 // assert
-                result.Should().Be(default(Power));
+                average.Should().Throw<InvalidOperationException>();
             }
 
             [Fact]
             public void ShouldReturnValidResult()
             {
                 // arrange
-                var objects = Fixture.CreateMany<Power>(3).Select(e => new TestObject<Power>(e));
+                var source = Fixture.CreateMany<Power>(3).Select(e => new TestObject<Power>(e));
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
-                decimal expectedResultInWatts = objects.Average(e => e.Property.Value * e.Property.Unit.ValueInWatts);
-                var expectedResultUnit = objects.First().Property.Unit;
+                decimal expectedResultInWatts = source.Average(e => e.Property.Value * e.Property.Unit.ValueInWatts);
+                var expectedResultUnit = source.First().Property.Unit;
                 var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
 
                 // act
-                var result = EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                var result = EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(source, factory, selector);
 
                 // assert
                 result.Value.Should().Be(expectedResult.Value);

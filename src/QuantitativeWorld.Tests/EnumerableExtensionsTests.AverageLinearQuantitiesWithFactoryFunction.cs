@@ -18,11 +18,11 @@ namespace QuantitativeWorld.Tests
             public void NullSource_ShouldThrow()
             {
                 // arrange
-                IEnumerable<Power> quantities = null;
+                IEnumerable<Power> source = null;
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
-                Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
+                Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(source, factory);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -33,11 +33,11 @@ namespace QuantitativeWorld.Tests
             public void NullFactory_ShouldThrow()
             {
                 // arrange
-                var quantities = Fixture.CreateMany<Power>(3);
+                var source = Fixture.CreateMany<Power>(3);
                 Func<decimal, PowerUnit, Power> factory = null;
 
                 // act
-                Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
+                Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(source, factory);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -45,32 +45,32 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void EmptySource_ShouldReturnDefaultTestQuantity()
+            public void EmptySource_ShouldThrow()
             {
                 // arrange
-                var quantities = Enumerable.Empty<Power>();
+                var source = Enumerable.Empty<Power>();
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
-                var result = EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
+                Action average = () => EnumerableExtensions.Average(source, factory);
 
                 // assert
-                result.Should().Be(default(Power));
+                average.Should().Throw<InvalidOperationException>();
             }
 
             [Fact]
             public void ShouldReturnValidResult()
             {
                 // arrange
-                var quantities = Fixture.CreateMany<Power>(3);
+                var source = Fixture.CreateMany<Power>(3);
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
 
-                decimal expectedResultInWatts = quantities.Average(e => e.Value * e.Unit.ValueInWatts);
-                var expectedResultUnit = quantities.First().Unit;
-                var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, PowerUnit.Watt);
+                decimal expectedResultInWatts = source.Average(e => e.Value * e.Unit.ValueInWatts);
+                var expectedResultUnit = source.First().Unit;
+                var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
 
                 // act
-                var result = EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
+                var result = EnumerableExtensions.Average<Power, PowerUnit>(source, factory);
 
                 // assert
                 result.Unit.Should().Be(expectedResult.Unit);

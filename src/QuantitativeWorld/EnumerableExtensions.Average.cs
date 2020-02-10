@@ -2,7 +2,6 @@
 using QuantitativeWorld.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace QuantitativeWorld
 {
@@ -11,27 +10,79 @@ namespace QuantitativeWorld
         public static Weight Average(this IEnumerable<Weight> source)
         {
             Assert.IsNotNull(source, nameof(source));
-            return source.Aggregate(default(Weight), (acc, e) => acc + e);
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Weight);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += enumerator.Current;
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
         }
 
         public static Weight Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Weight> selector)
         {
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNull(selector, nameof(selector));
-            return source.Aggregate(default(Weight), (acc, e) => acc + selector(e));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Weight);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += selector(enumerator.Current);
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
         }
 
         public static Length Average(this IEnumerable<Length> source)
         {
             Assert.IsNotNull(source, nameof(source));
-            return source.Aggregate(default(Length), (acc, e) => acc + e);
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Length);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += enumerator.Current;
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
         }
 
         public static Length Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Length> selector)
         {
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNull(selector, nameof(selector));
-            return source.Aggregate(default(Length), (acc, e) => acc + selector(e));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Length);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += selector(enumerator.Current);
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
         }
 
         public static TQuantity Average<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<decimal, TUnit, TQuantity> factory)
@@ -78,20 +129,22 @@ namespace QuantitativeWorld
         {
             bool hasElements = enumerator.MoveNext();
             if (!hasElements)
-                return default(TQuantity);
+                throw new InvalidOperationException("Sequence contains no elements.");
 
             var targetUnit = selector(enumerator.Current).Unit;
-            decimal valueInBaseUnit = 0m;
+            int count = 0;
+            decimal sumInBaseUnit = 0m;
             do
             {
                 var quantity = selector(enumerator.Current);
-                valueInBaseUnit += quantity.Value * quantity.Unit.ValueInBaseUnit;
+                sumInBaseUnit += quantity.Value * quantity.Unit.ValueInBaseUnit;
+                count++;
             }
             while (enumerator.MoveNext());
 
             if (targetUnit == null || targetUnit.ValueInBaseUnit == decimal.Zero)
                 throw new DivideByZeroException($"Could not find non-zero based unit of type {typeof(TUnit).FullName} in source.");
-            return factory(valueInBaseUnit / targetUnit.ValueInBaseUnit, targetUnit);
+            return factory(sumInBaseUnit / targetUnit.ValueInBaseUnit / count, targetUnit);
         }
     }
 }

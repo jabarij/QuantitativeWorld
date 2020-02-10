@@ -18,10 +18,10 @@ namespace QuantitativeWorld.Tests
             public void NullSource_ShouldThrow()
             {
                 // arrange
-                IEnumerable<Length> lengths = null;
+                IEnumerable<Length> source = null;
 
                 // act
-                Action average = () => EnumerableExtensions.Average(lengths);
+                Action average = () => EnumerableExtensions.Average(source);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -29,29 +29,30 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void EmptySource_ShouldReturnDefaultLength()
+            public void EmptySource_ShouldThrow()
             {
                 // arrange
-                var lengths = Enumerable.Empty<Length>();
+                var source = Enumerable.Empty<Length>();
 
                 // act
-                var result = EnumerableExtensions.Average(lengths);
+                Action average = () => EnumerableExtensions.Average(source);
 
                 // assert
-                result.Should().Be(default(Length));
+                average.Should().Throw<InvalidOperationException>();
             }
 
             [Fact]
             public void ShouldReturnValidResult()
             {
                 // arrange
-                var lengths = Fixture.CreateMany<Length>(3);
-                decimal expectedResultInMetres = lengths.Average(e => e.Metres);
-                var expectedResultUnit = lengths.First().Unit;
+                var source = Fixture.CreateMany<Length>(3);
+
+                decimal expectedResultInMetres = source.Average(e => e.Metres);
+                var expectedResultUnit = source.First().Unit;
                 var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 
                 // act
-                var result = EnumerableExtensions.Average(lengths);
+                var result = EnumerableExtensions.Average(source);
 
                 // assert
                 result.Metres.Should().Be(expectedResult.Metres);

@@ -18,11 +18,11 @@ namespace QuantitativeWorld.Tests
             public void NullSource_ShouldThrow()
             {
                 // arrange
-                IEnumerable<TestObject<Length>> objects = null;
+                IEnumerable<TestObject<Length>> source = null;
                 Func<TestObject<Length>, Length> selector = e => e.Property;
 
                 // act
-                Action average = () => EnumerableExtensions.Average(objects, selector);
+                Action average = () => EnumerableExtensions.Average(source, selector);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -33,11 +33,11 @@ namespace QuantitativeWorld.Tests
             public void NullSelector_ShouldThrow()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Length>>();
+                var source = Enumerable.Empty<TestObject<Length>>();
                 Func<TestObject<Length>, Length> selector = null;
 
                 // act
-                Action average = () => EnumerableExtensions.Average(objects, selector);
+                Action average = () => EnumerableExtensions.Average(source, selector);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -45,29 +45,32 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void EmptySource_ShouldReturnDefaultLength()
+            public void EmptySource_ShouldThrow()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Length>>();
+                var source = Enumerable.Empty<TestObject<Length>>();
+                Func<TestObject<Length>, Length> selector = e => e.Property;
 
                 // act
-                var result = EnumerableExtensions.Average(objects, e => e.Property);
+                Action average = () => EnumerableExtensions.Average(source, selector);
 
                 // assert
-                result.Should().Be(default(Length));
+                average.Should().Throw<InvalidOperationException>();
             }
 
             [Fact]
             public void ShouldReturnValidResult()
             {
                 // arrange
-                var objects = Fixture.CreateMany<Length>(3).Select(e => new TestObject<Length>(e));
-                decimal expectedResultInMetres = objects.Average(e => e.Property.Metres);
-                var expectedResultUnit = objects.First().Property.Unit;
+                var source = Fixture.CreateMany<Length>(3).Select(e => new TestObject<Length>(e));
+                Func<TestObject<Length>, Length> selector = e => e.Property;
+
+                decimal expectedResultInMetres = source.Average(e => e.Property.Metres);
+                var expectedResultUnit = source.First().Property.Unit;
                 var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 
                 // act
-                var result = EnumerableExtensions.Average(objects, e => e.Property);
+                var result = EnumerableExtensions.Average(source, selector);
 
                 // assert
                 result.Metres.Should().Be(expectedResult.Metres);

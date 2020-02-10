@@ -18,10 +18,10 @@ namespace QuantitativeWorld.Tests
             public void NullSource_ShouldThrow()
             {
                 // arrange
-                IEnumerable<Weight> weights = null;
+                IEnumerable<Weight> source = null;
 
                 // act
-                Action average = () => EnumerableExtensions.Average(weights);
+                Action average = () => EnumerableExtensions.Average(source);
 
                 // assert
                 average.Should().Throw<ArgumentNullException>()
@@ -29,29 +29,30 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void EmptySource_ShouldReturnDefaultWeight()
+            public void EmptySource_ShouldThrow()
             {
                 // arrange
-                var weights = Enumerable.Empty<Weight>();
+                var source = Enumerable.Empty<Weight>();
 
                 // act
-                var result = EnumerableExtensions.Average(weights);
+                Action average = () => EnumerableExtensions.Average(source);
+
 
                 // assert
-                result.Should().Be(default(Weight));
+                average.Should().Throw<InvalidOperationException>();
             }
 
             [Fact]
             public void ShouldReturnValidResult()
             {
                 // arrange
-                var weights = Fixture.CreateMany<Weight>(3);
-                decimal expectedResultInKilograms = weights.Average(e => e.Kilograms);
-                var expectedResultUnit = weights.First().Unit;
+                var source = Fixture.CreateMany<Weight>(3);
+                decimal expectedResultInKilograms = source.Average(e => e.Kilograms);
+                var expectedResultUnit = source.First().Unit;
                 var expectedResult = new Weight(expectedResultInKilograms).Convert(expectedResultUnit);
 
                 // act
-                var result = EnumerableExtensions.Average(weights);
+                var result = EnumerableExtensions.Average(source);
 
                 // assert
                 result.Kilograms.Should().Be(expectedResult.Kilograms);
