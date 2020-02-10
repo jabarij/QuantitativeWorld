@@ -14,6 +14,38 @@ namespace QuantitativeWorld.Tests
                 : base(testFixture) { }
 
             [Fact]
+            public void TwoDefaultWeights_ShouldProduceDefaultWeight()
+            {
+                // arrange
+                var weight1 = default(Weight);
+                var weight2 = default(Weight);
+
+                // act
+                var result = weight1 + weight2;
+
+                // assert
+                result.Should().Be(default(Weight));
+            }
+
+            [Fact]
+            public void DefaultWeightAndZeroWithOtherUnit_ShouldProduceZeroWithOtherUnit()
+            {
+                // arrange
+                var defaultWeight = default(Weight);
+                var zeroTons = new Weight(0m, WeightUnit.Ton);
+
+                // act
+                var result1 = defaultWeight + zeroTons;
+                var result2 = zeroTons + defaultWeight;
+
+                // assert
+                result1.IsZero().Should().BeTrue();
+                result1.Unit.Should().Be(zeroTons.Unit);
+                result2.IsZero().Should().BeTrue();
+                result2.Unit.Should().Be(zeroTons.Unit);
+            }
+
+            [Fact]
             public void WeightsOfSameUnit_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
@@ -49,6 +81,38 @@ namespace QuantitativeWorld.Tests
         {
             public Operator_Subtract(TestFixture testFixture)
                 : base(testFixture) { }
+
+            [Fact]
+            public void TwoDefaultWeights_ShouldProduceDefaultWeight()
+            {
+                // arrange
+                var weight1 = default(Weight);
+                var weight2 = default(Weight);
+
+                // act
+                var result = weight1 - weight2;
+
+                // assert
+                result.Should().Be(default(Weight));
+            }
+
+            [Fact]
+            public void DefaultWeightAndZeroWithOtherUnit_ShouldProduceZeroWithOtherUnit()
+            {
+                // arrange
+                var defaultWeight = default(Weight);
+                var zeroTons = new Weight(0m, WeightUnit.Ton);
+
+                // act
+                var result1 = defaultWeight - zeroTons;
+                var result2 = zeroTons - defaultWeight;
+
+                // assert
+                result1.IsZero().Should().BeTrue();
+                result1.Unit.Should().Be(WeightUnit.Ton);
+                result2.IsZero().Should().BeTrue();
+                result2.Unit.Should().Be(WeightUnit.Ton);
+            }
 
             [Fact]
             public void WeightsOfSameUnit_ShouldProduceValidResultInSameUnit()

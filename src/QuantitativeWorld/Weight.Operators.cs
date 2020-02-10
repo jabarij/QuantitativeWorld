@@ -20,9 +20,9 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Weight operator +(Weight left, Weight right) =>
-            new Weight(formatUnit: left.Unit, kilograms: left.Kilograms + right.Kilograms);
+            new Weight(formatUnit: left._formatUnit ?? right.Unit, kilograms: left.Kilograms + right.Kilograms);
         public static Weight operator -(Weight left, Weight right) =>
-            new Weight(formatUnit: left.Unit, kilograms: left.Kilograms - right.Kilograms);
+            new Weight(formatUnit: left._formatUnit ?? right.Unit, kilograms: left.Kilograms - right.Kilograms);
 
         public static Weight operator *(Weight weight, decimal factor) =>
             new Weight(formatUnit: weight.Unit, kilograms: weight.Kilograms * factor);

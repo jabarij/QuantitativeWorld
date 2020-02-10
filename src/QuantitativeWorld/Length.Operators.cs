@@ -20,9 +20,9 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Length operator +(Length left, Length right) =>
-            new Length(formatUnit: left.Unit, metres: left.Metres + right.Metres);
+            new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres + right.Metres);
         public static Length operator -(Length left, Length right) =>
-            new Length(formatUnit: left.Unit, metres: left.Metres - right.Metres);
+            new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres - right.Metres);
 
         public static Length operator *(Length length, decimal factor) =>
             new Length(formatUnit: length.Unit, metres: length.Metres * factor);
