@@ -10,9 +10,9 @@ namespace QuantitativeWorld.Tests
 {
     partial class EnumerableExtensionsTests
     {
-        public class SumLinearQuantitiesWithFactoryFunction : EnumerableExtensionsTests
+        public class AverageLinearQuantitiesWithFactoryFunction : EnumerableExtensionsTests
         {
-            public SumLinearQuantitiesWithFactoryFunction(TestFixture testFixture) : base(testFixture) { }
+            public AverageLinearQuantitiesWithFactoryFunction(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void NullSource_ShouldThrow()
@@ -22,10 +22,10 @@ namespace QuantitativeWorld.Tests
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
 
                 // assert
-                sum.Should().Throw<ArgumentNullException>()
+                average.Should().Throw<ArgumentNullException>()
                     .And.ParamName.Should().Be("source");
             }
 
@@ -37,10 +37,10 @@ namespace QuantitativeWorld.Tests
                 Func<decimal, PowerUnit, Power> factory = null;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
 
                 // assert
-                sum.Should().Throw<ArgumentNullException>()
+                average.Should().Throw<ArgumentNullException>()
                     .And.ParamName.Should().Be("factory");
             }
 
@@ -52,7 +52,7 @@ namespace QuantitativeWorld.Tests
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
-                var result = EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                var result = EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
 
                 // assert
                 result.Should().Be(default(Power));
@@ -65,12 +65,12 @@ namespace QuantitativeWorld.Tests
                 var quantities = Fixture.CreateMany<Power>(3);
                 Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
 
-                decimal expectedResultInWatts = quantities.Sum(e => e.Value * e.Unit.ValueInWatts);
+                decimal expectedResultInWatts = quantities.Average(e => e.Value * e.Unit.ValueInWatts);
                 var expectedResultUnit = quantities.First().Unit;
-                var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
+                var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, PowerUnit.Watt);
 
                 // act
-                var result = EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                var result = EnumerableExtensions.Average<Power, PowerUnit>(quantities, factory);
 
                 // assert
                 result.Unit.Should().Be(expectedResult.Unit);
