@@ -23,6 +23,8 @@ namespace QuantitativeWorld
             new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres + right.Metres);
         public static Length operator -(Length left, Length right) =>
             new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres - right.Metres);
+        public static Length operator -(Length length) =>
+            new Length(formatUnit: length.Unit, metres: -length.Metres);
 
         public static Length operator *(Length length, decimal factor) =>
             new Length(formatUnit: length.Unit, metres: length.Metres * factor);
@@ -40,6 +42,29 @@ namespace QuantitativeWorld
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
             return length.Metres / denominator.Metres;
+        }
+
+        public static Length? operator +(Length? left, Length? right)
+        {
+            if (left.HasValue && right.HasValue)
+                return left.Value + right.Value;
+            else if (!left.HasValue && !right.HasValue)
+                return null;
+            else if (left.HasValue)
+                return left.Value;
+            else
+                return right.Value;
+        }
+        public static Length? operator -(Length? left, Length? right)
+        {
+            if (left.HasValue && right.HasValue)
+                return left.Value - right.Value;
+            else if (!left.HasValue && !right.HasValue)
+                return null;
+            else if (left.HasValue)
+                return left.Value;
+            else
+                return -right.Value;
         }
     }
 }
