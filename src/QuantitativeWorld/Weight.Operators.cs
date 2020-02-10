@@ -66,5 +66,15 @@ namespace QuantitativeWorld
             else
                 return -right.Value;
         }
+
+        public static Weight? operator *(Weight? weight, decimal factor) =>
+            (weight ?? default(Weight)) * factor;
+        public static Weight? operator *(decimal factor, Weight? weight) =>
+            weight * factor;
+
+        public static Weight? operator /(Weight? weight, decimal denominator) =>
+            (weight ?? default(Weight)) / denominator;
+        public static decimal operator /(Weight? weight, Weight? denominator) =>
+            (weight ?? default(Weight)) / (denominator ?? default(Weight));
     }
 }

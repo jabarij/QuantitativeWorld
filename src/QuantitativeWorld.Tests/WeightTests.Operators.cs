@@ -114,7 +114,8 @@ namespace QuantitativeWorld.Tests
 
         public class Operator_Subtract : WeightTests
         {
-            public Operator_Subtract(TestFixture testFixture) : base(testFixture) { }
+            public Operator_Subtract(TestFixture testFixture)
+                : base(testFixture) { }
 
             [Fact]
             public void WeightsOfSameUnit_ShouldProduceValidResultInSameUnit()
@@ -183,13 +184,13 @@ namespace QuantitativeWorld.Tests
             }
         }
 
-        public class Operator_Multiply : WeightTests
+        public class Operator_MultiplyByDecimal : WeightTests
         {
-            public Operator_Multiply(TestFixture testFixture)
+            public Operator_MultiplyByDecimal(TestFixture testFixture)
                 : base(testFixture) { }
 
             [Fact]
-            public void MultiplyByDecimal_ShouldProduceValidResultInSameUnit()
+            public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
@@ -203,15 +204,30 @@ namespace QuantitativeWorld.Tests
                 result.Value.Should().Be(weight.Value * factor);
                 result.Unit.Should().Be(weight.Unit);
             }
-        }
-
-        public class Operator_Divide : WeightTests
-        {
-            public Operator_Divide(TestFixture testFixture)
-                : base(testFixture) { }
 
             [Fact]
-            public void DivideByZeroDecimal_ShouldThrow()
+            public void NullWeight_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Weight? nullWeight = null;
+                decimal factor = Fixture.Create<decimal>();
+                var expectedResult = default(Weight) * factor;
+
+                // act
+                var result = nullWeight * factor;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+        }
+
+        public class Operator_DivideByDecimal : WeightTests
+        {
+            public Operator_DivideByDecimal(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
             {
                 // arrange
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
@@ -224,7 +240,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void DivideByDecimal_ShouldProduceValidResultInSameUnit()
+            public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
@@ -239,20 +255,56 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void DivideByZeroWeight_ShouldThrow()
+            public void NullWeight_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Weight? nullWeight = null;
+                decimal denominator = Fixture.CreateNonZeroDecimal();
+                var expectedResult = default(Weight) / denominator;
+
+                // act
+                var result = nullWeight * denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+        }
+
+        public class Operator_DivideByWeight : WeightTests
+        {
+            public Operator_DivideByWeight(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
             {
                 // arrange
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                var denominator = new Weight(decimal.Zero);
 
                 // act
-                Func<decimal> divideByZero = () => weight / new Weight(decimal.Zero);
+                Func<decimal> divideByZero = () => weight / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
             [Fact]
-            public void DivideByWeight_ShouldProduceValidDecimalResult()
+            public void DivideByNull_ShouldThrow()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                Weight? denominator = null;
+
+                // act
+                Func<decimal> divideByZero = () => weight / denominator;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidDecimalResult()
             {
                 // arrange
                 var nominator = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
