@@ -66,5 +66,15 @@ namespace QuantitativeWorld
             else
                 return -right.Value;
         }
+
+        public static Length? operator *(Length? length, decimal factor) =>
+            (length ?? default(Length)) * factor;
+        public static Length? operator *(decimal factor, Length? length) =>
+            length * factor;
+
+        public static Length? operator /(Length? length, decimal denominator) =>
+            (length ?? default(Length)) / denominator;
+        public static decimal operator /(Length? length, Length? denominator) =>
+            (length ?? default(Length)) / (denominator ?? default(Length));
     }
 }
