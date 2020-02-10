@@ -8,40 +8,107 @@ namespace QuantitativeWorld.Tests
 {
     partial class LengthTests
     {
+        public class Operator_Oposite : LengthTests
+        {
+            public Operator_Oposite(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+
+                // act
+                var result = -length;
+
+                // assert
+                result.Metres.Should().Be(-length.Metres);
+                result.Value.Should().Be(-length.Value);
+                result.Unit.Should().Be(length.Unit);
+            }
+
+            [Fact]
+            public void NullLength_ShouldReturnNull()
+            {
+                // arrange
+                Length? length = null;
+
+                // act
+                var result = -length;
+
+                // assert
+                result.Should().BeNull();
+            }
+        }
+
         public class Operator_Add : LengthTests
         {
-            public Operator_Add(TestFixture testFixture)
-                : base(testFixture) { }
+            public Operator_Add(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void LengthsOfSameUnit_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var weight2 = CreateLengthInUnit(weight1.Unit);
+                var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var length2 = CreateLengthInUnit(length1.Unit);
 
                 // act
-                var result = weight1 + weight2;
+                var result = length1 + length2;
 
                 // assert
-                result.Metres.Should().Be(weight1.Metres + weight2.Metres);
-                result.Value.Should().Be(weight1.Value + weight2.Value);
-                result.Unit.Should().Be(weight1.Unit);
+                result.Metres.Should().Be(length1.Metres + length2.Metres);
+                result.Value.Should().Be(length1.Value + length2.Value);
+                result.Unit.Should().Be(length1.Unit);
             }
 
             [Fact]
             public void LengthOfDifferentUnits_ShouldProduceValidResultInUnitOfLeftOperand()
             {
                 // arrange
-                var weight1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var weight2 = CreateLengthInUnitOtherThan(LengthUnit.Metre, weight1.Unit);
+                var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var length2 = CreateLengthInUnitOtherThan(LengthUnit.Metre, length1.Unit);
 
                 // act
-                var result = weight1 + weight2;
+                var result = length1 + length2;
 
                 // assert
-                result.Metres.Should().Be(weight1.Metres + weight2.Metres);
-                result.Unit.Should().Be(weight1.Unit);
+                result.Metres.Should().Be(length1.Metres + length2.Metres);
+                result.Unit.Should().Be(length1.Unit);
+            }
+
+            [Fact]
+            public void NullLengths_ShouldReturnNull()
+            {
+                // arrange
+                Length? nullLength1 = null;
+                Length? nullLength2 = null;
+
+                // act
+                var result = nullLength1 + nullLength2;
+
+                // assert
+                result.Should().BeNull();
+            }
+
+            [Fact]
+            public void NullAndLength_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Length? nullLength = null;
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+
+                // act
+                var result1 = length + nullLength;
+                var result2 = nullLength + length;
+
+                // assert
+                result1.Should().NotBeNull();
+                result1.Value.Metres.Should().Be(length.Metres);
+                result1.Value.Unit.Should().Be(length.Unit);
+
+                result2.Should().NotBeNull();
+                result2.Value.Metres.Should().Be(length.Metres);
+                result2.Value.Unit.Should().Be(length.Unit);
             }
         }
 
@@ -54,31 +121,66 @@ namespace QuantitativeWorld.Tests
             public void LengthsOfSameUnit_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var weight2 = CreateLengthInUnit(weight1.Unit);
+                var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var length2 = CreateLengthInUnit(length1.Unit);
 
                 // act
-                var result = weight1 - weight2;
+                var result = length1 - length2;
 
                 // assert
-                result.Metres.Should().Be(weight1.Metres - weight2.Metres);
-                result.Value.Should().Be(weight1.Value - weight2.Value);
-                result.Unit.Should().Be(weight1.Unit);
+                result.Metres.Should().Be(length1.Metres - length2.Metres);
+                result.Value.Should().Be(length1.Value - length2.Value);
+                result.Unit.Should().Be(length1.Unit);
             }
 
             [Fact]
             public void LengthOfDifferentUnits_ShouldProduceValidResultInUnitOfLeftOperand()
             {
                 // arrange
-                var weight1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var weight2 = CreateLengthInUnitOtherThan(LengthUnit.Metre, weight1.Unit);
+                var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var length2 = CreateLengthInUnitOtherThan(LengthUnit.Metre, length1.Unit);
 
                 // act
-                var result = weight1 - weight2;
+                var result = length1 - length2;
 
                 // assert
-                result.Metres.Should().Be(weight1.Metres - weight2.Metres);
-                result.Unit.Should().Be(weight1.Unit);
+                result.Metres.Should().Be(length1.Metres - length2.Metres);
+                result.Unit.Should().Be(length1.Unit);
+            }
+
+            [Fact]
+            public void NullLengths_ShouldReturnNull()
+            {
+                // arrange
+                Length? nullLength1 = null;
+                Length? nullLength2 = null;
+
+                // act
+                var result = nullLength1 - nullLength2;
+
+                // assert
+                result.Should().BeNull();
+            }
+
+            [Fact]
+            public void NullAndLength_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Length? nullLength = null;
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+
+                // act
+                var result1 = length - nullLength;
+                var result2 = nullLength - length;
+
+                // assert
+                result1.Should().NotBeNull();
+                result1.Value.Metres.Should().Be(length.Metres);
+                result1.Value.Unit.Should().Be(length.Unit);
+
+                result2.Should().NotBeNull();
+                result2.Value.Metres.Should().Be(-length.Metres);
+                result2.Value.Unit.Should().Be(length.Unit);
             }
         }
 
@@ -91,16 +193,16 @@ namespace QuantitativeWorld.Tests
             public void MultiplyByDecimal_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
                 decimal factor = Fixture.Create<decimal>();
 
                 // act
-                var result = weight * factor;
+                var result = length * factor;
 
                 // assert
-                result.Metres.Should().Be(weight.Metres * factor);
-                result.Value.Should().Be(weight.Value * factor);
-                result.Unit.Should().Be(weight.Unit);
+                result.Metres.Should().Be(length.Metres * factor);
+                result.Value.Should().Be(length.Value * factor);
+                result.Unit.Should().Be(length.Unit);
             }
         }
 
@@ -126,15 +228,15 @@ namespace QuantitativeWorld.Tests
             public void DivideByDecimal_ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
                 decimal denominator = Fixture.CreateNonZeroDecimal();
 
                 // act
-                var result = weight / denominator;
+                var result = length / denominator;
 
                 // assert
-                result.Metres.Should().BeApproximately(weight.Metres / denominator, DecimalPrecision);
-                result.Unit.Should().Be(weight.Unit);
+                result.Metres.Should().BeApproximately(length.Metres / denominator, DecimalPrecision);
+                result.Unit.Should().Be(length.Unit);
             }
 
             [Fact]

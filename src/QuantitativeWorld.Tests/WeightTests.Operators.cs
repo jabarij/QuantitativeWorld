@@ -8,10 +8,42 @@ namespace QuantitativeWorld.Tests
 {
     partial class WeightTests
     {
+        public class Operator_Oposite : WeightTests
+        {
+            public Operator_Oposite(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+
+                // act
+                var result = -weight;
+
+                // assert
+                result.Kilograms.Should().Be(-weight.Kilograms);
+                result.Value.Should().Be(-weight.Value);
+                result.Unit.Should().Be(weight.Unit);
+            }
+
+            [Fact]
+            public void NullWeight_ShouldReturnNull()
+            {
+                // arrange
+                Weight? weight = null;
+
+                // act
+                var result = -weight;
+
+                // assert
+                result.Should().BeNull();
+            }
+        }
+
         public class Operator_Add : WeightTests
         {
-            public Operator_Add(TestFixture testFixture)
-                : base(testFixture) { }
+            public Operator_Add(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void WeightsOfSameUnit_ShouldProduceValidResultInSameUnit()
@@ -43,12 +75,46 @@ namespace QuantitativeWorld.Tests
                 result.Kilograms.Should().Be(weight1.Kilograms + weight2.Kilograms);
                 result.Unit.Should().Be(weight1.Unit);
             }
+
+            [Fact]
+            public void NullWeights_ShouldReturnNull()
+            {
+                // arrange
+                Weight? nullWeight1 = null;
+                Weight? nullWeight2 = null;
+
+                // act
+                var result = nullWeight1 + nullWeight2;
+
+                // assert
+                result.Should().BeNull();
+            }
+
+            [Fact]
+            public void NullAndWeight_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Weight? nullWeight = null;
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+
+                // act
+                var result1 = weight + nullWeight;
+                var result2 = nullWeight + weight;
+
+                // assert
+                result1.Should().NotBeNull();
+                result1.Value.Kilograms.Should().Be(weight.Kilograms);
+                result1.Value.Unit.Should().Be(weight.Unit);
+
+                result2.Should().NotBeNull();
+                result2.Value.Kilograms.Should().Be(weight.Kilograms);
+                result2.Value.Unit.Should().Be(weight.Unit);
+            }
         }
 
         public class Operator_Subtract : WeightTests
         {
-            public Operator_Subtract(TestFixture testFixture)
-                : base(testFixture) { }
+            public Operator_Subtract(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void WeightsOfSameUnit_ShouldProduceValidResultInSameUnit()
@@ -79,6 +145,41 @@ namespace QuantitativeWorld.Tests
                 // assert
                 result.Kilograms.Should().Be(weight1.Kilograms - weight2.Kilograms);
                 result.Unit.Should().Be(weight1.Unit);
+            }
+
+            [Fact]
+            public void NullWeights_ShouldReturnNull()
+            {
+                // arrange
+                Weight? nullWeight1 = null;
+                Weight? nullWeight2 = null;
+
+                // act
+                var result = nullWeight1 - nullWeight2;
+
+                // assert
+                result.Should().BeNull();
+            }
+
+            [Fact]
+            public void NullAndWeight_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Weight? nullWeight = null;
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+
+                // act
+                var result1 = weight - nullWeight;
+                var result2 = nullWeight - weight;
+
+                // assert
+                result1.Should().NotBeNull();
+                result1.Value.Kilograms.Should().Be(weight.Kilograms);
+                result1.Value.Unit.Should().Be(weight.Unit);
+
+                result2.Should().NotBeNull();
+                result2.Value.Kilograms.Should().Be(-weight.Kilograms);
+                result2.Value.Unit.Should().Be(weight.Unit);
             }
         }
 
