@@ -11,7 +11,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         public LengthUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"millimetre\",\"Abbreviation\":\"g\",\"ValueInMetres\":0.001}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"millimetre\",\"Abbreviation\":\"mm\",\"ValueInMetres\":0.001}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"mm\"}")]
         public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJson)
         {
