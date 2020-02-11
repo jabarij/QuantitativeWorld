@@ -10,8 +10,8 @@ var testsOutputDir = outputRootDir + "tests/";
 
 var sourceRootDir = "./src/";
 var solutionPath_QuantitativeWorld = sourceRootDir + "QuantitativeWorld.sln";
-var projectPath_QuantitativeWorld = sourceRootDir + "QuantitativeWorld/QuantitativeWorld.csproj";
 var nugetPackageName_QuantitativeWorld = "SoterDevelopment.QuantitativeWorld";
+var nugetPackageNames = "SoterDevelopment.QuantitativeWorld|SoterDevelopment.QuantitativeWorld.Text.Json";
 
 GitVersion version = null;
 
@@ -44,27 +44,12 @@ var buildSolutionTask = Task("Build-Solution")
           .Append($"-p:PackageVersion={version.FullSemVer}")
       });
   });
-
-var buildProjectTask = Task("Build-Project")
-  .IsDependentOn(resolveVersionTask)
-  .IsDependentOn(cleanBuildOutputDirTask)
-  .Does(() =>
-  {
-    DotNetCoreBuild(projectPath_QuantitativeWorld,
-      new DotNetCoreBuildSettings
-      {
-        Configuration = configuration,
-        OutputDirectory = buildOutputDir,
-        ArgumentCustomization = args => args
-          .Append($"-p:PackageVersion={version.FullSemVer}")
-      });
-  });
   
 var runUnitTestsTask = Task("Run-UnitTests")
-  .IsDependentOn(buildProjectTask)
+  .IsDependentOn(buildSolutionTask)
   .Does(() =>
   {
-    var testProjectFiles = GetFiles(sourceRootDir + "QuantitativeWorld/QuantitativeWorld.Tests.csproj");
+    var testProjectFiles = GetFiles(sourceRootDir + "QuantitativeWorld/**/[!QuantitativeWorld.Text.Tests.csproj]*.Tests.csproj");
     foreach (var project in testProjectFiles)
     {
       Information("Testing project: " + project);
@@ -90,20 +75,20 @@ var buildTargetValidateParamsTask = Task("Build-ValidateParams")
 
 var buildTask = Task("Build")
   .IsDependentOn(buildTargetValidateParamsTask)
-  .IsDependentOn(buildProjectTask)
+  .IsDependentOn(buildSolutionTask)
   .IsDependentOn(runUnitTestsTask)
   .Does(() =>
   {
   });
   
-var publishNuGetPackageTask = Task("Publish-NuGetPackage")
-  .Does(() =>
+var publishNuGetPackagesTask = Task("Publish-NuGet-Packages")
+  .DoesForEach(nugetPackageNames.Split('|'), (nugetPackageName) =>
   {
-    string nugetPackageFileName = $"{nugetPackageName_QuantitativeWorld}.{version.SemVer}.nupkg";
+    string nugetPackageFileName = $"{nugetPackageName}.{version.SemVer}.nupkg";
     string nugetPackageFilePath = buildOutputDir + nugetPackageFileName;
     Information($"Expected package file path: {nugetPackageFilePath}");
     if (!FileExists(nugetPackageFilePath))
-      throw new Exception("Could not find find package: {nugetPackageFilePath}.");
+      throw new Exception("Could not find package: {nugetPackageFilePath}.");
     
     Information($"Publishing package '{nugetPackageFilePath}' to repository '{nugetPushSource}'.");
     NuGetPush(nugetPackageFilePath,
@@ -117,14 +102,16 @@ var publishNuGetPackageTask = Task("Publish-NuGetPackage")
 var publishTargetValidateParamsTask = Task("Publish-ValidateParams")
   .Does(() =>
   {
-    if (string.IsNullOrWhiteSpace(nugetApiKey))
+		var isNugetOrg = string.Equals(nugetPushSource, "https://api.nuget.org/v3/index.json", StringComparison.OrdinalIgnoreCase);
+		var hasNugetApiKey = !string.IsNullOrWhiteSpace(nugetApiKey);
+    if (isNugetOrg && !hasNugetApiKey)		
       throw new Exception("-NuGetApiKey param is required to publish packages."); 
   });
   
 var publishTask = Task("Publish")
   .IsDependentOn(publishTargetValidateParamsTask)
   .IsDependentOn(buildTask)
-  .IsDependentOn(publishNuGetPackageTask)
+  .IsDependentOn(publishNuGetPackagesTask)
   .Does(() =>
   {
   });

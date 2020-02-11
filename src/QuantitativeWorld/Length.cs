@@ -30,6 +30,7 @@ namespace QuantitativeWorld
         public decimal Metres { get; }
         public decimal Value => GetValue(Metres, Unit);
         public LengthUnit Unit => _formatUnit ?? DefaultUnit;
+        decimal ILinearQuantity<LengthUnit>.BaseValue => Metres;
 
         public Length Convert(LengthUnit targetUnit) =>
             new Length(targetUnit, Metres);

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="fluentassertions" Version="5.10.0" />
+    <PackageReference Include="fluentassertions" Version="5.10.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuantitativeWorld.TestAbstractions\QuantitativeWorld.TestAbstractions.csproj" />
-    <ProjectReference Include="..\QuantitativeWorld.Text\QuantitativeWorld.Text.csproj" />
+    <ProjectReference Include="..\QuantitativeWorld.Text.Json\QuantitativeWorld.Text.Json.csproj" />
   </ItemGroup>
 
 </Project>
