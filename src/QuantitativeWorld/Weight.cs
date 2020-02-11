@@ -30,6 +30,7 @@ namespace QuantitativeWorld
         public decimal Kilograms { get; }
         public decimal Value => GetValue(Kilograms, Unit);
         public WeightUnit Unit => _formatUnit ?? DefaultUnit;
+        decimal ILinearQuantity<WeightUnit>.BaseValue => Kilograms;
 
         public Weight Convert(WeightUnit targetUnit) =>
             new Weight(targetUnit, Kilograms);

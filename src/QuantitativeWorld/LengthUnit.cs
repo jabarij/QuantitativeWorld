@@ -3,7 +3,7 @@ using QuantitativeWorld.Interfaces;
 
 namespace QuantitativeWorld
 {
-    public partial struct LengthUnit : ILinearUnit
+    public partial struct LengthUnit : ILinearUnit, INamedUnit
     {
         private readonly string _name;
         private readonly string _abbreviation;
