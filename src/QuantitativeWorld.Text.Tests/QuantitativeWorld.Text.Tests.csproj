@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuantitativeWorld.Parsing\QuantitativeWorld.Text.csproj" />
     <ProjectReference Include="..\QuantitativeWorld.TestAbstractions\QuantitativeWorld.TestAbstractions.csproj" />
+    <ProjectReference Include="..\QuantitativeWorld.Text\QuantitativeWorld.Text.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>SoterDevelopment.QuantitativeWorld.Text.Json</PackageId>
+    <Authors>Bartłomiej Soter (soter.development@gmail.com)</Authors>
+    <Company>SoterDevelopment</Company>
+    <Description>Library handling JSON serialization/deserialization for QuantitativeWorld's objects.</Description>
+    <Copyright>Copyright © SoterDevelopment 2020</Copyright>
+    <PackageProjectUrl>https://github.com/jabarij/QuantitativeWorld</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jabarij/QuantitativeWorld.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>quantity weight length json</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

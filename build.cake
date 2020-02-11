@@ -44,27 +44,12 @@ var buildSolutionTask = Task("Build-Solution")
           .Append($"-p:PackageVersion={version.FullSemVer}")
       });
   });
-
-var buildProjectTask = Task("Build-Project")
-  .IsDependentOn(resolveVersionTask)
-  .IsDependentOn(cleanBuildOutputDirTask)
-  .Does(() =>
-  {
-    DotNetCoreBuild(projectPath_QuantitativeWorld,
-      new DotNetCoreBuildSettings
-      {
-        Configuration = configuration,
-        OutputDirectory = buildOutputDir,
-        ArgumentCustomization = args => args
-          .Append($"-p:PackageVersion={version.FullSemVer}")
-      });
-  });
   
 var runUnitTestsTask = Task("Run-UnitTests")
-  .IsDependentOn(buildProjectTask)
+  .IsDependentOn(buildSolutionTask)
   .Does(() =>
   {
-    var testProjectFiles = GetFiles(sourceRootDir + "QuantitativeWorld/QuantitativeWorld.Tests.csproj");
+    var testProjectFiles = GetFiles(sourceRootDir + "QuantitativeWorld/**/[!QuantitativeWorld.Text.Tests.csproj]*.Tests.csproj");
     foreach (var project in testProjectFiles)
     {
       Information("Testing project: " + project);
@@ -90,7 +75,7 @@ var buildTargetValidateParamsTask = Task("Build-ValidateParams")
 
 var buildTask = Task("Build")
   .IsDependentOn(buildTargetValidateParamsTask)
-  .IsDependentOn(buildProjectTask)
+  .IsDependentOn(buildSolutionTask)
   .IsDependentOn(runUnitTestsTask)
   .Does(() =>
   {

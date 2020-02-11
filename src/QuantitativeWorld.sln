@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld", "Quanti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Tests", "QuantitativeWorld.Tests\QuantitativeWorld.Tests.csproj", "{AAF0DF8F-1D4F-4619-B8DD-D2C036389BC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Text", "QuantitativeWorld.Parsing\QuantitativeWorld.Text.csproj", "{2B6849A7-B6E4-4DF4-A90B-992081A1358F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Text", "QuantitativeWorld.Text\QuantitativeWorld.Text.csproj", "{2B6849A7-B6E4-4DF4-A90B-992081A1358F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6C22BF23-5A7C-44D7-942E-D7FD70EB1308}"
 EndProject
