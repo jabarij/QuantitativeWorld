@@ -53,8 +53,8 @@ Param(
     
     [ValidateSet("Quiet", "Minimal", "Normal", "Diagnostic", "Detailed")]
     [string]$DotNetCoreVerbosity,
-    [string]$NuGetApiKey,
-    [string]$NuGetPushSource
+    [string]$NuGetPushSource,
+    [string]$NuGetApiKey
 )
 
 # Attempt to set highest encryption available for SecurityProtocol.
