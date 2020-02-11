@@ -4,13 +4,13 @@ using System;
 
 namespace QuantitativeWorld.Text.Json
 {
-    public abstract class QuantityJsonConverter<TQuantity, TUnit> : JsonConverter<TQuantity>
+    public abstract class LinearQuantityJsonConverterBase<TQuantity, TUnit> : JsonConverter<TQuantity>
         where TQuantity : ILinearQuantity<TUnit>
         where TUnit : struct, ILinearUnit
     {
         private readonly QuantityJsonSerializationFormat _serializationFormat;
 
-        public QuantityJsonConverter(
+        public LinearQuantityJsonConverterBase(
             QuantityJsonSerializationFormat serializationFormat = QuantityJsonSerializationFormat.AsBaseValueWithUnit)
         {
             _serializationFormat = serializationFormat;
@@ -20,18 +20,18 @@ namespace QuantitativeWorld.Text.Json
 
         public override TQuantity ReadJson(JsonReader reader, Type objectType, TQuantity existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType != JsonToken.StartObject)
-                return default(TQuantity);
-
-            var builder = CreateQuantityBuilder();
-            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            var builder = CreateBuilder();
+            if (reader.TokenType == JsonToken.StartObject)
             {
-                if (reader.TryReadPropertyAs(BaseValuePropertyName, serializer, e => e.ReadAsDecimal(), out var baseValue))
-                    builder.SetBaseValue(baseValue);
-                else if (reader.TryDeserializeProperty(nameof(ILinearQuantity<TUnit>.Unit), serializer, out TUnit unit))
-                    builder.SetUnit(unit);
-                else if (reader.TryReadPropertyAs(nameof(ILinearQuantity<TUnit>.Value), serializer, e => e.ReadAsDecimal(), out var value))
-                    builder.SetValue(value);
+                while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+                {
+                    if (reader.TryReadPropertyAsNullable(BaseValuePropertyName, serializer, e => e.ReadAsDecimal(), out var baseValue))
+                        builder.SetBaseValue(baseValue);
+                    else if (reader.TryDeserializeProperty(nameof(ILinearQuantity<TUnit>.Unit), serializer, out TUnit unit))
+                        builder.SetUnit(unit);
+                    else if (reader.TryReadPropertyAsNullable(nameof(ILinearQuantity<TUnit>.Value), serializer, e => e.ReadAsDecimal(), out var value))
+                        builder.SetValue(value);
+                }
             }
 
             if (!builder.TryBuild(out var quantity))
@@ -69,6 +69,6 @@ namespace QuantitativeWorld.Text.Json
             writer.WriteEndObject();
         }
 
-        protected abstract ILinearQuantityBuilder<TQuantity, TUnit> CreateQuantityBuilder();
+        protected abstract ILinearQuantityBuilder<TQuantity, TUnit> CreateBuilder();
     }
 }

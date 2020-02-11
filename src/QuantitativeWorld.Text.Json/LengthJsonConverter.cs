@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    public class LengthJsonConverter : QuantityJsonConverter<Length, LengthUnit>
+    public class LengthJsonConverter : LinearQuantityJsonConverterBase<Length, LengthUnit>
     {
         public LengthJsonConverter(
             LengthJsonSerializationFormat serializationFormat = LengthJsonSerializationFormat.AsMetresWithUnit)
@@ -8,7 +8,7 @@
 
         protected override string BaseValuePropertyName =>
             nameof(Length.Metres);
-        protected override ILinearQuantityBuilder<Length, LengthUnit> CreateQuantityBuilder() =>
+        protected override ILinearQuantityBuilder<Length, LengthUnit> CreateBuilder() =>
             new LengthBuilder();
     }
 }

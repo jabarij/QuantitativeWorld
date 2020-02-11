@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    public class WeightJsonConverter : QuantityJsonConverter<Weight, WeightUnit>
+    public class WeightJsonConverter : LinearQuantityJsonConverterBase<Weight, WeightUnit>
     {
         public WeightJsonConverter(
             WeightJsonSerializationFormat serializationFormat = WeightJsonSerializationFormat.AsKilogramsWithUnit)
@@ -8,7 +8,7 @@
 
         protected override string BaseValuePropertyName =>
             nameof(Weight.Kilograms);
-        protected override ILinearQuantityBuilder<Weight, WeightUnit> CreateQuantityBuilder() =>
+        protected override ILinearQuantityBuilder<Weight, WeightUnit> CreateBuilder() =>
             new WeightBuilder();
     }
 }

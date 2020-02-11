@@ -18,11 +18,11 @@ namespace QuantitativeWorld.Text.Json
             return false;
         }
 
-        public static bool TryReadPropertyAs<T>(this JsonReader reader, string name, JsonSerializer serializer, Func<JsonReader, T?> read, out T result)
+        public static bool TryReadPropertyAsNullable<T>(this JsonReader reader, string name, JsonSerializer serializer, Func<JsonReader, T?> read, out T result)
             where T : struct
         {
             if (reader.TryGetPropertyName(out string propertyName)
-                && string.Equals(propertyName, name, System.StringComparison.OrdinalIgnoreCase))
+                && string.Equals(propertyName, name, StringComparison.OrdinalIgnoreCase))
             {
                 var value = read(reader);
                 result = value ?? default(T);
@@ -33,10 +33,24 @@ namespace QuantitativeWorld.Text.Json
             return false;
         }
 
+        public static bool TryReadPropertyAs<T>(this JsonReader reader, string name, JsonSerializer serializer, Func<JsonReader, T> read, out T result)
+            where T : class
+        {
+            if (reader.TryGetPropertyName(out string propertyName)
+                && string.Equals(propertyName, name, StringComparison.OrdinalIgnoreCase))
+            {
+                result = read(reader);
+                return true;
+            }
+
+            result = default(T);
+            return false;
+        }
+
         public static bool TryDeserializeProperty<T>(this JsonReader reader, string name, JsonSerializer serializer, out T result)
         {
             if (reader.TryGetPropertyName(out string propertyName)
-                && string.Equals(propertyName, name, System.StringComparison.OrdinalIgnoreCase)
+                && string.Equals(propertyName, name, StringComparison.OrdinalIgnoreCase)
                 && reader.Read())
             {
                 result = serializer.Deserialize<T>(reader);

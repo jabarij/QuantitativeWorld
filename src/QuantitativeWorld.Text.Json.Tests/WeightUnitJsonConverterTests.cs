@@ -11,9 +11,9 @@ namespace QuantitativeWorld.Text.Json.Tests
         public WeightUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(WeightUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"gram\",\"Abbreviation\":\"g\",\"ValueInKilograms\":0.001}}")]
-        [InlineData(WeightUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"g\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(WeightUnitJsonSerializationFormat serializationFormat, string expectedJson)
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"gram\",\"Abbreviation\":\"g\",\"ValueInKilograms\":0.001}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"g\"}")]
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJson)
         {
             // arrange
             var unit = WeightUnit.Gram;
@@ -26,7 +26,7 @@ namespace QuantitativeWorld.Text.Json.Tests
             actualJson.Should().Be(expectedJson);
         }
 
-        [Fact]
+        [Theory]
         [MemberData(nameof(GetTestData), typeof(WeightUnit), nameof(WeightUnit.GetPredefinedUnits))]
         public void DeserializePredefinedUnitString_ShouldReturnValidResult(WeightUnit expectedUnit)
         {
@@ -64,9 +64,9 @@ namespace QuantitativeWorld.Text.Json.Tests
         }
 
         [Theory]
-        [InlineData(WeightUnitJsonSerializationFormat.AlwaysFull)]
-        [InlineData(WeightUnitJsonSerializationFormat.PredefinedAsString)]
-        public void SerializeAndDeserialize_ShouldBeIdempotent(WeightUnitJsonSerializationFormat serializationFormat)
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull)]
+        [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString)]
+        public void SerializeAndDeserialize_ShouldBeIdempotent(LinearUnitJsonSerializationFormat serializationFormat)
         {
             // arrange
             var obj = new SomeUnitOwner<WeightUnit> { Unit = Fixture.Create<WeightUnit>() };
@@ -79,8 +79,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var deserializedObj2 = JsonConvert.DeserializeObject<SomeUnitOwner<WeightUnit>>(serializedObj2, converter);
 
             // assert
-            deserializedObj1.Unit.Should().Be(obj);
-            deserializedObj2.Unit.Should().Be(obj);
+            deserializedObj1.Unit.Should().Be(obj.Unit);
+            deserializedObj2.Unit.Should().Be(obj.Unit);
 
             deserializedObj2.Unit.Should().Be(deserializedObj1.Unit);
             serializedObj2.Should().Be(serializedObj1);
