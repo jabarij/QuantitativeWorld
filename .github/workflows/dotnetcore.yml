@@ -1,0 +1,97 @@
+name: Build, test, publish
+
+on:
+  push:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Fetch repository
+      run: git fetch --prune --unshallow
+  
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9
+      with:
+          versionSpec: '5.1.x'
+          
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.9
+      
+    - name: Output version values 
+      run: |
+        echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
+        mkdir -p ./artifacts
+        touch ./artifacts/gitversion.semver.txt
+        echo "${{ steps.gitversion.outputs.SemVer }}" >> ./artifacts/gitversion.semver.txt
+      
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.108
+        
+    - name: Build QuantitativeWorld
+      run: dotnet build ./src/QuantitativeWorld/QuantitativeWorld.csproj --configuration Release --framework netstandard2.0 --output ../../artifacts /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      
+    - name: Build QuantitativeWorld.Text.Json
+      run: dotnet build ./src/QuantitativeWorld.Text.Json/QuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../artifacts /p:Version=${{ steps.gitversion.outputs.SemVer }}
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: artifacts
+        path: ./artifacts
+      
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Fetch repository
+      run: git fetch --prune
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v1
+      with:
+        name: artifacts
+          
+    - name: Test QuantitativeWorld
+      run: dotnet test ./src/QuantitativeWorld.Tests/QuantitativeWorld.Tests.csproj --configuration Release --output ../../artifacts --no-build --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.TestsResults.trx"
+      
+    - name: Test QuantitativeWorld.Text.Json
+      run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/QuantitativeWorld.Text.Json.Tests.csproj --configuration Release --output ../../artifacts --no-build --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Text.Json.TestsResults.trx"
+      
+  publish:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/release') || github.ref == 'refs/heads/master'
+    steps:
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-api-key: ${{ secrets.NMPW2H0J }}
+        nuget-version: '5.x'
+          
+    - name: Download build artifacts
+      uses: actions/download-artifact@v1
+      with:
+        name: artifacts
+    
+    - name: Read GitVersion
+      id: gitversion
+      run: echo "::set-output name=semver::$(head -n 1 ./artifacts/gitversion.semver.txt)"
+      
+    - name: Publish QuantitativeWorld
+      run: nuget push "./artifacts/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
+    - name: Publish QuantitativeWorld.Text.Json
+      run: nuget push "./artifacts/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
