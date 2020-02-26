@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    class LengthBuilder : ILinearQuantityBuilder<Length, LengthUnit>
+    internal class LengthBuilder : ILinearQuantityBuilder<Length, LengthUnit>
     {
         private decimal? _metres;
         private decimal? _value;

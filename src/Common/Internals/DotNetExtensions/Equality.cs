@@ -2,7 +2,7 @@
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class Equality
+    internal static class Equality
     {
         public static bool AreEqual<T>(T left, T right) =>
             ReferenceEquals(left, right)

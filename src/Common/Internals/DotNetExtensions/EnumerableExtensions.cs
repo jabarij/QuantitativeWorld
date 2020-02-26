@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class EnumerableExtensions
+    internal static class EnumerableExtensions
     {
         public static string Join<T>(this IEnumerable<T> source, string separator) =>
             string.Join(separator, source);

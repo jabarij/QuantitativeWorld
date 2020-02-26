@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class DecimalExtensions
+    internal static class DecimalExtensions
     {
         public static decimal Pow(this decimal value, int exp)
         {
