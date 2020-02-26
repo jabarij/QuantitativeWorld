@@ -20,9 +20,11 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Length operator +(Length left, Length right) =>
-            new Length(formatUnit: left.Unit, metres: left.Metres + right.Metres);
+            new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres + right.Metres);
         public static Length operator -(Length left, Length right) =>
-            new Length(formatUnit: left.Unit, metres: left.Metres - right.Metres);
+            new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres - right.Metres);
+        public static Length operator -(Length length) =>
+            new Length(formatUnit: length.Unit, metres: -length.Metres);
 
         public static Length operator *(Length length, decimal factor) =>
             new Length(formatUnit: length.Unit, metres: length.Metres * factor);
@@ -41,5 +43,38 @@ namespace QuantitativeWorld
                 throw new DivideByZeroException("Denominator is zero.");
             return length.Metres / denominator.Metres;
         }
+
+        public static Length? operator +(Length? left, Length? right)
+        {
+            if (left.HasValue && right.HasValue)
+                return left.Value + right.Value;
+            else if (!left.HasValue && !right.HasValue)
+                return null;
+            else if (left.HasValue)
+                return left.Value;
+            else
+                return right.Value;
+        }
+        public static Length? operator -(Length? left, Length? right)
+        {
+            if (left.HasValue && right.HasValue)
+                return left.Value - right.Value;
+            else if (!left.HasValue && !right.HasValue)
+                return null;
+            else if (left.HasValue)
+                return left.Value;
+            else
+                return -right.Value;
+        }
+
+        public static Length? operator *(Length? length, decimal factor) =>
+            (length ?? default(Length)) * factor;
+        public static Length? operator *(decimal factor, Length? length) =>
+            length * factor;
+
+        public static Length? operator /(Length? length, decimal denominator) =>
+            (length ?? default(Length)) / denominator;
+        public static decimal operator /(Length? length, Length? denominator) =>
+            (length ?? default(Length)) / (denominator ?? default(Length));
     }
 }

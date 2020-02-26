@@ -20,9 +20,11 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Weight operator +(Weight left, Weight right) =>
-            new Weight(formatUnit: left.Unit, kilograms: left.Kilograms + right.Kilograms);
+            new Weight(formatUnit: left._formatUnit ?? right.Unit, kilograms: left.Kilograms + right.Kilograms);
         public static Weight operator -(Weight left, Weight right) =>
-            new Weight(formatUnit: left.Unit, kilograms: left.Kilograms - right.Kilograms);
+            new Weight(formatUnit: left._formatUnit ?? right.Unit, kilograms: left.Kilograms - right.Kilograms);
+        public static Weight operator -(Weight weight) =>
+            new Weight(formatUnit: weight.Unit, kilograms: -weight.Kilograms);
 
         public static Weight operator *(Weight weight, decimal factor) =>
             new Weight(formatUnit: weight.Unit, kilograms: weight.Kilograms * factor);
@@ -41,5 +43,38 @@ namespace QuantitativeWorld
                 throw new DivideByZeroException("Denominator is zero.");
             return weight.Kilograms / denominator.Kilograms;
         }
+
+        public static Weight? operator +(Weight? left, Weight? right)
+        {
+            if (left.HasValue && right.HasValue)
+                return left.Value + right.Value;
+            else if (!left.HasValue && !right.HasValue)
+                return null;
+            else if (left.HasValue)
+                return left.Value;
+            else
+                return right.Value;
+        }
+        public static Weight? operator -(Weight? left, Weight? right)
+        {
+            if (left.HasValue && right.HasValue)
+                return left.Value - right.Value;
+            else if (!left.HasValue && !right.HasValue)
+                return null;
+            else if (left.HasValue)
+                return left.Value;
+            else
+                return -right.Value;
+        }
+
+        public static Weight? operator *(Weight? weight, decimal factor) =>
+            (weight ?? default(Weight)) * factor;
+        public static Weight? operator *(decimal factor, Weight? weight) =>
+            weight * factor;
+
+        public static Weight? operator /(Weight? weight, decimal denominator) =>
+            (weight ?? default(Weight)) / denominator;
+        public static decimal operator /(Weight? weight, Weight? denominator) =>
+            (weight ?? default(Weight)) / (denominator ?? default(Weight));
     }
 }

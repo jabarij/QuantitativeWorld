@@ -14,4 +14,25 @@
     <PackageTags>quantity weight length</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\Common\Internals\DotNetExtensions\ArrayExtensions.cs" Link="DotNetExtensions\ArrayExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\Assert.cs" Link="DotNetExtensions\Assert.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\Check.cs" Link="DotNetExtensions\Check.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\DecimalExtensions.cs" Link="DotNetExtensions\DecimalExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\DecimalInfo.cs" Link="DotNetExtensions\DecimalInfo.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\DictionaryTransformationWrapper.cs" Link="DotNetExtensions\DictionaryTransformationWrapper.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\EnumerableExtensions.cs" Link="DotNetExtensions\EnumerableExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\Equality.cs" Link="DotNetExtensions\Equality.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\Error.cs" Link="DotNetExtensions\Error.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\HashCode.cs" Link="DotNetExtensions\HashCode.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\HashCodeExtensions.cs" Link="DotNetExtensions\HashCodeExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\ITransformation.cs" Link="DotNetExtensions\ITransformation.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\StringExtensions.cs" Link="DotNetExtensions\StringExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\TypeExtensions.cs" Link="DotNetExtensions\TypeExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DotNetExtensions\" />
+  </ItemGroup>
+
 </Project>

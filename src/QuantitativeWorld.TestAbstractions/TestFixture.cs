@@ -20,10 +20,10 @@ namespace QuantitativeWorld.TestAbstractions
         {
             // Customize common fixture setup here
             fixture.Customize<WeightUnit>(e => e.FromFactory(() => fixture.CreateFromSet(WeightUnit.GetPredefinedUnits())));
-            fixture.Customize<Weight>(e => e.FromFactory(() => new Weight(fixture.Create<decimal>(), fixture.Create<WeightUnit>())));
+            fixture.Customize<Weight>(e => e.FromFactory(() => new Weight(fixture.Create<decimal>()).Convert(fixture.Create<WeightUnit>())));
 
             fixture.Customize<LengthUnit>(e => e.FromFactory(() => fixture.CreateFromSet(LengthUnit.GetPredefinedUnits())));
-            fixture.Customize<Length>(e => e.FromFactory(() => new Length(fixture.Create<decimal>(), fixture.Create<LengthUnit>())));
+            fixture.Customize<Length>(e => e.FromFactory(() => new Length(fixture.Create<decimal>()).Convert(fixture.Create<LengthUnit>())));
         }
 
         private bool _isDisposed;
