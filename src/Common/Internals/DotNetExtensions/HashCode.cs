@@ -2,7 +2,7 @@
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public class HashCode
+    internal class HashCode
     {
         public const int DefaultInitialHash = -2128831035;
         public const int DefaultOffset = 16777619;

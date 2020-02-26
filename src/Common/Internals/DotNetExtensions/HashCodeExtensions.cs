@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class HashCodeExtensions
+    internal static class HashCodeExtensions
     {
         public static HashCode Append<T>(this HashCode hashCode, T value)
         {

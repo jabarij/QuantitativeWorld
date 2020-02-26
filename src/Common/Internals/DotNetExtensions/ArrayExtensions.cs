@@ -2,7 +2,7 @@
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class ArrayExtensions
+    internal static class ArrayExtensions
     {
         public static bool ArrayEqual<T>(this T[] array, T[] other, IEqualityComparer<T> comparer)
         {

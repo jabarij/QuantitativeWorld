@@ -2,7 +2,7 @@
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public class DictionaryTransformationWrapper<T> : ITransformation<T>
+    internal class DictionaryTransformationWrapper<T> : ITransformation<T>
     {
         private readonly IDictionary<T, T> _dictionary;
         private readonly ITransformation<T> _transformation;

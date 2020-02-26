@@ -2,7 +2,7 @@
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class Error
+    internal static class Error
     {
         public static Exception ArgumentIsOfUnexpectedType(object value, Type expectedType, string paramName) =>
             new ArgumentException($"Expected param to be of type {expectedType.FullName} but found {value.GetType().FullName}.", paramName);

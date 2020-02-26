@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class Check
+    internal static class Check
     {
         public static bool IsGreaterThan<T>(T value, T min) where T : struct, IComparable<T> =>
             value.CompareTo(min) > 0;

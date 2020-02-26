@@ -3,7 +3,7 @@ using System;
 
 namespace QuantitativeWorld.Text.Json
 {
-    static class JsonReaderExtensions
+    internal static class JsonReaderExtensions
     {
         public static bool TryGetPropertyName(this JsonReader reader, out string propertyName)
         {

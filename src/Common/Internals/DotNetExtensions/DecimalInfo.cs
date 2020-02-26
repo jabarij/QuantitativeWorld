@@ -2,7 +2,7 @@
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public struct DecimalInfo
+    internal struct DecimalInfo
     {
         public const byte MinExponent = 0;
         public const byte MaxExponent = 28;

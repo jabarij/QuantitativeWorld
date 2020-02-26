@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace QuantitativeWorld.DotNetExtensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static string LowercaseFirstLetter(this string value)
         {

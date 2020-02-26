@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    class WeightBuilder : ILinearQuantityBuilder<Weight, WeightUnit>
+    internal class WeightBuilder : ILinearQuantityBuilder<Weight, WeightUnit>
     {
         private decimal? _kilograms;
         private decimal? _value;
