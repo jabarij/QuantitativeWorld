@@ -1,4 +1,4 @@
-name: Build and test
+name: Build, test and publish
 
 on:
   push:
@@ -73,7 +73,7 @@ jobs:
   publish:
     needs: [build, test]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/heads/release') || github.ref == 'refs/heads/master'
+    if: github.event.release != null && github.event.action == 'published'
     steps:
     - name: Setup NuGet
       uses: nuget/setup-nuget@v1
@@ -90,8 +90,21 @@ jobs:
       id: gitversion
       run: echo "::set-output name=semver::$(head -n 1 ./build/gitversion.semver.txt)"
       
-    # - name: Publish QuantitativeWorld
-      # run: nuget push "./build/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+    - name: Select packages to publish 
+      run: |
+        mkdir -p ./published
+        cp ./build/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        ls ./published
+
+    - name: Upload published packages
+      uses: actions/upload-artifact@v1
+      with:
+        name: published
+        path: ./published
+      
+    - name: Publish QuantitativeWorld
+      run: nuget push "./published/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
         
-    # - name: Publish QuantitativeWorld.Text.Json
-      # run: nuget push "./build/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+    - name: Publish QuantitativeWorld.Text.Json
+      run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
