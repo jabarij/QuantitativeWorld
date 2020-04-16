@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    internal class LengthUnitBuilder : ILinearUnitBuilder<LengthUnit>
+    internal class LengthUnitBuilder : ILinearNamedUnitBuilder<LengthUnit>
     {
         private string _name;
         private string _abbreviation;

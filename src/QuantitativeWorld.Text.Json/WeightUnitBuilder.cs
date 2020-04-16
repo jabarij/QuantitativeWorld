@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    internal class WeightUnitBuilder : ILinearUnitBuilder<WeightUnit>
+    internal class WeightUnitBuilder : ILinearNamedUnitBuilder<WeightUnit>
     {
         private string _name;
         private string _abbreviation;
