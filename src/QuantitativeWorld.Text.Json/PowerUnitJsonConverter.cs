@@ -4,28 +4,28 @@ using System.Linq;
 
 namespace QuantitativeWorld.Text.Json
 {
-    public sealed class LengthUnitJsonConverter : LinearNamedUnitJsonConverterBase<LengthUnit>
+    public sealed class PowerUnitJsonConverter : LinearNamedUnitJsonConverterBase<PowerUnit>
     {
-        private readonly Dictionary<string, LengthUnit> _predefinedUnits;
+        private readonly Dictionary<string, PowerUnit> _predefinedUnits;
 
-        public LengthUnitJsonConverter(
+        public PowerUnitJsonConverter(
             LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull)
             : base(serializationFormat)
         {
-            _predefinedUnits = LengthUnit.GetPredefinedUnits()
+            _predefinedUnits = PowerUnit.GetPredefinedUnits()
                 .ToDictionary(e => e.Abbreviation);
         }
 
         protected override string ValueInBaseUnitPropertyName =>
-            nameof(LengthUnit.ValueInMetres);
-        protected override ILinearNamedUnitBuilder<LengthUnit> CreateBuilder() =>
-            new LengthUnitBuilder();
+            nameof(PowerUnit.ValueInWatts);
+        protected override ILinearNamedUnitBuilder<PowerUnit> CreateBuilder() =>
+            new PowerUnitBuilder();
 
-        protected override bool TryReadPredefinedUnit(string value, out LengthUnit predefinedUnit) =>
+        protected override bool TryReadPredefinedUnit(string value, out PowerUnit predefinedUnit) =>
             _predefinedUnits.TryGetValue(value, out predefinedUnit)
             || base.TryReadPredefinedUnit(value, out predefinedUnit);
 
-        protected override bool TryWritePredefinedUnit(JsonWriter writer, LengthUnit value, JsonSerializer serializer)
+        protected override bool TryWritePredefinedUnit(JsonWriter writer, PowerUnit value, JsonSerializer serializer)
         {
             if (_predefinedUnits.TryGetValue(value.Abbreviation, out var predefinedUnit))
             {

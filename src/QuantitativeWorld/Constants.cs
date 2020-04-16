@@ -1,4 +1,6 @@
-﻿namespace QuantitativeWorld
+﻿using System;
+
+namespace QuantitativeWorld
 {
     static class Constants
     {
@@ -32,5 +34,20 @@
         public const decimal FurlongsPerMile = 8m;
 
         public const decimal CablesPerNauticalMile = 10m;
+
+        public const decimal WattsPerMilliwatt = 0.001m;
+        public const decimal WattsPerKilowatt = 1000m;
+        public const decimal WattsPerMegawatt = 1000000m;
+        public const decimal WattsPerMechanicalHorsepower = 76.0402249m * 9.80665m;
+        public const decimal WattsPerMetricHorsepower = 75m * 9.80665m;
+        public const decimal WattsPerErgPerSecond = 0.0000001m;
+        public const decimal WattsPerStheneMetrePerSecond = 1000m;
+
+        public const decimal RadiansPerTurn = (decimal)Math.PI;
+        public const decimal DegreesPerTurn = 360m;
+        public const decimal ArcminutesPerTurn = DegreesPerTurn * 60m;
+        public const decimal ArcsecondsPerTurn = ArcminutesPerTurn * 60m;
+        public const decimal GradiansPerTurn = 400m;
+        public const decimal NATOMilsPerTurn = 6400m;
     }
 }

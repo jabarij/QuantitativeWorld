@@ -1,17 +1,17 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    internal class LengthUnitBuilder : ILinearNamedUnitBuilder<LengthUnit>
+    internal class PowerUnitBuilder : ILinearNamedUnitBuilder<PowerUnit>
     {
         private string _name;
         private string _abbreviation;
-        private decimal? _valueInMetres;
+        private decimal? _valueInWatts;
 
-        public LengthUnitBuilder() { }
-        public LengthUnitBuilder(LengthUnit unit)
+        public PowerUnitBuilder() { }
+        public PowerUnitBuilder(PowerUnit unit)
         {
             _name = unit.Name;
             _abbreviation = unit.Abbreviation;
-            _valueInMetres = unit.ValueInMetres;
+            _valueInWatts = unit.ValueInWatts;
         }
 
         public void SetAbbreviation(string abbreviation) =>
@@ -21,26 +21,26 @@
             _name = name;
 
         public void SetValueInBaseUnit(decimal valueInBaseUnit) =>
-            _valueInMetres = valueInBaseUnit;
+            _valueInWatts = valueInBaseUnit;
 
-        public bool TryBuild(out LengthUnit result)
+        public bool TryBuild(out PowerUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            decimal? valueInMetres = _valueInMetres;
+            decimal? valueInWatts = _valueInWatts;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)
-                && valueInMetres.HasValue)
+                && valueInWatts.HasValue)
             {
-                result = new LengthUnit(
+                result = new PowerUnit(
                     name: name,
                     abbreviation: abbreviation,
-                    valueInMetres: valueInMetres.Value);
+                    valueInWatts: valueInWatts.Value);
                 return true;
             }
 
-            result = default(LengthUnit);
+            result = default(PowerUnit);
             return false;
         }
     }

@@ -2,8 +2,8 @@
 
 namespace QuantitativeWorld.Text.Json
 {
-    public interface ILinearUnitBuilder<TUnit>
-        where TUnit : ILinearUnit
+    public interface ILinearNamedUnitBuilder<TUnit>
+        where TUnit : ILinearUnit, INamedUnit
     {
         void SetName(string name);
         void SetAbbreviation(string abbreviation);
