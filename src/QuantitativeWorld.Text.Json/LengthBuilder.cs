@@ -7,11 +7,11 @@
         private LengthUnit? _unit;
 
         public LengthBuilder() { }
-        public LengthBuilder(Length weight)
+        public LengthBuilder(Length length)
         {
-            _metres = weight.Metres;
-            _value = weight.Value;
-            _unit = weight.Unit;
+            _metres = length.Metres;
+            _value = length.Value;
+            _unit = length.Unit;
         }
 
         public void SetBaseValue(decimal metres)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace QuantitativeWorld.Text.Json
 {
-    public sealed class WeightUnitJsonConverter : LinearUnitJsonConverterBase<WeightUnit>
+    public sealed class WeightUnitJsonConverter : LinearNamedUnitJsonConverterBase<WeightUnit>
     {
         private readonly Dictionary<string, WeightUnit> _predefinedUnits;
 
@@ -18,7 +18,7 @@ namespace QuantitativeWorld.Text.Json
 
         protected override string ValueInBaseUnitPropertyName =>
             nameof(WeightUnit.ValueInKilograms);
-        protected override ILinearUnitBuilder<WeightUnit> CreateBuilder() =>
+        protected override ILinearNamedUnitBuilder<WeightUnit> CreateBuilder() =>
             new WeightUnitBuilder();
 
         protected override bool TryReadPredefinedUnit(string value, out WeightUnit predefinedUnit) =>

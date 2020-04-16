@@ -1,6 +1,6 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    internal class PowerUnitBuilder : ILinearUnitBuilder<PowerUnit>
+    internal class PowerUnitBuilder : ILinearNamedUnitBuilder<PowerUnit>
     {
         private string _name;
         private string _abbreviation;

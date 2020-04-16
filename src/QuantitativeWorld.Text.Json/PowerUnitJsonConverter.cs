@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace QuantitativeWorld.Text.Json
 {
-    public sealed class PowerUnitJsonConverter : LinearUnitJsonConverterBase<PowerUnit>
+    public sealed class PowerUnitJsonConverter : LinearNamedUnitJsonConverterBase<PowerUnit>
     {
         private readonly Dictionary<string, PowerUnit> _predefinedUnits;
 
@@ -18,7 +18,7 @@ namespace QuantitativeWorld.Text.Json
 
         protected override string ValueInBaseUnitPropertyName =>
             nameof(PowerUnit.ValueInWatts);
-        protected override ILinearUnitBuilder<PowerUnit> CreateBuilder() =>
+        protected override ILinearNamedUnitBuilder<PowerUnit> CreateBuilder() =>
             new PowerUnitBuilder();
 
         protected override bool TryReadPredefinedUnit(string value, out PowerUnit predefinedUnit) =>

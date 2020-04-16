@@ -4,12 +4,12 @@ using System;
 
 namespace QuantitativeWorld.Text.Json
 {
-    public abstract class LinearUnitJsonConverterBase<TUnit> : JsonConverter<TUnit>
+    public abstract class LinearNamedUnitJsonConverterBase<TUnit> : JsonConverter<TUnit>
         where TUnit : ILinearUnit, INamedUnit
     {
         private readonly LinearUnitJsonSerializationFormat _serializationFormat;
 
-        protected LinearUnitJsonConverterBase(LinearUnitJsonSerializationFormat serializationFormat)
+        protected LinearNamedUnitJsonConverterBase(LinearUnitJsonSerializationFormat serializationFormat)
         {
             _serializationFormat = serializationFormat;
         }
@@ -70,6 +70,6 @@ namespace QuantitativeWorld.Text.Json
         protected virtual bool TryWritePredefinedUnit(JsonWriter writer, TUnit value, JsonSerializer serializer) =>
             false;
 
-        protected abstract ILinearUnitBuilder<TUnit> CreateBuilder();
+        protected abstract ILinearNamedUnitBuilder<TUnit> CreateBuilder();
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace QuantitativeWorld.Text.Json
 {
-    public sealed class LengthUnitJsonConverter : LinearUnitJsonConverterBase<LengthUnit>
+    public sealed class LengthUnitJsonConverter : LinearNamedUnitJsonConverterBase<LengthUnit>
     {
         private readonly Dictionary<string, LengthUnit> _predefinedUnits;
 
@@ -18,7 +18,7 @@ namespace QuantitativeWorld.Text.Json
 
         protected override string ValueInBaseUnitPropertyName =>
             nameof(LengthUnit.ValueInMetres);
-        protected override ILinearUnitBuilder<LengthUnit> CreateBuilder() =>
+        protected override ILinearNamedUnitBuilder<LengthUnit> CreateBuilder() =>
             new LengthUnitBuilder();
 
         protected override bool TryReadPredefinedUnit(string value, out LengthUnit predefinedUnit) =>
