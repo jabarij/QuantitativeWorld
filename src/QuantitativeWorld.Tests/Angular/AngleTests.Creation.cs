@@ -19,14 +19,14 @@ namespace QuantitativeWorld.Tests.Angular
             public void ConstructorForTurns_ShouldCreateValidAngle()
             {
                 // arrange
-                decimal kilograms = Fixture.Create<decimal>();
+                decimal turns = Fixture.Create<decimal>();
 
                 // act
-                var angle = new Angle(kilograms);
+                var angle = new Angle(turns);
 
                 // assert
-                angle.Turns.Should().Be(kilograms);
-                angle.Value.Should().Be(kilograms);
+                angle.Turns.Should().Be(turns);
+                angle.Value.Should().Be(turns);
                 angle.Unit.Should().Be(AngleUnit.Turn);
             }
 
