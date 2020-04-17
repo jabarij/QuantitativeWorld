@@ -16,7 +16,7 @@ namespace QuantitativeWorld.Angular
         [Predefined]
         public static readonly AngleUnit Arcminute = new AngleUnit(name: "arcminute", abbreviation: "arcmin", symbol: "′", unitsPerTurn: Constants.ArcminutesPerTurn);
         [Predefined]
-        public static readonly AngleUnit Arcseconds = new AngleUnit(name: "arcsecond", abbreviation: "arcsec", symbol: "″", unitsPerTurn: Constants.ArcsecondsPerTurn);
+        public static readonly AngleUnit Arcsecond = new AngleUnit(name: "arcsecond", abbreviation: "arcsec", symbol: "″", unitsPerTurn: Constants.ArcsecondsPerTurn);
         [Predefined]
         public static readonly AngleUnit Gradian = new AngleUnit(name: "gradian", abbreviation: "gon", symbol: "ᵍ", unitsPerTurn: Constants.GradiansPerTurn);
         [Predefined]

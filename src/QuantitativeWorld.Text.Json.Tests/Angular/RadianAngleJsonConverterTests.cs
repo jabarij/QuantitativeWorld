@@ -13,8 +13,8 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         public RadianAngleJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(0.5, "{\"Radians\":0.5}")]
-        public void Serialize_ShouldReturnValidJson(decimal radians, string expectedJson)
+        [InlineData(0.5d, "{\"Radians\":0.5}")]
+        public void Serialize_ShouldReturnValidJson(double radians, string expectedJson)
         {
             // arrange
             var angle = new RadianAngle(radians);
@@ -28,8 +28,8 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         }
 
         [Theory]
-        [InlineData("{'radians': 0.5}", 0.5)]
-        public void DeserializeAsTurns_ShouldReturnValidResult(string json, decimal expectedRadians)
+        [InlineData("{'radians': 0.5}", 0.5d)]
+        public void DeserializeAsTurns_ShouldReturnValidResult(string json, double expectedRadians)
         {
             // arrange
             var converter = new RadianAngleJsonConverter();

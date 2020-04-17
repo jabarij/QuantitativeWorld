@@ -5,34 +5,40 @@ namespace QuantitativeWorld.Angular
 {
     public partial struct RadianAngle : ILinearQuantity<AngleUnit>
     {
-        private readonly static AngleUnit _unit = AngleUnit.Radian;
+        private const double EmptyValue = 0d;
+        private readonly double? _radians;
 
-        public RadianAngle(decimal radians)
+        public RadianAngle(double radians)
         {
-            Radians = radians;
+            _radians = radians;
         }
 
-        public decimal Radians { get; }
-
-        decimal ILinearQuantity<AngleUnit>.BaseValue => Radians;
-        AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => _unit;
-        decimal ILinearQuantity<AngleUnit>.Value => Radians;
-        AngleUnit ILinearQuantity<AngleUnit>.Unit => _unit;
+        public double Radians =>
+            _radians ?? EmptyValue;
 
         public Angle ToAngle() =>
-            new Angle(Radians, _unit);
+            new Angle((decimal)Radians, AngleUnit.Radian);
+
+        public DegreeAngle ToDegreeAngle() =>
+            new DegreeAngle(Radians * 180d * 3600d / Math.PI);
+
         public RadianAngle ToNormalized() =>
-            new RadianAngle(Radians % (2m * MathD.PI));
+            new RadianAngle(Radians % (2d * Math.PI));
 
         public bool IsZero() =>
-            Radians.Equals(decimal.Zero);
+            Radians.Equals(0d);
 
         public override string ToString() =>
             DummyStaticQuantityFormatter.ToString<RadianAngle, AngleUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticQuantityFormatter.ToString<RadianAngle, AngleUnit>(formatProvider, this);
 
+        decimal ILinearQuantity<AngleUnit>.BaseValue => (decimal)Radians;
+        AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => AngleUnit.Radian;
+        decimal ILinearQuantity<AngleUnit>.Value => ((ILinearQuantity<AngleUnit>)this).BaseValue;
+        AngleUnit ILinearQuantity<AngleUnit>.Unit => ((ILinearQuantity<AngleUnit>)this).BaseUnit;
+
         public static RadianAngle FromAngle(Angle angle) =>
-            new RadianAngle(angle.Convert(_unit).Value);
+            new RadianAngle((double)angle.Convert(AngleUnit.Radian).Value);
     }
 }

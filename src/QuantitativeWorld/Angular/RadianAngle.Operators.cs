@@ -26,18 +26,18 @@ namespace QuantitativeWorld.Angular
         public static RadianAngle operator -(RadianAngle radianAngle) =>
             new RadianAngle(-radianAngle.Radians);
 
-        public static RadianAngle operator *(RadianAngle radianAngle, decimal factor) =>
+        public static RadianAngle operator *(RadianAngle radianAngle, double factor) =>
             new RadianAngle(radianAngle.Radians * factor);
-        public static RadianAngle operator *(decimal factor, RadianAngle radianAngle) =>
+        public static RadianAngle operator *(double factor, RadianAngle radianAngle) =>
             radianAngle * factor;
 
-        public static RadianAngle operator /(RadianAngle radianAngle, decimal denominator)
+        public static RadianAngle operator /(RadianAngle radianAngle, double denominator)
         {
-            if (denominator == decimal.Zero)
+            if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
             return new RadianAngle(radianAngle.Radians / denominator);
         }
-        public static decimal operator /(RadianAngle radianAngle, RadianAngle denominator)
+        public static double operator /(RadianAngle radianAngle, RadianAngle denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -67,14 +67,14 @@ namespace QuantitativeWorld.Angular
                 return -right.Value;
         }
 
-        public static RadianAngle? operator *(RadianAngle? radianAngle, decimal factor) =>
+        public static RadianAngle? operator *(RadianAngle? radianAngle, double factor) =>
             (radianAngle ?? default(RadianAngle)) * factor;
-        public static RadianAngle? operator *(decimal factor, RadianAngle? radianAngle) =>
+        public static RadianAngle? operator *(double factor, RadianAngle? radianAngle) =>
             radianAngle * factor;
 
-        public static RadianAngle? operator /(RadianAngle? radianAngle, decimal denominator) =>
+        public static RadianAngle? operator /(RadianAngle? radianAngle, double denominator) =>
             (radianAngle ?? default(RadianAngle)) / denominator;
-        public static decimal operator /(RadianAngle? radianAngle, RadianAngle? denominator) =>
+        public static double operator /(RadianAngle? radianAngle, RadianAngle? denominator) =>
             (radianAngle ?? default(RadianAngle)) / (denominator ?? default(RadianAngle));
     }
 }

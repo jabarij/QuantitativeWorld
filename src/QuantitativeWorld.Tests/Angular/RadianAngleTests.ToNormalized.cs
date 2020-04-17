@@ -1,6 +1,7 @@
 using FluentAssertions;
 using QuantitativeWorld.Angular;
 using QuantitativeWorld.TestAbstractions;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -21,22 +22,22 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = originalRadianAngle.ToNormalized();
 
                 // assert
-                result.Radians.Should().BeApproximately(expectedRadianAngle.Radians, DecimalPrecision);
+                result.Radians.Should().BeApproximately(expectedRadianAngle.Radians, DoublePrecision);
             }
 
             private static IEnumerable<ITestDataProvider> GetToNormalizedTestData()
             {
                 yield return new ToNormalizedTestData(new RadianAngle(), new RadianAngle());
-                yield return new ToNormalizedTestData(new RadianAngle(0m), new RadianAngle(0m));
-                yield return new ToNormalizedTestData(new RadianAngle(-0m), new RadianAngle(0m));
-                yield return new ToNormalizedTestData(new RadianAngle(MathD.PI), new RadianAngle(MathD.PI));
-                yield return new ToNormalizedTestData(new RadianAngle(-MathD.PI), new RadianAngle(-MathD.PI));
-                yield return new ToNormalizedTestData(new RadianAngle(MathD.PI * 1.9999m), new RadianAngle(MathD.PI * 1.9999m));
-                yield return new ToNormalizedTestData(new RadianAngle(-MathD.PI * 1.9999m), new RadianAngle(-MathD.PI * 1.9999m));
-                yield return new ToNormalizedTestData(new RadianAngle(2m * MathD.PI), new RadianAngle(0m));
-                yield return new ToNormalizedTestData(new RadianAngle(-2m * MathD.PI), new RadianAngle(0m));
-                yield return new ToNormalizedTestData(new RadianAngle(MathD.PI * 73m), new RadianAngle(MathD.PI));
-                yield return new ToNormalizedTestData(new RadianAngle(-MathD.PI * 73m), new RadianAngle(-MathD.PI));
+                yield return new ToNormalizedTestData(new RadianAngle(0d), new RadianAngle(0d));
+                yield return new ToNormalizedTestData(new RadianAngle(-0d), new RadianAngle(0d));
+                yield return new ToNormalizedTestData(new RadianAngle(Math.PI), new RadianAngle(Math.PI));
+                yield return new ToNormalizedTestData(new RadianAngle(-Math.PI), new RadianAngle(-Math.PI));
+                yield return new ToNormalizedTestData(new RadianAngle(1.9999d * Math.PI), new RadianAngle(1.9999d * Math.PI));
+                yield return new ToNormalizedTestData(new RadianAngle(-1.9999d * Math.PI), new RadianAngle(-1.9999d * Math.PI));
+                yield return new ToNormalizedTestData(new RadianAngle(2d * Math.PI), new RadianAngle(0d));
+                yield return new ToNormalizedTestData(new RadianAngle(-2d * Math.PI), new RadianAngle(0d));
+                yield return new ToNormalizedTestData(new RadianAngle(73d * Math.PI), new RadianAngle(Math.PI));
+                yield return new ToNormalizedTestData(new RadianAngle(-73d * Math.PI), new RadianAngle(-Math.PI));
             }
 
             class ToNormalizedTestData : ITestDataProvider

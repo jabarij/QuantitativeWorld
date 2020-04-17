@@ -17,10 +17,10 @@ namespace QuantitativeWorld.Tests.Angular
             public void NullRadianAngle_ShouldReturnNull()
             {
                 // arrange
-                RadianAngle? radianRadianAngle = null;
+                RadianAngle? radianAngle = null;
 
                 // act
-                var result = -radianRadianAngle;
+                var result = -radianAngle;
 
                 // assert
                 result.Should().BeNull();
@@ -35,11 +35,11 @@ namespace QuantitativeWorld.Tests.Angular
             public void TwoDefaultRadianAngles_ShouldProduceDefaultRadianAngle()
             {
                 // arrange
-                var radianRadianAngle1 = default(RadianAngle);
-                var radianRadianAngle2 = default(RadianAngle);
+                var radianAngle1 = default(RadianAngle);
+                var radianAngle2 = default(RadianAngle);
 
                 // act
-                var result = radianRadianAngle1 + radianRadianAngle2;
+                var result = radianAngle1 + radianAngle2;
 
                 // assert
                 result.Should().Be(default(RadianAngle));
@@ -50,7 +50,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultRadianAngle = default(RadianAngle);
-                var zeroRadians = new RadianAngle(0m);
+                var zeroRadians = new RadianAngle(0d);
 
                 // act
                 var result1 = defaultRadianAngle + zeroRadians;
@@ -65,14 +65,14 @@ namespace QuantitativeWorld.Tests.Angular
             public void ShouldProduceValidResult()
             {
                 // arrange
-                var radianRadianAngle1 = CreateRadianAngle();
-                var radianRadianAngle2 = CreateRadianAngle();
+                var radianAngle1 = CreateRadianAngle();
+                var radianAngle2 = CreateRadianAngle();
 
                 // act
-                var result = radianRadianAngle1 + radianRadianAngle2;
+                var result = radianAngle1 + radianAngle2;
 
                 // assert
-                result.Radians.Should().Be(radianRadianAngle1.Radians + radianRadianAngle2.Radians);
+                result.Radians.Should().Be(radianAngle1.Radians + radianAngle2.Radians);
             }
 
             [Fact]
@@ -94,18 +94,18 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 RadianAngle? nullRadianAngle = null;
-                var radianRadianAngle = CreateRadianAngle();
+                var radianAngle = CreateRadianAngle();
 
                 // act
-                var result1 = radianRadianAngle + nullRadianAngle;
-                var result2 = nullRadianAngle + radianRadianAngle;
+                var result1 = radianAngle + nullRadianAngle;
+                var result2 = nullRadianAngle + radianAngle;
 
                 // assert
                 result1.Should().NotBeNull();
-                result1.Value.Radians.Should().Be(radianRadianAngle.Radians);
+                result1.Value.Radians.Should().Be(radianAngle.Radians);
 
                 result2.Should().NotBeNull();
-                result2.Value.Radians.Should().Be(radianRadianAngle.Radians);
+                result2.Value.Radians.Should().Be(radianAngle.Radians);
             }
         }
 
@@ -118,11 +118,11 @@ namespace QuantitativeWorld.Tests.Angular
             public void TwoDefaultRadianAngles_ShouldProduceDefaultRadianAngle()
             {
                 // arrange
-                var radianRadianAngle1 = default(RadianAngle);
-                var radianRadianAngle2 = default(RadianAngle);
+                var radianAngle1 = default(RadianAngle);
+                var radianAngle2 = default(RadianAngle);
 
                 // act
-                var result = radianRadianAngle1 - radianRadianAngle2;
+                var result = radianAngle1 - radianAngle2;
 
                 // assert
                 result.Should().Be(default(RadianAngle));
@@ -133,7 +133,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultRadianAngle = default(RadianAngle);
-                var zeroRadians = new RadianAngle(0m);
+                var zeroRadians = new RadianAngle(0d);
 
                 // act
                 var result1 = defaultRadianAngle - zeroRadians;
@@ -148,14 +148,14 @@ namespace QuantitativeWorld.Tests.Angular
             public void ShouldProduceValidResult()
             {
                 // arrange
-                var radianRadianAngle1 = CreateRadianAngle();
-                var radianRadianAngle2 = CreateRadianAngle();
+                var radianAngle1 = CreateRadianAngle();
+                var radianAngle2 = CreateRadianAngle();
 
                 // act
-                var result = radianRadianAngle1 - radianRadianAngle2;
+                var result = radianAngle1 - radianAngle2;
 
                 // assert
-                result.Radians.Should().Be(radianRadianAngle1.Radians - radianRadianAngle2.Radians);
+                result.Radians.Should().Be(radianAngle1.Radians - radianAngle2.Radians);
             }
 
             [Fact]
@@ -177,18 +177,18 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 RadianAngle? nullRadianAngle = null;
-                var radianRadianAngle = CreateRadianAngle();
+                var radianAngle = CreateRadianAngle();
 
                 // act
-                var result1 = radianRadianAngle - nullRadianAngle;
-                var result2 = nullRadianAngle - radianRadianAngle;
+                var result1 = radianAngle - nullRadianAngle;
+                var result2 = nullRadianAngle - radianAngle;
 
                 // assert
                 result1.Should().NotBeNull();
-                result1.Value.Radians.Should().Be(radianRadianAngle.Radians);
+                result1.Value.Radians.Should().Be(radianAngle.Radians);
 
                 result2.Should().NotBeNull();
-                result2.Value.Radians.Should().Be(-radianRadianAngle.Radians);
+                result2.Value.Radians.Should().Be(-radianAngle.Radians);
             }
         }
 
@@ -201,14 +201,14 @@ namespace QuantitativeWorld.Tests.Angular
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var radianRadianAngle = CreateRadianAngle();
-                decimal factor = Fixture.Create<decimal>();
+                var radianAngle = CreateRadianAngle();
+                double factor = Fixture.Create<double>();
 
                 // act
-                var result = radianRadianAngle * factor;
+                var result = radianAngle * factor;
 
                 // assert
-                result.Radians.Should().Be(radianRadianAngle.Radians * factor);
+                result.Radians.Should().Be(radianAngle.Radians * factor);
             }
 
             [Fact]
@@ -216,7 +216,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 RadianAngle? nullRadianAngle = null;
-                decimal factor = Fixture.Create<decimal>();
+                double factor = Fixture.Create<double>();
                 var expectedResult = default(RadianAngle) * factor;
 
                 // act
@@ -236,10 +236,10 @@ namespace QuantitativeWorld.Tests.Angular
             public void DivideByZero_ShouldThrow()
             {
                 // arrange
-                var radianRadianAngle = CreateRadianAngle();
+                var radianAngle = CreateRadianAngle();
 
                 // act
-                Func<RadianAngle> divideByZero = () => radianRadianAngle / decimal.Zero;
+                Func<RadianAngle> divideByZero = () => radianAngle / 0d;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -249,14 +249,14 @@ namespace QuantitativeWorld.Tests.Angular
             public void ShouldProduceValidResult()
             {
                 // arrange
-                var radianRadianAngle = CreateRadianAngle();
-                decimal denominator = Fixture.CreateNonZeroDecimal();
+                var radianAngle = CreateRadianAngle();
+                double denominator = Fixture.CreateNonZeroDouble();
 
                 // act
-                var result = radianRadianAngle / denominator;
+                var result = radianAngle / denominator;
 
                 // assert
-                result.Radians.Should().Be(radianRadianAngle.Radians / denominator);
+                result.Radians.Should().Be(radianAngle.Radians / denominator);
             }
 
             [Fact]
@@ -264,7 +264,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 RadianAngle? nullRadianAngle = null;
-                decimal denominator = Fixture.CreateNonZeroDecimal();
+                double denominator = Fixture.CreateNonZeroDouble();
                 var expectedResult = default(RadianAngle) / denominator;
 
                 // act
@@ -284,11 +284,11 @@ namespace QuantitativeWorld.Tests.Angular
             public void DivideByZero_ShouldThrow()
             {
                 // arrange
-                var radianRadianAngle = CreateRadianAngle();
-                var denominator = new RadianAngle(decimal.Zero);
+                var radianAngle = CreateRadianAngle();
+                var denominator = new RadianAngle(0d);
 
                 // act
-                Func<decimal> divideByZero = () => radianRadianAngle / denominator;
+                Func<double> divideByZero = () => radianAngle / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -298,11 +298,11 @@ namespace QuantitativeWorld.Tests.Angular
             public void DivideByNull_ShouldThrow()
             {
                 // arrange
-                var radianRadianAngle = CreateRadianAngle();
+                var radianAngle = CreateRadianAngle();
                 RadianAngle? denominator = null;
 
                 // act
-                Func<decimal> divideByZero = () => radianRadianAngle / denominator;
+                Func<double> divideByZero = () => radianAngle / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -313,10 +313,10 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var nominator = CreateRadianAngle();
-                var denominator = new RadianAngle(Fixture.CreateNonZeroDecimal());
+                var denominator = new RadianAngle(Fixture.CreateNonZeroDouble());
 
                 // act
-                decimal result = nominator / denominator;
+                double result = nominator / denominator;
 
                 // assert
                 result.Should().Be(nominator.Radians / denominator.Radians);
