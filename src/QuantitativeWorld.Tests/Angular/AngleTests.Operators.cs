@@ -65,17 +65,17 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultAngle = default(Angle);
-                var zeroKiloturns = new Angle(0m, AngleUnit.Degree);
+                var zeroDegrees = new Angle(0m, AngleUnit.Degree);
 
                 // act
-                var result1 = defaultAngle + zeroKiloturns;
-                var result2 = zeroKiloturns + defaultAngle;
+                var result1 = defaultAngle + zeroDegrees;
+                var result2 = zeroDegrees + defaultAngle;
 
                 // assert
                 result1.IsZero().Should().BeTrue();
-                result1.Unit.Should().Be(zeroKiloturns.Unit);
+                result1.Unit.Should().Be(zeroDegrees.Unit);
                 result2.IsZero().Should().BeTrue();
-                result2.Unit.Should().Be(zeroKiloturns.Unit);
+                result2.Unit.Should().Be(zeroDegrees.Unit);
             }
 
             [Fact]
@@ -90,7 +90,7 @@ namespace QuantitativeWorld.Tests.Angular
 
                 // assert
                 result.Turns.Should().Be(angle1.Turns + angle2.Turns);
-                result.Value.Should().Be(angle1.Value + angle2.Value);
+                result.Value.Should().BeApproximately(angle1.Value + angle2.Value, DecimalPrecision);
                 result.Unit.Should().Be(angle1.Unit);
             }
 
@@ -169,17 +169,17 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultAngle = default(Angle);
-                var zeroKiloturns = new Angle(0m, AngleUnit.Degree);
+                var zeroDegrees = new Angle(0m, AngleUnit.Degree);
 
                 // act
-                var result1 = defaultAngle - zeroKiloturns;
-                var result2 = zeroKiloturns - defaultAngle;
+                var result1 = defaultAngle - zeroDegrees;
+                var result2 = zeroDegrees - defaultAngle;
 
                 // assert
                 result1.IsZero().Should().BeTrue();
-                result1.Unit.Should().Be(zeroKiloturns.Unit);
+                result1.Unit.Should().Be(zeroDegrees.Unit);
                 result2.IsZero().Should().BeTrue();
-                result2.Unit.Should().Be(zeroKiloturns.Unit);
+                result2.Unit.Should().Be(zeroDegrees.Unit);
             }
 
             [Fact]

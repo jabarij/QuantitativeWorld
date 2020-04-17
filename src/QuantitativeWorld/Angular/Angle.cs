@@ -26,6 +26,10 @@ namespace QuantitativeWorld.Angular
 
         public Angle Convert(AngleUnit targetUnit) =>
             new Angle(targetUnit, Turns);
+        public Angle ToNormalized() =>
+            new Angle(
+                formatUnit: _formatUnit,
+                turns: Turns % 1m);
 
         public bool IsZero() =>
             Turns == decimal.Zero;
