@@ -31,6 +31,7 @@ namespace QuantitativeWorld
         public decimal Value => GetValue(Watts, Unit);
         public PowerUnit Unit => _formatUnit ?? DefaultUnit;
         decimal ILinearQuantity<PowerUnit>.BaseValue => Watts;
+        PowerUnit ILinearQuantity<PowerUnit>.BaseUnit => DefaultUnit;
 
         public Power Convert(PowerUnit targetUnit) =>
             new Power(targetUnit, Watts);

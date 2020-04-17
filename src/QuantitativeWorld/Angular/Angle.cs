@@ -23,6 +23,7 @@ namespace QuantitativeWorld.Angular
         public decimal Value => GetValue(Turns, Unit);
         public AngleUnit Unit => _formatUnit ?? DefaultUnit;
         decimal ILinearQuantity<AngleUnit>.BaseValue => Turns;
+        AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => DefaultUnit;
 
         public Angle Convert(AngleUnit targetUnit) =>
             new Angle(targetUnit, Turns);

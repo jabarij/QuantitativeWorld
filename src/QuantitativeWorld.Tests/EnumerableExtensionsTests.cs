@@ -46,6 +46,7 @@ namespace QuantitativeWorld.Tests
             }
 
             decimal ILinearQuantity<PowerUnit>.BaseValue => Value / Unit.ValueInWatts;
+            PowerUnit ILinearQuantity<PowerUnit>.BaseUnit => PowerUnit.Watt;
             public decimal Value { get; }
             public PowerUnit Unit { get; }
         }

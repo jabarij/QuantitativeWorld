@@ -4,6 +4,7 @@
         where TUnit : ILinearUnit
     {
         decimal BaseValue { get; }
+        TUnit BaseUnit { get; }
         decimal Value { get; }
         TUnit Unit { get; }
     }
