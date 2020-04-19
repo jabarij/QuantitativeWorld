@@ -43,6 +43,13 @@ namespace QuantitativeWorld.DotNetExtensions
                 throw Error.ArgumentNotBetween(value, min, max, paramName);
             return value;
         }
+        public static T IsInRange<T>(T value, ValueRange<T> range, string paramName)
+            where T : struct, IComparable<T>
+        {
+            if (!Check.IsInRange(value, range))
+                throw Error.ArgumentNotInRange(value, range.From, range.To, paramName);
+            return value;
+        }
 
         public static T? IsNullOrGreaterThan<T>(T? value, T min, string paramName) where T : struct, IComparable<T>
         {

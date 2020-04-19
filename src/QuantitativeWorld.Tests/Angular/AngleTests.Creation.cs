@@ -19,14 +19,14 @@ namespace QuantitativeWorld.Tests.Angular
             public void ConstructorForTurns_ShouldCreateValidAngle()
             {
                 // arrange
-                decimal kilograms = Fixture.Create<decimal>();
+                decimal turns = Fixture.Create<decimal>();
 
                 // act
-                var angle = new Angle(kilograms);
+                var angle = new Angle(turns);
 
                 // assert
-                angle.Turns.Should().Be(kilograms);
-                angle.Value.Should().Be(kilograms);
+                angle.Turns.Should().Be(turns);
+                angle.Value.Should().Be(turns);
                 angle.Unit.Should().Be(AngleUnit.Turn);
             }
 
@@ -46,10 +46,10 @@ namespace QuantitativeWorld.Tests.Angular
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
                 yield return new ConstructorForValueAndUnitTestData(1m, AngleUnit.Turn, 1m);
-                yield return new ConstructorForValueAndUnitTestData((decimal)Math.PI, AngleUnit.Radian, 1m);
+                yield return new ConstructorForValueAndUnitTestData((decimal)System.Math.PI, AngleUnit.Radian, 1m);
                 yield return new ConstructorForValueAndUnitTestData(360m, AngleUnit.Degree, 1m);
                 yield return new ConstructorForValueAndUnitTestData(21600m, AngleUnit.Arcminute, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1296000m, AngleUnit.Arcseconds, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1296000m, AngleUnit.Arcsecond, 1m);
                 yield return new ConstructorForValueAndUnitTestData(400m, AngleUnit.Gradian, 1m);
                 yield return new ConstructorForValueAndUnitTestData(6400m, AngleUnit.NATOMil, 1m);
             }

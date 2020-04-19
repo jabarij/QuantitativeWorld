@@ -31,6 +31,7 @@ namespace QuantitativeWorld
         public decimal Value => GetValue(Kilograms, Unit);
         public WeightUnit Unit => _formatUnit ?? DefaultUnit;
         decimal ILinearQuantity<WeightUnit>.BaseValue => Kilograms;
+        WeightUnit ILinearQuantity<WeightUnit>.BaseUnit => DefaultUnit;
 
         public Weight Convert(WeightUnit targetUnit) =>
             new Weight(targetUnit, Kilograms);
@@ -39,9 +40,9 @@ namespace QuantitativeWorld
             Kilograms == decimal.Zero;
 
         public override string ToString() =>
-            DummyStaticQuantityFormatter.ToString<Weight, WeightUnit>(this);
+            DummyStaticFormatter.ToString<Weight, WeightUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            DummyStaticQuantityFormatter.ToString<Weight, WeightUnit>(formatProvider, this);
+            DummyStaticFormatter.ToString<Weight, WeightUnit>(formatProvider, this);
 
         private static decimal GetKilograms(decimal value, WeightUnit sourceUnit) =>
             value * sourceUnit.ValueInKilograms;

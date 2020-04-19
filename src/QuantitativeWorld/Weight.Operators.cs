@@ -31,11 +31,24 @@ namespace QuantitativeWorld
         public static Weight operator *(decimal factor, Weight weight) =>
             weight * factor;
 
+        public static Weight operator *(Weight weight, double factor)
+        {
+            Assert.IsNotNaN(factor, nameof(factor));
+            return weight * (decimal)factor;
+        }
+        public static Weight operator *(double factor, Weight weight) =>
+            weight * factor;
+
         public static Weight operator /(Weight weight, decimal denominator)
         {
             if (denominator == decimal.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Weight(formatUnit: weight.Unit, kilograms: weight.Kilograms / denominator);
+        }
+        public static Weight operator /(Weight weight, double denominator)
+        {
+            Assert.IsNotNaN(denominator, nameof(denominator));
+            return weight / (decimal)denominator;
         }
         public static decimal operator /(Weight weight, Weight denominator)
         {
@@ -72,8 +85,30 @@ namespace QuantitativeWorld
         public static Weight? operator *(decimal factor, Weight? weight) =>
             weight * factor;
 
+        public static Weight? operator *(Weight? weight, double factor)
+        {
+            Assert.IsNotNaN(factor, nameof(factor));
+            decimal decimalFactor;
+            try
+            {
+                decimalFactor = (decimal)factor;
+            }
+            catch (OverflowException)
+            {
+                throw new ArgumentOutOfRangeException(nameof(factor), factor, "Value was either too large or too small for a Decimal.");
+            }
+            return weight * (decimal)factor;
+        }
+        public static Weight? operator *(double factor, Weight? weight) =>
+            weight * factor;
+
         public static Weight? operator /(Weight? weight, decimal denominator) =>
             (weight ?? default(Weight)) / denominator;
+        public static Weight? operator /(Weight? weight, double denominator)
+        {
+            Assert.IsNotNaN(denominator, nameof(denominator));
+            return weight / (decimal)denominator;
+        }
         public static decimal operator /(Weight? weight, Weight? denominator) =>
             (weight ?? default(Weight)) / (denominator ?? default(Weight));
     }

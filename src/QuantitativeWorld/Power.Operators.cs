@@ -31,11 +31,35 @@ namespace QuantitativeWorld
         public static Power operator *(decimal factor, Power power) =>
             power * factor;
 
+        public static Power operator *(Power power, double factor)
+        {
+            Assert.IsNotNaN(factor, nameof(factor));
+            return power * (decimal)factor;
+        }
+        public static Power operator *(double factor, Power power) =>
+            power * factor;
+
         public static Power operator /(Power power, decimal denominator)
         {
             if (denominator == decimal.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Power(formatUnit: power.Unit, watts: power.Watts / denominator);
+        }
+        public static Power operator /(Power power, double denominator)
+        {
+            Assert.IsNotNaN(denominator, nameof(denominator));
+            decimal decimalDenominator;
+
+            try
+            {
+                decimalDenominator = (decimal)denominator;
+            }
+            catch (OverflowException)
+            {
+                throw new ArgumentOutOfRangeException(nameof(denominator), denominator, "Value was either too large or too small for a Decimal.");
+            }
+
+            return power / decimalDenominator;
         }
         public static decimal operator /(Power power, Power denominator)
         {
@@ -72,8 +96,21 @@ namespace QuantitativeWorld
         public static Power? operator *(decimal factor, Power? power) =>
             power * factor;
 
+        public static Power? operator *(Power? power, double factor)
+        {
+            Assert.IsNotNaN(factor, nameof(factor));
+            return power * (decimal)factor;
+        }
+        public static Power? operator *(double factor, Power? power) =>
+            power * factor;
+
         public static Power? operator /(Power? power, decimal denominator) =>
             (power ?? default(Power)) / denominator;
+        public static Power? operator /(Power? power, double denominator)
+        {
+            Assert.IsNotNaN(denominator, nameof(denominator));
+            return power / (decimal)denominator;
+        }
         public static decimal operator /(Power? power, Power? denominator) =>
             (power ?? default(Power)) / (denominator ?? default(Power));
     }

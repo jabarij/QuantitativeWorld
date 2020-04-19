@@ -23,17 +23,22 @@ namespace QuantitativeWorld.Angular
         public decimal Value => GetValue(Turns, Unit);
         public AngleUnit Unit => _formatUnit ?? DefaultUnit;
         decimal ILinearQuantity<AngleUnit>.BaseValue => Turns;
+        AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => DefaultUnit;
 
         public Angle Convert(AngleUnit targetUnit) =>
             new Angle(targetUnit, Turns);
+        public Angle ToNormalized() =>
+            new Angle(
+                formatUnit: _formatUnit,
+                turns: Turns % 1m);
 
         public bool IsZero() =>
             Turns == decimal.Zero;
 
         public override string ToString() =>
-            DummyStaticQuantityFormatter.ToString<Angle, AngleUnit>(this);
+            DummyStaticFormatter.ToString<Angle, AngleUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            DummyStaticQuantityFormatter.ToString<Angle, AngleUnit>(formatProvider, this);
+            DummyStaticFormatter.ToString<Angle, AngleUnit>(formatProvider, this);
 
         private static decimal GetTurns(decimal value, AngleUnit sourceUnit) =>
             value / sourceUnit.UnitsPerTurn;

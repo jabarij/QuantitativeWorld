@@ -335,6 +335,119 @@ namespace QuantitativeWorld.Tests
             }
         }
 
+        public class Operator_MultiplyByDouble : PowerTests
+        {
+            public Operator_MultiplyByDouble(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
+                double factor = Fixture.Create<double>();
+
+                // act
+                var result = power * factor;
+
+                // assert
+                result.Watts.Should().Be(power.Watts * (decimal)factor);
+                result.Value.Should().Be(power.Value * (decimal)factor);
+                result.Unit.Should().Be(power.Unit);
+            }
+
+            [Fact]
+            public void NullPower_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Power? nullPower = null;
+                double factor = Fixture.Create<double>();
+                var expectedResult = default(Power) * factor;
+
+                // act
+                var result = nullPower * factor;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void MultiplyByNaN_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
+
+                // act
+                Func<Power> multiplyByNaN = () => power * double.NaN;
+
+                // assert
+                multiplyByNaN.Should().Throw<ArgumentException>();
+            }
+        }
+
+        public class Operator_DivideByDouble : PowerTests
+        {
+            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
+            {
+                // arrange
+                var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
+
+                // act
+                Func<Power> divideByZero = () => power / 0d;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByNaN_ShouldThrow()
+            {
+                // arrange
+                var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
+
+                // act
+                Func<Power> divideByNaN = () => power / double.NaN;
+
+                // assert
+                divideByNaN.Should().Throw<ArgumentException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
+                double denominator = (double)Fixture.CreateNonZeroDecimal();
+
+                // act
+                var result = power / denominator;
+
+                // assert
+                result.Watts.Should().BeApproximately(power.Watts / (decimal)denominator, DecimalPrecision);
+                result.Unit.Should().Be(power.Unit);
+            }
+
+            [Fact]
+            public void NullPower_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Power? nullPower = null;
+                double denominator = (double)Fixture.CreateNonZeroDecimal();
+                var expectedResult = default(Power) / denominator;
+
+                // act
+                var result = nullPower * denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+        }
+
         public class Operator_DivideByPower : PowerTests
         {
             public Operator_DivideByPower(TestFixture testFixture) : base(testFixture) { }

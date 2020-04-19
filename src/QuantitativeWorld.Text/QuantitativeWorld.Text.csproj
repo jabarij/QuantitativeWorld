@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -16,9 +16,11 @@
     <Compile Include="..\Common\Internals\DotNetExtensions\Error.cs" Link="DotNetExtensions\Error.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\HashCode.cs" Link="DotNetExtensions\HashCode.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\HashCodeExtensions.cs" Link="DotNetExtensions\HashCodeExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\IntervalBoundaryType.cs" Link="DotNetExtensions\IntervalBoundaryType.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\ITransformation.cs" Link="DotNetExtensions\ITransformation.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\StringExtensions.cs" Link="DotNetExtensions\StringExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\TypeExtensions.cs" Link="DotNetExtensions\TypeExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\ValueRange.cs" Link="DotNetExtensions\ValueRange.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -31,6 +31,7 @@ namespace QuantitativeWorld
         public decimal Value => GetValue(Watts, Unit);
         public PowerUnit Unit => _formatUnit ?? DefaultUnit;
         decimal ILinearQuantity<PowerUnit>.BaseValue => Watts;
+        PowerUnit ILinearQuantity<PowerUnit>.BaseUnit => DefaultUnit;
 
         public Power Convert(PowerUnit targetUnit) =>
             new Power(targetUnit, Watts);
@@ -39,9 +40,9 @@ namespace QuantitativeWorld
             Watts == decimal.Zero;
 
         public override string ToString() =>
-            DummyStaticQuantityFormatter.ToString<Power, PowerUnit>(this);
+            DummyStaticFormatter.ToString<Power, PowerUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            DummyStaticQuantityFormatter.ToString<Power, PowerUnit>(formatProvider, this);
+            DummyStaticFormatter.ToString<Power, PowerUnit>(formatProvider, this);
 
         private static decimal GetWatts(decimal value, PowerUnit sourceUnit) =>
             value * sourceUnit.ValueInWatts;

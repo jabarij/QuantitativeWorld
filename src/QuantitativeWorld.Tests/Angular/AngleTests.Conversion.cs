@@ -52,8 +52,8 @@ namespace QuantitativeWorld.Tests.Angular
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Angle(0.123m, AngleUnit.Turn), AngleUnit.Radian, new Angle(0.123m * (decimal)Math.PI, AngleUnit.Radian));
-                yield return new ConvertTestData(new Angle(123.456m, AngleUnit.Radian), AngleUnit.Turn, new Angle(123.456m / (decimal)Math.PI, AngleUnit.Turn));
+                yield return new ConvertTestData(new Angle(0.123m, AngleUnit.Turn), AngleUnit.Radian, new Angle(0.123m * (decimal)System.Math.PI, AngleUnit.Radian));
+                yield return new ConvertTestData(new Angle(123.456m, AngleUnit.Radian), AngleUnit.Turn, new Angle(123.456m / (decimal)System.Math.PI, AngleUnit.Turn));
 
                 yield return new ConvertTestData(new Angle(0.123456m, AngleUnit.Turn), AngleUnit.Degree, new Angle(0.123456m * 360m, AngleUnit.Degree));
                 yield return new ConvertTestData(new Angle(123.456m, AngleUnit.Degree), AngleUnit.Turn, new Angle(123.456m / 360m, AngleUnit.Turn));

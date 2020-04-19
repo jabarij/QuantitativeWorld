@@ -26,7 +26,7 @@ namespace QuantitativeWorld.Tests.Parsing
                 Action parseExact = () => parser.ParseExact(Fixture.Create<string>(), "s", null);
 
                 // assert
-                parseExact.Should().Throw<InvalidOperationException>();
+                parseExact.Should().Throw<FormatException>();
             }
 
             [Fact]

@@ -335,6 +335,119 @@ namespace QuantitativeWorld.Tests
             }
         }
 
+        public class Operator_MultiplyByDouble : WeightTests
+        {
+            public Operator_MultiplyByDouble(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                double factor = Fixture.Create<double>();
+
+                // act
+                var result = weight * factor;
+
+                // assert
+                result.Kilograms.Should().Be(weight.Kilograms * (decimal)factor);
+                result.Value.Should().Be(weight.Value * (decimal)factor);
+                result.Unit.Should().Be(weight.Unit);
+            }
+
+            [Fact]
+            public void NullWeight_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Weight? nullWeight = null;
+                double factor = Fixture.Create<double>();
+                var expectedResult = default(Weight) * factor;
+
+                // act
+                var result = nullWeight * factor;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void MultiplyByNaN_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+
+                // act
+                Func<Weight> multiplyByNaN = () => weight * double.NaN;
+
+                // assert
+                multiplyByNaN.Should().Throw<ArgumentException>();
+            }
+        }
+
+        public class Operator_DivideByDouble : WeightTests
+        {
+            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+
+                // act
+                Func<Weight> divideByZero = () => weight / 0d;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByNaN_ShouldThrow()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+
+                // act
+                Func<Weight> divideByNaN = () => weight / double.NaN;
+
+                // assert
+                divideByNaN.Should().Throw<ArgumentException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
+                double denominator = (double)Fixture.CreateNonZeroDecimal();
+
+                // act
+                var result = weight / denominator;
+
+                // assert
+                result.Kilograms.Should().BeApproximately(weight.Kilograms / (decimal)denominator, DecimalPrecision);
+                result.Unit.Should().Be(weight.Unit);
+            }
+
+            [Fact]
+            public void NullWeight_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Weight? nullWeight = null;
+                double denominator = (double)Fixture.CreateNonZeroDecimal();
+                var expectedResult = default(Weight) / denominator;
+
+                // act
+                var result = nullWeight / denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+        }
+
         public class Operator_DivideByWeight : WeightTests
         {
             public Operator_DivideByWeight(TestFixture testFixture) : base(testFixture) { }

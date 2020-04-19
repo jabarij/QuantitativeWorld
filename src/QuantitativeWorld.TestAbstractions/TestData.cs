@@ -19,6 +19,8 @@ namespace QuantitativeWorld.TestAbstractions
 
         protected IFixture Fixture => _testFixture.Fixture;
         protected decimal DecimalPrecision => _testFixture.DecimalPrecision;
+        protected double DoublePrecision => _testFixture.DoublePrecision;
+        protected float FloatPrecision => _testFixture.FloatPrecision;
 
         public static IEnumerable<object[]> GetTestData(Type sourceType, string dataSourceName)
         {
