@@ -6,7 +6,7 @@ namespace QuantitativeWorld.Angular
     partial struct DegreeAngle : IEquatable<DegreeAngle>, IComparable<DegreeAngle>, IComparable
     {
         public bool Equals(DegreeAngle other) =>
-            TotalDegrees.Equals(other.TotalDegrees);
+            TotalSeconds.Equals(other.TotalSeconds);
         public override bool Equals(object obj) =>
             Equality.IsStructureEqualToObject(this, obj);
         public override int GetHashCode() =>
@@ -15,7 +15,7 @@ namespace QuantitativeWorld.Angular
             .CurrentHash;
 
         public int CompareTo(DegreeAngle other) =>
-            TotalDegrees.CompareTo(other.TotalDegrees);
+            TotalSeconds.CompareTo(other.TotalSeconds);
         public int CompareTo(object obj) =>
             obj is DegreeAngle degreeAngle
             ? CompareTo(degreeAngle)

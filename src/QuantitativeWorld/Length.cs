@@ -40,9 +40,9 @@ namespace QuantitativeWorld
             Metres == decimal.Zero;
 
         public override string ToString() =>
-            DummyStaticQuantityFormatter.ToString<Length, LengthUnit>(this);
+            DummyStaticFormatter.ToString<Length, LengthUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            DummyStaticQuantityFormatter.ToString<Length, LengthUnit>(formatProvider, this);
+            DummyStaticFormatter.ToString<Length, LengthUnit>(formatProvider, this);
 
         private static decimal GetMetres(decimal value, LengthUnit sourceUnit) =>
             value * sourceUnit.ValueInMetres;

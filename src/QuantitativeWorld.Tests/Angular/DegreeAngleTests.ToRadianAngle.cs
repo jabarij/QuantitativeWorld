@@ -23,7 +23,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = sut.ToRadianAngle();
 
                 // assert
-                result.Radians.Should().BeApproximately(sut.TotalDegrees * Math.PI / 180d, DoublePrecision);
+                result.Radians.Should().BeApproximately(sut.TotalDegrees * System.Math.PI / 180d, DoublePrecision);
             }
         }
     }

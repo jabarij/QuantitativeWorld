@@ -16,8 +16,8 @@ namespace QuantitativeWorld.TestAbstractions
 
         public IFixture Fixture { get; }
         public decimal DecimalPrecision => 0.000000000000000000000001m;
-        public double DoublePrecision => 0.0000000000001d;
-        public float FloatPrecision => 0.0000000000001f;
+        public double DoublePrecision => 0.000000000001d;
+        public float FloatPrecision => 0.000000000001f;
 
         private void CustomizeFixture(Fixture fixture)
         {
@@ -36,6 +36,10 @@ namespace QuantitativeWorld.TestAbstractions
 
             fixture.Customize<DegreeAngle>(e => e.FromFactory(() => new DegreeAngle(fixture.Create<double>())));
             fixture.Customize<RadianAngle>(e => e.FromFactory(() => new RadianAngle(fixture.Create<double>())));
+
+            fixture.Customize<GeoCoordinate>(e => e.FromFactory(() => new GeoCoordinate(
+                latitude: fixture.CreateInRange(GeoCoordinate.MinLatitude, GeoCoordinate.MaxLatitude),
+                longitude: fixture.CreateInRange(GeoCoordinate.MinLongitude, GeoCoordinate.MaxLongitude))));
         }
 
         private bool _isDisposed;

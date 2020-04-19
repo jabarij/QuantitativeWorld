@@ -2,11 +2,21 @@
 
 namespace QuantitativeWorld.DotNetExtensions
 {
+    [System.Diagnostics.DebuggerDisplay("{DebuggerDisplay}")]
     internal struct ValueRange<TValue> : IEquatable<ValueRange<TValue>>
         where TValue : struct, IComparable<TValue>
     {
         public const IntervalBoundaryType DefaultBoundaryType = IntervalBoundaryType.Closed;
         public static readonly ValueRange<TValue> Empty = new ValueRange<TValue>();
+
+        private string DebuggerDisplay =>
+            string.Concat(
+                "ValueRange: ",
+                LeftBoundaryType == IntervalBoundaryType.Closed ? "[" : "(",
+                From.ToString(),
+                ";",
+                To.ToString(),
+                RightBoundaryType == IntervalBoundaryType.Closed ? "]" : ")");
 
         private readonly IntervalBoundaryType? _leftBoundaryType;
         private readonly IntervalBoundaryType? _rightBoundaryType;
@@ -32,28 +42,28 @@ namespace QuantitativeWorld.DotNetExtensions
         public IntervalBoundaryType RightBoundaryType => _rightBoundaryType ?? DefaultBoundaryType;
 
         public bool Contains(TValue value) =>
-            !IsOutOfLeftBoundary(value)
-            && !IsOutOfRightBoundary(value);
-        private bool IsOutOfLeftBoundary(TValue value)
+            IsInLeftBoundary(value)
+            && IsInRightBoundary(value);
+        private bool IsInLeftBoundary(TValue value)
         {
             switch (LeftBoundaryType)
             {
                 case IntervalBoundaryType.Open:
-                    return From.CompareTo(value) > 0;
+                    return From.CompareTo(value) <= 0;
                 case IntervalBoundaryType.Closed:
-                    return From.CompareTo(value) >= 0;
+                    return From.CompareTo(value) < 0;
                 default:
                     throw new NotImplementedException($"Handling {LeftBoundaryType.GetType().FullName}.{LeftBoundaryType} is not implemented.");
             }
         }
-        private bool IsOutOfRightBoundary(TValue value)
+        private bool IsInRightBoundary(TValue value)
         {
             switch (RightBoundaryType)
             {
                 case IntervalBoundaryType.Open:
-                    return From.CompareTo(value) > 0;
+                    return To.CompareTo(value) > 0;
                 case IntervalBoundaryType.Closed:
-                    return From.CompareTo(value) >= 0;
+                    return To.CompareTo(value) >= 0;
                 default:
                     throw new NotImplementedException($"Handling {RightBoundaryType.GetType().FullName}.{RightBoundaryType} is not implemented.");
             }

@@ -36,9 +36,9 @@ namespace QuantitativeWorld.Angular
             Turns == decimal.Zero;
 
         public override string ToString() =>
-            DummyStaticQuantityFormatter.ToString<Angle, AngleUnit>(this);
+            DummyStaticFormatter.ToString<Angle, AngleUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            DummyStaticQuantityFormatter.ToString<Angle, AngleUnit>(formatProvider, this);
+            DummyStaticFormatter.ToString<Angle, AngleUnit>(formatProvider, this);
 
         private static decimal GetTurns(decimal value, AngleUnit sourceUnit) =>
             value / sourceUnit.UnitsPerTurn;

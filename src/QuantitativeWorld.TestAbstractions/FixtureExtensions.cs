@@ -36,14 +36,14 @@ namespace QuantitativeWorld.TestAbstractions
             if (min == decimal.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(min), "Cannot generate decimal number greater than decimal.MaxValue.");
 
-            return CreateInRange(fixture, min, decimal.MaxValue);
+            return CreateInRange(fixture, min, int.MaxValue);
         }
         public static decimal CreateGreaterThan(this IFixture fixture, decimal min)
         {
             if (min == decimal.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(min), "Cannot generate decimal number greater than decimal.MaxValue.");
 
-            decimal result = CreateInRange(fixture, min, decimal.MaxValue);
+            decimal result = CreateInRange(fixture, min, int.MaxValue);
             return
                 result == min
                 ? result + _decimalEpsilon
@@ -54,7 +54,7 @@ namespace QuantitativeWorld.TestAbstractions
             if (max == decimal.MinValue)
                 throw new ArgumentOutOfRangeException(nameof(max), "Cannot generate decimal number lower than decimal.MinValue.");
 
-            decimal result = CreateInRange(fixture, decimal.MinValue, max);
+            decimal result = CreateInRange(fixture, int.MinValue, max);
             return
                 result == max
                 ? result - _decimalEpsilon

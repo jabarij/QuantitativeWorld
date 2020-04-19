@@ -13,6 +13,8 @@ namespace QuantitativeWorld.Angular
         public const double MinSeconds = 0d;
         public const double ExclusiveMaxSeconds = 60d;
 
+        public static readonly DegreeAngle Zero = new DegreeAngle(0d);
+
         private const double EmptyValue = 0d;
 
         private static readonly AngleUnit _baseUnit = AngleUnit.Degree;
@@ -21,8 +23,11 @@ namespace QuantitativeWorld.Angular
 
         private readonly double? _totalSeconds;
 
-        public DegreeAngle(double totalSeconds) =>
+        public DegreeAngle(double totalSeconds)
+        {
+            Assert.IsNotNaN(totalSeconds, nameof(totalSeconds));
             _totalSeconds = totalSeconds;
+        }
         public DegreeAngle(int circles, int degrees, int minutes, double seconds, bool isNegative)
         {
             Assert.IsGreaterThanOrEqual(circles, 0, nameof(circles));
@@ -35,11 +40,11 @@ namespace QuantitativeWorld.Angular
             _totalSeconds = totalSeconds;
         }
         public DegreeAngle(int circles, int degrees, int minutes, double seconds)
-            : this(System.Math.Abs(circles), degrees, minutes, seconds, circles < 0) { }
+            : this(Math.Abs(circles), degrees, minutes, seconds, circles < 0) { }
         public DegreeAngle(int degrees, int minutes, double seconds)
-            : this(0, System.Math.Abs(degrees), minutes, seconds, degrees < 0) { }
+            : this(0, Math.Abs(degrees), minutes, seconds, degrees < 0) { }
         public DegreeAngle(int minutes, double seconds)
-            : this(0, 0, System.Math.Abs(minutes), seconds, minutes < 0) { }
+            : this(0, 0, Math.Abs(minutes), seconds, minutes < 0) { }
 
         public double TotalSeconds => _totalSeconds ?? EmptyValue;
         public double TotalMinutes =>
@@ -50,13 +55,13 @@ namespace QuantitativeWorld.Angular
             TotalSeconds < 0d;
 
         public int Circles =>
-            System.Math.Abs((int)(TotalDegrees / 360d));
+            Math.Abs((int)(TotalDegrees / 360d));
         public int Degrees =>
-            System.Math.Abs((int)(TotalDegrees % 360d));
+            Math.Abs((int)(TotalDegrees % 360d));
         public int Minutes =>
-            System.Math.Abs((int)(TotalMinutes % 60d));
+            Math.Abs((int)(TotalMinutes % 60d));
         public double Seconds =>
-            System.Math.Abs(TotalSeconds % 60d);
+            Math.Abs(TotalSeconds % 60d);
 
         public Angle ToAngle() =>
             new Angle((decimal)TotalDegrees, AngleUnit.Degree);
@@ -71,9 +76,9 @@ namespace QuantitativeWorld.Angular
             TotalSeconds.Equals(0d);
 
         public override string ToString() =>
-            DummyStaticQuantityFormatter.ToString<DegreeAngle, AngleUnit>(this);
+            DummyStaticFormatter.ToString<DegreeAngle, AngleUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            DummyStaticQuantityFormatter.ToString<DegreeAngle, AngleUnit>(formatProvider, this);
+            DummyStaticFormatter.ToString<DegreeAngle, AngleUnit>(formatProvider, this);
 
         decimal ILinearQuantity<AngleUnit>.BaseValue => (decimal)TotalDegrees;
         AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => AngleUnit.Degree;

@@ -1,4 +1,5 @@
-﻿using QuantitativeWorld.Interfaces;
+﻿using QuantitativeWorld.DotNetExtensions;
+using QuantitativeWorld.Interfaces;
 using System;
 
 namespace QuantitativeWorld.Angular
@@ -8,8 +9,11 @@ namespace QuantitativeWorld.Angular
         private const double EmptyValue = 0d;
         private readonly double? _radians;
 
+        public static readonly RadianAngle Zero = new RadianAngle(0d);
+
         public RadianAngle(double radians)
         {
+            Assert.IsNotNaN(radians, nameof(radians));
             _radians = radians;
         }
 
@@ -20,18 +24,18 @@ namespace QuantitativeWorld.Angular
             new Angle((decimal)Radians, AngleUnit.Radian);
 
         public DegreeAngle ToDegreeAngle() =>
-            new DegreeAngle(Radians * 180d * 3600d / Math.PI);
+            new DegreeAngle(Radians * 180d * 3600d / System.Math.PI);
 
         public RadianAngle ToNormalized() =>
-            new RadianAngle(Radians % (2d * Math.PI));
+            new RadianAngle(Radians % (2d * System.Math.PI));
 
         public bool IsZero() =>
             Radians.Equals(0d);
 
         public override string ToString() =>
-            DummyStaticQuantityFormatter.ToString<RadianAngle, AngleUnit>(this);
+            DummyStaticFormatter.ToString<RadianAngle, AngleUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
-            DummyStaticQuantityFormatter.ToString<RadianAngle, AngleUnit>(formatProvider, this);
+            DummyStaticFormatter.ToString<RadianAngle, AngleUnit>(formatProvider, this);
 
         decimal ILinearQuantity<AngleUnit>.BaseValue => (decimal)Radians;
         AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => AngleUnit.Radian;
