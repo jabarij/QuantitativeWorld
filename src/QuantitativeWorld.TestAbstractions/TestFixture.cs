@@ -16,8 +16,8 @@ namespace QuantitativeWorld.TestAbstractions
 
         public IFixture Fixture { get; }
         public decimal DecimalPrecision => 0.000000000000000000000001m;
-        public double DoublePrecision => 0.000000000001d;
-        public float FloatPrecision => 0.000000000001f;
+        public double DoublePrecision => 0.00000000001d;
+        public float FloatPrecision => 0.00000000001f;
 
         private void CustomizeFixture(Fixture fixture)
         {
