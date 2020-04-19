@@ -23,7 +23,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = sut.ToDegreeAngle();
 
                 // assert
-                result.TotalDegrees.Should().BeApproximately(sut.Radians * 180d / Math.PI, DoublePrecision);
+                result.TotalDegrees.Should().BeApproximately(sut.Radians * 180d / System.Math.PI, DoublePrecision);
             }
         }
     }

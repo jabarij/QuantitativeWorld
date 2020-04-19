@@ -18,7 +18,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         {
             // arrange
             var angle = new RadianAngle(radians);
-            var converter = new RadianAngleJsonConverter();
+            var converter = new GeoCoordinateJsonConverter();
 
             // act
             string actualJson = JsonConvert.SerializeObject(angle, converter);
@@ -32,7 +32,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         public void DeserializeAsTurns_ShouldReturnValidResult(string json, double expectedRadians)
         {
             // arrange
-            var converter = new RadianAngleJsonConverter();
+            var converter = new GeoCoordinateJsonConverter();
 
             // act
             var result = JsonConvert.DeserializeObject<RadianAngle>(json, converter);
@@ -46,7 +46,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         {
             // arrange
             var angle = Fixture.Create<RadianAngle>();
-            var converter = new RadianAngleJsonConverter();
+            var converter = new GeoCoordinateJsonConverter();
 
             // act
             string serializedRadianAngle1 = JsonConvert.SerializeObject(angle, converter);

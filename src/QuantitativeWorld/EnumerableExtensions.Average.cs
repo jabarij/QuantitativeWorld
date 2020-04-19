@@ -23,7 +23,7 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / count;
+            return sum / (double)count;
         }
 
         public static Weight Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Weight> selector)
@@ -43,7 +43,7 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / count;
+            return sum / (double)count;
         }
 
         public static Length Average(this IEnumerable<Length> source)
@@ -62,7 +62,7 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / count;
+            return sum / (double)count;
         }
 
         public static Length Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Length> selector)
@@ -82,7 +82,7 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / count;
+            return sum / (double)count;
         }
 
         public static TQuantity Average<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<decimal, TUnit, TQuantity> factory)

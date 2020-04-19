@@ -335,6 +335,119 @@ namespace QuantitativeWorld.Tests
             }
         }
 
+        public class Operator_MultiplyByDouble : LengthTests
+        {
+            public Operator_MultiplyByDouble(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                double factor = Fixture.Create<double>();
+
+                // act
+                var result = length * factor;
+
+                // assert
+                result.Metres.Should().Be(length.Metres * (decimal)factor);
+                result.Value.Should().Be(length.Value * (decimal)factor);
+                result.Unit.Should().Be(length.Unit);
+            }
+
+            [Fact]
+            public void NullLength_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Length? nullLength = null;
+                double factor = Fixture.Create<double>();
+                var expectedResult = default(Length) * factor;
+
+                // act
+                var result = nullLength * factor;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void MultiplyByNaN_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+
+                // act
+                Func<Length> multiplyByNaN = () => length * double.NaN;
+
+                // assert
+                multiplyByNaN.Should().Throw<ArgumentException>();
+            }
+        }
+
+        public class Operator_DivideByDouble : LengthTests
+        {
+            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+
+                // act
+                Func<Length> divideByZero = () => length / 0d;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByNaN_ShouldThrow()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+
+                // act
+                Func<Length> divideByNaN = () => length / double.NaN;
+
+                // assert
+                divideByNaN.Should().Throw<ArgumentException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                double denominator = (double)Fixture.CreateNonZeroDecimal();
+
+                // act
+                var result = length / denominator;
+
+                // assert
+                result.Metres.Should().BeApproximately(length.Metres / (decimal)denominator, DecimalPrecision);
+                result.Unit.Should().Be(length.Unit);
+            }
+
+            [Fact]
+            public void NullLength_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Length? nullLength = null;
+                double denominator = (double)Fixture.CreateNonZeroDecimal();
+                var expectedResult = default(Length) / denominator;
+
+                // act
+                var result = nullLength * denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+        }
+
         public class Operator_DivideByLength : LengthTests
         {
             public Operator_DivideByLength(TestFixture testFixture) : base(testFixture) { }
