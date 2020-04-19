@@ -17,13 +17,26 @@ namespace QuantitativeWorld.Tests.Angular
             public void Constructor_ShouldCreateValidRadianAngle()
             {
                 // arrange
-                decimal radians = Fixture.Create<decimal>();
+                double radians = Fixture.Create<double>();
 
                 // act
-                var radianRadianAngle = new RadianAngle(radians);
+                var radianAngle = new RadianAngle(radians);
 
                 // assert
-                radianRadianAngle.Radians.Should().Be(radians);
+                radianAngle.Radians.Should().Be(radians);
+            }
+
+            [Fact]
+            public void FromAngle_ShouldCreateValidRadianAngle()
+            {
+                // arrange
+                var angle = Fixture.Create<Angle>();
+
+                // act
+                var radianAngle = RadianAngle.FromAngle(angle);
+
+                // assert
+                radianAngle.Radians.Should().BeApproximately((double)angle.Convert(AngleUnit.Radian).Value, DoublePrecision);
             }
         }
     }

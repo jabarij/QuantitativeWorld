@@ -10,6 +10,6 @@ namespace QuantitativeWorld.Tests.Angular
             : base(testFixture) { }
 
         private RadianAngle CreateRadianAngle() =>
-            new RadianAngle(radians: Fixture.Create<decimal>());
+            new RadianAngle(radians: Fixture.Create<double>());
     }
 }

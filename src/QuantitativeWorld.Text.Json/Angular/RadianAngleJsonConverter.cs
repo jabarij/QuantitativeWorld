@@ -8,12 +8,12 @@ namespace QuantitativeWorld.Text.Json.Angular
     {
         public override RadianAngle ReadJson(JsonReader reader, Type objectType, RadianAngle existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            decimal? radians = null;
+            double? radians = null;
             if (reader.TokenType == JsonToken.StartObject)
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(nameof(RadianAngle.Radians), serializer, e => e.ReadAsDecimal(), out var value))
+                    if (reader.TryReadPropertyAsNullable(nameof(RadianAngle.Radians), serializer, e => e.ReadAsDouble(), out var value))
                         radians = value;
                 }
             }

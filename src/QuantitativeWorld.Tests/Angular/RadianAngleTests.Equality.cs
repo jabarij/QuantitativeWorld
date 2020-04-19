@@ -18,41 +18,40 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultRadianAngle = default(RadianAngle);
-                var zeroRadiansRadianAngle = new RadianAngle(0m);
+                var zeroRadiansRadianAngle = new RadianAngle(0d);
 
                 // act
                 // assert
-                zeroRadiansRadianAngle.Equals(defaultRadianAngle).Should().BeTrue(because: "'new RadianAngle(0m)' should be equal 'default(RadianAngle)'");
-                defaultRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'default(RadianAngle)' should be equal 'new RadianAngle(0m)'");
+                zeroRadiansRadianAngle.Equals(defaultRadianAngle).Should().BeTrue(because: "'new RadianAngle(0d)' should be equal 'default(RadianAngle)'");
+                defaultRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'default(RadianAngle)' should be equal 'new RadianAngle(0d)'");
             }
 
             [Fact]
             public void RadianAngleCreateUtinsParamlessConstructor_ShouldBeEqualToZeroRadians()
             {
                 // arrange
-                var zeroRadiansRadianAngle = new RadianAngle(0m);
+                var zeroRadiansRadianAngle = new RadianAngle(0d);
                 var paramlessConstructedRadianAngle = new RadianAngle();
 
                 // act
                 // assert
-                zeroRadiansRadianAngle.Equals(paramlessConstructedRadianAngle).Should().BeTrue(because: "'new RadianAngle(0m)' should be equal 'new RadianAngle()'");
-                paramlessConstructedRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'new RadianAngle()' should be equal 'new RadianAngle(0m)'");
+                zeroRadiansRadianAngle.Equals(paramlessConstructedRadianAngle).Should().BeTrue(because: "'new RadianAngle(0d)' should be equal 'new RadianAngle()'");
+                paramlessConstructedRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'new RadianAngle()' should be equal 'new RadianAngle(0d)'");
             }
 
             [Fact]
             public void RadianAnglesOfDifferentUnitsEqualInRadians_ShouldBeEqual()
             {
                 // arrange
-                var radianRadianAngle1 = new RadianAngle(
-                    radians: Fixture.Create<decimal>());
-                var radianRadianAngle2 = new RadianAngle(
-                    radians: radianRadianAngle1.Radians);
+                var radianAngle1 = Fixture.Create<RadianAngle>();
+                var radianAngle2 = new RadianAngle(
+                    radians: radianAngle1.Radians);
 
                 // act
-                bool equalsResult = radianRadianAngle1.Equals(radianRadianAngle2);
+                bool equalsResult = radianAngle1.Equals(radianAngle2);
 
                 // assert
-                equalsResult.Should().BeTrue(because: $"{radianRadianAngle1.Radians} rad == {radianRadianAngle2.Radians} rad");
+                equalsResult.Should().BeTrue(because: $"{radianAngle1.Radians} rad == {radianAngle2.Radians} rad");
             }
         }
     }

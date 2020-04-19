@@ -18,6 +18,9 @@ namespace QuantitativeWorld.DotNetExtensions
             value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
         public static bool IsBetween<T>(T value, T min, T max) where T : struct, IComparable<T> =>
             value.CompareTo(min) > 0 && value.CompareTo(max) < 0;
+        public static bool IsInRange<T>(T value, ValueRange<T> range)
+            where T : struct, IComparable<T> =>
+            range.Contains(value);
 
         public static bool IsNullOrGreaterThan<T>(T? value, T min) where T : struct, IComparable<T> =>
             value.HasValue || IsGreaterThan(value.Value, min);
