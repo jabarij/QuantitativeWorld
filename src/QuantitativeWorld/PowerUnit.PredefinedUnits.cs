@@ -8,7 +8,7 @@ namespace QuantitativeWorld
     partial struct PowerUnit
     {
         [Predefined]
-        public static readonly PowerUnit Watt = new PowerUnit(name: "watt", abbreviation: "W", valueInWatts: 1m);
+        public static readonly PowerUnit Watt = new PowerUnit(name: "watt", abbreviation: "W", valueInWatts: 1d);
         [Predefined]
         public static readonly PowerUnit Milliwatt = new PowerUnit(name: "milliwatt", abbreviation: "mW", valueInWatts: Constants.WattsPerMilliwatt);
         [Predefined]

@@ -19,7 +19,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 IEnumerable<Power> source = null;
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
                 Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(source, factory);
@@ -34,7 +34,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Fixture.CreateMany<Power>(3);
-                Func<decimal, PowerUnit, Power> factory = null;
+                Func<double, PowerUnit, Power> factory = null;
 
                 // act
                 Action average = () => EnumerableExtensions.Average<Power, PowerUnit>(source, factory);
@@ -49,7 +49,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Enumerable.Empty<Power>();
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
                 Action average = () => EnumerableExtensions.Average(source, factory);
@@ -59,13 +59,14 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
+
             public void ShouldReturnValidResult()
             {
                 // arrange
                 var source = Fixture.CreateMany<Power>(3);
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
 
-                decimal expectedResultInWatts = source.Average(e => e.Value * e.Unit.ValueInWatts);
+                double expectedResultInWatts = source.Average(e => e.Value * e.Unit.ValueInWatts);
                 var expectedResultUnit = source.First().Unit;
                 var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
 
@@ -74,7 +75,7 @@ namespace QuantitativeWorld.Tests
 
                 // assert
                 result.Unit.Should().Be(expectedResult.Unit);
-                result.Value.Should().Be(expectedResult.Value);
+                result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
             }
         }
     }

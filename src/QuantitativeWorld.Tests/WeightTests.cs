@@ -10,14 +10,14 @@ namespace QuantitativeWorld.Tests
             : base(testFixture) { }
 
         private Weight CreateWeightInUnit(WeightUnit unit) =>
-            new Weight(
-                value: Fixture.Create<decimal>(),
-                unit: unit);
+            Fixture
+            .Create<Weight>()
+            .Convert(unit);
 
         private Weight CreateWeightInUnitOtherThan(params WeightUnit[] unitsToExclude) =>
-            new Weight(
-                value: Fixture.Create<decimal>(),
-                unit: CreateUnitOtherThan(unitsToExclude));
+            Fixture
+            .Create<Weight>()
+            .Convert(CreateUnitOtherThan(unitsToExclude));
 
         private WeightUnit CreateUnitOtherThan(params WeightUnit[] unitsToExclude) =>
             Fixture.CreateFromSet(WeightUnit.GetPredefinedUnits().Except(unitsToExclude));

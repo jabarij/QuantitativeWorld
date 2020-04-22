@@ -2,8 +2,8 @@
 {
     internal class LengthBuilder : ILinearQuantityBuilder<Length, LengthUnit>
     {
-        private decimal? _metres;
-        private decimal? _value;
+        private double? _metres;
+        private double? _value;
         private LengthUnit? _unit;
 
         public LengthBuilder() { }
@@ -14,13 +14,13 @@
             _unit = length.Unit;
         }
 
-        public void SetBaseValue(decimal metres)
+        public void SetBaseValue(double metres)
         {
             _metres = metres;
             _value = null;
         }
 
-        public void SetValue(decimal value)
+        public void SetValue(double value)
         {
             _metres = null;
             _value = value;
@@ -33,8 +33,8 @@
 
         public bool TryBuild(out Length result, LengthUnit? defaultUnit = null)
         {
-            decimal? metres = _metres;
-            decimal? value = _value;
+            double? metres = _metres;
+            double? value = _value;
             LengthUnit? unit = _unit ?? defaultUnit;
 
             if (metres.HasValue)

@@ -65,7 +65,7 @@ namespace QuantitativeWorld.Tests
                 var source = Fixture.CreateMany<Length>(3).Select(e => new TestObject<Length>(e));
                 Func<TestObject<Length>, Length> selector = e => e.Property;
 
-                decimal expectedResultInMetres = source.Average(e => e.Property.Metres);
+                double expectedResultInMetres = source.Average(e => e.Property.Metres);
                 var expectedResultUnit = source.First().Property.Unit;
                 var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 

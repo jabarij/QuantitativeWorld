@@ -62,7 +62,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var objects = Fixture.CreateMany<Length>(3).Select(e => new TestObject<Length>(e));
-                decimal expectedResultInMetres = objects.Sum(e => e.Property.Metres);
+                double expectedResultInMetres = objects.Sum(e => e.Property.Metres);
                 var expectedResultUnit = objects.First().Property.Unit;
                 var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 

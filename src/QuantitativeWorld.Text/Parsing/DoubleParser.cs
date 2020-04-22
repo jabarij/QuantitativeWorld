@@ -4,22 +4,22 @@ using System.Globalization;
 
 namespace QuantitativeWorld.Text.Parsing
 {
-    public class DecimalParser : IParser<decimal>
+    public class DoubleParser : IParser<double>
     {
         private readonly IFormatProvider _formatProvider;
 
-        public DecimalParser()
+        public DoubleParser()
             : this(CultureInfo.CurrentCulture) { }
-        public DecimalParser(IFormatProvider formatProvider)
+        public DoubleParser(IFormatProvider formatProvider)
         {
             Assert.IsNotNull(formatProvider, nameof(formatProvider));
             _formatProvider = formatProvider;
         }
 
-        public decimal Parse(string value) =>
-            decimal.Parse(value, _formatProvider);
+        public double Parse(string value) =>
+            double.Parse(value, _formatProvider);
 
-        public bool TryParse(string value, out decimal result) =>
-            decimal.TryParse(value, NumberStyles.Any, _formatProvider, out result);
+        public bool TryParse(string value, out double result) =>
+            double.TryParse(value, NumberStyles.Any, _formatProvider, out result);
     }
 }

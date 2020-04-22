@@ -22,7 +22,8 @@ namespace QuantitativeWorld.Tests
                 var actualLength = originalLength.Convert(targetUnit);
 
                 // assert
-                actualLength.Should().Be(expectedLength);
+                actualLength.Metres.Should().BeApproximately(expectedLength.Metres, DoublePrecision);
+                actualLength.Value.Should().BeApproximately(expectedLength.Value, DoublePrecision);
                 actualLength.Unit.Should().Be(targetUnit);
             }
 
@@ -39,7 +40,7 @@ namespace QuantitativeWorld.Tests
                     LengthUnit.Inch,
                     LengthUnit.Metre
                 };
-                var initialLength = new Length(1234.5678m, units.First());
+                var initialLength = new Length(1234.5678d, units.First());
                 Length? finalLength = null;
 
                 // act
@@ -51,14 +52,14 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Length(123.456m, LengthUnit.Metre), LengthUnit.Decimetre, new Length(1234.56m, LengthUnit.Decimetre));
-                yield return new ConvertTestData(new Length(1234.56m, LengthUnit.Decimetre), LengthUnit.Metre, new Length(123.456m, LengthUnit.Metre));
+                yield return new ConvertTestData(new Length(12.3456d, LengthUnit.Metre), LengthUnit.Decimetre, new Length(123.456d, LengthUnit.Decimetre));
+                yield return new ConvertTestData(new Length(1234.56d, LengthUnit.Decimetre), LengthUnit.Metre, new Length(123.456d, LengthUnit.Metre));
 
-                yield return new ConvertTestData(new Length(123.456m, LengthUnit.Metre), LengthUnit.Kilometre, new Length(0.123456m, LengthUnit.Kilometre));
-                yield return new ConvertTestData(new Length(0.123456m, LengthUnit.Kilometre), LengthUnit.Metre, new Length(123.456m, LengthUnit.Metre));
+                yield return new ConvertTestData(new Length(123.456d, LengthUnit.Metre), LengthUnit.Kilometre, new Length(0.123456d, LengthUnit.Kilometre));
+                yield return new ConvertTestData(new Length(0.123456d, LengthUnit.Kilometre), LengthUnit.Metre, new Length(123.456d, LengthUnit.Metre));
 
-                yield return new ConvertTestData(new Length(123.456m, LengthUnit.Metre), LengthUnit.Foot, new Length(123.456m / (0.0254m * 12m), LengthUnit.Foot));
-                yield return new ConvertTestData(new Length(272.17389m, LengthUnit.Foot), LengthUnit.Metre, new Length(272.17389m * (0.0254m * 12m), LengthUnit.Metre));
+                yield return new ConvertTestData(new Length(37.6293888d, LengthUnit.Metre), LengthUnit.Foot, new Length(123.456d, LengthUnit.Foot));
+                yield return new ConvertTestData(new Length(123.456d, LengthUnit.Foot), LengthUnit.Metre, new Length(37.6293888d, LengthUnit.Metre));
             }
 
             class ConvertTestData : ITestDataProvider

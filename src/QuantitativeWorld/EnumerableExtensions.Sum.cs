@@ -34,7 +34,7 @@ namespace QuantitativeWorld
             return source.Aggregate(default(Length), (acc, e) => acc + selector(e));
         }
 
-        public static TQuantity Sum<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<decimal, TUnit, TQuantity> factory)
+        public static TQuantity Sum<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<double, TUnit, TQuantity> factory)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -52,7 +52,7 @@ namespace QuantitativeWorld
             return Sum<TQuantity, TQuantity, TUnit>(source.GetEnumerator(), factory.Create, e => e);
         }
 
-        public static TQuantity Sum<TSource, TQuantity, TUnit>(this IEnumerable<TSource> source, Func<decimal, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
+        public static TQuantity Sum<TSource, TQuantity, TUnit>(this IEnumerable<TSource> source, Func<double, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -72,7 +72,7 @@ namespace QuantitativeWorld
             return Sum<TSource, TQuantity, TUnit>(source.GetEnumerator(), factory.Create, selector);
         }
 
-        private static TQuantity Sum<TSource, TQuantity, TUnit>(IEnumerator<TSource> enumerator, Func<decimal, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
+        private static TQuantity Sum<TSource, TQuantity, TUnit>(IEnumerator<TSource> enumerator, Func<double, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -81,7 +81,7 @@ namespace QuantitativeWorld
                 return default(TQuantity);
 
             var targetUnit = selector(enumerator.Current).Unit;
-            decimal valueInBaseUnit = 0m;
+            double valueInBaseUnit = 0d;
             do
             {
                 var quantity = selector(enumerator.Current);
@@ -89,7 +89,7 @@ namespace QuantitativeWorld
             }
             while (enumerator.MoveNext());
 
-            if (targetUnit == null || targetUnit.ValueInBaseUnit == decimal.Zero)
+            if (targetUnit == null || targetUnit.ValueInBaseUnit == 0d)
                 throw new DivideByZeroException($"Could not find non-zero based unit of type {typeof(TUnit).FullName} in source.");
             return factory(valueInBaseUnit / targetUnit.ValueInBaseUnit, targetUnit);
         }

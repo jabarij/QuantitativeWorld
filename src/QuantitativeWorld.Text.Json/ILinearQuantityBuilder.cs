@@ -6,9 +6,9 @@ namespace QuantitativeWorld.Text.Json
         where TQuantity : ILinearQuantity<TUnit>
         where TUnit : struct, ILinearUnit
     {
-        void SetBaseValue(decimal baseValue);
+        void SetBaseValue(double baseValue);
         void SetUnit(TUnit unit);
-        void SetValue(decimal value);
+        void SetValue(double value);
         bool TryBuild(out TQuantity quantity, TUnit? defaultUnit = null);
     }
 }

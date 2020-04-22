@@ -70,8 +70,8 @@ namespace QuantitativeWorld.Tests
                 var sut = new GeoCoordinate(latitude, longitude);
 
                 // assert
-                sut.Latitude.Should().Be(latitude);
-                sut.Longitude.Should().Be(longitude);
+                sut.Latitude.Should().BeApproximately(latitude, DoublePrecision);
+                sut.Longitude.Should().BeApproximately(longitude, DoublePrecision);
             }
         }
 

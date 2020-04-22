@@ -20,21 +20,21 @@ namespace QuantitativeWorld.Conversion.Tests
                 var converter = new LinearUnitConverter<LengthUnit>();
 
                 // act
-                decimal actualValue = converter.ConvertValue(testData.Value, testData.SourceUnit, testData.TargetUnit);
+                double actualValue = converter.ConvertValue(testData.Value, testData.SourceUnit, testData.TargetUnit);
 
                 // assert
-                actualValue.Should().BeApproximately(testData.ExpectedValue, DecimalPrecision);
+                actualValue.Should().BeApproximately(testData.ExpectedValue, DoublePrecision);
             }
 
             private static IEnumerable<ConvertValueTestData> GetConvertTestData()
             {
-                yield return new ConvertValueTestData(1 / (0.0254m * 12m * 3m * 5.5m * 4m * 10m * 8m), LengthUnit.Mile, LengthUnit.Metre, 1m);
-                yield return new ConvertValueTestData(0.0006213711922373339696174342m, LengthUnit.Mile, LengthUnit.Metre, 1m);
+                yield return new ConvertValueTestData(1 / (0.0254d * 12d * 3d * 5.5d * 4d * 10d * 8d), LengthUnit.Mile, LengthUnit.Metre, 1d);
+                yield return new ConvertValueTestData(0.0006213711922373339696174342d, LengthUnit.Mile, LengthUnit.Metre, 1d);
             }
 
             public class ConvertValueTestData
             {
-                public ConvertValueTestData(decimal value, LengthUnit sourceUnit, LengthUnit targetUnit, decimal expectedValue)
+                public ConvertValueTestData(double value, LengthUnit sourceUnit, LengthUnit targetUnit, double expectedValue)
                 {
                     Value = value;
                     SourceUnit = sourceUnit;
@@ -42,10 +42,10 @@ namespace QuantitativeWorld.Conversion.Tests
                     ExpectedValue = expectedValue;
                 }
 
-                public decimal Value { get; }
+                public double Value { get; }
                 public LengthUnit SourceUnit { get; }
                 public LengthUnit TargetUnit { get; }
-                public decimal ExpectedValue { get; }
+                public double ExpectedValue { get; }
 
                 public override string ToString() =>
                     $"{Value} {SourceUnit} should be {ExpectedValue} {TargetUnit}";

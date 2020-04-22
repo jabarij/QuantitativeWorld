@@ -8,18 +8,18 @@ namespace QuantitativeWorld
     {
         public static readonly Weight MinValue = new Weight(MinWatts);
         public static readonly Weight MaxValue = new Weight(MaxWatts);
-        private const decimal MinWatts = decimal.MinValue;
-        private const decimal MaxWatts = decimal.MaxValue;
+        private const double MinWatts = double.MinValue;
+        private const double MaxWatts = double.MaxValue;
 
         public static readonly PowerUnit DefaultUnit = PowerUnit.Watt;
 
         private readonly PowerUnit? _formatUnit;
 
-        public Power(decimal watts)
+        public Power(double watts)
             : this(formatUnit: null, watts: watts) { }
-        public Power(decimal value, PowerUnit unit)
+        public Power(double value, PowerUnit unit)
             : this(formatUnit: unit, watts: GetWatts(value, unit)) { }
-        private Power(PowerUnit? formatUnit, decimal watts)
+        private Power(PowerUnit? formatUnit, double watts)
         {
             Assert.IsInRange(watts, MinWatts, MaxWatts, nameof(watts));
 
@@ -27,26 +27,26 @@ namespace QuantitativeWorld
             Watts = watts;
         }
 
-        public decimal Watts { get; }
-        public decimal Value => GetValue(Watts, Unit);
+        public double Watts { get; }
+        public double Value => GetValue(Watts, Unit);
         public PowerUnit Unit => _formatUnit ?? DefaultUnit;
-        decimal ILinearQuantity<PowerUnit>.BaseValue => Watts;
+        double ILinearQuantity<PowerUnit>.BaseValue => Watts;
         PowerUnit ILinearQuantity<PowerUnit>.BaseUnit => DefaultUnit;
 
         public Power Convert(PowerUnit targetUnit) =>
             new Power(targetUnit, Watts);
 
         public bool IsZero() =>
-            Watts == decimal.Zero;
+            Watts == 0d;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Power, PowerUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Power, PowerUnit>(formatProvider, this);
 
-        private static decimal GetWatts(decimal value, PowerUnit sourceUnit) =>
+        private static double GetWatts(double value, PowerUnit sourceUnit) =>
             value * sourceUnit.ValueInWatts;
-        private static decimal GetValue(decimal watts, PowerUnit targetUnit) =>
+        private static double GetValue(double watts, PowerUnit targetUnit) =>
             watts / targetUnit.ValueInWatts;
     }
 }

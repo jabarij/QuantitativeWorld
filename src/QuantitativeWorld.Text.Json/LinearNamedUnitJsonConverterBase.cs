@@ -29,7 +29,7 @@ namespace QuantitativeWorld.Text.Json
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(ValueInBaseUnitPropertyName, serializer, e => e.ReadAsDecimal(), out var baseValue))
+                    if (reader.TryReadPropertyAsNullable(ValueInBaseUnitPropertyName, serializer, e => e.ReadAsDouble(), out var baseValue))
                         builder.SetValueInBaseUnit(baseValue);
                     else if (reader.TryReadPropertyAs(nameof(INamedUnit.Name), serializer, e => e.ReadAsString(), out var name))
                         builder.SetName(name);

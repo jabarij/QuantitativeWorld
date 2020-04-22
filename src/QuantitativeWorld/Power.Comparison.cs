@@ -6,7 +6,7 @@ namespace QuantitativeWorld
     partial struct Power : IEquatable<Power>, IComparable<Power>, IComparable
     {
         public bool Equals(Power other) =>
-            Watts == other.Watts;
+            Watts.Equals(other.Watts);
         public override bool Equals(object obj) =>
             Equality.IsStructureEqualToObject(this, obj);
         public override int GetHashCode() =>

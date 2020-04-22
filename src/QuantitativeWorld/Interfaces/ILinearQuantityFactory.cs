@@ -4,6 +4,6 @@
         where TQuantity : ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
-        TQuantity Create(decimal value, TUnit unit);
+        TQuantity Create(double value, TUnit unit);
     }
 }

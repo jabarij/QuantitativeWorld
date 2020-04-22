@@ -18,56 +18,52 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultAngle = default(Angle);
-                var zeroTurnsAngle = new Angle(0m);
+                var zeroTurnsAngle = new Angle(0d);
 
                 // act
                 // assert
-                zeroTurnsAngle.Equals(defaultAngle).Should().BeTrue(because: "'new Angle(0m)' should be equal 'default(Angle)'");
-                defaultAngle.Equals(zeroTurnsAngle).Should().BeTrue(because: "'default(Angle)' should be equal 'new Angle(0m)'");
+                zeroTurnsAngle.Equals(defaultAngle).Should().BeTrue(because: "'new Angle(0d)' should be equal 'default(Angle)'");
+                defaultAngle.Equals(zeroTurnsAngle).Should().BeTrue(because: "'default(Angle)' should be equal 'new Angle(0d)'");
             }
 
             [Fact]
             public void AngleCreateUtinsParamlessConstructor_ShouldBeEqualToZeroTurns()
             {
                 // arrange
-                var zeroTurnsAngle = new Angle(0m);
+                var zeroTurnsAngle = new Angle(0d);
                 var paramlessConstructedAngle = new Angle();
 
                 // act
                 // assert
-                zeroTurnsAngle.Equals(paramlessConstructedAngle).Should().BeTrue(because: "'new Angle(0m)' should be equal 'new Angle()'");
-                paramlessConstructedAngle.Equals(zeroTurnsAngle).Should().BeTrue(because: "'new Angle()' should be equal 'new Angle(0m)'");
+                zeroTurnsAngle.Equals(paramlessConstructedAngle).Should().BeTrue(because: "'new Angle(0d)' should be equal 'new Angle()'");
+                paramlessConstructedAngle.Equals(zeroTurnsAngle).Should().BeTrue(because: "'new Angle()' should be equal 'new Angle(0d)'");
             }
 
             [Fact]
             public void ZeroUnitsAngle_ShouldBeEqualToZeroTurns()
             {
                 // arrange
-                var zeroTurnsAngle = new Angle(0m);
-                var zeroUnitsAngle = new Angle(0m, CreateUnitOtherThan(AngleUnit.Turn));
+                var zeroTurnsAngle = new Angle(0d);
+                var zeroUnitsAngle = new Angle(0d, CreateUnitOtherThan(AngleUnit.Turn));
 
                 // act
                 // assert
-                zeroTurnsAngle.Equals(zeroUnitsAngle).Should().BeTrue(because: "'new Angle(0m)' should be equal 'new Angle(0m, SomeUnit)'");
-                zeroUnitsAngle.Equals(zeroTurnsAngle).Should().BeTrue(because: "'new Angle(0m, SomeUnit)' should be equal 'new Angle(0m)'");
+                zeroTurnsAngle.Equals(zeroUnitsAngle).Should().BeTrue(because: "'new Angle(0d)' should be equal 'new Angle(0d, SomeUnit)'");
+                zeroUnitsAngle.Equals(zeroTurnsAngle).Should().BeTrue(because: "'new Angle(0d, SomeUnit)' should be equal 'new Angle(0d)'");
             }
 
             [Fact]
-            public void AnglesOfDifferentUnitsEqualInTurns_ShouldBeEqual()
+            public void AnglesConvertedToDifferentUnitsEqualInTurns_ShouldBeEqual()
             {
                 // arrange
-                var angle1 = new Angle(
-                    value: Fixture.Create<decimal>(),
-                    unit: AngleUnit.Degree);
-                var angle2 = new Angle(
-                    value: angle1.Turns * 400m,
-                    unit: AngleUnit.Gradian);
+                var angle1 = new Angle(Fixture.Create<double>()).Convert(Fixture.Create<AngleUnit>());
+                var angle2 = new Angle(angle1.Turns).Convert(CreateUnitOtherThan(angle1.Unit));
 
                 // act
                 bool equalsResult = angle1.Equals(angle2);
 
                 // assert
-                equalsResult.Should().BeTrue(because: $"{angle1.Value} {angle1.Unit} ({angle1.Turns} ,) == {angle2.Value} {angle2.Unit} ({angle2.Turns} ,)");
+                equalsResult.Should().BeTrue();
             }
         }
     }

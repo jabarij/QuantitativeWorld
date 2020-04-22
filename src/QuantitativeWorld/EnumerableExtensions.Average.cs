@@ -23,7 +23,7 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / (double)count;
+            return sum / count;
         }
 
         public static Weight Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Weight> selector)
@@ -43,7 +43,7 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / (double)count;
+            return sum / count;
         }
 
         public static Length Average(this IEnumerable<Length> source)
@@ -62,7 +62,7 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / (double)count;
+            return sum / count;
         }
 
         public static Length Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Length> selector)
@@ -82,10 +82,10 @@ namespace QuantitativeWorld
             if (count == 0)
                 throw new InvalidOperationException("Sequence contains no elements.");
 
-            return sum / (double)count;
+            return sum / count;
         }
 
-        public static TQuantity Average<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<decimal, TUnit, TQuantity> factory)
+        public static TQuantity Average<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<double, TUnit, TQuantity> factory)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -103,7 +103,7 @@ namespace QuantitativeWorld
             return Average<TQuantity, TQuantity, TUnit>(source.GetEnumerator(), factory.Create, e => e);
         }
 
-        public static TQuantity Average<TSource, TQuantity, TUnit>(this IEnumerable<TSource> source, Func<decimal, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
+        public static TQuantity Average<TSource, TQuantity, TUnit>(this IEnumerable<TSource> source, Func<double, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -123,7 +123,7 @@ namespace QuantitativeWorld
             return Average<TSource, TQuantity, TUnit>(source.GetEnumerator(), factory.Create, selector);
         }
 
-        private static TQuantity Average<TSource, TQuantity, TUnit>(IEnumerator<TSource> enumerator, Func<decimal, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
+        private static TQuantity Average<TSource, TQuantity, TUnit>(IEnumerator<TSource> enumerator, Func<double, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -133,7 +133,7 @@ namespace QuantitativeWorld
 
             var targetUnit = selector(enumerator.Current).Unit;
             int count = 0;
-            decimal sumInBaseUnit = 0m;
+            double sumInBaseUnit = 0d;
             do
             {
                 var quantity = selector(enumerator.Current);
@@ -142,7 +142,7 @@ namespace QuantitativeWorld
             }
             while (enumerator.MoveNext());
 
-            if (targetUnit == null || targetUnit.ValueInBaseUnit == decimal.Zero)
+            if (targetUnit == null || targetUnit.ValueInBaseUnit == 0d)
                 throw new DivideByZeroException($"Could not find non-zero based unit of type {typeof(TUnit).FullName} in source.");
             return factory(sumInBaseUnit / targetUnit.ValueInBaseUnit / count, targetUnit);
         }

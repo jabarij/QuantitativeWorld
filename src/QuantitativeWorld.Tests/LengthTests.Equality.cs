@@ -17,56 +17,52 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultLength = default(Length);
-                var zeroMetresLength = new Length(0m);
+                var zeroMetresLength = new Length(0d);
 
                 // act
                 // assert
-                zeroMetresLength.Equals(defaultLength).Should().BeTrue(because: "'new Length(0m)' should be equal 'default(Length)'");
-                defaultLength.Equals(zeroMetresLength).Should().BeTrue(because: "'default(Length)' should be equal 'new Length(0m)'");
+                zeroMetresLength.Equals(defaultLength).Should().BeTrue(because: "'new Length(0d)' should be equal 'default(Length)'");
+                defaultLength.Equals(zeroMetresLength).Should().BeTrue(because: "'default(Length)' should be equal 'new Length(0d)'");
             }
 
             [Fact]
             public void LengthCreateUtinsParamlessConstructor_ShouldBeEqualToZeroMetres()
             {
                 // arrange
-                var zeroMetresLength = new Length(0m);
+                var zeroMetresLength = new Length(0d);
                 var paramlessConstructedLength = new Length();
 
                 // act
                 // assert
-                zeroMetresLength.Equals(paramlessConstructedLength).Should().BeTrue(because: "'new Length(0m)' should be equal 'new Length()'");
-                paramlessConstructedLength.Equals(zeroMetresLength).Should().BeTrue(because: "'new Length()' should be equal 'new Length(0m)'");
+                zeroMetresLength.Equals(paramlessConstructedLength).Should().BeTrue(because: "'new Length(0d)' should be equal 'new Length()'");
+                paramlessConstructedLength.Equals(zeroMetresLength).Should().BeTrue(because: "'new Length()' should be equal 'new Length(0d)'");
             }
 
             [Fact]
             public void ZeroUnitsLength_ShouldBeEqualToZeroMetres()
             {
                 // arrange
-                var zeroMetresLength = new Length(0m);
-                var zeroUnitsLength = new Length(0m, CreateUnitOtherThan(LengthUnit.Metre));
+                var zeroMetresLength = new Length(0d);
+                var zeroUnitsLength = new Length(0d, CreateUnitOtherThan(LengthUnit.Metre));
 
                 // act
                 // assert
-                zeroMetresLength.Equals(zeroUnitsLength).Should().BeTrue(because: "'new Length(0m)' should be equal 'new Length(0m, SomeUnit)'");
-                zeroUnitsLength.Equals(zeroMetresLength).Should().BeTrue(because: "'new Length(0m, SomeUnit)' should be equal 'new Length(0m)'");
+                zeroMetresLength.Equals(zeroUnitsLength).Should().BeTrue(because: "'new Length(0d)' should be equal 'new Length(0d, SomeUnit)'");
+                zeroUnitsLength.Equals(zeroMetresLength).Should().BeTrue(because: "'new Length(0d, SomeUnit)' should be equal 'new Length(0d)'");
             }
 
             [Fact]
-            public void LengthsOfDifferentUnitsEqualInMetres_ShouldBeEqual()
+            public void LengthsConvertedToDifferentUnitsEqualInMetres_ShouldBeEqual()
             {
                 // arrange
-                var length1 = new Length(
-                    value: Fixture.Create<decimal>(),
-                    unit: LengthUnit.Kilometre);
-                var length2 = new Length(
-                    value: length1.Metres * 1000m,
-                    unit: LengthUnit.Millimetre);
+                var length1 = new Length(Fixture.Create<double>()).Convert(Fixture.Create<LengthUnit>());
+                var length2 = new Length(length1.Metres).Convert(CreateUnitOtherThan(length1.Unit));
 
                 // act
                 bool equalsResult = length1.Equals(length2);
 
                 // assert
-                equalsResult.Should().BeTrue(because: $"{length1.Value} {length1.Unit} ({length1.Metres} ,) == {length2.Value} {length2.Unit} ({length2.Metres} ,)");
+                equalsResult.Should().BeTrue();
             }
         }
     }

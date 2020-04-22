@@ -4,7 +4,7 @@ namespace QuantitativeWorld
 {
     public class LengthFactory : ILinearQuantityFactory<Length, LengthUnit>
     {
-        public Length Create(decimal value, LengthUnit unit) =>
+        public Length Create(double value, LengthUnit unit) =>
             new Length(value, unit);
     }
 }

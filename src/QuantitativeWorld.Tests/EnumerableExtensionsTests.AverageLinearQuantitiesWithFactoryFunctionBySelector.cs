@@ -19,7 +19,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 IEnumerable<TestObject<Power>> source = null;
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
                 // act
@@ -35,7 +35,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Enumerable.Empty<TestObject<Power>>();
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = null;
 
                 // act
@@ -51,7 +51,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Enumerable.Empty<TestObject<Power>>();
-                Func<decimal, PowerUnit, Power> factory = null;
+                Func<double, PowerUnit, Power> factory = null;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
                 // act
@@ -67,7 +67,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Enumerable.Empty<TestObject<Power>>();
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
                 // act
@@ -82,10 +82,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Fixture.CreateMany<Power>(3).Select(e => new TestObject<Power>(e));
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
                 Func<TestObject<Power>, Power> selector = e => e.Property;
 
-                decimal expectedResultInWatts = source.Average(e => e.Property.Value * e.Property.Unit.ValueInWatts);
+                double expectedResultInWatts = source.Average(e => e.Property.Value * e.Property.Unit.ValueInWatts);
                 var expectedResultUnit = source.First().Property.Unit;
                 var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
 
@@ -93,7 +93,7 @@ namespace QuantitativeWorld.Tests
                 var result = EnumerableExtensions.Average<TestObject<Power>, Power, PowerUnit>(source, factory, selector);
 
                 // assert
-                result.Value.Should().Be(expectedResult.Value);
+                result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
                 result.Unit.Should().Be(expectedResult.Unit);
             }
         }

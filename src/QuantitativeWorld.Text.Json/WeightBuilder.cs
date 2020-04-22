@@ -2,8 +2,8 @@
 {
     internal class WeightBuilder : ILinearQuantityBuilder<Weight, WeightUnit>
     {
-        private decimal? _kilograms;
-        private decimal? _value;
+        private double? _kilograms;
+        private double? _value;
         private WeightUnit? _unit;
 
         public WeightBuilder() { }
@@ -14,13 +14,13 @@
             _unit = weight.Unit;
         }
 
-        public void SetBaseValue(decimal kilograms)
+        public void SetBaseValue(double kilograms)
         {
             _kilograms = kilograms;
             _value = null;
         }
 
-        public void SetValue(decimal value)
+        public void SetValue(double value)
         {
             _kilograms = null;
             _value = value;
@@ -33,8 +33,8 @@
 
         public bool TryBuild(out Weight result, WeightUnit? defaultUnit = null)
         {
-            decimal? kilograms = _kilograms;
-            decimal? value = _value;
+            double? kilograms = _kilograms;
+            double? value = _value;
             WeightUnit? unit = _unit ?? defaultUnit;
 
             if (kilograms.HasValue)

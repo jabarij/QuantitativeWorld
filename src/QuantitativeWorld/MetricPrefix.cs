@@ -5,7 +5,7 @@ namespace QuantitativeWorld
 {
     public struct MetricPrefix
     {
-        public const decimal Base = 10m;
+        public const double Base = 10d;
 
         public static readonly MetricPrefix Yotta = new MetricPrefix(name: "yotta", symbol: "Y", exponent: 24);
         public static readonly MetricPrefix Zetta = new MetricPrefix(name: "zetta", symbol: "Z", exponent: 21);
@@ -41,7 +41,7 @@ namespace QuantitativeWorld
 
         public string Name { get; }
         public string Symbol { get; }
-        public decimal Factor { get; }
+        public double Factor { get; }
 
         public static MetricPrefix FromExponent(int exponent)
         {
@@ -72,9 +72,9 @@ namespace QuantitativeWorld
             }
         }
 
-        public static decimal operator *(decimal value, MetricPrefix prefix) =>
+        public static double operator *(double value, MetricPrefix prefix) =>
             value * prefix.Factor;
-        public static decimal operator *(MetricPrefix prefix, decimal value) =>
+        public static double operator *(MetricPrefix prefix, double value) =>
             value * prefix;
 
         public static LengthUnit operator *(LengthUnit unit, MetricPrefix prefix) =>
