@@ -17,7 +17,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForKilograms_ShouldCreateValidWeight()
             {
                 // arrange
-                decimal kilograms = Fixture.Create<decimal>();
+                double kilograms = Fixture.Create<double>();
 
                 // act
                 var weight = new Weight(kilograms);
@@ -43,31 +43,31 @@ namespace QuantitativeWorld.Tests
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1m, WeightUnit.Kilogram, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1000m, WeightUnit.Gram, 1m);
-                yield return new ConstructorForValueAndUnitTestData(100m, WeightUnit.Decagram, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / 0.45359237m, WeightUnit.Pound, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.45359237m / 16m), WeightUnit.Ounce, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1d, WeightUnit.Kilogram, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1000d, WeightUnit.Gram, 1d);
+                yield return new ConstructorForValueAndUnitTestData(100d, WeightUnit.Decagram, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / 0.45359237d, WeightUnit.Pound, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.45359237d / 16d), WeightUnit.Ounce, 1d);
             }
             public class ConstructorForValueAndUnitTestData
             {
-                public ConstructorForValueAndUnitTestData(decimal value, WeightUnit unit, decimal expectedKilograms)
+                public ConstructorForValueAndUnitTestData(double value, WeightUnit unit, double expectedKilograms)
                 {
                     Value = value;
                     Unit = unit;
                     ExpectedKilograms = expectedKilograms;
                 }
 
-                public decimal Value { get; }
+                public double Value { get; }
                 public WeightUnit Unit { get; }
-                public decimal ExpectedKilograms { get; }
+                public double ExpectedKilograms { get; }
             }
 
             [Theory]
             [InlineData(0.001, 1000)]
             [InlineData(1, 1000000)]
             [InlineData(1000, 1000000000)]
-            public void FromTons_ShouldCreateValidWeight(decimal tons, decimal grams)
+            public void FromTons_ShouldCreateValidWeight(double tons, double grams)
             {
                 // arrange
                 var expectedWeight = new Weight(grams, WeightUnit.Gram);

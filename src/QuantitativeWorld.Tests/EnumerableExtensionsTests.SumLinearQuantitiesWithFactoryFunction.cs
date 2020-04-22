@@ -19,7 +19,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 IEnumerable<Power> quantities = null;
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
                 Action sum = () => EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
@@ -34,7 +34,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var quantities = Fixture.CreateMany<Power>(3);
-                Func<decimal, PowerUnit, Power> factory = null;
+                Func<double, PowerUnit, Power> factory = null;
 
                 // act
                 Action sum = () => EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
@@ -49,7 +49,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var quantities = Enumerable.Empty<Power>();
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
 
                 // act
                 var result = EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
@@ -63,9 +63,9 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var quantities = Fixture.CreateMany<Power>(3);
-                Func<decimal, PowerUnit, Power> factory = PowerFactory.Create;
+                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
 
-                decimal expectedResultInWatts = quantities.Sum(e => e.Value * e.Unit.ValueInWatts);
+                double expectedResultInWatts = quantities.Sum(e => e.Value * e.Unit.ValueInWatts);
                 var expectedResultUnit = quantities.First().Unit;
                 var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
 

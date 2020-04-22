@@ -25,11 +25,11 @@ namespace QuantitativeWorld.Text.Json
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(BaseValuePropertyName, serializer, e => e.ReadAsDecimal(), out var baseValue))
+                    if (reader.TryReadPropertyAsNullable(BaseValuePropertyName, serializer, e => e.ReadAsDouble(), out var baseValue))
                         builder.SetBaseValue(baseValue);
                     else if (reader.TryDeserializeProperty(nameof(ILinearQuantity<TUnit>.Unit), serializer, out TUnit unit))
                         builder.SetUnit(unit);
-                    else if (reader.TryReadPropertyAsNullable(nameof(ILinearQuantity<TUnit>.Value), serializer, e => e.ReadAsDecimal(), out var value))
+                    else if (reader.TryReadPropertyAsNullable(nameof(ILinearQuantity<TUnit>.Value), serializer, e => e.ReadAsDouble(), out var value))
                         builder.SetValue(value);
                 }
             }

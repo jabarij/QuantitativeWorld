@@ -10,14 +10,14 @@ namespace QuantitativeWorld.Tests
             : base(testFixture) { }
 
         private Power CreatePowerInUnit(PowerUnit unit) =>
-            new Power(
-                value: Fixture.Create<decimal>(),
-                unit: unit);
+            Fixture
+            .Create<Power>()
+            .Convert(unit);
 
         private Power CreatePowerInUnitOtherThan(params PowerUnit[] unitsToExclude) =>
-            new Power(
-                value: Fixture.Create<decimal>(),
-                unit: CreateUnitOtherThan(unitsToExclude));
+            Fixture
+            .Create<Power>()
+            .Convert(CreateUnitOtherThan(unitsToExclude));
 
         private PowerUnit CreateUnitOtherThan(params PowerUnit[] unitsToExclude) =>
             Fixture.CreateFromSet(PowerUnit.GetPredefinedUnits().Except(unitsToExclude));

@@ -65,7 +65,7 @@ namespace QuantitativeWorld.Tests
                 var source = Fixture.CreateMany<Weight>(3).Select(e => new TestObject<Weight>(e));
                 Func<TestObject<Weight>, Weight> selector = e => e.Property;
 
-                decimal expectedResultInKilograms = source.Average(e => e.Property.Kilograms);
+                double expectedResultInKilograms = source.Average(e => e.Property.Kilograms);
                 var expectedResultUnit = source.First().Property.Unit;
                 var expectedResult = new Weight(expectedResultInKilograms).Convert(expectedResultUnit);
 

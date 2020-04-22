@@ -16,7 +16,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         [InlineData(180, AngleJsonSerializationFormat.AsTurns, "{\"Turns\":0.5}")]
         [InlineData(180, AngleJsonSerializationFormat.AsTurnsWithUnit, "{\"Turns\":0.5,\"Unit\":{\"Name\":\"degree\",\"Abbreviation\":\"deg\",\"Symbol\":\"°\",\"UnitsPerTurn\":360.0}}")]
         [InlineData(180, AngleJsonSerializationFormat.AsValueWithUnit, "{\"Value\":180.0,\"Unit\":{\"Name\":\"degree\",\"Abbreviation\":\"deg\",\"Symbol\":\"°\",\"UnitsPerTurn\":360.0}}")]
-        public void Serialize_ShouldReturnValidJson(decimal degrees, AngleJsonSerializationFormat serializationFormat, string expectedJson)
+        public void Serialize_ShouldReturnValidJson(double degrees, AngleJsonSerializationFormat serializationFormat, string expectedJson)
         {
             // arrange
             var angle = new Angle(degrees, AngleUnit.Degree);
@@ -42,8 +42,8 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             var result = JsonConvert.DeserializeObject<Angle>(json, converter);
 
             // assert
-            result.Turns.Should().Be(0.5m);
-            result.Value.Should().Be(0.5m);
+            result.Turns.Should().Be(0.5d);
+            result.Value.Should().Be(0.5d);
             result.Unit.Should().Be(AngleUnit.Turn);
         }
 
@@ -66,8 +66,8 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             var result = JsonConvert.DeserializeObject<Angle>(json, converter);
 
             // assert
-            result.Turns.Should().Be(0.5m);
-            result.Value.Should().Be(180m);
+            result.Turns.Should().Be(0.5d);
+            result.Value.Should().Be(180d);
             result.Unit.Should().Be(AngleUnit.Degree);
         }
 
@@ -90,8 +90,8 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             var result = JsonConvert.DeserializeObject<Angle>(json, converter);
 
             // assert
-            result.Turns.Should().Be(0.5m);
-            result.Value.Should().Be(180m);
+            result.Turns.Should().Be(0.5d);
+            result.Value.Should().Be(180d);
             result.Unit.Should().Be(AngleUnit.Degree);
         }
 
@@ -132,8 +132,8 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             var deserializedAngle2 = JsonConvert.DeserializeObject<Angle>(serializedAngle2, converter);
 
             // assert
-            deserializedAngle1.Turns.Should().BeApproximately(angle.Turns, DecimalPrecision);
-            deserializedAngle2.Turns.Should().BeApproximately(angle.Turns, DecimalPrecision);
+            deserializedAngle1.Turns.Should().BeApproximately(angle.Turns, DoublePrecision);
+            deserializedAngle2.Turns.Should().BeApproximately(angle.Turns, DoublePrecision);
 
             deserializedAngle2.Should().Be(deserializedAngle1);
             serializedAngle2.Should().Be(serializedAngle1);

@@ -14,11 +14,11 @@ namespace QuantitativeWorld.Text.Parsing
         public WeightParser(IFormatProvider decimalFormatProvider)
             : this(
                  parser: new QuantityParser<Weight, WeightUnit>(
-                     valueParser: new DecimalParser(decimalFormatProvider),
+                     valueParser: new DoubleParser(decimalFormatProvider),
                      unitParser: new WeightUnitParser(),
                      quantityFactory: new WeightFactory()),
                  formattedParser: new FormattedQuantityParser<Weight, WeightUnit>(
-                     valueParser: new FormattedDecimalParser(),
+                     valueParser: new FormattedDoubleParser(),
                      unitParser: new FormattedWeightUnitParser(),
                      quantityFactory: new WeightFactory()))
         { }

@@ -11,10 +11,10 @@ namespace QuantitativeWorld.Text.Json.Tests
         public PowerJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(123.456, PowerJsonSerializationFormat.AsWatts, "{\"Watts\":0.123456}")]
-        [InlineData(123.456, PowerJsonSerializationFormat.AsWattsWithUnit, "{\"Watts\":0.123456,\"Unit\":{\"Name\":\"milliwatt\",\"Abbreviation\":\"mW\",\"ValueInWatts\":0.001}}")]
-        [InlineData(123.456, PowerJsonSerializationFormat.AsValueWithUnit, "{\"Value\":123.456,\"Unit\":{\"Name\":\"milliwatt\",\"Abbreviation\":\"mW\",\"ValueInWatts\":0.001}}")]
-        public void Serialize_ShouldReturnValidJson(decimal milliwatts, PowerJsonSerializationFormat serializationFormat, string expectedJson)
+        [InlineData(5000d, PowerJsonSerializationFormat.AsWatts, "{\"Watts\":5.0}")]
+        [InlineData(5000d, PowerJsonSerializationFormat.AsWattsWithUnit, "{\"Watts\":5.0,\"Unit\":{\"Name\":\"milliwatt\",\"Abbreviation\":\"mW\",\"ValueInWatts\":0.001}}")]
+        [InlineData(5000d, PowerJsonSerializationFormat.AsValueWithUnit, "{\"Value\":5000.0,\"Unit\":{\"Name\":\"milliwatt\",\"Abbreviation\":\"mW\",\"ValueInWatts\":0.001}}")]
+        public void Serialize_ShouldReturnValidJson(double milliwatts, PowerJsonSerializationFormat serializationFormat, string expectedJson)
         {
             // arrange
             var power = new Power(milliwatts, PowerUnit.Milliwatt);
@@ -40,8 +40,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Power>(json, converter);
 
             // assert
-            result.Watts.Should().Be(0.123456m);
-            result.Value.Should().Be(0.123456m);
+            result.Watts.Should().Be(0.123456d);
+            result.Value.Should().Be(0.123456d);
             result.Unit.Should().Be(PowerUnit.Watt);
         }
 
@@ -50,7 +50,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         {
             // arrange
             string json = @"{
-  'watts': 0.123456,
+  'watts': 5,
   'unit': {
     'name': 'milliwatt',
     'abbreviation': 'mW',
@@ -63,8 +63,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Power>(json, converter);
 
             // assert
-            result.Watts.Should().Be(0.123456m);
-            result.Value.Should().Be(123.456m);
+            result.Watts.Should().Be(5d);
+            result.Value.Should().Be(5000d);
             result.Unit.Should().Be(PowerUnit.Milliwatt);
         }
 
@@ -73,7 +73,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         {
             // arrange
             string json = @"{
-  'value': 123.456,
+  'value': 5000,
   'unit': {
     'name': 'milliwatt',
     'abbreviation': 'mW',
@@ -86,8 +86,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Power>(json, converter);
 
             // assert
-            result.Watts.Should().Be(0.123456m);
-            result.Value.Should().Be(123.456m);
+            result.Watts.Should().Be(5d);
+            result.Value.Should().Be(5000d);
             result.Unit.Should().Be(PowerUnit.Milliwatt);
         }
 
@@ -128,8 +128,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var deserializedPower2 = JsonConvert.DeserializeObject<Power>(serializedPower2, converter);
 
             // assert
-            deserializedPower1.Watts.Should().BeApproximately(power.Watts, DecimalPrecision);
-            deserializedPower2.Watts.Should().BeApproximately(power.Watts, DecimalPrecision);
+            deserializedPower1.Watts.Should().BeApproximately(power.Watts, DoublePrecision);
+            deserializedPower2.Watts.Should().BeApproximately(power.Watts, DoublePrecision);
 
             deserializedPower2.Should().Be(deserializedPower1);
             serializedPower2.Should().Be(serializedPower1);

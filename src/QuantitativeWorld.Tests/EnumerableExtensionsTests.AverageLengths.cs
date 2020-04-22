@@ -47,7 +47,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var source = Fixture.CreateMany<Length>(3);
 
-                decimal expectedResultInMetres = source.Average(e => e.Metres);
+                double expectedResultInMetres = source.Average(e => e.Metres);
                 var expectedResultUnit = source.First().Unit;
                 var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 

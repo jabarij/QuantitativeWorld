@@ -39,7 +39,7 @@ namespace QuantitativeWorld.Tests
                     PowerUnit.MechanicalHorsepower,
                     PowerUnit.Watt
                 };
-                var initialPower = new Power(1234.5678m, units.First());
+                var initialPower = new Power(1234.5678d, units.First());
                 Power? finalPower = null;
 
                 // act
@@ -51,14 +51,14 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Power(123.456m, PowerUnit.Watt), PowerUnit.Milliwatt, new Power(123456m, PowerUnit.Milliwatt));
-                yield return new ConvertTestData(new Power(123456m, PowerUnit.Milliwatt), PowerUnit.Watt, new Power(123.456m, PowerUnit.Watt));
+                yield return new ConvertTestData(new Power(123.456d, PowerUnit.Watt), PowerUnit.Milliwatt, new Power(123456d, PowerUnit.Milliwatt));
+                yield return new ConvertTestData(new Power(123456d, PowerUnit.Milliwatt), PowerUnit.Watt, new Power(123.456d, PowerUnit.Watt));
 
-                yield return new ConvertTestData(new Power(123.456m, PowerUnit.Watt), PowerUnit.Kilowatt, new Power(0.123456m, PowerUnit.Kilowatt));
-                yield return new ConvertTestData(new Power(0.123456m, PowerUnit.Kilowatt), PowerUnit.Watt, new Power(123.456m, PowerUnit.Watt));
+                yield return new ConvertTestData(new Power(123.456d, PowerUnit.Watt), PowerUnit.Kilowatt, new Power(0.123456d, PowerUnit.Kilowatt));
+                yield return new ConvertTestData(new Power(0.123456d, PowerUnit.Kilowatt), PowerUnit.Watt, new Power(123.456d, PowerUnit.Watt));
 
-                yield return new ConvertTestData(new Power(1234.56m, PowerUnit.Watt), PowerUnit.MechanicalHorsepower, new Power(1234.56m / (76.0402249m * 9.80665m), PowerUnit.MechanicalHorsepower));
-                yield return new ConvertTestData(new Power(123.456m, PowerUnit.MechanicalHorsepower), PowerUnit.Watt, new Power(123.456m * (76.0402249m * 9.80665m), PowerUnit.Watt));
+                yield return new ConvertTestData(new Power(1234.56d, PowerUnit.Watt), PowerUnit.MechanicalHorsepower, new Power(1234.56d / (76.0402249d * 9.80665d), PowerUnit.MechanicalHorsepower));
+                yield return new ConvertTestData(new Power(123.456d, PowerUnit.MechanicalHorsepower), PowerUnit.Watt, new Power(123.456d * (76.0402249d * 9.80665d), PowerUnit.Watt));
             }
 
             class ConvertTestData : ITestDataProvider

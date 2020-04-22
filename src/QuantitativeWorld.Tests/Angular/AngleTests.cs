@@ -11,14 +11,14 @@ namespace QuantitativeWorld.Tests.Angular
             : base(testFixture) { }
 
         private Angle CreateAngleInUnit(AngleUnit unit) =>
-            new Angle(
-                value: Fixture.Create<decimal>(),
-                unit: unit);
+            Fixture
+            .Create<Angle>()
+            .Convert(unit);
 
         private Angle CreateAngleInUnitOtherThan(params AngleUnit[] unitsToExclude) =>
-            new Angle(
-                value: Fixture.Create<decimal>(),
-                unit: CreateUnitOtherThan(unitsToExclude));
+            Fixture
+            .Create<Angle>()
+            .Convert(CreateUnitOtherThan(unitsToExclude));
 
         private AngleUnit CreateUnitOtherThan(params AngleUnit[] unitsToExclude) =>
             Fixture.CreateFromSet(AngleUnit.GetPredefinedUnits().Except(unitsToExclude));

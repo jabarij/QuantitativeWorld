@@ -4,7 +4,7 @@
     {
         private string _name;
         private string _abbreviation;
-        private decimal? _valueInWatts;
+        private double? _valueInWatts;
 
         public PowerUnitBuilder() { }
         public PowerUnitBuilder(PowerUnit unit)
@@ -20,14 +20,14 @@
         public void SetName(string name) =>
             _name = name;
 
-        public void SetValueInBaseUnit(decimal valueInBaseUnit) =>
+        public void SetValueInBaseUnit(double valueInBaseUnit) =>
             _valueInWatts = valueInBaseUnit;
 
         public bool TryBuild(out PowerUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            decimal? valueInWatts = _valueInWatts;
+            double? valueInWatts = _valueInWatts;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

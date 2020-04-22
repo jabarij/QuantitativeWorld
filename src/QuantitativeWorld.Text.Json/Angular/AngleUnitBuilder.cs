@@ -7,7 +7,7 @@ namespace QuantitativeWorld.Text.Json.Angular
         private string _name;
         private string _abbreviation;
         private string _symbol;
-        private decimal? _unitsPerTurn;
+        private double? _unitsPerTurn;
 
         public AngleUnitBuilder() { }
         public AngleUnitBuilder(AngleUnit unit)
@@ -27,7 +27,7 @@ namespace QuantitativeWorld.Text.Json.Angular
         public void SetSymbol(string symbol) =>
             _symbol = symbol;
 
-        public void SetUnitPerTurn(decimal unitsPerTurn) =>
+        public void SetUnitPerTurn(double unitsPerTurn) =>
             _unitsPerTurn = unitsPerTurn;
 
         public bool TryBuild(out AngleUnit result)
@@ -35,7 +35,7 @@ namespace QuantitativeWorld.Text.Json.Angular
             string name = _name;
             string abbreviation = _abbreviation;
             string symbol = _symbol;
-            decimal? unitsPerTurn = _unitsPerTurn;
+            double? unitsPerTurn = _unitsPerTurn;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

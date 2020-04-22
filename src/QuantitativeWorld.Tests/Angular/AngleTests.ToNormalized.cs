@@ -32,16 +32,16 @@ namespace QuantitativeWorld.Tests.Angular
                 var units = AngleUnit.GetPredefinedUnits();
                 foreach (var unit in units)
                 {
-                    yield return new ToNormalizedTestData(new Angle(0m, unit), new Angle(0m, unit));
-                    yield return new ToNormalizedTestData(new Angle(-0m, unit), new Angle(0m, unit));
-                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn * 0.5m, unit), new Angle(unit.UnitsPerTurn * 0.5m, unit));
-                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn * 0.5m, unit), new Angle(-unit.UnitsPerTurn * 0.5m, unit));
-                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn * 0.9999m, unit), new Angle(unit.UnitsPerTurn * 0.9999m, unit));
-                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn * 0.9999m, unit), new Angle(-unit.UnitsPerTurn * 0.9999m, unit));
-                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn, unit), new Angle(0m, unit));
-                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn, unit), new Angle(0m, unit));
-                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn * 73m + unit.UnitsPerTurn * 0.5m, unit), new Angle(unit.UnitsPerTurn * 0.5m, unit));
-                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn * 73m - unit.UnitsPerTurn * 0.5m, unit), new Angle(-unit.UnitsPerTurn * 0.5m, unit));
+                    yield return new ToNormalizedTestData(new Angle(0d, unit), new Angle(0d, unit));
+                    yield return new ToNormalizedTestData(new Angle(-0d, unit), new Angle(0d, unit));
+                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn * 0.5d, unit), new Angle(unit.UnitsPerTurn * 0.5d, unit));
+                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn * 0.5d, unit), new Angle(-unit.UnitsPerTurn * 0.5d, unit));
+                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn * 0.9999d, unit), new Angle(unit.UnitsPerTurn * 0.9999d, unit));
+                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn * 0.9999d, unit), new Angle(-unit.UnitsPerTurn * 0.9999d, unit));
+                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn, unit), new Angle(0d, unit));
+                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn, unit), new Angle(0d, unit));
+                    yield return new ToNormalizedTestData(new Angle(unit.UnitsPerTurn * 73d + unit.UnitsPerTurn * 0.5d, unit), new Angle(unit.UnitsPerTurn * 0.5d, unit));
+                    yield return new ToNormalizedTestData(new Angle(-unit.UnitsPerTurn * 73d - unit.UnitsPerTurn * 0.5d, unit), new Angle(-unit.UnitsPerTurn * 0.5d, unit));
                 }
             }
 

@@ -4,7 +4,7 @@
     {
         private string _name;
         private string _abbreviation;
-        private decimal? _valueInKilograms;
+        private double? _valueInKilograms;
 
         public WeightUnitBuilder() { }
         public WeightUnitBuilder(WeightUnit unit)
@@ -20,14 +20,14 @@
         public void SetName(string name) =>
             _name = name;
 
-        public void SetValueInBaseUnit(decimal valueInBaseUnit) =>
+        public void SetValueInBaseUnit(double valueInBaseUnit) =>
             _valueInKilograms = valueInBaseUnit;
 
         public bool TryBuild(out WeightUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            decimal? valueInKilograms = _valueInKilograms;
+            double? valueInKilograms = _valueInKilograms;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

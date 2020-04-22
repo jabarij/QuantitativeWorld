@@ -10,14 +10,14 @@ namespace QuantitativeWorld.Tests
             : base(testFixture) { }
 
         private Length CreateLengthInUnit(LengthUnit unit) =>
-            new Length(
-                value: Fixture.Create<decimal>(),
-                unit: unit);
+            Fixture
+            .Create<Length>()
+            .Convert(unit);
 
         private Length CreateLengthInUnitOtherThan(params LengthUnit[] unitsToExclude) =>
-            new Length(
-                value: Fixture.Create<decimal>(),
-                unit: CreateUnitOtherThan(unitsToExclude));
+            Fixture
+            .Create<Length>()
+            .Convert(CreateUnitOtherThan(unitsToExclude));
 
         private LengthUnit CreateUnitOtherThan(params LengthUnit[] unitsToExclude) =>
             Fixture.CreateFromSet(LengthUnit.GetPredefinedUnits().Except(unitsToExclude));

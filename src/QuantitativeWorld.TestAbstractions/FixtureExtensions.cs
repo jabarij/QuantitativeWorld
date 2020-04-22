@@ -9,6 +9,8 @@ namespace QuantitativeWorld.TestAbstractions
     {
         private static readonly Random _randomGenerator = new Random(Guid.NewGuid().ToByteArray()[0]);
         private static readonly decimal _decimalEpsilon = new decimal(1, 0, 0, false, 28);
+        private const double MinDouble = -1000d;
+        private const double MaxDouble = 1000d;
 
         public static int CreateBetween(this IFixture fixture, int min, int max) =>
             _randomGenerator.Next(min + 1, max);
@@ -66,76 +68,17 @@ namespace QuantitativeWorld.TestAbstractions
             : fixture.CreateLowerThan(0m);
 
         public static double CreateInRange(this IFixture fixture, double min, double max) =>
-            (double)(min + _randomGenerator.NextDouble() * (max - min));
-        public static double CreateGreaterThanOrEqual(this IFixture fixture, double min)
-        {
-            if (min == double.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(min), "Cannot generate double number greater than double.MaxValue.");
-
-            return CreateInRange(fixture, min, double.MaxValue);
-        }
-        public static double CreateGreaterThan(this IFixture fixture, double min)
-        {
-            if (min == double.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(min), "Cannot generate double number greater than double.MaxValue.");
-
-            double result = CreateInRange(fixture, min, double.MaxValue);
-            return
-                result == min
-                ? result + double.Epsilon
-                : result;
-        }
-        public static double CreateLowerThan(this IFixture fixture, double max)
-        {
-            if (max == double.MinValue)
-                throw new ArgumentOutOfRangeException(nameof(max), "Cannot generate double number lower than double.MinValue.");
-
-            double result = CreateInRange(fixture, double.MinValue, max);
-            return
-                result == max
-                ? result - double.Epsilon
-                : result;
-        }
+            min + _randomGenerator.NextDouble() * (max - min);
+        public static double CreateNonNegative(this IFixture fixture) =>
+            CreateInRange(fixture, 0d, MaxDouble);
+        public static double CreatePositive(this IFixture fixture) =>
+            CreateInRange(fixture, 1d, MaxDouble);
+        public static double CreateNegative(this IFixture fixture) =>
+            CreateInRange(fixture, MinDouble, -1d);
         public static double CreateNonZeroDouble(this IFixture fixture) =>
             fixture.Create<bool>()
-            ? fixture.CreateGreaterThan(0d)
-            : fixture.CreateLowerThan(0d);
-
-        public static float CreateInRange(this IFixture fixture, float min, float max) =>
-            (float)(min + _randomGenerator.NextDouble() * (max - min));
-        public static float CreateGreaterThanOrEqual(this IFixture fixture, float min)
-        {
-            if (min == float.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(min), "Cannot generate float number greater than float.MaxValue.");
-
-            return CreateInRange(fixture, min, float.MaxValue);
-        }
-        public static float CreateGreaterThan(this IFixture fixture, float min)
-        {
-            if (min == float.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(min), "Cannot generate float number greater than float.MaxValue.");
-
-            float result = CreateInRange(fixture, min, float.MaxValue);
-            return
-                result == min
-                ? result + float.Epsilon
-                : result;
-        }
-        public static float CreateLowerThan(this IFixture fixture, float max)
-        {
-            if (max == float.MinValue)
-                throw new ArgumentOutOfRangeException(nameof(max), "Cannot generate float number lower than float.MinValue.");
-
-            float result = CreateInRange(fixture, float.MinValue, max);
-            return
-                result == max
-                ? result - float.Epsilon
-                : result;
-        }
-        public static float CreateNonZeroFloat(this IFixture fixture) =>
-            fixture.Create<bool>()
-            ? fixture.CreateGreaterThan(0f)
-            : fixture.CreateLowerThan(0f);
+            ? fixture.CreatePositive()
+            : fixture.CreateNegative();
 
         public static TValue CreateFromSet<TValue>(this IFixture fixture, IEnumerable<TValue> values)
         {

@@ -26,18 +26,18 @@ namespace QuantitativeWorld.Angular
         public static Angle operator -(Angle angle) =>
             new Angle(formatUnit: angle.Unit, turns: -angle.Turns);
 
-        public static Angle operator *(Angle angle, decimal factor) =>
+        public static Angle operator *(Angle angle, double factor) =>
             new Angle(formatUnit: angle.Unit, turns: angle.Turns * factor);
-        public static Angle operator *(decimal factor, Angle angle) =>
+        public static Angle operator *(double factor, Angle angle) =>
             angle * factor;
 
-        public static Angle operator /(Angle angle, decimal denominator)
+        public static Angle operator /(Angle angle, double denominator)
         {
-            if (denominator == decimal.Zero)
+            if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Angle(formatUnit: angle.Unit, turns: angle.Turns / denominator);
         }
-        public static decimal operator /(Angle angle, Angle denominator)
+        public static double operator /(Angle angle, Angle denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -67,14 +67,14 @@ namespace QuantitativeWorld.Angular
                 return -right.Value;
         }
 
-        public static Angle? operator *(Angle? angle, decimal factor) =>
+        public static Angle? operator *(Angle? angle, double factor) =>
             (angle ?? default(Angle)) * factor;
-        public static Angle? operator *(decimal factor, Angle? angle) =>
+        public static Angle? operator *(double factor, Angle? angle) =>
             angle * factor;
 
-        public static Angle? operator /(Angle? angle, decimal denominator) =>
+        public static Angle? operator /(Angle? angle, double denominator) =>
             (angle ?? default(Angle)) / denominator;
-        public static decimal operator /(Angle? angle, Angle? denominator) =>
+        public static double operator /(Angle? angle, Angle? denominator) =>
             (angle ?? default(Angle)) / (denominator ?? default(Angle));
     }
 }

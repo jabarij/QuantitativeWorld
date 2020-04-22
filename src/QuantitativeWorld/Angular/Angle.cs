@@ -9,20 +9,20 @@ namespace QuantitativeWorld.Angular
 
         private readonly AngleUnit? _formatUnit;
 
-        public Angle(decimal turns)
+        public Angle(double turns)
             : this(formatUnit: null, turns: turns) { }
-        public Angle(decimal value, AngleUnit unit)
+        public Angle(double value, AngleUnit unit)
             : this(formatUnit: unit, turns: GetTurns(value, unit)) { }
-        private Angle(AngleUnit? formatUnit, decimal turns)
+        private Angle(AngleUnit? formatUnit, double turns)
         {
             _formatUnit = formatUnit;
             Turns = turns;
         }
 
-        public decimal Turns { get; }
-        public decimal Value => GetValue(Turns, Unit);
+        public double Turns { get; }
+        public double Value => GetValue(Turns, Unit);
         public AngleUnit Unit => _formatUnit ?? DefaultUnit;
-        decimal ILinearQuantity<AngleUnit>.BaseValue => Turns;
+        double ILinearQuantity<AngleUnit>.BaseValue => Turns;
         AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => DefaultUnit;
 
         public Angle Convert(AngleUnit targetUnit) =>
@@ -30,19 +30,19 @@ namespace QuantitativeWorld.Angular
         public Angle ToNormalized() =>
             new Angle(
                 formatUnit: _formatUnit,
-                turns: Turns % 1m);
+                turns: Turns % 1d);
 
         public bool IsZero() =>
-            Turns == decimal.Zero;
+            Turns == 0d;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Angle, AngleUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Angle, AngleUnit>(formatProvider, this);
 
-        private static decimal GetTurns(decimal value, AngleUnit sourceUnit) =>
+        private static double GetTurns(double value, AngleUnit sourceUnit) =>
             value / sourceUnit.UnitsPerTurn;
-        private static decimal GetValue(decimal turns, AngleUnit targetUnit) =>
+        private static double GetValue(double turns, AngleUnit targetUnit) =>
             turns * targetUnit.UnitsPerTurn;
     }
 }

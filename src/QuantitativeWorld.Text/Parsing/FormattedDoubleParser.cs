@@ -3,20 +3,20 @@ using System.Globalization;
 
 namespace QuantitativeWorld.Text.Parsing
 {
-    public class FormattedDecimalParser : IFormattedParser<decimal>
+    public class FormattedDoubleParser : IFormattedParser<double>
     {
-        public decimal ParseExact(string value, string format, IFormatProvider formatProvider) =>
-            decimal.Parse(value, formatProvider);
+        public double ParseExact(string value, string format, IFormatProvider formatProvider) =>
+            double.Parse(value, formatProvider);
 
-        public bool TryParseExact(string value, string format, IFormatProvider formatProvider, out decimal result)
+        public bool TryParseExact(string value, string format, IFormatProvider formatProvider, out double result)
         {
             if (TryParseNumberStyles(value, format, formatProvider, out var style)
-                && decimal.TryParse(value, style, formatProvider, out result))
+                && double.TryParse(value, style, formatProvider, out result))
             {
                 return true;
             }
 
-            result = default(decimal);
+            result = default(double);
             return false;
         }
 

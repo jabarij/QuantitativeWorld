@@ -11,10 +11,10 @@ namespace QuantitativeWorld.Text.Json.Tests
         public LengthJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(123.456, LengthJsonSerializationFormat.AsMetres, "{\"Metres\":0.123456}")]
-        [InlineData(123.456, LengthJsonSerializationFormat.AsMetresWithUnit, "{\"Metres\":0.123456,\"Unit\":{\"Name\":\"millimetre\",\"Abbreviation\":\"mm\",\"ValueInMetres\":0.001}}")]
-        [InlineData(123.456, LengthJsonSerializationFormat.AsValueWithUnit, "{\"Value\":123.456,\"Unit\":{\"Name\":\"millimetre\",\"Abbreviation\":\"mm\",\"ValueInMetres\":0.001}}")]
-        public void Serialize_ShouldReturnValidJson(decimal millimetres, LengthJsonSerializationFormat serializationFormat, string expectedJson)
+        [InlineData(5000d, LengthJsonSerializationFormat.AsMetres, "{\"Metres\":5.0}")]
+        [InlineData(5000d, LengthJsonSerializationFormat.AsMetresWithUnit, "{\"Metres\":5.0,\"Unit\":{\"Name\":\"millimetre\",\"Abbreviation\":\"mm\",\"ValueInMetres\":0.001}}")]
+        [InlineData(5000d, LengthJsonSerializationFormat.AsValueWithUnit, "{\"Value\":5000.0,\"Unit\":{\"Name\":\"millimetre\",\"Abbreviation\":\"mm\",\"ValueInMetres\":0.001}}")]
+        public void Serialize_ShouldReturnValidJson(double millimetres, LengthJsonSerializationFormat serializationFormat, string expectedJson)
         {
             // arrange
             var length = new Length(millimetres, LengthUnit.Millimetre);
@@ -40,8 +40,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Length>(json, converter);
 
             // assert
-            result.Metres.Should().Be(0.123456m);
-            result.Value.Should().Be(0.123456m);
+            result.Metres.Should().Be(0.123456d);
+            result.Value.Should().Be(0.123456d);
             result.Unit.Should().Be(LengthUnit.Metre);
         }
 
@@ -63,8 +63,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Length>(json, converter);
 
             // assert
-            result.Metres.Should().Be(0.123456m);
-            result.Value.Should().Be(123.456m);
+            result.Metres.Should().Be(0.123456d);
+            result.Value.Should().BeApproximately(123.456d, DoublePrecision);
             result.Unit.Should().Be(LengthUnit.Millimetre);
         }
 
@@ -86,8 +86,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Length>(json, converter);
 
             // assert
-            result.Metres.Should().Be(0.123456m);
-            result.Value.Should().Be(123.456m);
+            result.Metres.Should().BeApproximately(0.123456d, DoublePrecision);
+            result.Value.Should().BeApproximately(123.456d, DoublePrecision);
             result.Unit.Should().Be(LengthUnit.Millimetre);
         }
 
@@ -128,8 +128,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var deserializedLength2 = JsonConvert.DeserializeObject<Length>(serializedLength2, converter);
 
             // assert
-            deserializedLength1.Metres.Should().BeApproximately(length.Metres, DecimalPrecision);
-            deserializedLength2.Metres.Should().BeApproximately(length.Metres, DecimalPrecision);
+            deserializedLength1.Metres.Should().BeApproximately(length.Metres, DoublePrecision);
+            deserializedLength2.Metres.Should().BeApproximately(length.Metres, DoublePrecision);
 
             deserializedLength2.Should().Be(deserializedLength1);
             serializedLength2.Should().Be(serializedLength1);

@@ -8,7 +8,7 @@ namespace QuantitativeWorld
     partial struct LengthUnit
     {
         [Predefined]
-        public static readonly LengthUnit Metre = new LengthUnit(name: "metre", abbreviation: "m", valueInMetres: 1m);
+        public static readonly LengthUnit Metre = new LengthUnit(name: "metre", abbreviation: "m", valueInMetres: 1d);
         [Predefined]
         public static readonly LengthUnit Millimetre = new LengthUnit(name: "millimetre", abbreviation: "mm", valueInMetres: Constants.MetresPerMillimetre);
         [Predefined]

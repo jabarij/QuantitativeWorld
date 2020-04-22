@@ -64,7 +64,7 @@ namespace QuantitativeWorld.Angular
             Math.Abs(TotalSeconds % 60d);
 
         public Angle ToAngle() =>
-            new Angle((decimal)TotalDegrees, AngleUnit.Degree);
+            new Angle((double)TotalDegrees, AngleUnit.Degree);
 
         public RadianAngle ToRadianAngle() =>
             new RadianAngle(TotalSeconds * Math.PI / (180d * 3600d));
@@ -80,9 +80,9 @@ namespace QuantitativeWorld.Angular
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<DegreeAngle, AngleUnit>(formatProvider, this);
 
-        decimal ILinearQuantity<AngleUnit>.BaseValue => (decimal)TotalDegrees;
+        double ILinearQuantity<AngleUnit>.BaseValue => (double)TotalDegrees;
         AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => AngleUnit.Degree;
-        decimal ILinearQuantity<AngleUnit>.Value => ((ILinearQuantity<AngleUnit>)this).BaseValue;
+        double ILinearQuantity<AngleUnit>.Value => ((ILinearQuantity<AngleUnit>)this).BaseValue;
         AngleUnit ILinearQuantity<AngleUnit>.Unit => ((ILinearQuantity<AngleUnit>)this).BaseUnit;
 
         public static DegreeAngle FromAngle(Angle angle) =>

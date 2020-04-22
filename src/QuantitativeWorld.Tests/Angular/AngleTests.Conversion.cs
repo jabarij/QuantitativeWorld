@@ -40,7 +40,7 @@ namespace QuantitativeWorld.Tests.Angular
                     AngleUnit.Gradian,
                     AngleUnit.Turn
                 };
-                var initialAngle = new Angle(123.45678m, units.First());
+                var initialAngle = new Angle(123.45678d, units.First());
                 Angle? finalAngle = null;
 
                 // act
@@ -52,14 +52,14 @@ namespace QuantitativeWorld.Tests.Angular
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Angle(0.123m, AngleUnit.Turn), AngleUnit.Radian, new Angle(0.123m * (decimal)System.Math.PI, AngleUnit.Radian));
-                yield return new ConvertTestData(new Angle(123.456m, AngleUnit.Radian), AngleUnit.Turn, new Angle(123.456m / (decimal)System.Math.PI, AngleUnit.Turn));
+                yield return new ConvertTestData(new Angle(0.123d, AngleUnit.Turn), AngleUnit.Radian, new Angle(0.123d * (double)System.Math.PI, AngleUnit.Radian));
+                yield return new ConvertTestData(new Angle(123.456d, AngleUnit.Radian), AngleUnit.Turn, new Angle(123.456d / (double)System.Math.PI, AngleUnit.Turn));
 
-                yield return new ConvertTestData(new Angle(0.123456m, AngleUnit.Turn), AngleUnit.Degree, new Angle(0.123456m * 360m, AngleUnit.Degree));
-                yield return new ConvertTestData(new Angle(123.456m, AngleUnit.Degree), AngleUnit.Turn, new Angle(123.456m / 360m, AngleUnit.Turn));
+                yield return new ConvertTestData(new Angle(0.123456d, AngleUnit.Turn), AngleUnit.Degree, new Angle(0.123456d * 360d, AngleUnit.Degree));
+                yield return new ConvertTestData(new Angle(123.456d, AngleUnit.Degree), AngleUnit.Turn, new Angle(123.456d / 360d, AngleUnit.Turn));
 
-                yield return new ConvertTestData(new Angle(0.123456m, AngleUnit.Turn), AngleUnit.Gradian, new Angle(0.123456m * 400m, AngleUnit.Gradian));
-                yield return new ConvertTestData(new Angle(123.456m, AngleUnit.Gradian), AngleUnit.Turn, new Angle(123.456m / 400m, AngleUnit.Turn));
+                yield return new ConvertTestData(new Angle(0.123456d, AngleUnit.Turn), AngleUnit.Gradian, new Angle(0.123456d * 400d, AngleUnit.Gradian));
+                yield return new ConvertTestData(new Angle(123.456d, AngleUnit.Gradian), AngleUnit.Turn, new Angle(123.456d / 400d, AngleUnit.Turn));
             }
 
             class ConvertTestData : ITestDataProvider

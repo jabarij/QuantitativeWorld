@@ -11,10 +11,10 @@ namespace QuantitativeWorld.Text.Json.Tests
         public WeightJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(123.456, WeightJsonSerializationFormat.AsKilograms, "{\"Kilograms\":0.123456}")]
-        [InlineData(123.456, WeightJsonSerializationFormat.AsKilogramsWithUnit, "{\"Kilograms\":0.123456,\"Unit\":{\"Name\":\"gram\",\"Abbreviation\":\"g\",\"ValueInKilograms\":0.001}}")]
-        [InlineData(123.456, WeightJsonSerializationFormat.AsValueWithUnit, "{\"Value\":123.456,\"Unit\":{\"Name\":\"gram\",\"Abbreviation\":\"g\",\"ValueInKilograms\":0.001}}")]
-        public void Serialize_ShouldReturnValidJson(decimal grams, WeightJsonSerializationFormat serializationFormat, string expectedJson)
+        [InlineData(5000d, WeightJsonSerializationFormat.AsKilograms, "{\"Kilograms\":5.0}")]
+        [InlineData(5000d, WeightJsonSerializationFormat.AsKilogramsWithUnit, "{\"Kilograms\":5.0,\"Unit\":{\"Name\":\"gram\",\"Abbreviation\":\"g\",\"ValueInKilograms\":0.001}}")]
+        [InlineData(5000d, WeightJsonSerializationFormat.AsValueWithUnit, "{\"Value\":5000.0,\"Unit\":{\"Name\":\"gram\",\"Abbreviation\":\"g\",\"ValueInKilograms\":0.001}}")]
+        public void Serialize_ShouldReturnValidJson(double grams, WeightJsonSerializationFormat serializationFormat, string expectedJson)
         {
             // arrange
             var weight = new Weight(grams, WeightUnit.Gram);
@@ -40,8 +40,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Weight>(json, converter);
 
             // assert
-            result.Kilograms.Should().Be(0.123456m);
-            result.Value.Should().Be(0.123456m);
+            result.Kilograms.Should().Be(0.123456d);
+            result.Value.Should().Be(0.123456d);
             result.Unit.Should().Be(WeightUnit.Kilogram);
         }
 
@@ -50,7 +50,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         {
             // arrange
             string json = @"{
-  'kilograms': 0.123456,
+  'kilograms': 5,
   'unit': {
     'name': 'gram',
     'abbreviation': 'g',
@@ -63,8 +63,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Weight>(json, converter);
 
             // assert
-            result.Kilograms.Should().Be(0.123456m);
-            result.Value.Should().Be(123.456m);
+            result.Kilograms.Should().Be(5d);
+            result.Value.Should().Be(5000d);
             result.Unit.Should().Be(WeightUnit.Gram);
         }
 
@@ -73,7 +73,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         {
             // arrange
             string json = @"{
-  'value': 123.456,
+  'value': 5000,
   'unit': {
     'name': 'gram',
     'abbreviation': 'g',
@@ -86,8 +86,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var result = JsonConvert.DeserializeObject<Weight>(json, converter);
 
             // assert
-            result.Kilograms.Should().Be(0.123456m);
-            result.Value.Should().Be(123.456m);
+            result.Kilograms.Should().Be(5d);
+            result.Value.Should().Be(5000d);
             result.Unit.Should().Be(WeightUnit.Gram);
         }
 
@@ -128,8 +128,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var deserializedWeight2 = JsonConvert.DeserializeObject<Weight>(serializedWeight2, converter);
 
             // assert
-            deserializedWeight1.Kilograms.Should().BeApproximately(weight.Kilograms, DecimalPrecision);
-            deserializedWeight2.Kilograms.Should().BeApproximately(weight.Kilograms, DecimalPrecision);
+            deserializedWeight1.Kilograms.Should().BeApproximately(weight.Kilograms, DoublePrecision);
+            deserializedWeight2.Kilograms.Should().BeApproximately(weight.Kilograms, DoublePrecision);
 
             deserializedWeight2.Should().Be(deserializedWeight1);
             serializedWeight2.Should().Be(serializedWeight1);

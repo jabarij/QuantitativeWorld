@@ -21,7 +21,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = sut.ToAngle();
 
                 // assert
-                result.Value.Should().BeApproximately((decimal)sut.Radians, DecimalPrecision);
+                result.Value.Should().BeApproximately((double)sut.Radians, DoublePrecision);
                 result.Unit.Should().Be(AngleUnit.Radian);
             }
         }

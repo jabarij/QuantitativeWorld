@@ -3,9 +3,9 @@
     public interface ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
-        decimal BaseValue { get; }
+        double BaseValue { get; }
         TUnit BaseUnit { get; }
-        decimal Value { get; }
+        double Value { get; }
         TUnit Unit { get; }
     }
 }

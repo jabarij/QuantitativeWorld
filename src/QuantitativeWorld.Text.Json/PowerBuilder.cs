@@ -2,8 +2,8 @@
 {
     internal class PowerBuilder : ILinearQuantityBuilder<Power, PowerUnit>
     {
-        private decimal? _watts;
-        private decimal? _value;
+        private double? _watts;
+        private double? _value;
         private PowerUnit? _unit;
 
         public PowerBuilder() { }
@@ -14,13 +14,13 @@
             _unit = weight.Unit;
         }
 
-        public void SetBaseValue(decimal watts)
+        public void SetBaseValue(double watts)
         {
             _watts = watts;
             _value = null;
         }
 
-        public void SetValue(decimal value)
+        public void SetValue(double value)
         {
             _watts = null;
             _value = value;
@@ -33,8 +33,8 @@
 
         public bool TryBuild(out Power result, PowerUnit? defaultUnit = null)
         {
-            decimal? watts = _watts;
-            decimal? value = _value;
+            double? watts = _watts;
+            double? value = _value;
             PowerUnit? unit = _unit ?? defaultUnit;
 
             if (watts.HasValue)

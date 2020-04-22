@@ -46,7 +46,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var weights = Fixture.CreateMany<Weight>(3);
-                decimal expectedResultInKilograms = weights.Sum(e => e.Kilograms);
+                double expectedResultInKilograms = weights.Sum(e => e.Kilograms);
                 var expectedResultUnit = weights.First().Unit;
                 var expectedResult = new Weight(expectedResultInKilograms).Convert(expectedResultUnit);
 

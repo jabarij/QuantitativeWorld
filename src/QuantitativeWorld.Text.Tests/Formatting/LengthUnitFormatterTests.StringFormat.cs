@@ -1,4 +1,3 @@
-using AutoFixture;
 using FluentAssertions;
 using QuantitativeWorld.TestAbstractions;
 using QuantitativeWorld.Text.Formatting;
@@ -24,7 +23,7 @@ namespace QuantitativeWorld.Tests.Formatting
                 var length = new LengthUnit(
                     name: unitName,
                     abbreviation: unitAbbreviation,
-                    valueInMetres: Fixture.Create<decimal>());
+                    valueInMetres: Fixture.CreatePositive());
 
                 // act
                 string actualResult = formatter.Format(standardFormat, length);

@@ -3,8 +3,8 @@
     public interface IAngularQuantity<TUnit>
         where TUnit : IAngularUnit
     {
-        decimal Turns { get; }
-        decimal Value { get; }
+        double Turns { get; }
+        double Value { get; }
         TUnit Unit { get; }
     }
 }

@@ -45,7 +45,7 @@ namespace QuantitativeWorld.Tests
             [InlineData(0d, 0d, 0d, 0d, 0d)]
             [InlineData(0d, -180d, 0d, 180d, 0d)]
             [InlineData(50.5d, 10.5d, 51.5d, 10.5d, 111194.92)]
-            public void ShouldReturnProperValue(double lat1, double lon1, double lat2, double lon2, decimal expectedResult)
+            public void ShouldReturnProperValue(double lat1, double lon1, double lat2, double lon2, double expectedResult)
             {
                 // arrange
                 var sut = new GeoCoordinate(lat1, lon1);
@@ -54,7 +54,7 @@ namespace QuantitativeWorld.Tests
                 var result = sut.GetDistanceTo(new GeoCoordinate(lat2, lon2));
 
                 // assert
-                result.Metres.Should().BeApproximately(expectedResult, 0.01m);
+                result.Metres.Should().BeApproximately(expectedResult, 0.01d);
             }
         }
     }

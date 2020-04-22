@@ -2,6 +2,6 @@
 {
     public interface ILinearUnit
     {
-        decimal ValueInBaseUnit { get; }
+        double ValueInBaseUnit { get; }
     }
 }

@@ -7,7 +7,7 @@ namespace QuantitativeWorld
     [System.Diagnostics.DebuggerDisplay("Geo coordinate(lat:{Latitude}, lon:{Longitude})")]
     public partial struct GeoCoordinate
     {
-        private static readonly Length EarthRadius = new Length(metres: 6371000m);
+        private static readonly Length EarthRadius = new Length(metres: 6371000d);
 
         public static readonly double MinLatitude = -90d;
         public static readonly double MaxLatitude = 90d;
@@ -117,7 +117,7 @@ namespace QuantitativeWorld
             double a = MathA.Sin(Δφ / 2d) * MathA.Sin(Δφ / 2d) + MathA.Cos(φ1) * MathA.Cos(φ2) * MathA.Sin(Δλ / 2d) * MathA.Sin(Δλ / 2d);
             double c = 2d * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-            return (decimal)c * EarthRadius;
+            return c * EarthRadius;
         }
 
         public RadianAngle GetBearingTo(GeoCoordinate destination)

@@ -19,7 +19,7 @@ namespace QuantitativeWorld.Tests.Angular
             public void ConstructorForTurns_ShouldCreateValidAngle()
             {
                 // arrange
-                decimal turns = Fixture.Create<decimal>();
+                double turns = Fixture.Create<double>();
 
                 // act
                 var angle = new Angle(turns);
@@ -39,32 +39,32 @@ namespace QuantitativeWorld.Tests.Angular
                 var angle = new Angle(testData.Value, testData.Unit);
 
                 // assert
-                angle.Turns.Should().BeApproximately(testData.ExpectedTurns, DecimalPrecision);
+                angle.Turns.Should().BeApproximately(testData.ExpectedTurns, DoublePrecision);
                 angle.Value.Should().Be(testData.Value);
                 angle.Unit.Should().Be(testData.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1m, AngleUnit.Turn, 1m);
-                yield return new ConstructorForValueAndUnitTestData((decimal)System.Math.PI, AngleUnit.Radian, 1m);
-                yield return new ConstructorForValueAndUnitTestData(360m, AngleUnit.Degree, 1m);
-                yield return new ConstructorForValueAndUnitTestData(21600m, AngleUnit.Arcminute, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1296000m, AngleUnit.Arcsecond, 1m);
-                yield return new ConstructorForValueAndUnitTestData(400m, AngleUnit.Gradian, 1m);
-                yield return new ConstructorForValueAndUnitTestData(6400m, AngleUnit.NATOMil, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1d, AngleUnit.Turn, 1d);
+                yield return new ConstructorForValueAndUnitTestData((double)System.Math.PI, AngleUnit.Radian, 1d);
+                yield return new ConstructorForValueAndUnitTestData(360d, AngleUnit.Degree, 1d);
+                yield return new ConstructorForValueAndUnitTestData(21600d, AngleUnit.Arcminute, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1296000d, AngleUnit.Arcsecond, 1d);
+                yield return new ConstructorForValueAndUnitTestData(400d, AngleUnit.Gradian, 1d);
+                yield return new ConstructorForValueAndUnitTestData(6400d, AngleUnit.NATOMil, 1d);
             }
             public class ConstructorForValueAndUnitTestData
             {
-                public ConstructorForValueAndUnitTestData(decimal value, AngleUnit unit, decimal expectedTurns)
+                public ConstructorForValueAndUnitTestData(double value, AngleUnit unit, double expectedTurns)
                 {
                     Value = value;
                     Unit = unit;
                     ExpectedTurns = expectedTurns;
                 }
 
-                public decimal Value { get; }
+                public double Value { get; }
                 public AngleUnit Unit { get; }
-                public decimal ExpectedTurns { get; }
+                public double ExpectedTurns { get; }
             }
         }
     }

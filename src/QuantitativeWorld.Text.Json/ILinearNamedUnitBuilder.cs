@@ -7,7 +7,7 @@ namespace QuantitativeWorld.Text.Json
     {
         void SetName(string name);
         void SetAbbreviation(string abbreviation);
-        void SetValueInBaseUnit(decimal valueInBaseUnit);
+        void SetValueInBaseUnit(double valueInBaseUnit);
         bool TryBuild(out TUnit unit);
     }
 }

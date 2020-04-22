@@ -64,7 +64,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultLength = default(Length);
-                var zeroKilometres = new Length(0m, LengthUnit.Kilometre);
+                var zeroKilometres = new Length(0d, LengthUnit.Kilometre);
 
                 // act
                 var result1 = defaultLength + zeroKilometres;
@@ -78,23 +78,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void LengthsOfSameUnit_ShouldProduceValidResultInSameUnit()
-            {
-                // arrange
-                var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var length2 = CreateLengthInUnit(length1.Unit);
-
-                // act
-                var result = length1 + length2;
-
-                // assert
-                result.Metres.Should().Be(length1.Metres + length2.Metres);
-                result.Value.Should().Be(length1.Value + length2.Value);
-                result.Unit.Should().Be(length1.Unit);
-            }
-
-            [Fact]
-            public void LengthOfDifferentUnits_ShouldProduceValidResultInUnitOfLeftOperand()
+            public void ShouldProduceValidResultInUnitOfLeftOperand()
             {
                 // arrange
                 var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
@@ -168,7 +152,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultLength = default(Length);
-                var zeroKilometres = new Length(0m, LengthUnit.Kilometre);
+                var zeroKilometres = new Length(0d, LengthUnit.Kilometre);
 
                 // act
                 var result1 = defaultLength - zeroKilometres;
@@ -182,23 +166,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void LengthsOfSameUnit_ShouldProduceValidResultInSameUnit()
-            {
-                // arrange
-                var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var length2 = CreateLengthInUnit(length1.Unit);
-
-                // act
-                var result = length1 - length2;
-
-                // assert
-                result.Metres.Should().Be(length1.Metres - length2.Metres);
-                result.Value.Should().Be(length1.Value - length2.Value);
-                result.Unit.Should().Be(length1.Unit);
-            }
-
-            [Fact]
-            public void LengthOfDifferentUnits_ShouldProduceValidResultInUnitOfLeftOperand()
+            public void ShouldProduceValidResultInUnitOfLeftOperand()
             {
                 // arrange
                 var length1 = CreateLengthInUnitOtherThan(LengthUnit.Metre);
@@ -248,93 +216,6 @@ namespace QuantitativeWorld.Tests
             }
         }
 
-        public class Operator_MultiplyByDecimal : LengthTests
-        {
-            public Operator_MultiplyByDecimal(TestFixture testFixture)
-                : base(testFixture) { }
-
-            [Fact]
-            public void ShouldProduceValidResultInSameUnit()
-            {
-                // arrange
-                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                decimal factor = Fixture.Create<decimal>();
-
-                // act
-                var result = length * factor;
-
-                // assert
-                result.Metres.Should().Be(length.Metres * factor);
-                result.Value.Should().Be(length.Value * factor);
-                result.Unit.Should().Be(length.Unit);
-            }
-
-            [Fact]
-            public void NullLength_ShouldTreatNullAsDefault()
-            {
-                // arrange
-                Length? nullLength = null;
-                decimal factor = Fixture.Create<decimal>();
-                var expectedResult = default(Length) * factor;
-
-                // act
-                var result = nullLength * factor;
-
-                // assert
-                result.Should().NotBeNull();
-                result.Value.Should().Be(expectedResult);
-            }
-        }
-
-        public class Operator_DivideByDecimal : LengthTests
-        {
-            public Operator_DivideByDecimal(TestFixture testFixture) : base(testFixture) { }
-
-            [Fact]
-            public void DivideByZero_ShouldThrow()
-            {
-                // arrange
-                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-
-                // act
-                Func<Length> divideByZero = () => length / decimal.Zero;
-
-                // assert
-                divideByZero.Should().Throw<DivideByZeroException>();
-            }
-
-            [Fact]
-            public void ShouldProduceValidResultInSameUnit()
-            {
-                // arrange
-                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                decimal denominator = Fixture.CreateNonZeroDecimal();
-
-                // act
-                var result = length / denominator;
-
-                // assert
-                result.Metres.Should().BeApproximately(length.Metres / denominator, DecimalPrecision);
-                result.Unit.Should().Be(length.Unit);
-            }
-
-            [Fact]
-            public void NullLength_ShouldTreatNullAsDefault()
-            {
-                // arrange
-                Length? nullLength = null;
-                decimal denominator = Fixture.CreateNonZeroDecimal();
-                var expectedResult = default(Length) / denominator;
-
-                // act
-                var result = nullLength * denominator;
-
-                // assert
-                result.Should().NotBeNull();
-                result.Value.Should().Be(expectedResult);
-            }
-        }
-
         public class Operator_MultiplyByDouble : LengthTests
         {
             public Operator_MultiplyByDouble(TestFixture testFixture)
@@ -351,8 +232,8 @@ namespace QuantitativeWorld.Tests
                 var result = length * factor;
 
                 // assert
-                result.Metres.Should().Be(length.Metres * (decimal)factor);
-                result.Value.Should().Be(length.Value * (decimal)factor);
+                result.Metres.Should().BeApproximately(length.Metres * factor, DoublePrecision);
+                result.Value.Should().BeApproximately(length.Value * factor, DoublePrecision);
                 result.Unit.Should().Be(length.Unit);
             }
 
@@ -421,13 +302,13 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                double denominator = (double)Fixture.CreateNonZeroDecimal();
+                double denominator = (double)Fixture.CreateNonZeroDouble();
 
                 // act
                 var result = length / denominator;
 
                 // assert
-                result.Metres.Should().BeApproximately(length.Metres / (decimal)denominator, DecimalPrecision);
+                result.Metres.Should().BeApproximately(length.Metres / (double)denominator, DoublePrecision);
                 result.Unit.Should().Be(length.Unit);
             }
 
@@ -436,7 +317,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Length? nullLength = null;
-                double denominator = (double)Fixture.CreateNonZeroDecimal();
+                double denominator = (double)Fixture.CreateNonZeroDouble();
                 var expectedResult = default(Length) / denominator;
 
                 // act
@@ -457,10 +338,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var denominator = new Length(decimal.Zero);
+                var denominator = new Length(0d);
 
                 // act
-                Func<decimal> divideByZero = () => length / denominator;
+                Func<double> divideByZero = () => length / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -474,26 +355,26 @@ namespace QuantitativeWorld.Tests
                 Length? denominator = null;
 
                 // act
-                Func<decimal> divideByZero = () => length / denominator;
+                Func<double> divideByZero = () => length / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
             [Fact]
-            public void ShouldProduceValidDecimalResult()
+            public void ShouldProduceValidDoubleResult()
             {
                 // arrange
                 var nominator = CreateLengthInUnitOtherThan(LengthUnit.Metre);
                 var denominator = new Length(
-                    value: Fixture.CreateNonZeroDecimal(),
+                    value: Fixture.CreateNonZeroDouble(),
                     unit: CreateUnitOtherThan(LengthUnit.Metre, nominator.Unit));
 
                 // act
-                decimal result = nominator / denominator;
+                double result = nominator / denominator;
 
                 // assert
-                result.Should().BeApproximately(nominator.Metres / denominator.Metres, DecimalPrecision);
+                result.Should().Be(nominator.Metres / denominator.Metres);
             }
         }
     }
