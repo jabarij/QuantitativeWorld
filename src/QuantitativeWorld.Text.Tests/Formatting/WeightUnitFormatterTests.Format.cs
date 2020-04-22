@@ -1,4 +1,3 @@
-using AutoFixture;
 using FluentAssertions;
 using QuantitativeWorld.TestAbstractions;
 using QuantitativeWorld.Text.Formatting;
@@ -24,7 +23,7 @@ namespace QuantitativeWorld.Tests.Formatting
                 var weight = new WeightUnit(
                     name: unitName,
                     abbreviation: unitAbbreviation,
-                    valueInKilograms: Fixture.Create<decimal>());
+                    valueInKilograms: Fixture.CreatePositive());
 
                 // act
                 string actualResult = formatter.Format(standardFormat, weight);

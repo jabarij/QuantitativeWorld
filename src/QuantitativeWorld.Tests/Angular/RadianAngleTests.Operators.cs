@@ -192,9 +192,9 @@ namespace QuantitativeWorld.Tests.Angular
             }
         }
 
-        public class Operator_MultiplyByDecimal : RadianAngleTests
+        public class Operator_MultiplyByDouble : RadianAngleTests
         {
-            public Operator_MultiplyByDecimal(TestFixture testFixture)
+            public Operator_MultiplyByDouble(TestFixture testFixture)
                 : base(testFixture) { }
 
             [Fact]
@@ -228,9 +228,9 @@ namespace QuantitativeWorld.Tests.Angular
             }
         }
 
-        public class Operator_DivideByDecimal : RadianAngleTests
+        public class Operator_DivideByDouble : RadianAngleTests
         {
-            public Operator_DivideByDecimal(TestFixture testFixture) : base(testFixture) { }
+            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void DivideByZero_ShouldThrow()
@@ -309,7 +309,7 @@ namespace QuantitativeWorld.Tests.Angular
             }
 
             [Fact]
-            public void ShouldProduceValidDecimalResult()
+            public void ShouldProduceValidResult()
             {
                 // arrange
                 var nominator = CreateRadianAngle();

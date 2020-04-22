@@ -2,6 +2,6 @@
 {
     public interface IUnitConverter<TUnit>
     {
-        decimal ConvertValue(decimal value, TUnit sourceUnit, TUnit targetUnit);
+        double ConvertValue(double value, TUnit sourceUnit, TUnit targetUnit);
     }
 }

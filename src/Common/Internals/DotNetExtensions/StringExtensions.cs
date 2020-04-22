@@ -147,8 +147,7 @@ namespace QuantitativeWorld.DotNetExtensions
         public static (string left, string right) SplitAt(this string value, int rightStartIndex)
         {
             Assert.IsNotNullOrEmpty(value, nameof(value));
-            if (rightStartIndex >= value.Length)
-                throw Error.ArgumentOutOfRange(nameof(rightStartIndex), $"Index is out of range.");
+            Assert.IsLowerThan(rightStartIndex, value.Length, nameof(rightStartIndex));
 
             char[] leftPart = new char[rightStartIndex];
             for (int index = 0; index < leftPart.Length; index++)

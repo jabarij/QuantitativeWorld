@@ -4,7 +4,7 @@
     {
         private string _name;
         private string _abbreviation;
-        private decimal? _valueInMetres;
+        private double? _valueInMetres;
 
         public LengthUnitBuilder() { }
         public LengthUnitBuilder(LengthUnit unit)
@@ -20,14 +20,14 @@
         public void SetName(string name) =>
             _name = name;
 
-        public void SetValueInBaseUnit(decimal valueInBaseUnit) =>
+        public void SetValueInBaseUnit(double valueInBaseUnit) =>
             _valueInMetres = valueInBaseUnit;
 
         public bool TryBuild(out LengthUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            decimal? valueInMetres = _valueInMetres;
+            double? valueInMetres = _valueInMetres;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

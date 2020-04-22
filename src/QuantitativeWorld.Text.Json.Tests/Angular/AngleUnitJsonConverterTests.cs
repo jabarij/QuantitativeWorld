@@ -63,7 +63,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
             result.Symbol.Should().Be("?");
-            result.UnitsPerTurn.Should().Be(123.456m);
+            result.UnitsPerTurn.Should().Be(123.456d);
         }
 
         [Theory]

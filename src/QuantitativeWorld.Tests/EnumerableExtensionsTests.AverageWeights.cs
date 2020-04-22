@@ -47,7 +47,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Fixture.CreateMany<Weight>(3);
-                decimal expectedResultInKilograms = source.Average(e => e.Kilograms);
+                double expectedResultInKilograms = source.Average(e => e.Kilograms);
                 var expectedResultUnit = source.First().Unit;
                 var expectedResult = new Weight(expectedResultInKilograms).Convert(expectedResultUnit);
 

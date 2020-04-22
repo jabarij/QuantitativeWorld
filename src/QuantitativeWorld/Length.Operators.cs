@@ -26,31 +26,18 @@ namespace QuantitativeWorld
         public static Length operator -(Length length) =>
             new Length(formatUnit: length.Unit, metres: -length.Metres);
 
-        public static Length operator *(Length length, decimal factor) =>
+        public static Length operator *(Length length, double factor) =>
             new Length(formatUnit: length.Unit, metres: length.Metres * factor);
-        public static Length operator *(decimal factor, Length length) =>
-            length * factor;
-
-        public static Length operator *(Length length, double factor)
-        {
-            Assert.IsNotNaN(factor, nameof(factor));
-            return length * (decimal)factor;
-        }
         public static Length operator *(double factor, Length length) =>
             length * factor;
 
-        public static Length operator /(Length length, decimal denominator)
+        public static Length operator /(Length length, double denominator)
         {
-            if (denominator == decimal.Zero)
+            if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Length(formatUnit: length.Unit, metres: length.Metres / denominator);
         }
-        public static Length operator /(Length length, double denominator)
-        {
-            Assert.IsNotNaN(denominator, nameof(denominator));
-            return length / (decimal)denominator;
-        }
-        public static decimal operator /(Length length, Length denominator)
+        public static double operator /(Length length, Length denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -80,27 +67,14 @@ namespace QuantitativeWorld
                 return -right.Value;
         }
 
-        public static Length? operator *(Length? length, decimal factor) =>
+        public static Length? operator *(Length? length, double factor) =>
             (length ?? default(Length)) * factor;
-        public static Length? operator *(decimal factor, Length? length) =>
-            length * factor;
-
-        public static Length? operator *(Length? length, double factor)
-        {
-            Assert.IsNotNaN(factor, nameof(factor));
-            return length * (decimal)factor;
-        }
         public static Length? operator *(double factor, Length? length) =>
             length * factor;
 
-        public static Length? operator /(Length? length, decimal denominator) =>
+        public static Length? operator /(Length? length, double denominator) =>
             (length ?? default(Length)) / denominator;
-        public static Length? operator /(Length? length, double denominator)
-        {
-            Assert.IsNotNaN(denominator, nameof(denominator));
-            return length / (decimal)denominator;
-        }
-        public static decimal operator /(Length? length, Length? denominator) =>
+        public static double operator /(Length? length, Length? denominator) =>
             (length ?? default(Length)) / (denominator ?? default(Length));
     }
 }

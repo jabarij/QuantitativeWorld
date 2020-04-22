@@ -250,7 +250,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var degreeAngle = Fixture.Create<DegreeAngle>();
-                double denominator = Fixture.CreateNonZeroFloat();
+                double denominator = Fixture.CreateNonZeroDouble();
 
                 // act
                 var result = degreeAngle / denominator;
@@ -264,7 +264,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 DegreeAngle? nullDegreeAngle = null;
-                double denominator = Fixture.CreateNonZeroFloat();
+                double denominator = Fixture.CreateNonZeroDouble();
                 var expectedResult = default(DegreeAngle) / denominator;
 
                 // act
@@ -313,7 +313,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var nominator = Fixture.Create<DegreeAngle>();
-                var denominator = new DegreeAngle(Fixture.CreateNonZeroFloat());
+                var denominator = new DegreeAngle(Fixture.CreateNonZeroDouble());
 
                 // act
                 double result = nominator / denominator;

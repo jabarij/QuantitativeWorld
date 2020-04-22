@@ -15,11 +15,11 @@ namespace QuantitativeWorld.Text.Parsing
         public LengthParser(CultureInfo culture)
             : this(
                  parser: new QuantityParser<Length, LengthUnit>(
-                     valueParser: new DecimalParser(culture),
+                     valueParser: new DoubleParser(culture),
                      unitParser: new LengthUnitParser(),
                      quantityFactory: new LengthFactory()),
                  formattedParser: new FormattedQuantityParser<Length, LengthUnit>(
-                     valueParser: new FormattedDecimalParser(),
+                     valueParser: new FormattedDoubleParser(),
                      unitParser: new FormattedLengthUnitParser(),
                      quantityFactory: new LengthFactory()))
         { }

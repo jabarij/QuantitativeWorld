@@ -8,7 +8,7 @@ namespace QuantitativeWorld.Text.Parsing
         where TQuantity : ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
-        private readonly IParser<decimal> _valueParser;
+        private readonly IParser<double> _valueParser;
         private readonly IParser<TUnit> _unitParser;
         private readonly ILinearQuantityFactory<TQuantity, TUnit> _quantityFactory;
 
@@ -16,12 +16,12 @@ namespace QuantitativeWorld.Text.Parsing
             IParser<TUnit> unitParser,
             ILinearQuantityFactory<TQuantity, TUnit> quantityFactory)
             : this(
-                 valueParser: new DecimalParser(),
+                 valueParser: new DoubleParser(),
                  unitParser: unitParser,
                  quantityFactory: quantityFactory)
         { }
         public QuantityParser(
-            IParser<decimal> valueParser,
+            IParser<double> valueParser,
             IParser<TUnit> unitParser,
             ILinearQuantityFactory<TQuantity, TUnit> quantityFactory)
         {

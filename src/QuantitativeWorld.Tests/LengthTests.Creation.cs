@@ -17,7 +17,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForMetres_ShouldCreateValidLength()
             {
                 // arrange
-                decimal kilograms = Fixture.Create<decimal>();
+                double kilograms = Fixture.Create<double>();
 
                 // act
                 var length = new Length(kilograms);
@@ -37,43 +37,43 @@ namespace QuantitativeWorld.Tests
                 var length = new Length(testData.Value, testData.Unit);
 
                 // assert
-                length.Metres.Should().BeApproximately(testData.ExpectedMetres, DecimalPrecision);
+                length.Metres.Should().BeApproximately(testData.ExpectedMetres, DoublePrecision);
                 length.Value.Should().Be(testData.Value);
                 length.Unit.Should().Be(testData.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1m, LengthUnit.Metre, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1000m, LengthUnit.Millimetre, 1m);
-                yield return new ConstructorForValueAndUnitTestData(10m, LengthUnit.Decimetre, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / 0.0254m, LengthUnit.Inch, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254m * 12m), LengthUnit.Foot, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254m * 12m * 3m), LengthUnit.Yard, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254m * 12m * 3m * 5.5m), LengthUnit.Rod, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254m * 12m * 3m * 5.5m * 4m), LengthUnit.Chain, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254m * 12m * 3m * 5.5m * 4m * 10m), LengthUnit.Furlong, 1m);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254m * 12m * 3m * 5.5m * 4m * 10m * 8m), LengthUnit.Mile, 1m);
-                yield return new ConstructorForValueAndUnitTestData(0.0006213711922373339696174342m, LengthUnit.Mile, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Metre, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1000d, LengthUnit.Millimetre, 1d);
+                yield return new ConstructorForValueAndUnitTestData(10d, LengthUnit.Decimetre, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / 0.0254d, LengthUnit.Inch, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d), LengthUnit.Foot, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d), LengthUnit.Yard, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d), LengthUnit.Rod, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d * 4d), LengthUnit.Chain, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d * 4d * 10d), LengthUnit.Furlong, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d * 4d * 10d * 8d), LengthUnit.Mile, 1d);
+                yield return new ConstructorForValueAndUnitTestData(0.0006213711922373339696174342d, LengthUnit.Mile, 1d);
             }
             public class ConstructorForValueAndUnitTestData
             {
-                public ConstructorForValueAndUnitTestData(decimal value, LengthUnit unit, decimal expectedMetres)
+                public ConstructorForValueAndUnitTestData(double value, LengthUnit unit, double expectedMetres)
                 {
                     Value = value;
                     Unit = unit;
                     ExpectedMetres = expectedMetres;
                 }
 
-                public decimal Value { get; }
+                public double Value { get; }
                 public LengthUnit Unit { get; }
-                public decimal ExpectedMetres { get; }
+                public double ExpectedMetres { get; }
             }
 
             [Theory]
             [InlineData(0.001, 1000)]
             [InlineData(1, 1000000)]
             [InlineData(1000, 1000000000)]
-            public void FromKilometres_ShouldCreateValidLength(decimal kilometres, decimal millimetres)
+            public void FromKilometres_ShouldCreateValidLength(double kilometres, double millimetres)
             {
                 // arrange
                 var expectedLength = new Length(millimetres, LengthUnit.Millimetre);

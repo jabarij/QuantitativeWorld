@@ -8,14 +8,14 @@ namespace QuantitativeWorld.Angular
         private readonly string _name;
         private readonly string _abbreviation;
         private readonly string _symbol;
-        private readonly decimal? _unitsPerTurn;
+        private readonly double? _unitsPerTurn;
 
-        public AngleUnit(string name, string abbreviation, string symbol, decimal unitsPerTurn)
+        public AngleUnit(string name, string abbreviation, string symbol, double unitsPerTurn)
         {
             Assert.IsNotNullOrWhiteSpace(name, nameof(name));
             Assert.IsNotNullOrWhiteSpace(abbreviation, nameof(abbreviation));
             Assert.IsNotNullOrWhiteSpace(symbol, nameof(symbol));
-            Assert.IsGreaterThan(unitsPerTurn, 0m, nameof(unitsPerTurn));
+            Assert.IsGreaterThan(unitsPerTurn, 0d, nameof(unitsPerTurn));
 
             _name = name;
             _abbreviation = abbreviation;
@@ -26,10 +26,10 @@ namespace QuantitativeWorld.Angular
         public string Name => _name ?? Turn._name;
         public string Abbreviation => _abbreviation ?? Turn._abbreviation;
         public string Symbol => _symbol ?? Turn._symbol;
-        public decimal UnitsPerTurn => _unitsPerTurn ?? Turn._unitsPerTurn.Value;
+        public double UnitsPerTurn => _unitsPerTurn ?? Turn._unitsPerTurn.Value;
 
         public override string ToString() => Abbreviation;
 
-        decimal ILinearUnit.ValueInBaseUnit => 1m / UnitsPerTurn;
+        double ILinearUnit.ValueInBaseUnit => 1d / UnitsPerTurn;
     }
 }

@@ -8,18 +8,18 @@ namespace QuantitativeWorld
     {
         public static readonly Weight MinValue = new Weight(MinMetres);
         public static readonly Weight MaxValue = new Weight(MaxMetres);
-        private const decimal MinMetres = decimal.MinValue;
-        private const decimal MaxMetres = decimal.MaxValue;
+        private const double MinMetres = double.MinValue;
+        private const double MaxMetres = double.MaxValue;
 
         public static readonly LengthUnit DefaultUnit = LengthUnit.Metre;
 
         private readonly LengthUnit? _formatUnit;
 
-        public Length(decimal metres)
+        public Length(double metres)
             : this(formatUnit: null, metres: metres) { }
-        public Length(decimal value, LengthUnit unit)
+        public Length(double value, LengthUnit unit)
             : this(formatUnit: unit, metres: GetMetres(value, unit)) { }
-        private Length(LengthUnit? formatUnit, decimal metres)
+        private Length(LengthUnit? formatUnit, double metres)
         {
             Assert.IsInRange(metres, MinMetres, MaxMetres, nameof(metres));
 
@@ -27,26 +27,26 @@ namespace QuantitativeWorld
             Metres = metres;
         }
 
-        public decimal Metres { get; }
-        public decimal Value => GetValue(Metres, Unit);
+        public double Metres { get; }
+        public double Value => GetValue(Metres, Unit);
         public LengthUnit Unit => _formatUnit ?? DefaultUnit;
-        decimal ILinearQuantity<LengthUnit>.BaseValue => Metres;
+        double ILinearQuantity<LengthUnit>.BaseValue => Metres;
         LengthUnit ILinearQuantity<LengthUnit>.BaseUnit => DefaultUnit;
 
         public Length Convert(LengthUnit targetUnit) =>
             new Length(targetUnit, Metres);
 
         public bool IsZero() =>
-            Metres == decimal.Zero;
+            Metres == 0d;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Length, LengthUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Length, LengthUnit>(formatProvider, this);
 
-        private static decimal GetMetres(decimal value, LengthUnit sourceUnit) =>
+        private static double GetMetres(double value, LengthUnit sourceUnit) =>
             value * sourceUnit.ValueInMetres;
-        private static decimal GetValue(decimal metres, LengthUnit targetUnit) =>
+        private static double GetValue(double metres, LengthUnit targetUnit) =>
             metres / targetUnit.ValueInMetres;
     }
 }

@@ -21,10 +21,10 @@ namespace QuantitativeWorld.Angular
             _radians ?? EmptyValue;
 
         public Angle ToAngle() =>
-            new Angle((decimal)Radians, AngleUnit.Radian);
+            new Angle(Radians, AngleUnit.Radian);
 
         public DegreeAngle ToDegreeAngle() =>
-            new DegreeAngle(Radians * 180d * 3600d / System.Math.PI);
+            new DegreeAngle(Radians * 180d * 3600d / Math.PI);
 
         public RadianAngle ToNormalized() =>
             new RadianAngle(Radians % (2d * System.Math.PI));
@@ -37,12 +37,12 @@ namespace QuantitativeWorld.Angular
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<RadianAngle, AngleUnit>(formatProvider, this);
 
-        decimal ILinearQuantity<AngleUnit>.BaseValue => (decimal)Radians;
+        double ILinearQuantity<AngleUnit>.BaseValue => Radians;
         AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => AngleUnit.Radian;
-        decimal ILinearQuantity<AngleUnit>.Value => ((ILinearQuantity<AngleUnit>)this).BaseValue;
+        double ILinearQuantity<AngleUnit>.Value => ((ILinearQuantity<AngleUnit>)this).BaseValue;
         AngleUnit ILinearQuantity<AngleUnit>.Unit => ((ILinearQuantity<AngleUnit>)this).BaseUnit;
 
         public static RadianAngle FromAngle(Angle angle) =>
-            new RadianAngle((double)angle.Convert(AngleUnit.Radian).Value);
+            new RadianAngle(angle.Convert(AngleUnit.Radian).Value);
     }
 }

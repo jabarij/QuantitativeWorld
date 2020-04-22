@@ -60,7 +60,7 @@ namespace QuantitativeWorld.Text.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInWatts.Should().Be(123.456m);
+            result.ValueInWatts.Should().Be(123.456d);
         }
 
         [Theory]

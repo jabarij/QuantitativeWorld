@@ -37,7 +37,7 @@ namespace QuantitativeWorld.Tests
             [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 0.5d * Math.PI, 0d, 1d)]
             [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 1.5d * Math.PI, 0d, -1d)]
             [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 2.5d * Math.PI, 0d, 1d)]
-            public void ShouldReturnProperValue(double lat, double lon, decimal metres, double bearing, double expectedLatitude, double expectedLongitude)
+            public void ShouldReturnProperValue(double lat, double lon, double metres, double bearing, double expectedLatitude, double expectedLongitude)
             {
                 // arrange
                 var sut = new GeoCoordinate(lat, lon);

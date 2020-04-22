@@ -2,6 +2,6 @@
 {
     public interface IAngularUnit
     {
-        decimal UnitsPerTurn { get; }
+        double UnitsPerTurn { get; }
     }
 }

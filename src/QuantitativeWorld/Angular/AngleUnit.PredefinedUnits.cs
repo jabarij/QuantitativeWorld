@@ -8,7 +8,7 @@ namespace QuantitativeWorld.Angular
     partial struct AngleUnit
     {
         [Predefined]
-        public static readonly AngleUnit Turn = new AngleUnit(name: "turn", abbreviation: "tr", symbol: "tr", unitsPerTurn: 1m);
+        public static readonly AngleUnit Turn = new AngleUnit(name: "turn", abbreviation: "tr", symbol: "tr", unitsPerTurn: 1d);
         [Predefined]
         public static readonly AngleUnit Radian = new AngleUnit(name: "radian", abbreviation: "rad", symbol: "c", unitsPerTurn: Constants.RadiansPerTurn);
         [Predefined]

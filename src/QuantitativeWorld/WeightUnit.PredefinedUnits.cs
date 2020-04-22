@@ -8,7 +8,7 @@ namespace QuantitativeWorld
     partial struct WeightUnit
     {
         [Predefined]
-        public static readonly WeightUnit Kilogram = new WeightUnit(name: "kilogram", abbreviation: "kg", valueInKilograms: 1m);
+        public static readonly WeightUnit Kilogram = new WeightUnit(name: "kilogram", abbreviation: "kg", valueInKilograms: 1d);
         [Predefined]
         public static readonly WeightUnit Gram = new WeightUnit(name: "gram", abbreviation: "g", valueInKilograms: Constants.KilogramsPerGram);
         [Predefined]
