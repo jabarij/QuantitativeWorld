@@ -49,9 +49,9 @@ namespace QuantitativeWorld.DotNetExtensions
             switch (LeftBoundaryType)
             {
                 case IntervalBoundaryType.Open:
-                    return From.CompareTo(value) <= 0;
-                case IntervalBoundaryType.Closed:
                     return From.CompareTo(value) < 0;
+                case IntervalBoundaryType.Closed:
+                    return From.CompareTo(value) <= 0;
                 default:
                     throw new NotImplementedException($"Handling {LeftBoundaryType.GetType().FullName}.{LeftBoundaryType} is not implemented.");
             }
