@@ -113,12 +113,21 @@ namespace QuantitativeWorld.Tests
                 exception.ActualValue.Should().Be(longitude);
             }
 
-            [Fact]
-            public void ShouldCreateWithGivenValues()
+            [Theory]
+            [InlineData(0d, 0d)]
+            [InlineData(-90d, 0d)]
+            [InlineData(-45d, 0d)]
+            [InlineData(45d, 0d)]
+            [InlineData(90d, 0d)]
+            [InlineData(0d, -180d)]
+            [InlineData(0d, -90d)]
+            [InlineData(0d, 90d)]
+            [InlineData(0d, 180d)]
+            public void ShouldCreateWithGivenValues(double latitudeDegrees, double longitudeDegrees)
             {
                 // arrange
-                var latitude = new DegreeAngle(Fixture.CreateInRange(GeoCoordinate.MinLatitude, GeoCoordinate.MaxLatitude));
-                var longitude = new DegreeAngle(Fixture.CreateInRange(GeoCoordinate.MinLongitude, GeoCoordinate.MaxLongitude));
+                var latitude = new DegreeAngle(latitudeDegrees);
+                var longitude = new DegreeAngle(longitudeDegrees);
 
                 // act
                 var sut = new GeoCoordinate(latitude, longitude);
@@ -167,12 +176,21 @@ namespace QuantitativeWorld.Tests
                 exception.ActualValue.Should().Be(longitude);
             }
 
-            [Fact]
-            public void ShouldCreateWithGivenValues()
+            [Theory]
+            [InlineData(0d, 0d)]
+            [InlineData(-Math.PI / 2d, 0d)]
+            [InlineData(-Math.PI / 4d, 0d)]
+            [InlineData(Math.PI / 4d, 0d)]
+            [InlineData(Math.PI / 2d, 0d)]
+            [InlineData(0d, -0.99d * Math.PI)]
+            [InlineData(0d, -0.5d * Math.PI)]
+            [InlineData(0d, 0.5d * Math.PI)]
+            [InlineData(0d, 0.99d * Math.PI)]
+            public void ShouldCreateWithGivenValues(double latitudeRadians, double longitudeRadians)
             {
                 // arrange
-                var latitude = new RadianAngle(Fixture.CreateInRange(GeoCoordinate.MinLatitudeRadians.Radians, GeoCoordinate.MaxLatitudeRadians.Radians));
-                var longitude = new RadianAngle(Fixture.CreateInRange(GeoCoordinate.MinLongitudeRadians.Radians, GeoCoordinate.MaxLongitudeRadians.Radians));
+                var latitude = new RadianAngle(latitudeRadians);
+                var longitude = new RadianAngle(longitudeRadians);
 
                 // act
                 var sut = new GeoCoordinate(latitude, longitude);

@@ -19,10 +19,10 @@ namespace QuantitativeWorld
         public static readonly DegreeAngle MinLongitudeDegrees = new DegreeAngle(-180d * 3600d);
         public static readonly DegreeAngle MaxLongitudeDegrees = new DegreeAngle(180d * 3600d);
 
-        public static readonly RadianAngle MinLatitudeRadians = new RadianAngle(-Math.PI / 4d);
-        public static readonly RadianAngle MaxLatitudeRadians = new RadianAngle(Math.PI / 4d);
-        public static readonly RadianAngle MinLongitudeRadians = new RadianAngle(-Math.PI / 2d);
-        public static readonly RadianAngle MaxLongitudeRadians = new RadianAngle(Math.PI / 2d);
+        public static readonly RadianAngle MinLatitudeRadians = new RadianAngle(-Math.PI / 2d);
+        public static readonly RadianAngle MaxLatitudeRadians = new RadianAngle(Math.PI / 2d);
+        public static readonly RadianAngle MinLongitudeRadians = new RadianAngle(-Math.PI);
+        public static readonly RadianAngle MaxLongitudeRadians = new RadianAngle(Math.PI);
 
         private static readonly ValueRange<DegreeAngle> LatitudeDegreesRange =
             new ValueRange<DegreeAngle>(MinLatitudeDegrees, MaxLatitudeDegrees);
@@ -145,12 +145,12 @@ namespace QuantitativeWorld
 
             var φ1 = LatitudeRadians;
             var λ1 = LongitudeRadians;
-            var angularDistance = new RadianAngle((double)(distance / EarthRadius));
+            var δ = new RadianAngle(distance / EarthRadius);
 
-            var φ2 = new RadianAngle(Math.Asin(MathA.Sin(φ1) * MathA.Cos(angularDistance) + MathA.Cos(φ1) * MathA.Sin(angularDistance) * MathA.Cos(bearing)));
+            var φ2 = new RadianAngle(Math.Asin(MathA.Sin(φ1) * MathA.Cos(δ) + MathA.Cos(φ1) * MathA.Sin(δ) * MathA.Cos(bearing)));
 
-            double y = MathA.Sin(bearing) * MathA.Sin(angularDistance) * MathA.Cos(φ1);
-            double x = MathA.Cos(angularDistance) - MathA.Sin(φ1) * MathA.Sin(φ2);
+            double y = MathA.Sin(bearing) * MathA.Sin(δ) * MathA.Cos(φ1);
+            double x = MathA.Cos(δ) - MathA.Sin(φ1) * MathA.Sin(φ2);
             var Δλ = new RadianAngle(Math.Atan2(y, x));
             var λ2 = λ1 + Δλ;
 
