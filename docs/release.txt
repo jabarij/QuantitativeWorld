@@ -5,4 +5,5 @@
 	- tag version: 'vX.Y.Z';
 	- target: master;
 	- release title: 'Release version X.Y.Z';
-	- 
+	- description line: '* description of the single-issue job done (issue #N);';
+5. Publish release.
