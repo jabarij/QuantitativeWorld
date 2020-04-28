@@ -37,17 +37,22 @@ namespace QuantitativeWorld.Tests
             [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 0.5d * Math.PI, 0d, 1d)]
             [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 1.5d * Math.PI, 0d, -1d)]
             [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 2.5d * Math.PI, 0d, 1d)]
+            [InlineData(50.233620d, 18.991077d, 170000d, 0.545178d, 51.53388889d, 20.26555556d)]
+            [InlineData(50.233620d, 18.991077d, 270000000d, 0.545178d, -34.83527778d, -20.16722222d)]
+            [InlineData(50.23362d, 18.991077d, 17000d, 0.54517663057804711d, -25.77861111d, -176.2261111d)]
             public void ShouldReturnProperValue(double lat, double lon, double metres, double bearing, double expectedLatitude, double expectedLongitude)
             {
                 // arrange
                 var sut = new GeoCoordinate(lat, lon);
+                var distance = new Length(metres, LengthUnit.Kilometre);
+                var bearingAngle = new RadianAngle(bearing);
 
                 // act
-                var result = sut.GetDestinationPoint(new Length(metres), new RadianAngle(bearing));
+                var result = sut.GetDestinationPoint(distance, bearingAngle);
 
                 // assert
-                result.Latitude.Should().BeApproximately(expectedLatitude, 0.01d);
-                result.Longitude.Should().BeApproximately(expectedLongitude, 0.01d);
+                result.Latitude.Should().BeApproximately(expectedLatitude, 0.005d);
+                result.Longitude.Should().BeApproximately(expectedLongitude, 0.005d);
             }
         }
     }
