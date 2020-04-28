@@ -44,7 +44,7 @@ namespace QuantitativeWorld.Tests
             [Theory]
             [InlineData(0d, 0d, 0d, 0d, 0d)]
             [InlineData(0d, -180d, 0d, 180d, 0d)]
-            [InlineData(50.5d, 10.5d, 51.5d, 10.5d, 111194.92)]
+            [InlineData(50.5d, 10.5d, 51.5d, 10.5d, 111195.07d)]
             public void ShouldReturnProperValue(double lat1, double lon1, double lat2, double lon2, double expectedResult)
             {
                 // arrange
