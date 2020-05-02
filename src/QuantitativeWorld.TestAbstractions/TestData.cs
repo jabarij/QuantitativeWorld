@@ -18,8 +18,7 @@ namespace QuantitativeWorld.TestAbstractions
         }
 
         protected IFixture Fixture => _testFixture.Fixture;
-        protected const decimal DecimalPrecision = TestFixture.DecimalPrecision;
-        protected const double DoublePrecision = TestFixture.DoublePrecision;
+        public const double DoublePrecision = 0.000005d;
 
         public static IEnumerable<object[]> GetTestData(Type sourceType, string dataSourceName)
         {
@@ -29,7 +28,7 @@ namespace QuantitativeWorld.TestAbstractions
             if (source.Skip(1).Any())
                 throw new InvalidOperationException($"Ambiguous member {sourceType.FullName}.{dataSourceName}.");
             var member = source.Single();
-            
+
             object dataSource;
             switch (member.MemberType)
             {

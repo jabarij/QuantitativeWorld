@@ -86,6 +86,6 @@ namespace QuantitativeWorld.Angular
         AngleUnit ILinearQuantity<AngleUnit>.Unit => ((ILinearQuantity<AngleUnit>)this).BaseUnit;
 
         public static DegreeAngle FromAngle(Angle angle) =>
-            new DegreeAngle((double)angle.Convert(AngleUnit.Arcsecond).Value);
+            new DegreeAngle(angle.Convert(AngleUnit.Arcsecond).Value);
     }
 }

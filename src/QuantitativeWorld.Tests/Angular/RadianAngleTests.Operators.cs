@@ -276,6 +276,54 @@ namespace QuantitativeWorld.Tests.Angular
             }
         }
 
+        public class Operator_ModuloByDouble : RadianAngleTests
+        {
+            public Operator_ModuloByDouble(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void ModuloByZero_ShouldThrow()
+            {
+                // arrange
+                var radianAngle = CreateRadianAngle();
+
+                // act
+                Func<RadianAngle> moduloByZero = () => radianAngle % 0d;
+
+                // assert
+                moduloByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidResult()
+            {
+                // arrange
+                var radianAngle = CreateRadianAngle();
+                double denominator = Fixture.CreateNonZeroDouble();
+
+                // act
+                var result = radianAngle % denominator;
+
+                // assert
+                result.Radians.Should().Be(radianAngle.Radians % denominator);
+            }
+
+            [Fact]
+            public void NullRadianAngle_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                RadianAngle? nullRadianAngle = null;
+                double denominator = Fixture.CreateNonZeroDouble();
+                var expectedResult = default(RadianAngle) % denominator;
+
+                // act
+                var result = nullRadianAngle * denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+        }
+
         public class Operator_DivideByRadianAngle : RadianAngleTests
         {
             public Operator_DivideByRadianAngle(TestFixture testFixture) : base(testFixture) { }

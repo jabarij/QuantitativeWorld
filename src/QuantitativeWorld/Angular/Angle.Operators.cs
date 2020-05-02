@@ -23,25 +23,32 @@ namespace QuantitativeWorld.Angular
             new Angle(formatUnit: left._formatUnit ?? right.Unit, turns: left.Turns + right.Turns);
         public static Angle operator -(Angle left, Angle right) =>
             new Angle(formatUnit: left._formatUnit ?? right.Unit, turns: left.Turns - right.Turns);
-        public static Angle operator -(Angle angle) =>
-            new Angle(formatUnit: angle.Unit, turns: -angle.Turns);
+        public static Angle operator -(Angle argument) =>
+            new Angle(formatUnit: argument.Unit, turns: -argument.Turns);
 
-        public static Angle operator *(Angle angle, double factor) =>
-            new Angle(formatUnit: angle.Unit, turns: angle.Turns * factor);
-        public static Angle operator *(double factor, Angle angle) =>
-            angle * factor;
+        public static Angle operator *(Angle argument, double factor) =>
+            new Angle(formatUnit: argument.Unit, turns: argument.Turns * factor);
+        public static Angle operator *(double argument, Angle factor) =>
+            factor * argument;
 
-        public static Angle operator /(Angle angle, double denominator)
+        public static Angle operator /(Angle nominator, double denominator)
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Angle(formatUnit: angle.Unit, turns: angle.Turns / denominator);
+            return new Angle(formatUnit: nominator.Unit, turns: nominator.Turns / denominator);
         }
-        public static double operator /(Angle angle, Angle denominator)
+        public static double operator /(Angle nominator, Angle denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
-            return angle.Turns / denominator.Turns;
+            return nominator.Turns / denominator.Turns;
+        }
+
+        public static Angle operator %(Angle nominator, double denominator)
+        {
+            if (denominator == 0d)
+                throw new DivideByZeroException("Denominator is zero.");
+            return new Angle(nominator._formatUnit, nominator.Turns % denominator);
         }
 
         public static Angle? operator +(Angle? left, Angle? right)
@@ -67,14 +74,17 @@ namespace QuantitativeWorld.Angular
                 return -right.Value;
         }
 
-        public static Angle? operator *(Angle? angle, double factor) =>
-            (angle ?? default(Angle)) * factor;
-        public static Angle? operator *(double factor, Angle? angle) =>
-            angle * factor;
+        public static Angle? operator *(Angle? argument, double factor) =>
+            (argument ?? default(Angle)) * factor;
+        public static Angle? operator *(double argument, Angle? factor) =>
+            factor * argument;
 
-        public static Angle? operator /(Angle? angle, double denominator) =>
-            (angle ?? default(Angle)) / denominator;
-        public static double operator /(Angle? angle, Angle? denominator) =>
-            (angle ?? default(Angle)) / (denominator ?? default(Angle));
+        public static Angle? operator /(Angle? nominator, double denominator) =>
+            (nominator ?? default(Angle)) / denominator;
+        public static double operator /(Angle? nominator, Angle? denominator) =>
+            (nominator ?? default(Angle)) / (denominator ?? default(Angle));
+
+        public static Angle? operator %(Angle? nominator, double denominator) =>
+            (nominator ?? default(Angle)) % denominator;
     }
 }

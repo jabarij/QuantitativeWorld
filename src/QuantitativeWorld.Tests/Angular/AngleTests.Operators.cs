@@ -304,6 +304,55 @@ namespace QuantitativeWorld.Tests.Angular
             }
         }
 
+        public class Operator_ModuloByDouble : AngleTests
+        {
+            public Operator_ModuloByDouble(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void ModuloByZero_ShouldThrow()
+            {
+                // arrange
+                var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
+
+                // act
+                Func<Angle> moduloByZero = () => angle % 0d;
+
+                // assert
+                moduloByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
+                double denominator = Fixture.CreateNonZeroDouble();
+
+                // act
+                var result = angle % denominator;
+
+                // assert
+                result.Turns.Should().Be(angle.Turns % denominator);
+                result.Unit.Should().Be(angle.Unit);
+            }
+
+            [Fact]
+            public void NullAngle_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Angle? nullAngle = null;
+                double denominator = Fixture.CreateNonZeroDouble();
+                var expectedResult = default(Angle) % denominator;
+
+                // act
+                var result = nullAngle * denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+        }
+
         public class Operator_DivideByAngle : AngleTests
         {
             public Operator_DivideByAngle(TestFixture testFixture) : base(testFixture) { }
