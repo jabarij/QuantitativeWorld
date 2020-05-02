@@ -27,7 +27,7 @@ namespace QuantitativeWorld.Angular
             new DegreeAngle(Radians * 180d * 3600d / Math.PI);
 
         public RadianAngle ToNormalized() =>
-            new RadianAngle(Radians % (2d * System.Math.PI));
+            new RadianAngle(Radians % (2d * Math.PI));
 
         public bool IsZero() =>
             Radians.Equals(0d);
@@ -44,5 +44,8 @@ namespace QuantitativeWorld.Angular
 
         public static RadianAngle FromAngle(Angle angle) =>
             new RadianAngle(angle.Convert(AngleUnit.Radian).Value);
+
+        public static implicit operator RadianAngle(double radians) =>
+            new RadianAngle(radians);
     }
 }
