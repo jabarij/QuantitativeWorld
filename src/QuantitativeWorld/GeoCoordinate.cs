@@ -4,36 +4,25 @@ using System;
 
 namespace QuantitativeWorld
 {
-    [System.Diagnostics.DebuggerDisplay("Geo coordinate(lat:{Latitude}, lon:{Longitude})")]
+    [System.Diagnostics.DebuggerDisplay("Geo coordinate(lat: {Latitude}, lon: {Longitude})")]
     public partial struct GeoCoordinate
     {
-        private static readonly Length EarthRadius = new Length(metres: 6371008d);
-
-        public static readonly double MinLatitude = -90d;
-        public static readonly double MaxLatitude = 90d;
-        public static readonly double MinLongitude = -180d;
-        public static readonly double MaxLongitude = 180d;
-
-        public static readonly DegreeAngle MinLatitudeDegrees = new DegreeAngle(-90d * 3600d);
-        public static readonly DegreeAngle MaxLatitudeDegrees = new DegreeAngle(90d * 3600d);
-        public static readonly DegreeAngle MinLongitudeDegrees = new DegreeAngle(-180d * 3600d);
-        public static readonly DegreeAngle MaxLongitudeDegrees = new DegreeAngle(180d * 3600d);
-
-        public static readonly RadianAngle MinLatitudeRadians = new RadianAngle(-Math.PI / 2d);
-        public static readonly RadianAngle MaxLatitudeRadians = new RadianAngle(Math.PI / 2d);
-        public static readonly RadianAngle MinLongitudeRadians = new RadianAngle(-Math.PI);
-        public static readonly RadianAngle MaxLongitudeRadians = new RadianAngle(Math.PI);
-
-        private static readonly ValueRange<DegreeAngle> LatitudeDegreesRange =
-            new ValueRange<DegreeAngle>(MinLatitudeDegrees, MaxLatitudeDegrees);
-        private static readonly ValueRange<DegreeAngle> LongitudeDegreesRange =
-            new ValueRange<DegreeAngle>(MinLongitudeDegrees, MaxLongitudeDegrees);
-        private static readonly ValueRange<RadianAngle> LatitudeRadiansRange =
-            new ValueRange<RadianAngle>(MinLatitudeRadians, MaxLatitudeRadians);
-        private static readonly ValueRange<RadianAngle> LongitudeRadiansRange =
-            new ValueRange<RadianAngle>(MinLongitudeRadians, MaxLongitudeRadians);
+        public const double MinLatitude = -90d;
+        public const double MaxLatitude = 90d;
+        public const double MinLongitude = -180d;
+        public const double MaxLongitude = 180d;
 
         public static readonly GeoCoordinate Empty = new GeoCoordinate();
+        public static readonly Length EarthRadius = new Length(metres: 6371008d);
+
+        private static readonly ValueRange<DegreeAngle> LatitudeDegreesRange =
+            new ValueRange<DegreeAngle>(-DegreeAngle.Right, DegreeAngle.Right);
+        private static readonly ValueRange<DegreeAngle> LongitudeDegreesRange =
+            new ValueRange<DegreeAngle>(-DegreeAngle.Straight, DegreeAngle.Straight);
+        private static readonly ValueRange<RadianAngle> LatitudeRadiansRange =
+            new ValueRange<RadianAngle>(-RadianAngle.Right, RadianAngle.Right);
+        private static readonly ValueRange<RadianAngle> LongitudeRadiansRange =
+            new ValueRange<RadianAngle>(-RadianAngle.Straight, RadianAngle.Straight);
 
         private readonly DegreeAngle? _latitudeDegrees;
         private readonly DegreeAngle? _longitudeDegrees;
@@ -135,7 +124,7 @@ namespace QuantitativeWorld
 
             double y = MathA.Sin(Δλ) * MathA.Cos(φ2);
             double x = MathA.Cos(φ1) * MathA.Sin(φ2) - MathA.Sin(φ1) * MathA.Cos(φ2) * MathA.Cos(Δλ);
-            return new RadianAngle(Math.Atan2(y, x));
+            return MathA.Atan2(y, x);
         }
 
         public GeoCoordinate GetDestinationPoint(Length distance, RadianAngle bearing)
@@ -147,15 +136,15 @@ namespace QuantitativeWorld
             var λ1 = LongitudeRadians;
             var δ = new RadianAngle(distance / EarthRadius);
 
-            var φ2 = new RadianAngle(Math.Asin(MathA.Sin(φ1) * MathA.Cos(δ) + MathA.Cos(φ1) * MathA.Sin(δ) * MathA.Cos(bearing)));
+            var φ2 = MathA.Asin(MathA.Sin(φ1) * MathA.Cos(δ) + MathA.Cos(φ1) * MathA.Sin(δ) * MathA.Cos(bearing));
 
             double y = MathA.Sin(bearing) * MathA.Sin(δ) * MathA.Cos(φ1);
             double x = MathA.Cos(δ) - MathA.Sin(φ1) * MathA.Sin(φ2);
-            var Δλ = new RadianAngle(Math.Atan2(y, x));
+            var Δλ = MathA.Atan2(y, x);
             var λ2 = λ1 + Δλ;
 
             // Normalize longitude to range -π ... +π (that is, -180° ... +180°)
-            λ2 = new RadianAngle((λ2.Radians + 3d * Math.PI) % (2d * Math.PI) - Math.PI);
+            λ2 = (λ2 + 3d * RadianAngle.PI) % (2d * Math.PI) - RadianAngle.PI;
 
             return new GeoCoordinate(φ2, λ2);
         }
