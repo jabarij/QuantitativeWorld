@@ -332,7 +332,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = angle % denominator;
 
                 // assert
-                result.Value.Should().Be(angle.Value % denominator);
+                result.Value.Should().BeApproximately(angle.Value % denominator, DoublePrecision);
                 result.Unit.Should().Be(angle.Unit);
             }
 
