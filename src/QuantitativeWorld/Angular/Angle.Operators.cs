@@ -48,7 +48,7 @@ namespace QuantitativeWorld.Angular
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Angle(nominator._formatUnit, nominator.Turns % denominator);
+            return new Angle(nominator.Value % denominator, nominator.Unit);
         }
 
         public static Angle? operator +(Angle? left, Angle? right)
