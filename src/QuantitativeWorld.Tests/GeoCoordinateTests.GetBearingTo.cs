@@ -49,6 +49,7 @@ namespace QuantitativeWorld.Tests
             [InlineData(0d, 0d, -45d, 90d, 135d * Math.PI / 180d)]
             [InlineData(0d, 0d, -45d, -90d, -135d * Math.PI / 180d)]
             [InlineData(0d, 0d, 45d, -90d, -45d * Math.PI / 180d)]
+            [InlineData(50.233620d, 18.991077d, 52.256371d, 21.011800d, 0.54517783d)]
             public void ShouldReturnProperValue(double lat1, double lon1, double lat2, double lon2, double expectedResult)
             {
                 // arrange
@@ -58,7 +59,7 @@ namespace QuantitativeWorld.Tests
                 var result = sut.GetBearingTo(new GeoCoordinate(lat2, lon2));
 
                 // assert
-                result.Radians.Should().BeApproximately(expectedResult, 0.01d);
+                result.Radians.Should().BeApproximately(expectedResult, 0.005d);
             }
         }
     }

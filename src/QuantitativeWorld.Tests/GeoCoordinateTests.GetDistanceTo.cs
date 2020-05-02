@@ -3,7 +3,6 @@ using FluentAssertions;
 using QuantitativeWorld.TestAbstractions;
 using System;
 using Xunit;
-using Xunit.Sdk;
 
 namespace QuantitativeWorld.Tests
 {
@@ -54,7 +53,7 @@ namespace QuantitativeWorld.Tests
                 var result = sut.GetDistanceTo(new GeoCoordinate(lat2, lon2));
 
                 // assert
-                result.Metres.Should().BeApproximately(expectedResult, 0.01d);
+                result.Metres.Should().BeApproximately(expectedResult, 1d);
             }
         }
     }

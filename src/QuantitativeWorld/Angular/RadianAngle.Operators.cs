@@ -23,58 +23,54 @@ namespace QuantitativeWorld.Angular
             new RadianAngle(left.Radians + right.Radians);
         public static RadianAngle operator -(RadianAngle left, RadianAngle right) =>
             new RadianAngle(left.Radians - right.Radians);
-        public static RadianAngle operator -(RadianAngle radianAngle) =>
-            new RadianAngle(-radianAngle.Radians);
+        public static RadianAngle operator -(RadianAngle argument) =>
+            new RadianAngle(-argument.Radians);
 
-        public static RadianAngle operator *(RadianAngle radianAngle, double factor) =>
-            new RadianAngle(radianAngle.Radians * factor);
-        public static RadianAngle operator *(double factor, RadianAngle radianAngle) =>
-            radianAngle * factor;
+        public static RadianAngle operator *(RadianAngle argument, double factor) =>
+            new RadianAngle(argument.Radians * factor);
+        public static RadianAngle operator *(double argument, RadianAngle factor) =>
+            factor * argument;
 
-        public static RadianAngle operator /(RadianAngle radianAngle, double denominator)
+        public static RadianAngle operator /(RadianAngle nominator, double denominator)
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new RadianAngle(radianAngle.Radians / denominator);
+            return new RadianAngle(nominator.Radians / denominator);
         }
-        public static double operator /(RadianAngle radianAngle, RadianAngle denominator)
+        public static double operator /(RadianAngle nominator, RadianAngle denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
-            return radianAngle.Radians / denominator.Radians;
+            return nominator.Radians / denominator.Radians;
         }
 
-        public static RadianAngle? operator +(RadianAngle? left, RadianAngle? right)
+        public static RadianAngle operator %(RadianAngle nominator, double denominator)
         {
-            if (left.HasValue && right.HasValue)
-                return left.Value + right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return right.Value;
-        }
-        public static RadianAngle? operator -(RadianAngle? left, RadianAngle? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value - right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return -right.Value;
+            if (denominator == 0d)
+                throw new DivideByZeroException("Denominator is zero.");
+            return new RadianAngle(nominator.Radians % denominator);
         }
 
-        public static RadianAngle? operator *(RadianAngle? radianAngle, double factor) =>
-            (radianAngle ?? default(RadianAngle)) * factor;
-        public static RadianAngle? operator *(double factor, RadianAngle? radianAngle) =>
-            radianAngle * factor;
+        public static RadianAngle? operator +(RadianAngle? left, RadianAngle? right) =>
+            !left.HasValue && !right.HasValue
+            ? (RadianAngle?)null
+            : (left ?? default(RadianAngle)) + (right ?? default(RadianAngle));
+        public static RadianAngle? operator -(RadianAngle? left, RadianAngle? right) =>
+            !left.HasValue && !right.HasValue
+            ? (RadianAngle?)null
+            : (left ?? default(RadianAngle)) - (right ?? default(RadianAngle));
 
-        public static RadianAngle? operator /(RadianAngle? radianAngle, double denominator) =>
-            (radianAngle ?? default(RadianAngle)) / denominator;
-        public static double operator /(RadianAngle? radianAngle, RadianAngle? denominator) =>
-            (radianAngle ?? default(RadianAngle)) / (denominator ?? default(RadianAngle));
+        public static RadianAngle? operator *(RadianAngle? argument, double factor) =>
+            (argument ?? default(RadianAngle)) * factor;
+        public static RadianAngle? operator *(double argument, RadianAngle? factor) =>
+            factor * argument;
+
+        public static RadianAngle? operator /(RadianAngle? nominator, double denominator) =>
+            (nominator ?? default(RadianAngle)) / denominator;
+        public static double operator /(RadianAngle? nominator, RadianAngle? denominator) =>
+            (nominator ?? default(RadianAngle)) / (denominator ?? default(RadianAngle));
+
+        public static RadianAngle? operator %(RadianAngle? nominator, double denominator) =>
+            (nominator ?? default(RadianAngle)) % denominator;
     }
 }
