@@ -20,22 +20,27 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Area operator +(Area left, Area right) =>
-            new Area(formatUnit: left._formatUnit ?? right.Unit, metres: left.SquareMetres + right.SquareMetres);
+            new Area(formatUnit: left._formatUnit ?? right.Unit, squareMetres: left.SquareMetres + right.SquareMetres);
         public static Area operator -(Area left, Area right) =>
-            new Area(formatUnit: left._formatUnit ?? right.Unit, metres: left.SquareMetres - right.SquareMetres);
+            new Area(formatUnit: left._formatUnit ?? right.Unit, squareMetres: left.SquareMetres - right.SquareMetres);
         public static Area operator -(Area argument) =>
-            new Area(formatUnit: argument.Unit, metres: -argument.SquareMetres);
+            new Area(formatUnit: argument.Unit, squareMetres: -argument.SquareMetres);
 
         public static Area operator *(Area argument, double factor) =>
-            new Area(formatUnit: argument.Unit, metres: argument.SquareMetres * factor);
+            new Area(formatUnit: argument.Unit, squareMetres: argument.SquareMetres * factor);
         public static Area operator *(double argument, Area factor) =>
+            factor * argument;
+
+        public static Volume operator *(Area argument, Length factor) =>
+            new Volume(cubicMetres: argument.SquareMetres * factor.Metres);
+        public static Volume operator *(Length argument, Area factor) =>
             factor * argument;
 
         public static Area operator /(Area nominator, double denominator)
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Area(formatUnit: nominator.Unit, metres: nominator.SquareMetres / denominator);
+            return new Area(formatUnit: nominator.Unit, squareMetres: nominator.SquareMetres / denominator);
         }
         public static double operator /(Area nominator, Area denominator)
         {
@@ -62,6 +67,13 @@ namespace QuantitativeWorld
         public static Area? operator *(Area? argument, double factor) =>
             (argument ?? default(Area)) * factor;
         public static Area? operator *(double argument, Area? factor) =>
+            factor * argument;
+
+        public static Volume? operator *(Area? argument, Length? factor) =>
+            argument.HasValue || factor.HasValue
+            ? (argument ?? default(Area)) * (factor ?? default(Length))
+            : (Volume?)null;
+        public static Volume? operator *(Length? argument, Area? factor) =>
             factor * argument;
 
         public static Area? operator /(Area? nominator, double denominator) =>

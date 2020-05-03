@@ -14,6 +14,8 @@ namespace QuantitativeWorld
         [Predefined]
         public static readonly AreaUnit SquareCentimetre = new AreaUnit(name: "square centimetre", abbreviation: "cm²", valueInSquareMetres: Constants.SquareMetresPerSquareCentimetre);
         [Predefined]
+        public static readonly AreaUnit Decimetre = new AreaUnit(name: "square decimetre", abbreviation: "dm²", valueInSquareMetres: Constants.SquareMetresPerSquareDecimetre);
+        [Predefined]
         public static readonly AreaUnit SquareKilometre = new AreaUnit(name: "square kilometre", abbreviation: "km²", valueInSquareMetres: Constants.SquareMetresPerSquareKilometre);
 
         [Predefined]
@@ -23,7 +25,15 @@ namespace QuantitativeWorld
         [Predefined]
         public static readonly AreaUnit SquareYard = new AreaUnit(name: "square yard", abbreviation: "yd²", valueInSquareMetres: SquareFoot.ValueInSquareMetres * Constants.SquareFeetPerSquareYard);
         [Predefined]
-        public static readonly AreaUnit SquareMile = new AreaUnit(name: "square mile", abbreviation: "mi²", valueInSquareMetres: SquareYard.ValueInSquareMetres * Constants.SquareYardsPerSquareMile);
+        public static readonly AreaUnit SquareRod = new AreaUnit(name: "rod", abbreviation: "rd²", valueInSquareMetres: SquareYard.ValueInSquareMetres * Constants.SquareYardsPerSquareRod);
+        [Predefined]
+        public static readonly AreaUnit SquareChain = new AreaUnit(name: "chain", abbreviation: "ch²", valueInSquareMetres: SquareRod.ValueInSquareMetres * Constants.SquareRodsPerSquareChain);
+        [Predefined]
+        public static readonly AreaUnit SquareFurlong = new AreaUnit(name: "furlong", abbreviation: "fur²", valueInSquareMetres: SquareChain.ValueInSquareMetres * Constants.SquareChainsPerSquareFurlong);
+        [Predefined]
+        public static readonly AreaUnit SquareMile = new AreaUnit(name: "square mile", abbreviation: "mi²", valueInSquareMetres: SquareFurlong.ValueInSquareMetres * Constants.SquareFurlongsPerSquareMile);
+        [Predefined]
+        public static readonly AreaUnit SquareLeague = new AreaUnit(name: "square league", abbreviation: "lea²", valueInSquareMetres: SquareMile.ValueInSquareMetres * Constants.SquareMilesPerSquareLeague);
 
         [Predefined]
         public static readonly AreaUnit Are = new AreaUnit(name: "are", abbreviation: "a", valueInSquareMetres: Constants.SquareMetresPerAre);

@@ -6,8 +6,6 @@ namespace QuantitativeWorld
 {
     public partial struct Area : ILinearQuantity<AreaUnit>
     {
-        public static readonly Weight MinValue = new Weight(MinSquareMetres);
-        public static readonly Weight MaxValue = new Weight(MaxSquareMetres);
         private const double MinSquareMetres = double.MinValue;
         private const double MaxSquareMetres = double.MaxValue;
 
@@ -15,16 +13,16 @@ namespace QuantitativeWorld
 
         private readonly AreaUnit? _formatUnit;
 
-        public Area(double metres)
-            : this(formatUnit: null, metres: metres) { }
+        public Area(double squareMetres)
+            : this(formatUnit: null, squareMetres: squareMetres) { }
         public Area(double value, AreaUnit unit)
-            : this(formatUnit: unit, metres: GetSquareMetres(value, unit)) { }
-        private Area(AreaUnit? formatUnit, double metres)
+            : this(formatUnit: unit, squareMetres: GetSquareMetres(value, unit)) { }
+        private Area(AreaUnit? formatUnit, double squareMetres)
         {
-            Assert.IsInRange(metres, MinSquareMetres, MaxSquareMetres, nameof(metres));
+            Assert.IsInRange(squareMetres, MinSquareMetres, MaxSquareMetres, nameof(squareMetres));
 
             _formatUnit = formatUnit;
-            SquareMetres = metres;
+            SquareMetres = squareMetres;
         }
 
         public double SquareMetres { get; }

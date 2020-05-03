@@ -267,6 +267,84 @@ namespace QuantitativeWorld.Tests
             }
         }
 
+        public class Operator_MultiplyByLength : AreaTests
+        {
+            public Operator_MultiplyByLength(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSquareMetres()
+            {
+                // arrange
+                var argument = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                var factor = new Length(
+                    value: Fixture.CreateNonZeroDouble(),
+                    unit: Fixture.Create<LengthUnit>());
+
+                // act
+                var result1 = argument * factor;
+                var result2 = factor * argument;
+
+                // assert
+                result1.CubicMetres.Should().Be(argument.SquareMetres * factor.Metres);
+                result1.Unit.Should().Be(VolumeUnit.CubicMetre);
+                result2.CubicMetres.Should().Be(argument.SquareMetres * factor.Metres);
+                result2.Unit.Should().Be(VolumeUnit.CubicMetre);
+            }
+
+            [Fact]
+            public void NullArgument_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Area? argument = null;
+                var factor = new Length(
+                    value: Fixture.CreateNonZeroDouble(),
+                    unit: Fixture.Create<LengthUnit>());
+                var expectedResult = default(Area) * factor;
+
+                // act
+                var result1 = argument * factor;
+                var result2 = factor * argument;
+
+                // assert
+                result1.Should().Be(expectedResult);
+                result2.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullFactor_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                var argument = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                Length? factor = null;
+                var expectedResult = argument * default(Length);
+
+                // act
+                var result1 = argument * factor;
+                var result2 = factor * argument;
+
+                // assert
+                result1.Should().Be(expectedResult);
+                result2.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullArgumentAndFactor_ShouldReturnNull()
+            {
+                // arrange
+                Area? argument = null;
+                Length? factor = null;
+
+                // act
+                var result1 = argument * factor;
+                var result2 = factor * argument;
+
+                // assert
+                result1.Should().BeNull();
+                result2.Should().BeNull();
+            }
+        }
+
         public class Operator_DivideByDouble : AreaTests
         {
             public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
