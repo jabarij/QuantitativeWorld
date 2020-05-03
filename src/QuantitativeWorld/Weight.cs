@@ -6,8 +6,6 @@ namespace QuantitativeWorld
 {
     public partial struct Weight : ILinearQuantity<WeightUnit>
     {
-        public static readonly Weight MinValue = new Weight(MinKilograms);
-        public static readonly Weight MaxValue = new Weight(MaxKilograms);
         private const double MinKilograms = double.MinValue;
         private const double MaxKilograms = double.MaxValue;
 
