@@ -9,8 +9,8 @@ namespace QuantitativeWorld.Tests
         public EnumerableExtensionsTests(TestFixture testFixture)
             : base(testFixture)
         {
-            Fixture.Customize<PowerUnit>(e => e.FromFactory(() => Fixture.CreateFromSet(new[] { PowerUnit.Watt, PowerUnit.Kilowatt })));
-            Fixture.Customize<Power>(e => e.FromFactory(() => new Power(Fixture.CreatePositive(), Fixture.Create<PowerUnit>())));
+            Fixture.Customize<SomeUnit>(e => e.FromFactory(() => Fixture.CreateFromSet(new[] { SomeUnit.Unit, SomeUnit.Kilounit })));
+            Fixture.Customize<SomeQuantity>(e => e.FromFactory(() => new SomeQuantity(Fixture.CreatePositive(), Fixture.Create<SomeUnit>())));
         }
 
         class TestObject<T>
@@ -23,40 +23,40 @@ namespace QuantitativeWorld.Tests
             public T Property { get; }
         }
 
-        struct PowerUnit : ILinearUnit
+        struct SomeUnit : ILinearUnit
         {
-            public static readonly PowerUnit Watt = new PowerUnit(1d);
-            public static readonly PowerUnit Kilowatt = new PowerUnit(1000d);
+            public static readonly SomeUnit Unit = new SomeUnit(1d);
+            public static readonly SomeUnit Kilounit = new SomeUnit(1000d);
 
-            private PowerUnit(double valueInWatts)
+            private SomeUnit(double valueInUnits)
             {
-                ValueInWatts = valueInWatts;
+                ValueInUnits = valueInUnits;
             }
 
-            public double ValueInWatts { get; }
-            double ILinearUnit.ValueInBaseUnit => ValueInWatts;
+            public double ValueInUnits { get; }
+            double ILinearUnit.ValueInBaseUnit => ValueInUnits;
         }
 
-        struct Power : ILinearQuantity<PowerUnit>
+        struct SomeQuantity : ILinearQuantity<SomeUnit>
         {
-            public Power(double value, PowerUnit unit)
+            public SomeQuantity(double value, SomeUnit unit)
             {
                 Value = value;
                 Unit = unit;
             }
 
-            double ILinearQuantity<PowerUnit>.BaseValue => Value / Unit.ValueInWatts;
-            PowerUnit ILinearQuantity<PowerUnit>.BaseUnit => PowerUnit.Watt;
+            double ILinearQuantity<SomeUnit>.BaseValue => Value / Unit.ValueInUnits;
+            SomeUnit ILinearQuantity<SomeUnit>.BaseUnit => SomeUnit.Unit;
             public double Value { get; }
-            public PowerUnit Unit { get; }
+            public SomeUnit Unit { get; }
         }
 
-        class PowerFactory : ILinearQuantityFactory<Power, PowerUnit>
+        class SomeQuantityFactory : ILinearQuantityFactory<SomeQuantity, SomeUnit>
         {
-            public static Power Create(double value, PowerUnit unit) =>
-                new Power(value, unit);
+            public static SomeQuantity Create(double value, SomeUnit unit) =>
+                new SomeQuantity(value, unit);
 
-            Power ILinearQuantityFactory<Power, PowerUnit>.Create(double value, PowerUnit unit) =>
+            SomeQuantity ILinearQuantityFactory<SomeQuantity, SomeUnit>.Create(double value, SomeUnit unit) =>
                 Create(value, unit);
         }
     }

@@ -18,12 +18,12 @@ namespace QuantitativeWorld.Tests
             public void NullSource_ShouldThrow()
             {
                 // arrange
-                IEnumerable<TestObject<Power>> objects = null;
-                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
-                Func<TestObject<Power>, Power> selector = e => e.Property;
+                IEnumerable<TestObject<SomeQuantity>> objects = null;
+                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                Action sum = () => EnumerableExtensions.Sum<TestObject<SomeQuantity>, SomeQuantity, SomeUnit>(objects, factory, selector);
 
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
@@ -34,12 +34,12 @@ namespace QuantitativeWorld.Tests
             public void NullSelector_ShouldThrow()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Power>>();
-                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
-                Func<TestObject<Power>, Power> selector = null;
+                var objects = Enumerable.Empty<TestObject<SomeQuantity>>();
+                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<TestObject<SomeQuantity>, SomeQuantity> selector = null;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                Action sum = () => EnumerableExtensions.Sum<TestObject<SomeQuantity>, SomeQuantity, SomeUnit>(objects, factory, selector);
 
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
@@ -50,12 +50,12 @@ namespace QuantitativeWorld.Tests
             public void NullFactory_ShouldThrow()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Power>>();
-                Func<double, PowerUnit, Power> factory = null;
-                Func<TestObject<Power>, Power> selector = e => e.Property;
+                var objects = Enumerable.Empty<TestObject<SomeQuantity>>();
+                Func<double, SomeUnit, SomeQuantity> factory = null;
+                Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                Action sum = () => EnumerableExtensions.Sum<TestObject<SomeQuantity>, SomeQuantity, SomeUnit>(objects, factory, selector);
 
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
@@ -66,31 +66,31 @@ namespace QuantitativeWorld.Tests
             public void EmptySource_ShouldReturnDefaultTestQuantity()
             {
                 // arrange
-                var objects = Enumerable.Empty<TestObject<Power>>();
-                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
-                Func<TestObject<Power>, Power> selector = e => e.Property;
+                var objects = Enumerable.Empty<TestObject<SomeQuantity>>();
+                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
                 // act
-                var result = EnumerableExtensions.Sum<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                var result = EnumerableExtensions.Sum<TestObject<SomeQuantity>, SomeQuantity, SomeUnit>(objects, factory, selector);
 
                 // assert
-                result.Should().Be(default(Power));
+                result.Should().Be(default(SomeQuantity));
             }
 
             [Fact]
             public void ShouldReturnValidResult()
             {
                 // arrange
-                var objects = Fixture.CreateMany<Power>(3).Select(e => new TestObject<Power>(e));
-                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
-                Func<TestObject<Power>, Power> selector = e => e.Property;
+                var objects = Fixture.CreateMany<SomeQuantity>(3).Select(e => new TestObject<SomeQuantity>(e));
+                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
-                double expectedResultInWatts = objects.Sum(e => e.Property.Value * e.Property.Unit.ValueInWatts);
+                double expectedResultInWatts = objects.Sum(e => e.Property.Value * e.Property.Unit.ValueInUnits);
                 var expectedResultUnit = objects.First().Property.Unit;
-                var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
+                var expectedResult = new SomeQuantity(expectedResultInWatts / expectedResultUnit.ValueInUnits, expectedResultUnit);
 
                 // act
-                var result = EnumerableExtensions.Sum<TestObject<Power>, Power, PowerUnit>(objects, factory, selector);
+                var result = EnumerableExtensions.Sum<TestObject<SomeQuantity>, SomeQuantity, SomeUnit>(objects, factory, selector);
 
                 // assert
                 result.Value.Should().Be(expectedResult.Value);

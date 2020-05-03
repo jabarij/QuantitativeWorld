@@ -18,11 +18,11 @@ namespace QuantitativeWorld.Tests
             public void NullSource_ShouldThrow()
             {
                 // arrange
-                IEnumerable<Power> quantities = null;
-                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
+                IEnumerable<SomeQuantity> quantities = null;
+                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                Action sum = () => EnumerableExtensions.Sum<SomeQuantity, SomeUnit>(quantities, factory);
 
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
@@ -33,11 +33,11 @@ namespace QuantitativeWorld.Tests
             public void NullFactory_ShouldThrow()
             {
                 // arrange
-                var quantities = Fixture.CreateMany<Power>(3);
-                Func<double, PowerUnit, Power> factory = null;
+                var quantities = Fixture.CreateMany<SomeQuantity>(3);
+                Func<double, SomeUnit, SomeQuantity> factory = null;
 
                 // act
-                Action sum = () => EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                Action sum = () => EnumerableExtensions.Sum<SomeQuantity, SomeUnit>(quantities, factory);
 
                 // assert
                 sum.Should().Throw<ArgumentNullException>()
@@ -48,29 +48,29 @@ namespace QuantitativeWorld.Tests
             public void EmptySource_ShouldReturnDefaultTestQuantity()
             {
                 // arrange
-                var quantities = Enumerable.Empty<Power>();
-                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
+                var quantities = Enumerable.Empty<SomeQuantity>();
+                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
                 // act
-                var result = EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                var result = EnumerableExtensions.Sum<SomeQuantity, SomeUnit>(quantities, factory);
 
                 // assert
-                result.Should().Be(default(Power));
+                result.Should().Be(default(SomeQuantity));
             }
 
             [Fact]
             public void ShouldReturnValidResult()
             {
                 // arrange
-                var quantities = Fixture.CreateMany<Power>(3);
-                Func<double, PowerUnit, Power> factory = PowerFactory.Create;
+                var quantities = Fixture.CreateMany<SomeQuantity>(3);
+                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
-                double expectedResultInWatts = quantities.Sum(e => e.Value * e.Unit.ValueInWatts);
+                double expectedResultInWatts = quantities.Sum(e => e.Value * e.Unit.ValueInUnits);
                 var expectedResultUnit = quantities.First().Unit;
-                var expectedResult = new Power(expectedResultInWatts / expectedResultUnit.ValueInWatts, expectedResultUnit);
+                var expectedResult = new SomeQuantity(expectedResultInWatts / expectedResultUnit.ValueInUnits, expectedResultUnit);
 
                 // act
-                var result = EnumerableExtensions.Sum<Power, PowerUnit>(quantities, factory);
+                var result = EnumerableExtensions.Sum<SomeQuantity, SomeUnit>(quantities, factory);
 
                 // assert
                 result.Unit.Should().Be(expectedResult.Unit);
