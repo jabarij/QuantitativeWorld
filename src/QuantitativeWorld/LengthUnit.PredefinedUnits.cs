@@ -33,9 +33,14 @@ namespace QuantitativeWorld
         [Predefined]
         public static readonly LengthUnit Mile = new LengthUnit(name: "mile", abbreviation: "mi", valueInMetres: Furlong.ValueInMetres * Constants.FurlongsPerMile);
         [Predefined]
-        public static readonly LengthUnit NauticalMile = new LengthUnit(name: "nautical mile", abbreviation: "nmi", valueInMetres: Constants.MetresPerNauticalMile);
+        public static readonly LengthUnit League = new LengthUnit(name: "league", abbreviation: "lea", valueInMetres: Mile.ValueInMetres * Constants.MilesPerLeague);
+
         [Predefined]
-        public static readonly LengthUnit Cable = new LengthUnit(name: "cable", abbreviation: "cbl", valueInMetres: Chain.ValueInMetres * Constants.CablesPerNauticalMile);
+        public static readonly LengthUnit Fathom = new LengthUnit(name: "fathom", abbreviation: "ftm", valueInMetres: Yard.ValueInMetres * Constants.YardsPerFathom);
+        [Predefined]
+        public static readonly LengthUnit Cable = new LengthUnit(name: "cable", abbreviation: "cbl", valueInMetres: Fathom.ValueInMetres * Constants.FathomsPerCable);
+        [Predefined]
+        public static readonly LengthUnit NauticalMile = new LengthUnit(name: "nautical mile", abbreviation: "nmi", valueInMetres: Constants.MetresPerNauticalMile);
 
         public static IEnumerable<LengthUnit> GetPredefinedUnits() =>
             typeof(LengthUnit).GetFields(BindingFlags.Static | BindingFlags.Public)

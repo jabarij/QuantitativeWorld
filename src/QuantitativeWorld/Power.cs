@@ -6,8 +6,6 @@ namespace QuantitativeWorld
 {
     public partial struct Power : ILinearQuantity<PowerUnit>
     {
-        public static readonly Weight MinValue = new Weight(MinWatts);
-        public static readonly Weight MaxValue = new Weight(MaxWatts);
         private const double MinWatts = double.MinValue;
         private const double MaxWatts = double.MaxValue;
 

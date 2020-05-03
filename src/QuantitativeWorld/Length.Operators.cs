@@ -31,6 +31,9 @@ namespace QuantitativeWorld
         public static Length operator *(double factor, Length length) =>
             length * factor;
 
+        public static Area operator *(Length argument, Length factor) =>
+            new Area(argument.Metres * factor.Metres);
+
         public static Length operator /(Length length, double denominator)
         {
             if (denominator == 0d)
@@ -71,6 +74,11 @@ namespace QuantitativeWorld
             (length ?? default(Length)) * factor;
         public static Length? operator *(double factor, Length? length) =>
             length * factor;
+
+        public static Area? operator *(Length? argument, Length? factor) =>
+            argument.HasValue || factor.HasValue
+            ? (argument ?? default(Length)) * (factor ?? default(Length))
+            : (Area?)null;
 
         public static Length? operator /(Length? length, double denominator) =>
             (length ?? default(Length)) / denominator;

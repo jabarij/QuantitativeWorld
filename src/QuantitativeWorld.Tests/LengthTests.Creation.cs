@@ -17,14 +17,14 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForMetres_ShouldCreateValidLength()
             {
                 // arrange
-                double kilograms = Fixture.Create<double>();
+                double metres = Fixture.Create<double>();
 
                 // act
-                var length = new Length(kilograms);
+                var length = new Length(metres);
 
                 // assert
-                length.Metres.Should().Be(kilograms);
-                length.Value.Should().Be(kilograms);
+                length.Metres.Should().Be(metres);
+                length.Value.Should().Be(metres);
                 length.Unit.Should().Be(LengthUnit.Metre);
             }
 
