@@ -7,45 +7,6 @@ namespace QuantitativeWorld
 {
     partial class EnumerableExtensions
     {
-        public static Weight Average(this IEnumerable<Weight> source)
-        {
-            Assert.IsNotNull(source, nameof(source));
-
-            var enumerator = source.GetEnumerator();
-            var sum = default(Weight);
-            int count = 0;
-            while (enumerator.MoveNext())
-            {
-                sum += enumerator.Current;
-                count++;
-            }
-
-            if (count == 0)
-                throw new InvalidOperationException("Sequence contains no elements.");
-
-            return sum / count;
-        }
-
-        public static Weight Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Weight> selector)
-        {
-            Assert.IsNotNull(source, nameof(source));
-            Assert.IsNotNull(selector, nameof(selector));
-
-            var enumerator = source.GetEnumerator();
-            var sum = default(Weight);
-            int count = 0;
-            while (enumerator.MoveNext())
-            {
-                sum += selector(enumerator.Current);
-                count++;
-            }
-
-            if (count == 0)
-                throw new InvalidOperationException("Sequence contains no elements.");
-
-            return sum / count;
-        }
-
         public static Length Average(this IEnumerable<Length> source)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -72,6 +33,162 @@ namespace QuantitativeWorld
 
             var enumerator = source.GetEnumerator();
             var sum = default(Length);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += selector(enumerator.Current);
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Area Average(this IEnumerable<Area> source)
+        {
+            Assert.IsNotNull(source, nameof(source));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Area);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += enumerator.Current;
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Area Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Area> selector)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(selector, nameof(selector));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Area);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += selector(enumerator.Current);
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Volume Average(this IEnumerable<Volume> source)
+        {
+            Assert.IsNotNull(source, nameof(source));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Volume);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += enumerator.Current;
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Volume Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Volume> selector)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(selector, nameof(selector));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Volume);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += selector(enumerator.Current);
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Power Average(this IEnumerable<Power> source)
+        {
+            Assert.IsNotNull(source, nameof(source));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Power);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += enumerator.Current;
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Power Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Power> selector)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(selector, nameof(selector));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Power);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += selector(enumerator.Current);
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Weight Average(this IEnumerable<Weight> source)
+        {
+            Assert.IsNotNull(source, nameof(source));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Weight);
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += enumerator.Current;
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static Weight Average<TSource>(this IEnumerable<TSource> source, Func<TSource, Weight> selector)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(selector, nameof(selector));
+
+            var enumerator = source.GetEnumerator();
+            var sum = default(Weight);
             int count = 0;
             while (enumerator.MoveNext())
             {
