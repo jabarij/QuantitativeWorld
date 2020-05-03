@@ -57,9 +57,46 @@ namespace QuantitativeWorld
 
         public const double SquareInchesPerSquareFoot = 144d;
         public const double SquareFeetPerSquareYard = 9d;
-        public const double SquareYardsPerSquareMile = 3097600d;
+        public const double SquareYardsPerSquareRod = 30.25d;
+        public const double SquareRodsPerSquareChain = 16d;
+        public const double SquareChainsPerSquareFurlong = 100d;
+        public const double SquareFurlongsPerSquareMile = 64d;
+        public const double SquareMilesPerSquareLeague = 9d;
 
         public const double SquareYardsPerAcre = 4840d;
+
+        #endregion
+
+        #region Volume
+
+        public const double CubicMetresPerCubicMillimetre = 0.000000001d;
+        public const double CubicMetresPerCubicCentimetre = 0.000001d;
+        public const double CubicMetresPerCubicDecimetre = 0.001d;
+        public const double CubicMetresPerCubicKilometre = 1000000000d;
+        public const double CubicMetresPerCubicInch = 0.000016387064d;
+
+        public const double CubicInchesPerCubicFoot = 1728d;
+        public const double CubicFeetPerCubicYard = 27d;
+        public const double CubicYardsPerCubicRod = 166.375d;
+        public const double CubicRodsPerCubicChain = 64d;
+        public const double CubicChainsPerCubicFurlong = 1000d;
+        public const double CubicFurlongsPerCubicMile = 512d;
+        public const double CubicMilesPerCubicLeague = 27d;
+
+        public const double CubicMetresPerLitre = 0.001d;
+        public const double MillilitresPerLitre = 1000d;
+        public const double CentilitresPerLitre = 100d;
+        public const double DecilitresPerLitre = 10d;
+        public const double HectolitresPerLitre = 0.01d;
+
+        public const double ImperialGallonsPerCubicMetre = 0.00454609d;
+        public const double ImperialQuartsPerImperialGallon = 4d;
+        public const double ImperialPintsPerImperialGallon = 8d;
+
+        public const double USLiquidGallonsPerCubicMetre = 0.003785411784d;
+        public const double USDryGallonsPerCubicMetre = 0.00440488377086d;
+
+        public const double USLiquidGallonsPerOilBarrel = 42d;
 
         #endregion
 

@@ -33,13 +33,13 @@
 
         public bool TryBuild(out Area result, AreaUnit? defaultUnit = null)
         {
-            double? metres = _squareMetres;
+            double? squareMetres = _squareMetres;
             double? value = _value;
             AreaUnit? unit = _unit ?? defaultUnit;
 
-            if (metres.HasValue)
+            if (squareMetres.HasValue)
             {
-                result = new Area(metres.Value);
+                result = new Area(squareMetres.Value);
                 if (unit.HasValue)
                     result = result.Convert(unit.Value);
                 return true;

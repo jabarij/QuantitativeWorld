@@ -1,17 +1,17 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
-    internal class AreaUnitBuilder : ILinearNamedUnitBuilder<AreaUnit>
+    internal class VolumeUnitBuilder : ILinearNamedUnitBuilder<VolumeUnit>
     {
         private string _name;
         private string _abbreviation;
-        private double? _valueInSquareMetres;
+        private double? _valueInCubicMetres;
 
-        public AreaUnitBuilder() { }
-        public AreaUnitBuilder(AreaUnit unit)
+        public VolumeUnitBuilder() { }
+        public VolumeUnitBuilder(VolumeUnit unit)
         {
             _name = unit.Name;
             _abbreviation = unit.Abbreviation;
-            _valueInSquareMetres = unit.ValueInSquareMetres;
+            _valueInCubicMetres = unit.ValueInCubicMetres;
         }
 
         public void SetAbbreviation(string abbreviation) =>
@@ -21,26 +21,26 @@
             _name = name;
 
         public void SetValueInBaseUnit(double valueInBaseUnit) =>
-            _valueInSquareMetres = valueInBaseUnit;
+            _valueInCubicMetres = valueInBaseUnit;
 
-        public bool TryBuild(out AreaUnit result)
+        public bool TryBuild(out VolumeUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            double? valueInSquareMetres = _valueInSquareMetres;
+            double? valueInCubicMetres = _valueInCubicMetres;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)
-                && valueInSquareMetres.HasValue)
+                && valueInCubicMetres.HasValue)
             {
-                result = new AreaUnit(
+                result = new VolumeUnit(
                     name: name,
                     abbreviation: abbreviation,
-                    valueInSquareMetres: valueInSquareMetres.Value);
+                    valueInCubicMetres: valueInCubicMetres.Value);
                 return true;
             }
 
-            result = default(AreaUnit);
+            result = default(VolumeUnit);
             return false;
         }
     }
