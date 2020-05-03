@@ -1,0 +1,465 @@
+using AutoFixture;
+using FluentAssertions;
+using QuantitativeWorld.TestAbstractions;
+using System;
+using Xunit;
+
+namespace QuantitativeWorld.Tests
+{
+    partial class AreaTests
+    {
+        public class Operator_Oposite : AreaTests
+        {
+            public Operator_Oposite(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+
+                // act
+                var result = -area;
+
+                // assert
+                result.SquareMetres.Should().Be(-area.SquareMetres);
+                result.Value.Should().Be(-area.Value);
+                result.Unit.Should().Be(area.Unit);
+            }
+
+            [Fact]
+            public void NullArea_ShouldReturnNull()
+            {
+                // arrange
+                Area? area = null;
+
+                // act
+                var result = -area;
+
+                // assert
+                result.Should().BeNull();
+            }
+        }
+
+        public class Operator_Add : AreaTests
+        {
+            public Operator_Add(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void TwoDefaultAreas_ShouldProduceDefaultArea()
+            {
+                // arrange
+                var area1 = default(Area);
+                var area2 = default(Area);
+
+                // act
+                var result = area1 + area2;
+
+                // assert
+                result.Should().Be(default(Area));
+            }
+
+            [Fact]
+            public void DefaultAreaAndZeroWithOtherUnit_ShouldProduceZeroWithOtherUnit()
+            {
+                // arrange
+                var defaultArea = default(Area);
+                var zeroSquareKilometres = new Area(0d, AreaUnit.SquareKilometre);
+
+                // act
+                var result1 = defaultArea + zeroSquareKilometres;
+                var result2 = zeroSquareKilometres + defaultArea;
+
+                // assert
+                result1.IsZero().Should().BeTrue();
+                result1.Unit.Should().Be(zeroSquareKilometres.Unit);
+                result2.IsZero().Should().BeTrue();
+                result2.Unit.Should().Be(zeroSquareKilometres.Unit);
+            }
+
+            [Fact]
+            public void ShouldProduceValidResultInUnitOfLeftOperand()
+            {
+                // arrange
+                var area1 = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                var area2 = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre, area1.Unit);
+
+                // act
+                var result = area1 + area2;
+
+                // assert
+                result.SquareMetres.Should().Be(area1.SquareMetres + area2.SquareMetres);
+                result.Unit.Should().Be(area1.Unit);
+            }
+
+            [Fact]
+            public void NullAreas_ShouldReturnNull()
+            {
+                // arrange
+                Area? nullArea1 = null;
+                Area? nullArea2 = null;
+
+                // act
+                var result = nullArea1 + nullArea2;
+
+                // assert
+                result.Should().BeNull();
+            }
+
+            [Fact]
+            public void NullAndArea_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Area? nullArea = null;
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+
+                // act
+                var result1 = area + nullArea;
+                var result2 = nullArea + area;
+
+                // assert
+                result1.Should().NotBeNull();
+                result1.Value.SquareMetres.Should().Be(area.SquareMetres);
+                result1.Value.Unit.Should().Be(area.Unit);
+
+                result2.Should().NotBeNull();
+                result2.Value.SquareMetres.Should().Be(area.SquareMetres);
+                result2.Value.Unit.Should().Be(area.Unit);
+            }
+        }
+
+        public class Operator_Subtract : AreaTests
+        {
+            public Operator_Subtract(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void TwoDefaultAreas_ShouldProduceDefaultArea()
+            {
+                // arrange
+                var area1 = default(Area);
+                var area2 = default(Area);
+
+                // act
+                var result = area1 - area2;
+
+                // assert
+                result.Should().Be(default(Area));
+            }
+
+            [Fact]
+            public void DefaultAreaAndZeroWithOtherUnit_ShouldProduceZeroWithOtherUnit()
+            {
+                // arrange
+                var defaultArea = default(Area);
+                var zeroSquareKilometres = new Area(0d, AreaUnit.SquareKilometre);
+
+                // act
+                var result1 = defaultArea - zeroSquareKilometres;
+                var result2 = zeroSquareKilometres - defaultArea;
+
+                // assert
+                result1.IsZero().Should().BeTrue();
+                result1.Unit.Should().Be(zeroSquareKilometres.Unit);
+                result2.IsZero().Should().BeTrue();
+                result2.Unit.Should().Be(zeroSquareKilometres.Unit);
+            }
+
+            [Fact]
+            public void ShouldProduceValidResultInUnitOfLeftOperand()
+            {
+                // arrange
+                var area1 = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                var area2 = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre, area1.Unit);
+
+                // act
+                var result = area1 - area2;
+
+                // assert
+                result.SquareMetres.Should().Be(area1.SquareMetres - area2.SquareMetres);
+                result.Unit.Should().Be(area1.Unit);
+            }
+
+            [Fact]
+            public void NullAreas_ShouldReturnNull()
+            {
+                // arrange
+                Area? nullArea1 = null;
+                Area? nullArea2 = null;
+
+                // act
+                var result = nullArea1 - nullArea2;
+
+                // assert
+                result.Should().BeNull();
+            }
+
+            [Fact]
+            public void NullAndArea_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Area? nullArea = null;
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+
+                // act
+                var result1 = area - nullArea;
+                var result2 = nullArea - area;
+
+                // assert
+                result1.Should().NotBeNull();
+                result1.Value.SquareMetres.Should().Be(area.SquareMetres);
+                result1.Value.Unit.Should().Be(area.Unit);
+
+                result2.Should().NotBeNull();
+                result2.Value.SquareMetres.Should().Be(-area.SquareMetres);
+                result2.Value.Unit.Should().Be(area.Unit);
+            }
+        }
+
+        public class Operator_MultiplyByDouble : AreaTests
+        {
+            public Operator_MultiplyByDouble(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                double factor = Fixture.Create<double>();
+
+                // act
+                var result = area * factor;
+
+                // assert
+                result.SquareMetres.Should().BeApproximately(area.SquareMetres * factor, DoublePrecision);
+                result.Value.Should().BeApproximately(area.Value * factor, DoublePrecision);
+                result.Unit.Should().Be(area.Unit);
+            }
+
+            [Fact]
+            public void NullArea_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Area? nullArea = null;
+                double factor = Fixture.Create<double>();
+                var expectedResult = default(Area) * factor;
+
+                // act
+                var result = nullArea * factor;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void MultiplyByNaN_ShouldThrow()
+            {
+                // arrange
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+
+                // act
+                Func<Area> multiplyByNaN = () => area * double.NaN;
+
+                // assert
+                multiplyByNaN.Should().Throw<ArgumentException>();
+            }
+        }
+
+        public class Operator_DivideByDouble : AreaTests
+        {
+            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
+            {
+                // arrange
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+
+                // act
+                Func<Area> divideByZero = () => area / 0d;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByNaN_ShouldThrow()
+            {
+                // arrange
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+
+                // act
+                Func<Area> divideByNaN = () => area / double.NaN;
+
+                // assert
+                divideByNaN.Should().Throw<ArgumentException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                double denominator = (double)Fixture.CreateNonZeroDouble();
+
+                // act
+                var result = area / denominator;
+
+                // assert
+                result.SquareMetres.Should().BeApproximately(area.SquareMetres / (double)denominator, DoublePrecision);
+                result.Unit.Should().Be(area.Unit);
+            }
+
+            [Fact]
+            public void NullArea_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Area? nullArea = null;
+                double denominator = Fixture.CreateNonZeroDouble();
+                var expectedResult = default(Area) / denominator;
+
+                // act
+                var result = nullArea / denominator;
+
+                // assert
+                result.Should().Be(expectedResult);
+            }
+        }
+
+        public class Operator_DivideByLength : AreaTests
+        {
+            public Operator_DivideByLength(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInMetres()
+            {
+                // arrange
+                var nominator = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                var denominator = new Length(
+                    value: Fixture.CreateNonZeroDouble(),
+                    unit: Fixture.Create<LengthUnit>());
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.Metres.Should().Be(nominator.SquareMetres / denominator.Metres);
+                result.Unit.Should().Be(LengthUnit.Metre);
+            }
+
+            [Fact]
+            public void NullNominator_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Area? nominator = null;
+                var denominator = new Length(
+                    value: Fixture.CreateNonZeroDouble(),
+                    unit: Fixture.Create<LengthUnit>());
+                var expectedResult = default(Area) / denominator;
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullDenominator_ShouldThrow()
+            {
+                // arrange
+                var nominator = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                Length? denominator = null;
+
+                // act
+                Func<Length?> result = () => nominator / denominator;
+
+                // assert
+                result.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void NullNominatorAndDenominator_ShouldThrow()
+            {
+                // arrange
+                Area? nominator = null;
+                Length? denominator = null;
+
+                // act
+                Func<Length?> result = () => nominator / denominator;
+
+                // assert
+                result.Should().Throw<DivideByZeroException>();
+            }
+        }
+
+        public class Operator_DivideByArea : AreaTests
+        {
+            public Operator_DivideByArea(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
+            {
+                // arrange
+                var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                var denominator = new Area(0d);
+
+                // act
+                Func<double> divideByZero = () => area / denominator;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByNull_ShouldThrow()
+            {
+                // arrange
+                var nominator = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                Area? denominator = null;
+
+                // act
+                Func<double> divideByNull = () => nominator / denominator;
+
+                // assert
+                divideByNull.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideNullByArea_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Area? nominator = null;
+                var denominator = new Area(
+                    value: Fixture.CreateNonZeroDouble(),
+                    unit: CreateUnitOtherThan(AreaUnit.SquareMetre));
+
+                // act
+                double result = nominator / denominator;
+
+                // assert
+                result.Should().Be(default(Area) / denominator);
+            }
+
+            [Fact]
+            public void ShouldProduceValidDoubleResult()
+            {
+                // arrange
+                var nominator = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
+                var denominator = new Area(
+                    value: Fixture.CreateNonZeroDouble(),
+                    unit: CreateUnitOtherThan(AreaUnit.SquareMetre, nominator.Unit));
+
+                // act
+                double result = nominator / denominator;
+
+                // assert
+                result.Should().Be(nominator.SquareMetres / denominator.SquareMetres);
+            }
+        }
+    }
+}

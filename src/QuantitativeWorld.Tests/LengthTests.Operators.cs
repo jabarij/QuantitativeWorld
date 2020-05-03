@@ -267,6 +267,71 @@ namespace QuantitativeWorld.Tests
             }
         }
 
+        public class Operator_MultiplyByLength : LengthTests
+        {
+            public Operator_MultiplyByLength(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSquareMetres()
+            {
+                // arrange
+                var argument = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var factor = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.SquareMetres.Should().Be(argument.Metres * factor.Metres);
+                result.Unit.Should().Be(AreaUnit.SquareMetre);
+            }
+
+            [Fact]
+            public void NullArgument_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Length? argument = null;
+                var factor = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var expectedResult = default(Length) * factor;
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullFactor_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                var argument = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                Length? factor = null;
+                var expectedResult = argument * default(Length);
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullArgumentAndFactor_ShouldReturnNull()
+            {
+                // arrange
+                Length? argument = null;
+                Length? factor = null;
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.Should().BeNull();
+            }
+        }
+
         public class Operator_DivideByDouble : LengthTests
         {
             public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }

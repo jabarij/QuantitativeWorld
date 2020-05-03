@@ -34,7 +34,7 @@ namespace QuantitativeWorld.Angular
             Assert.IsInRange(degrees, MinDegrees, MaxDegrees, nameof(degrees));
             Assert.IsInRange(minutes, MinMinutes, MaxMinutes, nameof(minutes));
             Assert.IsInRange(seconds, _secondsRange, nameof(seconds));
-            double totalSeconds = (circles * 1296000 + degrees * 3600 + minutes * 60 + seconds);
+            double totalSeconds = (circles * Constants.ArcsecondsPerTurn + degrees * Constants.ArcsecondsPerDegree + minutes * Constants.ArcsecondsPerArcminute + seconds);
             if (isNegative)
                 totalSeconds *= -1;
             _totalSeconds = totalSeconds;
@@ -48,23 +48,23 @@ namespace QuantitativeWorld.Angular
 
         public double TotalSeconds => _totalSeconds ?? EmptyValue;
         public double TotalMinutes =>
-            TotalSeconds / 60d;
+            TotalSeconds / Constants.ArcsecondsPerArcminute;
         public double TotalDegrees =>
-            TotalSeconds / 3600d;
+            TotalSeconds / Constants.ArcsecondsPerDegree;
         public bool IsNegative =>
             TotalSeconds < 0d;
 
         public int Circles =>
-            Math.Abs((int)(TotalDegrees / 360d));
+            Math.Abs((int)(TotalDegrees / Constants.DegreesPerTurn));
         public int Degrees =>
-            Math.Abs((int)(TotalDegrees % 360d));
+            Math.Abs((int)(TotalDegrees % Constants.DegreesPerTurn));
         public int Minutes =>
-            Math.Abs((int)(TotalMinutes % 60d));
+            Math.Abs((int)(TotalMinutes % Constants.ArcminutesPerDegree));
         public double Seconds =>
-            Math.Abs(TotalSeconds % 60d);
+            Math.Abs(TotalSeconds % Constants.ArcsecondsPerArcminute);
 
         public Angle ToAngle() =>
-            new Angle((double)TotalDegrees, AngleUnit.Degree);
+            new Angle(TotalDegrees, AngleUnit.Degree);
 
         public RadianAngle ToRadianAngle() =>
             new RadianAngle(TotalSeconds * Math.PI / (180d * 3600d));
@@ -80,7 +80,7 @@ namespace QuantitativeWorld.Angular
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<DegreeAngle, AngleUnit>(formatProvider, this);
 
-        double ILinearQuantity<AngleUnit>.BaseValue => (double)TotalDegrees;
+        double ILinearQuantity<AngleUnit>.BaseValue => TotalDegrees;
         AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => AngleUnit.Degree;
         double ILinearQuantity<AngleUnit>.Value => ((ILinearQuantity<AngleUnit>)this).BaseValue;
         AngleUnit ILinearQuantity<AngleUnit>.Unit => ((ILinearQuantity<AngleUnit>)this).BaseUnit;
