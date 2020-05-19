@@ -44,28 +44,14 @@ namespace QuantitativeWorld
             return power.Watts / denominator.Watts;
         }
 
-        public static Power? operator +(Power? left, Power? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value + right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return right.Value;
-        }
-        public static Power? operator -(Power? left, Power? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value - right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return -right.Value;
-        }
+        public static Power? operator +(Power? left, Power? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Power)) + (right ?? default(Power))
+            : (Power?)null;
+        public static Power? operator -(Power? left, Power? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Power)) - (right ?? default(Power))
+            : (Power?)null;
 
         public static Power? operator *(Power? power, double factor) =>
             (power ?? default(Power)) * factor;
