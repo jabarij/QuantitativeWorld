@@ -134,5 +134,25 @@ namespace QuantitativeWorld
         public const double NATOMilsPerTurn = 6400d;
 
         #endregion
+
+        #region Energy
+
+        public const double JoulesPerKilojoule = 1000d;
+        public const double JoulesPerMegajoule = 1000000d;
+        
+        public const double JoulesPerWattSecond = 1d;
+        public const double JoulesPerWattHour = 3600d;
+        public const double JoulesPerKilowattHour = 3600d;
+        public const double JoulesPerMegawattHour = 3600000d;
+        
+        public const double JoulesPerElectronvolt = 1.602176634E-19;
+        public const double JoulesPerFootPoundForce = 1.3558179483314004d;
+        public const double JoulesPerErg = 1E-7;
+        public const double JoulesPerStheneMetre = 1000d;
+
+        public const double JoulesPerCalorie = 4184d;
+        public const double JoulesPerKilocalorie = 4184000d;
+
+        #endregion
     }
 }

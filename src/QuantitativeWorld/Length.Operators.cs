@@ -47,28 +47,14 @@ namespace QuantitativeWorld
             return length.Metres / denominator.Metres;
         }
 
-        public static Length? operator +(Length? left, Length? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value + right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return right.Value;
-        }
-        public static Length? operator -(Length? left, Length? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value - right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return -right.Value;
-        }
+        public static Length? operator +(Length? left, Length? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Length)) + (right ?? default(Length))
+            : (Length?)null;
+        public static Length? operator -(Length? left, Length? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Length)) - (right ?? default(Length))
+            : (Length?)null;
 
         public static Length? operator *(Length? length, double factor) =>
             (length ?? default(Length)) * factor;
