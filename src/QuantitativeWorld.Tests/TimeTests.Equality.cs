@@ -25,7 +25,7 @@ namespace QuantitativeWorld.Tests.Angular
             }
 
             [Fact]
-            public void TimeCreateUtinsParamlessConstructor_ShouldBeEqualToZeroHours()
+            public void TimeCreateUsingParamlessConstructor_ShouldBeEqualToZeroHours()
             {
                 // arrange
                 var zeroTime = new Time(0d);

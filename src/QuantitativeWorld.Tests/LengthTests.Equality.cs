@@ -26,7 +26,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void LengthCreateUtinsParamlessConstructor_ShouldBeEqualToZeroMetres()
+            public void LengthCreateUsingParamlessConstructor_ShouldBeEqualToZeroMetres()
             {
                 // arrange
                 var zeroMetresLength = new Length(0d);

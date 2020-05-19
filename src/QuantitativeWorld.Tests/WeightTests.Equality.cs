@@ -26,7 +26,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void WeightCreateUtinsParamlessConstructor_ShouldBeEqualToZeroKilograms()
+            public void WeightCreateUsingParamlessConstructor_ShouldBeEqualToZeroKilograms()
             {
                 // arrange
                 var zeroKilogramsWeight = new Weight(0d);

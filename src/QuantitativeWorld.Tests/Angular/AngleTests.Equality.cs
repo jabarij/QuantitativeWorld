@@ -27,7 +27,7 @@ namespace QuantitativeWorld.Tests.Angular
             }
 
             [Fact]
-            public void AngleCreateUtinsParamlessConstructor_ShouldBeEqualToZeroTurns()
+            public void AngleCreateUsingParamlessConstructor_ShouldBeEqualToZeroTurns()
             {
                 // arrange
                 var zeroTurnsAngle = new Angle(0d);
