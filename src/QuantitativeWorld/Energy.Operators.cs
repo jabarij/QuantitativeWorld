@@ -43,6 +43,19 @@ namespace QuantitativeWorld
                 throw new DivideByZeroException("Denominator is zero.");
             return energy.Joules / denominator.Joules;
         }
+        public static Power operator /(Energy energy, Time time)
+        {
+            if (time.IsZero())
+                throw new DivideByZeroException("Denominator is zero.");
+            return new Power(energy.Joules / time.TotalSeconds);
+        }
+        public static Time operator /(Energy energy, Power power)
+        {
+            if (power.IsZero())
+                throw new DivideByZeroException("Denominator is zero.");
+            return new Time(
+                totalSeconds: energy.Joules / power.Watts);
+        }
 
         public static Energy? operator +(Energy? left, Energy? right) =>
             left.HasValue || right.HasValue
@@ -62,5 +75,9 @@ namespace QuantitativeWorld
             (energy ?? default(Energy)) / denominator;
         public static double operator /(Energy? energy, Energy? denominator) =>
             (energy ?? default(Energy)) / (denominator ?? default(Energy));
+        public static Power? operator /(Energy? energy, Time? time) =>
+            (energy ?? default(Energy)) / (time ?? default(Time));
+        public static Time? operator /(Energy? energy, Power? power) =>
+            (energy ?? default(Energy)) / (power ?? default(Power));
     }
 }
