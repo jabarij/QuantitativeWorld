@@ -377,5 +377,138 @@ namespace QuantitativeWorld.Tests
                 result.Should().BeApproximately(nominator.Joules / denominator.Joules, DoublePrecision);
             }
         }
+
+        public class Operator_DivideByTime : EnergyTests
+        {
+            public Operator_DivideByTime(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInWatts()
+            {
+                // arrange
+                var nominator = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
+                var denominator = new Time(
+                    totalSeconds: Fixture.CreateNonZeroDouble());
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.Watts.Should().Be(nominator.Joules / denominator.TotalSeconds);
+                result.Unit.Should().Be(PowerUnit.Watt);
+            }
+
+            [Fact]
+            public void NullNominator_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Energy? nominator = null;
+                var denominator = new Time(
+                    totalSeconds: Fixture.CreateNonZeroDouble());
+                var expectedResult = default(Energy) / denominator;
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullDenominator_ShouldThrow()
+            {
+                // arrange
+                var nominator = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
+                Time? denominator = null;
+
+                // act
+                Func<Power?> result = () => nominator / denominator;
+
+                // assert
+                result.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void NullNominatorAndDenominator_ShouldThrow()
+            {
+                // arrange
+                Energy? nominator = null;
+                Time? denominator = null;
+
+                // act
+                Func<Power?> result = () => nominator / denominator;
+
+                // assert
+                result.Should().Throw<DivideByZeroException>();
+            }
+        }
+
+        public class Operator_DivideByPower : EnergyTests
+        {
+            public Operator_DivideByPower(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInWatts()
+            {
+                // arrange
+                var nominator = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
+                var denominator = new Power(
+                    watts: Fixture.CreateNonZeroDouble());
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.TotalSeconds.Should().Be(nominator.Joules / denominator.Watts);
+            }
+
+            [Fact]
+            public void NullNominator_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Energy? nominator = null;
+                var denominator = new Power(
+                    watts: Fixture.CreateNonZeroDouble());
+                var expectedResult = default(Energy) / denominator;
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Value.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullDenominator_ShouldThrow()
+            {
+                // arrange
+                var nominator = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
+                Power? denominator = null;
+
+                // act
+                Func<Time?> result = () => nominator / denominator;
+
+                // assert
+                result.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void NullNominatorAndDenominator_ShouldThrow()
+            {
+                // arrange
+                Energy? nominator = null;
+                Power? denominator = null;
+
+                // act
+                Func<Time?> result = () => nominator / denominator;
+
+                // assert
+                result.Should().Throw<DivideByZeroException>();
+            }
+        }
     }
 }

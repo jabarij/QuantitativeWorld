@@ -31,6 +31,11 @@ namespace QuantitativeWorld
         public static Power operator *(double factor, Power power) =>
             power * factor;
 
+        public static Energy operator *(Power power, Time time) =>
+            new Energy(power.Watts * time.TotalSeconds);
+        public static Energy operator *(Time argument, Power factor) =>
+            new Energy(argument.TotalSeconds * factor.Watts);
+
         public static Power operator /(Power power, double denominator)
         {
             if (denominator == 0d)
@@ -57,6 +62,14 @@ namespace QuantitativeWorld
             (power ?? default(Power)) * factor;
         public static Power? operator *(double factor, Power? power) =>
             power * factor;
+        public static Energy? operator *(Power? power, Time? time) =>
+            power.HasValue || time.HasValue
+            ? (power ?? default(Power)) * (time ?? default(Time))
+            : (Energy?)null;
+        public static Energy? operator *(Time? time, Power? power) =>
+            time.HasValue || power.HasValue
+            ? (time ?? default(Time)) * (power ?? default(Power))
+            : (Energy?)null;
 
         public static Power? operator /(Power? power, double denominator) =>
             (power ?? default(Power)) / denominator;
