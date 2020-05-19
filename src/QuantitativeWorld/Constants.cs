@@ -4,6 +4,14 @@ namespace QuantitativeWorld
 {
     static class Constants
     {
+        #region Time
+
+        public const double SecondsPerMinute = 60d;
+        public const double SecondsPerHour = 3600d;
+        public const double MinutesPerHour = 60d;
+
+        #endregion
+
         #region Weight
 
         public const double KilogramsPerGram = 0.001d;
