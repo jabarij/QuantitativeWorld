@@ -26,7 +26,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void PowerCreateUtinsParamlessConstructor_ShouldBeEqualToZeroWatts()
+            public void PowerCreateUsingParamlessConstructor_ShouldBeEqualToZeroWatts()
             {
                 // arrange
                 var zeroWattsPower = new Power(0d);

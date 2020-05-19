@@ -31,6 +31,11 @@ namespace QuantitativeWorld
         public static Power operator *(double factor, Power power) =>
             power * factor;
 
+        public static Energy operator *(Power power, Time time) =>
+            new Energy(power.Watts * time.TotalSeconds);
+        public static Energy operator *(Time argument, Power factor) =>
+            new Energy(argument.TotalSeconds * factor.Watts);
+
         public static Power operator /(Power power, double denominator)
         {
             if (denominator == 0d)
@@ -44,33 +49,27 @@ namespace QuantitativeWorld
             return power.Watts / denominator.Watts;
         }
 
-        public static Power? operator +(Power? left, Power? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value + right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return right.Value;
-        }
-        public static Power? operator -(Power? left, Power? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value - right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return -right.Value;
-        }
+        public static Power? operator +(Power? left, Power? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Power)) + (right ?? default(Power))
+            : (Power?)null;
+        public static Power? operator -(Power? left, Power? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Power)) - (right ?? default(Power))
+            : (Power?)null;
 
         public static Power? operator *(Power? power, double factor) =>
             (power ?? default(Power)) * factor;
         public static Power? operator *(double factor, Power? power) =>
             power * factor;
+        public static Energy? operator *(Power? power, Time? time) =>
+            power.HasValue || time.HasValue
+            ? (power ?? default(Power)) * (time ?? default(Time))
+            : (Energy?)null;
+        public static Energy? operator *(Time? time, Power? power) =>
+            time.HasValue || power.HasValue
+            ? (time ?? default(Time)) * (power ?? default(Power))
+            : (Energy?)null;
 
         public static Power? operator /(Power? power, double denominator) =>
             (power ?? default(Power)) / denominator;

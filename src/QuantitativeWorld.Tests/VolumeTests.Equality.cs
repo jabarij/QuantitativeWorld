@@ -26,7 +26,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void VolumeCreateUtinsParamlessConstructor_ShouldBeEqualToZeroMetres()
+            public void VolumeCreateUsingParamlessConstructor_ShouldBeEqualToZeroMetres()
             {
                 // arrange
                 var zeroMetresVolume = new Volume(0d);

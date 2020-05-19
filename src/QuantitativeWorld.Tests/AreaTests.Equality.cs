@@ -26,7 +26,7 @@ namespace QuantitativeWorld.Tests
             }
 
             [Fact]
-            public void AreaCreateUtinsParamlessConstructor_ShouldBeEqualToZeroMetres()
+            public void AreaCreateUsingParamlessConstructor_ShouldBeEqualToZeroMetres()
             {
                 // arrange
                 var zeroMetresArea = new Area(0d);

@@ -34,16 +34,16 @@ namespace QuantitativeWorld.Tests.Angular
             }
 
             [Fact]
-            public void FromAngle_ShouldCreateValidRadianAngle()
+            public void FromAngle_ShouldCreateValidDegreeAngle()
             {
                 // arrange
                 var angle = Fixture.Create<Angle>();
 
                 // act
-                var radianAngle = DegreeAngle.FromAngle(angle);
+                var degreeAngle = DegreeAngle.FromAngle(angle);
 
                 // assert
-                radianAngle.TotalSeconds.Should().BeApproximately((double)angle.Convert(AngleUnit.Arcsecond).Value, DoublePrecision);
+                degreeAngle.TotalSeconds.Should().BeApproximately((double)angle.Convert(AngleUnit.Arcsecond).Value, DoublePrecision);
             }
         }
     }

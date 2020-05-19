@@ -27,7 +27,7 @@ namespace QuantitativeWorld.Tests.Angular
             }
 
             [Fact]
-            public void RadianAngleCreateUtinsParamlessConstructor_ShouldBeEqualToZeroRadians()
+            public void RadianAngleCreateUsingParamlessConstructor_ShouldBeEqualToZeroRadians()
             {
                 // arrange
                 var zeroRadiansRadianAngle = new RadianAngle(0d);

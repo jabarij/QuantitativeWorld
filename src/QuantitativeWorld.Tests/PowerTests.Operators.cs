@@ -267,6 +267,73 @@ namespace QuantitativeWorld.Tests
             }
         }
 
+        public class Operator_MultiplyByTime : PowerTests
+        {
+            public Operator_MultiplyByTime(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInJoules()
+            {
+                // arrange
+                var argument = CreatePowerInUnitOtherThan(PowerUnit.Watt);
+                var factor = new Time(
+                    totalSeconds: Fixture.CreateNonZeroDouble());
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.Joules.Should().Be(argument.Watts * factor.TotalSeconds);
+                result.Unit.Should().Be(EnergyUnit.Joule);
+            }
+
+            [Fact]
+            public void NullArgument_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Power? argument = null;
+                var factor = new Time(
+                    totalSeconds: Fixture.CreateNonZeroDouble());
+                var expectedResult = default(Power) * factor;
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullFactor_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                var argument = CreatePowerInUnitOtherThan(PowerUnit.Watt);
+                Time? factor = null;
+                var expectedResult = argument * default(Time);
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.Should().Be(expectedResult);
+            }
+
+            [Fact]
+            public void NullArgumentAndFactor_ShouldReturnNull()
+            {
+                // arrange
+                Power? argument = null;
+                Time? factor = null;
+
+                // act
+                var result = argument * factor;
+
+                // assert
+                result.Should().BeNull();
+            }
+        }
+
         public class Operator_DivideByDouble : PowerTests
         {
             public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }

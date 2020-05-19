@@ -44,28 +44,14 @@ namespace QuantitativeWorld
             return weight.Kilograms / denominator.Kilograms;
         }
 
-        public static Weight? operator +(Weight? left, Weight? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value + right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return right.Value;
-        }
-        public static Weight? operator -(Weight? left, Weight? right)
-        {
-            if (left.HasValue && right.HasValue)
-                return left.Value - right.Value;
-            else if (!left.HasValue && !right.HasValue)
-                return null;
-            else if (left.HasValue)
-                return left.Value;
-            else
-                return -right.Value;
-        }
+        public static Weight? operator +(Weight? left, Weight? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Weight)) + (right ?? default(Weight))
+            : (Weight?)null;
+        public static Weight? operator -(Weight? left, Weight? right) =>
+            left.HasValue || right.HasValue
+            ? (left ?? default(Weight)) - (right ?? default(Weight))
+            : (Weight?)null;
 
         public static Weight? operator *(Weight? weight, double factor) =>
             (weight ?? default(Weight)) * factor;

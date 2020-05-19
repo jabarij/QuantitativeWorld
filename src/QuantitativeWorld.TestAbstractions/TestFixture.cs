@@ -21,6 +21,9 @@ namespace QuantitativeWorld.TestAbstractions
             // Customize common fixture setup here
             fixture.Customize<double>(e => e.FromFactory(() => fixture.CreateInRange(-100, 100)));
 
+            fixture.Customize<TimeSpan>(e => e.FromFactory(() => TimeSpan.FromSeconds(fixture.Create<double>())));
+            fixture.Customize<Time>(e => e.FromFactory(() => new Time(fixture.Create<double>())));
+
             fixture.Customize<WeightUnit>(e => e.FromFactory(() => fixture.CreateFromSet(WeightUnit.GetPredefinedUnits())));
             fixture.Customize<Weight>(e => e.FromFactory(() => new Weight(fixture.Create<double>()).Convert(fixture.Create<WeightUnit>())));
 
@@ -35,6 +38,9 @@ namespace QuantitativeWorld.TestAbstractions
 
             fixture.Customize<PowerUnit>(e => e.FromFactory(() => fixture.CreateFromSet(PowerUnit.GetPredefinedUnits())));
             fixture.Customize<Power>(e => e.FromFactory(() => new Power(fixture.Create<double>()).Convert(fixture.Create<PowerUnit>())));
+
+            fixture.Customize<EnergyUnit>(e => e.FromFactory(() => fixture.CreateFromSet(EnergyUnit.GetPredefinedUnits())));
+            fixture.Customize<Energy>(e => e.FromFactory(() => new Energy(fixture.Create<double>()).Convert(fixture.Create<EnergyUnit>())));
 
             fixture.Customize<AngleUnit>(e => e.FromFactory(() => fixture.CreateFromSet(AngleUnit.GetPredefinedUnits())));
             fixture.Customize<Angle>(e => e.FromFactory(() => new Angle(fixture.Create<double>()).Convert(fixture.Create<AngleUnit>())));
