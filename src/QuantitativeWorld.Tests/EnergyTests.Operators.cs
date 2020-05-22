@@ -225,7 +225,7 @@ namespace QuantitativeWorld.Tests
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var energy = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
+                var energy = CreateEnergyInUnitOtherThan(EnergyUnit.Joule, EnergyUnit.Electronvolt);
                 double factor = Fixture.Create<double>();
 
                 // act
