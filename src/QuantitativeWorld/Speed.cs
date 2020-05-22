@@ -6,28 +6,35 @@ namespace QuantitativeWorld
 {
     public partial struct Speed : ILinearQuantity<SpeedUnit>
     {
-        private const double MinMetresPerSecond = double.MinValue;
-        private const double MaxMetresPerSecond = double.MaxValue;
-
         public static readonly SpeedUnit DefaultUnit = SpeedUnit.MetrePerSecond;
 
-        private readonly SpeedUnit? _formatUnit;
+        private readonly double? _metresPerSecond;
+        private readonly double? _value;
+        private readonly SpeedUnit? _unit;
 
         public Speed(double metresPerSecond)
-            : this(formatUnit: null, metresPerSecond: metresPerSecond) { }
-        public Speed(double value, SpeedUnit unit)
-            : this(formatUnit: unit, metresPerSecond: GetMetresPerSecond(value, unit)) { }
-        private Speed(SpeedUnit? formatUnit, double metresPerSecond)
         {
-            Assert.IsInRange(metresPerSecond, MinMetresPerSecond, MaxMetresPerSecond, nameof(metresPerSecond));
-
-            _formatUnit = formatUnit;
-            MetresPerSecond = metresPerSecond;
+            _metresPerSecond = metresPerSecond;
+            _value = metresPerSecond;
+            _unit = DefaultUnit;
+        }
+        public Speed(double value, SpeedUnit unit)
+        {
+            _metresPerSecond = null;
+            _value = value;
+            _unit = unit;
+        }
+        private Speed(SpeedUnit unit, double metresPerSecond)
+        {
+            _metresPerSecond = metresPerSecond;
+            _value = null;
+            _unit = unit;
         }
 
-        public double MetresPerSecond { get; }
-        public double Value => GetValue(MetresPerSecond, Unit);
-        public SpeedUnit Unit => _formatUnit ?? DefaultUnit;
+        public double MetresPerSecond => _metresPerSecond ?? (_value.HasValue ? GetMetresPerSecond(_value.Value, Unit) : 0d);
+        public double Value => _value ?? (_metresPerSecond.HasValue ? GetValue(_metresPerSecond.Value, Unit) : 0d);
+        public SpeedUnit Unit => _unit ?? DefaultUnit;
+
         double ILinearQuantity<SpeedUnit>.BaseValue => MetresPerSecond;
         SpeedUnit ILinearQuantity<SpeedUnit>.BaseUnit => DefaultUnit;
 

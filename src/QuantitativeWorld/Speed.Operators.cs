@@ -20,22 +20,42 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Speed operator +(Speed left, Speed right) =>
-            new Speed(formatUnit: left._formatUnit ?? right.Unit, metresPerSecond: left.MetresPerSecond + right.MetresPerSecond);
+            new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond + right.MetresPerSecond);
         public static Speed operator -(Speed left, Speed right) =>
-            new Speed(formatUnit: left._formatUnit ?? right.Unit, metresPerSecond: left.MetresPerSecond - right.MetresPerSecond);
+            new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond - right.MetresPerSecond);
         public static Speed operator -(Speed speed) =>
-            new Speed(formatUnit: speed.Unit, metresPerSecond: -speed.MetresPerSecond);
+            new Speed(unit: speed.Unit, metresPerSecond: -speed.MetresPerSecond);
 
-        public static Speed operator *(Speed speed, double factor) =>
-            new Speed(formatUnit: speed.Unit, metresPerSecond: speed.MetresPerSecond * factor);
+        public static Speed operator *(Speed speed, double factor)
+        {
+            if (double.IsNaN(factor))
+                throw new ArgumentException("Argument is not a number.", nameof(factor));
+            return
+                speed._value.HasValue
+                ? new Speed(
+                    value: speed._value.Value * factor,
+                    unit: speed._unit.Value)
+                : new Speed(
+                    unit: speed.Unit,
+                    metresPerSecond: speed.MetresPerSecond * factor);
+        }
         public static Speed operator *(double factor, Speed speed) =>
             speed * factor;
 
         public static Speed operator /(Speed speed, double denominator)
         {
+            if (double.IsNaN(denominator))
+                throw new ArgumentException("Argument is not a number.", nameof(denominator));
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Speed(formatUnit: speed.Unit, metresPerSecond: speed.MetresPerSecond / denominator);
+            return
+                speed._value.HasValue
+                ? new Speed(
+                    value: speed._value.Value / denominator,
+                    unit: speed._unit.Value)
+                : new Speed(
+                    unit: speed.Unit,
+                    metresPerSecond: speed.MetresPerSecond / denominator);
         }
         public static double operator /(Speed speed, Speed denominator)
         {
