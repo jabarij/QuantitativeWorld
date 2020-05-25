@@ -442,5 +442,52 @@ namespace QuantitativeWorld.Tests
                 result.Should().Be(nominator.Metres / denominator.Metres);
             }
         }
+
+        public class Operator_DivideByTime : LengthTests
+        {
+            public Operator_DivideByTime(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var denominator = new Time(0d);
+
+                // act
+                Func<Speed> divideByZero = () => length / denominator;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByNull_ShouldThrow()
+            {
+                // arrange
+                var length = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                Time? denominator = null;
+
+                // act
+                Func<Speed> divideByZero = () => length / denominator;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidSpeedResult()
+            {
+                // arrange
+                var nominator = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var denominator = new Time(totalSeconds: Fixture.CreateNonZeroDouble());
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.MetresPerSecond.Should().Be(nominator.Metres / denominator.TotalSeconds);
+            }
+        }
     }
 }

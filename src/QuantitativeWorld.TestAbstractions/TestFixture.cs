@@ -30,6 +30,9 @@ namespace QuantitativeWorld.TestAbstractions
             fixture.Customize<LengthUnit>(e => e.FromFactory(() => fixture.CreateFromSet(LengthUnit.GetPredefinedUnits())));
             fixture.Customize<Length>(e => e.FromFactory(() => new Length(fixture.Create<double>()).Convert(fixture.Create<LengthUnit>())));
 
+            fixture.Customize<SpeedUnit>(e => e.FromFactory(() => fixture.CreateFromSet(SpeedUnit.GetPredefinedUnits())));
+            fixture.Customize<Speed>(e => e.FromFactory(() => new Speed(fixture.Create<double>()).Convert(fixture.Create<SpeedUnit>())));
+
             fixture.Customize<AreaUnit>(e => e.FromFactory(() => fixture.CreateFromSet(AreaUnit.GetPredefinedUnits())));
             fixture.Customize<Area>(e => e.FromFactory(() => new Area(fixture.Create<double>()).Convert(fixture.Create<AreaUnit>())));
 
