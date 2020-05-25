@@ -41,6 +41,10 @@ namespace QuantitativeWorld
         }
         public static Speed operator *(double factor, Speed speed) =>
             speed * factor;
+        public static Length operator *(Speed speed, Time time) =>
+            new Length(speed.MetresPerSecond * time.TotalSeconds);
+        public static Length operator *(Time time, Speed speed) =>
+            speed * time;
 
         public static Speed operator /(Speed speed, double denominator)
         {
@@ -77,6 +81,10 @@ namespace QuantitativeWorld
             (speed ?? default(Speed)) * factor;
         public static Speed? operator *(double factor, Speed? speed) =>
             speed * factor;
+        public static Length? operator *(Speed? speed, Time? time) =>
+            (speed ?? default(Speed)) * (time ?? default(Time));
+        public static Length? operator *(Time? time, Speed? speed) =>
+            speed * time;
 
         public static Speed? operator /(Speed? speed, double denominator) =>
             (speed ?? default(Speed)) / denominator;

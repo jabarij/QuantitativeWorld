@@ -267,6 +267,44 @@ namespace QuantitativeWorld.Tests
             }
         }
 
+        public class Operator_MultiplyByTime : SpeedTests
+        {
+            public Operator_MultiplyByTime(TestFixture testFixture)
+                : base(testFixture) { }
+
+            [Fact]
+            public void ShouldProduceValidResultInSameUnit()
+            {
+                // arrange
+                var length = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
+                var time = new Time(totalSeconds: Fixture.CreateNonZeroDouble());
+
+                // act
+                var result = length * time;
+
+                // assert
+                result.Metres.Should().Be(length.MetresPerSecond * time.TotalSeconds);
+                result.Value.Should().Be(length.MetresPerSecond * time.TotalSeconds);
+                result.Unit.Should().Be(LengthUnit.Metre);
+            }
+
+            [Fact]
+            public void NullSpeed_ShouldTreatNullAsDefault()
+            {
+                // arrange
+                Speed? nullSpeed = null;
+                Time? time = new Time(totalSeconds: Fixture.CreateNonZeroDouble());
+                var expectedResult = default(Speed) * time;
+
+                // act
+                var result = nullSpeed * time;
+
+                // assert
+                result.Should().NotBeNull();
+                result.Should().Be(expectedResult);
+            }
+        }
+
         public class Operator_DivideByDouble : SpeedTests
         {
             public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
