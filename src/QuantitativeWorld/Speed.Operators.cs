@@ -20,11 +20,17 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Speed operator +(Speed left, Speed right) =>
-            new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond + right.MetresPerSecond);
+            left.Unit.IsEquivalentOf(right.Unit)
+            ? new Speed(value: left.Value + right.Value, left.Unit)
+            : new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond + right.MetresPerSecond);
         public static Speed operator -(Speed left, Speed right) =>
-            new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond - right.MetresPerSecond);
+            left.Unit.IsEquivalentOf(right.Unit)
+            ? new Speed(value: left.Value - right.Value, left.Unit)
+            : new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond - right.MetresPerSecond);
         public static Speed operator -(Speed speed) =>
-            new Speed(unit: speed.Unit, metresPerSecond: -speed.MetresPerSecond);
+            speed._value.HasValue
+            ? new Speed(value: -speed._value.Value, speed.Unit)
+            : new Speed(unit: speed.Unit, metresPerSecond: -speed.MetresPerSecond);
 
         public static Speed operator *(Speed speed, double factor)
         {
@@ -65,7 +71,10 @@ namespace QuantitativeWorld
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
-            return speed.MetresPerSecond / denominator.MetresPerSecond;
+            return
+                speed.Unit.IsEquivalentOf(denominator.Unit)
+                ? speed.Value / denominator.Value
+                : speed.MetresPerSecond / denominator.MetresPerSecond;
         }
 
         public static Speed? operator +(Speed? left, Speed? right) =>

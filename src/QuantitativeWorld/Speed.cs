@@ -20,14 +20,20 @@ namespace QuantitativeWorld
         }
         public Speed(double value, SpeedUnit unit)
         {
-            _metresPerSecond = null;
+            _metresPerSecond =
+                unit.IsEquivalentOf(DefaultUnit)
+                ? value
+                : (double?)null;
             _value = value;
             _unit = unit;
         }
         private Speed(SpeedUnit unit, double metresPerSecond)
         {
             _metresPerSecond = metresPerSecond;
-            _value = null;
+            _value =
+                unit.IsEquivalentOf(DefaultUnit)
+                ? metresPerSecond
+                : (double?)null;
             _unit = unit;
         }
 
@@ -42,7 +48,9 @@ namespace QuantitativeWorld
             new Speed(targetUnit, MetresPerSecond);
 
         public bool IsZero() =>
-            MetresPerSecond == 0d;
+            _value.HasValue && _value.Value == 0d
+            || _metresPerSecond.HasValue && _metresPerSecond.Value == 0d
+            || !_value.HasValue && !_metresPerSecond.HasValue;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Speed, SpeedUnit>(this);
