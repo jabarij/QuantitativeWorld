@@ -21,15 +21,15 @@ namespace QuantitativeWorld
 
         public static Speed operator +(Speed left, Speed right) =>
             left.Unit.IsEquivalentOf(right.Unit)
-            ? new Speed(value: left.Value + right.Value, left.Unit)
+            ? new Speed(value: left.Value + right.Value, unit: left.Unit)
             : new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond + right.MetresPerSecond);
         public static Speed operator -(Speed left, Speed right) =>
             left.Unit.IsEquivalentOf(right.Unit)
-            ? new Speed(value: left.Value - right.Value, left.Unit)
+            ? new Speed(value: left.Value - right.Value, unit: left.Unit)
             : new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond - right.MetresPerSecond);
         public static Speed operator -(Speed speed) =>
             speed._value.HasValue
-            ? new Speed(value: -speed._value.Value, speed.Unit)
+            ? new Speed(value: -speed._value.Value, unit: speed.Unit)
             : new Speed(unit: speed.Unit, metresPerSecond: -speed.MetresPerSecond);
 
         public static Speed operator *(Speed speed, double factor)
