@@ -52,6 +52,14 @@ namespace QuantitativeWorld
 
         #endregion
 
+        #region Speed
+
+        public const double MetresPerSecondPerKilometrePerHour = 1d / 3.6d;
+        public const double MetresPerSecondPerFootPerSecond = 0.3048d;
+        public const double MetresPerSecondPerMilePerHour = 1609.344d / 3600d;
+
+        #endregion
+
         #region Area
 
         public const double SquareMetresPerSquareMillimetre = 0.000001d;
@@ -139,12 +147,12 @@ namespace QuantitativeWorld
 
         public const double JoulesPerKilojoule = 1000d;
         public const double JoulesPerMegajoule = 1000000d;
-        
+
         public const double JoulesPerWattSecond = 1d;
         public const double JoulesPerWattHour = 3600d;
         public const double JoulesPerKilowattHour = 3600d;
         public const double JoulesPerMegawattHour = 3600000d;
-        
+
         public const double JoulesPerElectronvolt = 1.602176634E-19;
         public const double JoulesPerFootPoundForce = 1.3558179483314004d;
         public const double JoulesPerErg = 1E-7;
