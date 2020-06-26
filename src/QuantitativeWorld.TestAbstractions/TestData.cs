@@ -58,5 +58,56 @@ namespace QuantitativeWorld.TestAbstractions
             else
                 throw new InvalidOperationException($"Member {sourceType.FullName}.{dataSourceName} must return {typeof(IEnumerable<ITestDataProvider>).FullName} or {typeof(IEnumerable).FullName} to be a valid test data source.");
         }
+
+        #region Length
+
+        protected Length CreateLengthInUnit(LengthUnit unit) =>
+            Fixture
+            .Create<Length>()
+            .Convert(unit);
+
+        protected Length CreateLengthInUnitOtherThan(LengthUnit unitToExclude, params LengthUnit[] unitsToExclude) =>
+            Fixture
+            .Create<Length>()
+            .Convert(CreateUnitOtherThan(unitToExclude, unitsToExclude));
+
+        protected LengthUnit CreateUnitOtherThan(LengthUnit unitToExclude, params LengthUnit[] unitsToExclude) =>
+            Fixture.CreateFromSet(LengthUnit.GetPredefinedUnits().Except(new[] { unitToExclude }.Union(unitsToExclude)));
+
+        #endregion
+
+        #region Weight
+
+        protected Weight CreateWeightInUnit(WeightUnit unit) =>
+            Fixture
+            .Create<Weight>()
+            .Convert(unit);
+
+        protected Weight CreateWeightInUnitOtherThan(WeightUnit unitToExclude, params WeightUnit[] unitsToExclude) =>
+            Fixture
+            .Create<Weight>()
+            .Convert(CreateUnitOtherThan(unitToExclude, unitsToExclude));
+
+        protected WeightUnit CreateUnitOtherThan(WeightUnit unitToExclude, params WeightUnit[] unitsToExclude) =>
+            Fixture.CreateFromSet(WeightUnit.GetPredefinedUnits().Except(new[] { unitToExclude }.Union(unitsToExclude)));
+
+        #endregion
+
+        #region Speed
+
+        protected Speed CreateSpeedInUnit(SpeedUnit unit) =>
+            Fixture
+            .Create<Speed>()
+            .Convert(unit);
+
+        protected Speed CreateSpeedInUnitOtherThan(SpeedUnit unitToExclude, params SpeedUnit[] unitsToExclude) =>
+            Fixture
+            .Create<Speed>()
+            .Convert(CreateUnitOtherThan(unitToExclude, unitsToExclude));
+
+        protected SpeedUnit CreateUnitOtherThan(SpeedUnit unitToExclude, params SpeedUnit[] unitsToExclude) =>
+            Fixture.CreateFromSet(SpeedUnit.GetPredefinedUnits().Except(new[] { unitToExclude }.Union(unitsToExclude)));
+
+        #endregion
     }
 }

@@ -44,16 +44,15 @@ namespace QuantitativeWorld.Tests
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
                 yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Metre, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1000d, LengthUnit.Millimetre, 1d);
-                yield return new ConstructorForValueAndUnitTestData(10d, LengthUnit.Decimetre, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / 0.0254d, LengthUnit.Inch, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d), LengthUnit.Foot, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d), LengthUnit.Yard, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d), LengthUnit.Rod, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d * 4d), LengthUnit.Chain, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d * 4d * 10d), LengthUnit.Furlong, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.0254d * 12d * 3d * 5.5d * 4d * 10d * 8d), LengthUnit.Mile, 1d);
-                yield return new ConstructorForValueAndUnitTestData(0.0006213711922373339696174342d, LengthUnit.Mile, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Millimetre, 0.001d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Decimetre, 0.1d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Inch, 0.0254d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Foot, 0.3048d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Yard, 0.9144d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Rod, 5.0292d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Chain, 20.1168d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Furlong, 201.168d);
+                yield return new ConstructorForValueAndUnitTestData(1d, LengthUnit.Mile, 1609.344d);
             }
             public class ConstructorForValueAndUnitTestData
             {
