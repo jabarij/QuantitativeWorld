@@ -375,11 +375,11 @@ namespace QuantitativeWorld.Tests
             public void DivideByZero_ShouldThrow()
             {
                 // arrange
-                var length = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
+                var nominator = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
                 var denominator = new Speed(0d);
 
                 // act
-                Func<double> divideByZero = () => length / denominator;
+                Func<double> divideByZero = () => nominator / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -389,11 +389,11 @@ namespace QuantitativeWorld.Tests
             public void DivideByNull_ShouldThrow()
             {
                 // arrange
-                var length = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
+                var nominator = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
                 Speed? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => length / denominator;
+                Func<double> divideByZero = () => nominator / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -413,6 +413,55 @@ namespace QuantitativeWorld.Tests
 
                 // assert
                 result.Should().Be(nominator.MetresPerSecond / denominator.MetresPerSecond);
+            }
+        }
+
+        public class Operator_DivideLengthBySpeed : SpeedTests
+        {
+            public Operator_DivideLengthBySpeed(TestFixture testFixture) : base(testFixture) { }
+
+            [Fact]
+            public void DivideByZero_ShouldThrow()
+            {
+                // arrange
+                var nominator = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var denominator = new Speed(0d);
+
+                // act
+                Func<Time> divideByZero = () => nominator / denominator;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void DivideByNull_ShouldThrow()
+            {
+                // arrange
+                var nominator = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                Speed? denominator = null;
+
+                // act
+                Func<Time?> divideByZero = () => nominator / denominator;
+
+                // assert
+                divideByZero.Should().Throw<DivideByZeroException>();
+            }
+
+            [Fact]
+            public void ShouldProduceValidDoubleResult()
+            {
+                // arrange
+                var nominator = CreateLengthInUnitOtherThan(LengthUnit.Metre);
+                var denominator = new Speed(
+                    value: Fixture.CreateNonZeroDouble(),
+                    unit: CreateUnitOtherThan(SpeedUnit.MetrePerSecond));
+
+                // act
+                var result = nominator / denominator;
+
+                // assert
+                result.TotalSeconds.Should().Be(nominator.Metres / denominator.MetresPerSecond);
             }
         }
     }

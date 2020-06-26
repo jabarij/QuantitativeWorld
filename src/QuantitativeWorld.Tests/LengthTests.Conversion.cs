@@ -40,7 +40,7 @@ namespace QuantitativeWorld.Tests
                     LengthUnit.Inch,
                     LengthUnit.Metre
                 };
-                var initialLength = new Length(1234.5678d, units.First());
+                var initialLength = new Length(0.12345678d, units.First());
                 Length? finalLength = null;
 
                 // act

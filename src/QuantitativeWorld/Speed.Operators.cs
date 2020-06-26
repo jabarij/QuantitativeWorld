@@ -76,6 +76,12 @@ namespace QuantitativeWorld
                 ? speed.Value / denominator.Value
                 : speed.MetresPerSecond / denominator.MetresPerSecond;
         }
+        public static Time operator /(Length length, Speed speed)
+        {
+            if (speed.IsZero())
+                throw new DivideByZeroException("Denominator is zero.");
+            return new Time(length.Metres / speed.MetresPerSecond);
+        }
 
         public static Speed? operator +(Speed? left, Speed? right) =>
             left.HasValue || right.HasValue
@@ -99,5 +105,7 @@ namespace QuantitativeWorld
             (speed ?? default(Speed)) / denominator;
         public static double operator /(Speed? speed, Speed? denominator) =>
             (speed ?? default(Speed)) / (denominator ?? default(Speed));
+        public static Time? operator /(Length? length, Speed? denominator) =>
+            (length ?? default(Length)) / (denominator ?? default(Speed));
     }
 }
