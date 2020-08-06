@@ -6,6 +6,7 @@ namespace QuantitativeWorld.Angular
     public partial struct Angle : ILinearQuantity<AngleUnit>
     {
         public static readonly AngleUnit DefaultUnit = AngleUnit.Turn;
+        public static readonly Angle Zero = new Angle(0d);
 
         private readonly AngleUnit? _formatUnit;
 

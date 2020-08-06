@@ -7,17 +7,56 @@ namespace QuantitativeWorld.Angular
 {
     partial class AngularEnumerableExtensions
     {
-        public static Angle Min(this IEnumerable<Angle> source)
+        public static RadianAngle Average(this IEnumerable<RadianAngle> source)
         {
             Assert.IsNotNull(source, nameof(source));
 
-            var value = default(Angle);
+            var enumerator = source.GetEnumerator();
+            var sum = RadianAngle.Zero;
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += enumerator.Current;
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static RadianAngle Average<TSource>(this IEnumerable<TSource> source, Func<TSource, RadianAngle> selector)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(selector, nameof(selector));
+
+            var enumerator = source.GetEnumerator();
+            var sum = RadianAngle.Zero;
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                sum += selector(enumerator.Current);
+                count++;
+            }
+
+            if (count == 0)
+                throw new InvalidOperationException("Sequence contains no elements.");
+
+            return sum / count;
+        }
+
+        public static RadianAngle Max(this IEnumerable<RadianAngle> source)
+        {
+            Assert.IsNotNull(source, nameof(source));
+
+            var value = RadianAngle.Zero;
             bool hasValue = false;
             foreach (var element in source)
             {
                 if (hasValue)
                 {
-                    if (element < value)
+                    if (element > value)
                         value = element;
                 }
                 else
@@ -32,74 +71,30 @@ namespace QuantitativeWorld.Angular
             return value;
         }
 
-        public static Angle? Min(this IEnumerable<Angle?> source)
+        public static RadianAngle? Max(this IEnumerable<RadianAngle?> source)
         {
             Assert.IsNotNull(source, nameof(source));
 
-            Angle? value = null;
+            RadianAngle? value = null;
             foreach (var element in source)
             {
-                if (value == null || element < value)
+                if (value == null || element > value)
                     value = element;
             }
             return value;
         }
 
-        public static Angle Min<TSource>(this IEnumerable<TSource> source, Func<TSource, Angle> selector) =>
-            source.Select(selector).Min();
+        public static RadianAngle Max<TSource>(this IEnumerable<TSource> source, Func<TSource, RadianAngle> selector) =>
+            source.Select(selector).Max();
 
-        public static Angle? Min<TSource>(this IEnumerable<TSource> source, Func<TSource, Angle?> selector) =>
-            source.Select(selector).Min();
-
-        public static DegreeAngle Min(this IEnumerable<DegreeAngle> source)
-        {
-            Assert.IsNotNull(source, nameof(source));
-
-            var value = default(DegreeAngle);
-            bool hasValue = false;
-            foreach (var element in source)
-            {
-                if (hasValue)
-                {
-                    if (element < value)
-                        value = element;
-                }
-                else
-                {
-                    value = element;
-                    hasValue = true;
-                }
-            }
-
-            if (!hasValue)
-                throw new InvalidOperationException("Sequence contains no elements.");
-            return value;
-        }
-
-        public static DegreeAngle? Min(this IEnumerable<DegreeAngle?> source)
-        {
-            Assert.IsNotNull(source, nameof(source));
-
-            DegreeAngle? value = null;
-            foreach (var element in source)
-            {
-                if (value == null || element < value)
-                    value = element;
-            }
-            return value;
-        }
-
-        public static DegreeAngle Min<TSource>(this IEnumerable<TSource> source, Func<TSource, DegreeAngle> selector) =>
-            source.Select(selector).Min();
-
-        public static DegreeAngle? Min<TSource>(this IEnumerable<TSource> source, Func<TSource, DegreeAngle?> selector) =>
-            source.Select(selector).Min();
+        public static RadianAngle? Max<TSource>(this IEnumerable<TSource> source, Func<TSource, RadianAngle?> selector) =>
+            source.Select(selector).Max();
 
         public static RadianAngle Min(this IEnumerable<RadianAngle> source)
         {
             Assert.IsNotNull(source, nameof(source));
 
-            var value = default(RadianAngle);
+            var value = RadianAngle.Zero;
             bool hasValue = false;
             foreach (var element in source)
             {
@@ -138,5 +133,18 @@ namespace QuantitativeWorld.Angular
 
         public static RadianAngle? Min<TSource>(this IEnumerable<TSource> source, Func<TSource, RadianAngle?> selector) =>
             source.Select(selector).Min();
+
+        public static RadianAngle Sum(this IEnumerable<RadianAngle> source)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            return source.Aggregate(default(RadianAngle), (acc, e) => acc + e);
+        }
+
+        public static RadianAngle Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, RadianAngle> selector)
+        {
+            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(selector, nameof(selector));
+            return source.Aggregate(default(RadianAngle), (acc, e) => acc + selector(e));
+        }
     }
 }
