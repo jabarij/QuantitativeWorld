@@ -10,6 +10,7 @@ namespace QuantitativeWorld
         private const double MaxJoules = double.MaxValue;
 
         public static readonly EnergyUnit DefaultUnit = EnergyUnit.Joule;
+        public static readonly Energy Zero = new Energy(0d);
 
         private readonly EnergyUnit? _formatUnit;
 

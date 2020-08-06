@@ -7,6 +7,7 @@ namespace QuantitativeWorld
     public partial struct Speed : ILinearQuantity<SpeedUnit>
     {
         public static readonly SpeedUnit DefaultUnit = SpeedUnit.MetrePerSecond;
+        public static readonly Speed Zero = new Speed(0d);
 
         private readonly double? _metresPerSecond;
         private readonly double? _value;
