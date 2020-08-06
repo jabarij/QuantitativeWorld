@@ -12,7 +12,7 @@ namespace QuantitativeWorld
             Assert.IsNotNull(source, nameof(source));
 
             var enumerator = source.GetEnumerator();
-            var sum = Weight.Zero;
+            var sum = default(Weight);
             int count = 0;
             while (enumerator.MoveNext())
             {
@@ -32,7 +32,7 @@ namespace QuantitativeWorld
             Assert.IsNotNull(selector, nameof(selector));
 
             var enumerator = source.GetEnumerator();
-            var sum = Weight.Zero;
+            var sum = default(Weight);
             int count = 0;
             while (enumerator.MoveNext())
             {
@@ -50,7 +50,7 @@ namespace QuantitativeWorld
         {
             Assert.IsNotNull(source, nameof(source));
 
-            var value = Weight.Zero;
+            var value = default(Weight);
             bool hasValue = false;
             foreach (var element in source)
             {
@@ -94,7 +94,7 @@ namespace QuantitativeWorld
         {
             Assert.IsNotNull(source, nameof(source));
 
-            var value = Weight.Zero;
+            var value = default(Weight);
             bool hasValue = false;
             foreach (var element in source)
             {
