@@ -10,6 +10,7 @@ namespace QuantitativeWorld
         private const double MaxMetres = double.MaxValue;
 
         public static readonly LengthUnit DefaultUnit = LengthUnit.Metre;
+        public static readonly Length Zero = new Length(0d);
 
         private readonly LengthUnit? _formatUnit;
 

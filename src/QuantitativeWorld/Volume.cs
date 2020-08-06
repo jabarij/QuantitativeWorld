@@ -10,6 +10,7 @@ namespace QuantitativeWorld
         private const double MaxCubicMetres = double.MaxValue;
 
         public static readonly VolumeUnit DefaultUnit = VolumeUnit.CubicMetre;
+        public static readonly Volume Zero = new Volume(0d);
 
         private readonly VolumeUnit? _formatUnit;
 

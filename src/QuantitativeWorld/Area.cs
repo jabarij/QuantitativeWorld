@@ -10,6 +10,7 @@ namespace QuantitativeWorld
         private const double MaxSquareMetres = double.MaxValue;
 
         public static readonly AreaUnit DefaultUnit = AreaUnit.SquareMetre;
+        public static readonly Area Zero = new Area(0d);
 
         private readonly AreaUnit? _formatUnit;
 

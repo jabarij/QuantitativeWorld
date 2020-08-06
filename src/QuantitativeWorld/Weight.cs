@@ -10,6 +10,7 @@ namespace QuantitativeWorld
         private const double MaxKilograms = double.MaxValue;
 
         public static readonly WeightUnit DefaultUnit = WeightUnit.Kilogram;
+        public static readonly Weight Zero = new Weight(0d);
 
         private readonly WeightUnit? _formatUnit;
 

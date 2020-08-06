@@ -10,6 +10,7 @@ namespace QuantitativeWorld
         private const double MaxWatts = double.MaxValue;
 
         public static readonly PowerUnit DefaultUnit = PowerUnit.Watt;
+        public static readonly Power Zero = new Power(0d);
 
         private readonly PowerUnit? _formatUnit;
 
