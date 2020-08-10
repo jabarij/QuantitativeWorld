@@ -473,6 +473,122 @@ namespace QuantitativeWorld.Tests
                     result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
                 }
             }
+
+            public class Extremes : AreaQuantity
+            {
+                public Extremes(TestFixture testFixture) : base(testFixture) { }
+
+                [Fact]
+                public void NullSource_ShouldThrow()
+                {
+                    // arrange
+                    IEnumerable<Area> source = null;
+
+                    // act
+                    Action extremes = () => EnumerableExtensions.Extremes(source);
+
+                    // assert
+                    extremes.Should().Throw<ArgumentNullException>()
+                        .And.ParamName.Should().Be("source");
+                }
+
+                [Fact]
+                public void EmptySource_ShouldThrow()
+                {
+                    // arrange
+                    var source = Enumerable.Empty<Area>();
+
+                    // act
+                    Action extremes = () => EnumerableExtensions.Extremes(source);
+
+                    // assert
+                    extremes.Should().Throw<InvalidOperationException>();
+                }
+
+                [Fact]
+                public void ShouldReturnValidResult()
+                {
+                    // arrange
+                    var source = Fixture.CreateMany<Area>(3).ToList();
+
+                    var min = source.OrderBy(e => e).First();
+                    var max = source.OrderBy(e => e).Last();
+                    var expectedResult = (min, max);
+
+                    // act
+                    var result = EnumerableExtensions.Extremes(source);
+
+                    // assert
+                    result.Should().Be(expectedResult, because: "The source was: {0}", string.Join(", ", source.Select(e => e.ToString())));
+                }
+            }
+
+            public class ExtremesBySelector : AreaQuantity
+            {
+                public ExtremesBySelector(TestFixture testFixture) : base(testFixture) { }
+
+                [Fact]
+                public void NullSource_ShouldThrow()
+                {
+                    // arrange
+                    IEnumerable<TestObject<Area>> source = null;
+                    Func<TestObject<Area>, Area> selector = e => e.Property;
+
+                    // act
+                    Action extremes = () => EnumerableExtensions.Extremes(source, selector);
+
+                    // assert
+                    extremes.Should().Throw<ArgumentNullException>()
+                        .And.ParamName.Should().Be("source");
+                }
+
+                [Fact]
+                public void NullSelector_ShouldThrow()
+                {
+                    // arrange
+                    var source = Enumerable.Empty<TestObject<Area>>();
+                    Func<TestObject<Area>, Area> selector = null;
+
+                    // act
+                    Action extremes = () => EnumerableExtensions.Extremes(source, selector);
+
+                    // assert
+                    extremes.Should().Throw<ArgumentNullException>()
+                        .And.ParamName.Should().Be("selector");
+                }
+
+                [Fact]
+                public void EmptySource_ShouldThrow()
+                {
+                    // arrange
+                    var source = Enumerable.Empty<TestObject<Area>>();
+                    Func<TestObject<Area>, Area> selector = e => e.Property;
+
+                    // act
+                    Action extremes = () => EnumerableExtensions.Extremes(source, selector);
+
+                    // assert
+                    extremes.Should().Throw<InvalidOperationException>();
+                }
+
+                [Fact]
+                public void ShouldReturnValidResult()
+                {
+                    // arrange
+                    var source = Fixture.CreateMany<Area>(3).Select(e => new TestObject<Area>(e)).ToList();
+                    Func<TestObject<Area>, Area> selector = e => e.Property;
+
+                    var min = source.OrderBy(selector).First().Property;
+                    var max = source.OrderBy(selector).Last().Property;
+                    var expectedResult = (min, max);
+
+                    // act
+                    var result = EnumerableExtensions.Extremes(source, selector);
+
+                    // assert
+                    result.Should().Be(expectedResult, because: "The source was: {0}", string.Join(", ", source.Select(e => selector(e).ToString())));
+                }
+            }
         }
     }
 }

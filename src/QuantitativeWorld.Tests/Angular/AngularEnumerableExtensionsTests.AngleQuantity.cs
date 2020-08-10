@@ -140,7 +140,7 @@ namespace QuantitativeWorld.Tests.Angular
                     IEnumerable<Angle> source = null;
 
                     // act
-                    Action max = () => AngularEnumerableExtensions.Max(source);
+                    Action max = () => EnumerableExtensions.Max(source);
 
                     // assert
                     max.Should().Throw<ArgumentNullException>()
@@ -154,7 +154,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var source = Enumerable.Empty<Angle>();
 
                     // act
-                    Action max = () => AngularEnumerableExtensions.Max(source);
+                    Action max = () => EnumerableExtensions.Max(source);
 
                     // assert
                     max.Should().Throw<InvalidOperationException>();
@@ -169,7 +169,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var expectedResult = source.OrderByDescending(e => e).First();
 
                     // act
-                    var result = AngularEnumerableExtensions.Max(source);
+                    var result = EnumerableExtensions.Max(source);
 
                     // assert
                     result.Should().Be(expectedResult);
@@ -188,7 +188,7 @@ namespace QuantitativeWorld.Tests.Angular
                     Func<TestObject<Angle>, Angle> selector = e => e.Property;
 
                     // act
-                    Action max = () => AngularEnumerableExtensions.Max(source, selector);
+                    Action max = () => EnumerableExtensions.Max(source, selector);
 
                     // assert
                     max.Should().Throw<ArgumentNullException>()
@@ -203,7 +203,7 @@ namespace QuantitativeWorld.Tests.Angular
                     Func<TestObject<Angle>, Angle> selector = null;
 
                     // act
-                    Action max = () => AngularEnumerableExtensions.Max(source, selector);
+                    Action max = () => EnumerableExtensions.Max(source, selector);
 
                     // assert
                     max.Should().Throw<ArgumentNullException>()
@@ -218,7 +218,7 @@ namespace QuantitativeWorld.Tests.Angular
                     Func<TestObject<Angle>, Angle> selector = e => e.Property;
 
                     // act
-                    Action max = () => AngularEnumerableExtensions.Max(source, selector);
+                    Action max = () => EnumerableExtensions.Max(source, selector);
 
                     // assert
                     max.Should().Throw<InvalidOperationException>();
@@ -234,7 +234,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var expectedResult = source.OrderByDescending(e => e.Property).First().Property;
 
                     // act
-                    var result = AngularEnumerableExtensions.Max(source, selector);
+                    var result = EnumerableExtensions.Max(source, selector);
 
                     // assert
                     result.Should().Be(expectedResult);
@@ -252,7 +252,7 @@ namespace QuantitativeWorld.Tests.Angular
                     IEnumerable<Angle> source = null;
 
                     // act
-                    Action min = () => AngularEnumerableExtensions.Min(source);
+                    Action min = () => EnumerableExtensions.Min(source);
 
                     // assert
                     min.Should().Throw<ArgumentNullException>()
@@ -266,7 +266,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var source = Enumerable.Empty<Angle>();
 
                     // act
-                    Action min = () => AngularEnumerableExtensions.Min(source);
+                    Action min = () => EnumerableExtensions.Min(source);
 
                     // assert
                     min.Should().Throw<InvalidOperationException>();
@@ -281,7 +281,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var expectedResult = source.OrderBy(e => e).First();
 
                     // act
-                    var result = AngularEnumerableExtensions.Min(source);
+                    var result = EnumerableExtensions.Min(source);
 
                     // assert
                     result.Should().Be(expectedResult);
@@ -300,7 +300,7 @@ namespace QuantitativeWorld.Tests.Angular
                     Func<TestObject<Angle>, Angle> selector = e => e.Property;
 
                     // act
-                    Action min = () => AngularEnumerableExtensions.Min(source, selector);
+                    Action min = () => EnumerableExtensions.Min(source, selector);
 
                     // assert
                     min.Should().Throw<ArgumentNullException>()
@@ -315,7 +315,7 @@ namespace QuantitativeWorld.Tests.Angular
                     Func<TestObject<Angle>, Angle> selector = null;
 
                     // act
-                    Action min = () => AngularEnumerableExtensions.Min(source, selector);
+                    Action min = () => EnumerableExtensions.Min(source, selector);
 
                     // assert
                     min.Should().Throw<ArgumentNullException>()
@@ -330,7 +330,7 @@ namespace QuantitativeWorld.Tests.Angular
                     Func<TestObject<Angle>, Angle> selector = e => e.Property;
 
                     // act
-                    Action min = () => AngularEnumerableExtensions.Min(source, selector);
+                    Action min = () => EnumerableExtensions.Min(source, selector);
 
                     // assert
                     min.Should().Throw<InvalidOperationException>();
@@ -346,7 +346,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var expectedResult = source.OrderBy(e => e.Property).First().Property;
 
                     // act
-                    var result = AngularEnumerableExtensions.Min(source, selector);
+                    var result = EnumerableExtensions.Min(source, selector);
 
                     // assert
                     result.Should().Be(expectedResult);
@@ -361,10 +361,10 @@ namespace QuantitativeWorld.Tests.Angular
                 public void NullSource_ShouldThrow()
                 {
                     // arrange
-                    IEnumerable<Angle> areas = null;
+                    IEnumerable<Angle> angles = null;
 
                     // act
-                    Action sum = () => AngularEnumerableExtensions.Sum(areas);
+                    Action sum = () => AngularEnumerableExtensions.Sum(angles);
 
                     // assert
                     sum.Should().Throw<ArgumentNullException>()
@@ -375,10 +375,10 @@ namespace QuantitativeWorld.Tests.Angular
                 public void EmptySource_ShouldReturnDefaultAngle()
                 {
                     // arrange
-                    var areas = Enumerable.Empty<Angle>();
+                    var angles = Enumerable.Empty<Angle>();
 
                     // act
-                    var result = AngularEnumerableExtensions.Sum(areas);
+                    var result = AngularEnumerableExtensions.Sum(angles);
 
                     // assert
                     result.Should().Be(default(Angle));
@@ -388,12 +388,12 @@ namespace QuantitativeWorld.Tests.Angular
                 public void ShouldReturnValidResult()
                 {
                     // arrange
-                    var areas = Fixture.CreateMany<Angle>(3);
-                    double expectedResultInTurns = areas.Sum(e => e.Turns);
+                    var angles = Fixture.CreateMany<Angle>(3);
+                    double expectedResultInTurns = angles.Sum(e => e.Turns);
                     var expectedResult = new Angle(expectedResultInTurns);
 
                     // act
-                    var result = AngularEnumerableExtensions.Sum(areas);
+                    var result = AngularEnumerableExtensions.Sum(angles);
 
                     // assert
                     result.Turns.Should().Be(expectedResult.Turns);
