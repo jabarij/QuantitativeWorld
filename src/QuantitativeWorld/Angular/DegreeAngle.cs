@@ -6,6 +6,9 @@ namespace QuantitativeWorld.Angular
 {
     public partial struct DegreeAngle : ILinearQuantity<AngleUnit>
     {
+        private const double MinTotalSeconds = double.MinValue;
+        private const double MaxTotalSeconds = double.MaxValue;
+
         public const int MinDegrees = 0;
         public const int MaxDegrees = 359;
         public const int MinMinutes = 0;
@@ -14,20 +17,19 @@ namespace QuantitativeWorld.Angular
         public const double ExclusiveMaxSeconds = 60d;
 
         public static readonly DegreeAngle Zero = new DegreeAngle(0d);
+        public static readonly DegreeAngle PositiveInfinity = new DegreeAngle(double.PositiveInfinity, false);
+        public static readonly DegreeAngle NegativeInfinity = new DegreeAngle(double.NegativeInfinity, false);
 
-        private const double EmptyValue = 0d;
-
-        private static readonly AngleUnit _baseUnit = AngleUnit.Degree;
         private static readonly ValueRange<double> _secondsRange =
             new ValueRange<double>(MinSeconds, ExclusiveMaxSeconds, IntervalBoundaryType.Closed, IntervalBoundaryType.Open);
 
-        private readonly double? _totalSeconds;
+        private int? _circles;
+        private int? _degrees;
+        private int? _minutes;
+        private double? _seconds;
 
         public DegreeAngle(double totalSeconds)
-        {
-            Assert.IsNotNaN(totalSeconds, nameof(totalSeconds));
-            _totalSeconds = totalSeconds;
-        }
+            : this(totalSeconds, true) { }
         public DegreeAngle(int circles, int degrees, int minutes, double seconds, bool isNegative)
         {
             Assert.IsGreaterThanOrEqual(circles, 0, nameof(circles));
@@ -37,7 +39,12 @@ namespace QuantitativeWorld.Angular
             double totalSeconds = (circles * Constants.ArcsecondsPerTurn + degrees * Constants.ArcsecondsPerDegree + minutes * Constants.ArcsecondsPerArcminute + seconds);
             if (isNegative)
                 totalSeconds *= -1;
-            _totalSeconds = totalSeconds;
+            Assert.IsInRange(totalSeconds, MinTotalSeconds, MaxTotalSeconds, nameof(totalSeconds));
+            TotalSeconds = totalSeconds;
+            _circles = circles;
+            _degrees = degrees;
+            _minutes = minutes;
+            _seconds = seconds;
         }
         public DegreeAngle(int circles, int degrees, int minutes, double seconds)
             : this(Math.Abs(circles), degrees, minutes, seconds, circles < 0) { }
@@ -45,8 +52,18 @@ namespace QuantitativeWorld.Angular
             : this(0, Math.Abs(degrees), minutes, seconds, degrees < 0) { }
         public DegreeAngle(int minutes, double seconds)
             : this(0, 0, Math.Abs(minutes), seconds, minutes < 0) { }
+        private DegreeAngle(double totalSeconds, bool validate)
+        {
+            if (validate)
+                Assert.IsInRange(totalSeconds, MinTotalSeconds, MaxTotalSeconds, nameof(totalSeconds));
+            TotalSeconds = totalSeconds;
+            _circles = null;
+            _degrees = null;
+            _minutes = null;
+            _seconds = null;
+        }
 
-        public double TotalSeconds => _totalSeconds ?? EmptyValue;
+        public double TotalSeconds { get; }
         public double TotalMinutes =>
             TotalSeconds / Constants.ArcsecondsPerArcminute;
         public double TotalDegrees =>
@@ -55,13 +72,13 @@ namespace QuantitativeWorld.Angular
             TotalSeconds < 0d;
 
         public int Circles =>
-            Math.Abs((int)(TotalDegrees / Constants.DegreesPerTurn));
+            EnsureCircles();
         public int Degrees =>
-            Math.Abs((int)(TotalDegrees % Constants.DegreesPerTurn));
+            EnsureDegrees();
         public int Minutes =>
-            Math.Abs((int)(TotalMinutes % Constants.ArcminutesPerDegree));
+            EnsureMinutes();
         public double Seconds =>
-            Math.Abs(TotalSeconds % Constants.ArcsecondsPerArcminute);
+            EnsureSeconds();
 
         public Angle ToAngle() =>
             new Angle(TotalDegrees, AngleUnit.Degree);
@@ -73,7 +90,7 @@ namespace QuantitativeWorld.Angular
             new DegreeAngle(TotalSeconds % (360d * 60d * 60d));
 
         public bool IsZero() =>
-            TotalSeconds.Equals(0d);
+            TotalSeconds == 0d;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<DegreeAngle, AngleUnit>(this);
@@ -87,5 +104,33 @@ namespace QuantitativeWorld.Angular
 
         public static DegreeAngle FromAngle(Angle angle) =>
             new DegreeAngle(angle.Convert(AngleUnit.Arcsecond).Value);
+
+        private int EnsureCircles()
+        {
+            if (!_circles.HasValue)
+                _circles = Math.Abs((int)(TotalDegrees / Constants.DegreesPerTurn));
+            return _circles.Value;
+        }
+
+        private int EnsureDegrees()
+        {
+            if (!_degrees.HasValue)
+                _degrees = Math.Abs((int)(TotalDegrees % Constants.DegreesPerTurn));
+            return _degrees.Value;
+        }
+
+        private int EnsureMinutes()
+        {
+            if (!_minutes.HasValue)
+                _minutes = Math.Abs((int)(TotalMinutes % Constants.ArcminutesPerDegree));
+            return _minutes.Value;
+        }
+
+        private double EnsureSeconds()
+        {
+            if (!_seconds.HasValue)
+                _seconds = Math.Abs(TotalSeconds % Constants.ArcsecondsPerArcminute);
+            return _seconds.Value;
+        }
     }
 }

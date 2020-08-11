@@ -20,14 +20,14 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Area operator +(Area left, Area right) =>
-            new Area(formatUnit: left._formatUnit ?? right.Unit, squareMetres: left.SquareMetres + right.SquareMetres);
+            new Area(squareMetres: left.SquareMetres + right.SquareMetres, value: null, unit: left._unit ?? right.Unit);
         public static Area operator -(Area left, Area right) =>
-            new Area(formatUnit: left._formatUnit ?? right.Unit, squareMetres: left.SquareMetres - right.SquareMetres);
+            new Area(squareMetres: left.SquareMetres - right.SquareMetres, value: null, unit: left._unit ?? right.Unit);
         public static Area operator -(Area argument) =>
-            new Area(formatUnit: argument.Unit, squareMetres: -argument.SquareMetres);
+            new Area(squareMetres: -argument.SquareMetres, value: null, unit: argument._unit);
 
         public static Area operator *(Area argument, double factor) =>
-            new Area(formatUnit: argument.Unit, squareMetres: argument.SquareMetres * factor);
+            new Area(squareMetres: argument.SquareMetres * factor, value: null, unit: argument._unit);
         public static Area operator *(double argument, Area factor) =>
             factor * argument;
 
@@ -40,7 +40,7 @@ namespace QuantitativeWorld
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Area(formatUnit: nominator.Unit, squareMetres: nominator.SquareMetres / denominator);
+            return new Area(squareMetres: nominator.SquareMetres / denominator, value: null, unit: nominator._unit);
         }
         public static double operator /(Area nominator, Area denominator)
         {

@@ -27,7 +27,7 @@ namespace QuantitativeWorld.Text.Json.Angular
         public void SetSymbol(string symbol) =>
             _symbol = symbol;
 
-        public void SetUnitPerTurn(double unitsPerTurn) =>
+        public void SetUnitsPerTurn(double unitsPerTurn) =>
             _unitsPerTurn = unitsPerTurn;
 
         public bool TryBuild(out AngleUnit result)

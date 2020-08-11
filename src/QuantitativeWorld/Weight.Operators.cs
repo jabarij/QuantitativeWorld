@@ -20,14 +20,14 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Weight operator +(Weight left, Weight right) =>
-            new Weight(formatUnit: left._formatUnit ?? right.Unit, kilograms: left.Kilograms + right.Kilograms);
+            new Weight(kilograms: left.Kilograms + right.Kilograms, value: null, unit: left._unit ?? right.Unit);
         public static Weight operator -(Weight left, Weight right) =>
-            new Weight(formatUnit: left._formatUnit ?? right.Unit, kilograms: left.Kilograms - right.Kilograms);
+            new Weight(kilograms: left.Kilograms - right.Kilograms, value: null, unit: left._unit ?? right.Unit);
         public static Weight operator -(Weight weight) =>
-            new Weight(formatUnit: weight.Unit, kilograms: -weight.Kilograms);
+            new Weight(kilograms: -weight.Kilograms, value: null, unit: weight.Unit);
 
         public static Weight operator *(Weight weight, double factor) =>
-            new Weight(formatUnit: weight.Unit, kilograms: weight.Kilograms * factor);
+            new Weight(kilograms: weight.Kilograms * factor, value: null, unit: weight._unit);
         public static Weight operator *(double factor, Weight weight) =>
             weight * factor;
 
@@ -35,7 +35,7 @@ namespace QuantitativeWorld
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Weight(formatUnit: weight.Unit, kilograms: weight.Kilograms / denominator);
+            return new Weight(kilograms: weight.Kilograms / denominator, value: null, unit: weight._unit);
         }
         public static double operator /(Weight weight, Weight denominator)
         {

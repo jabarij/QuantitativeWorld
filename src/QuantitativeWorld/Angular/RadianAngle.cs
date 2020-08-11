@@ -6,14 +6,24 @@ namespace QuantitativeWorld.Angular
 {
     public partial struct RadianAngle : ILinearQuantity<AngleUnit>
     {
+        private const double MinRadians = double.MinValue;
+        private const double MaxRadians = double.MaxValue;
+
         private const double EmptyValue = 0d;
         private readonly double? _radians;
 
         public static readonly RadianAngle Zero = new RadianAngle(0d);
+        public static readonly RadianAngle PositiveInfinity = new RadianAngle((double?)double.PositiveInfinity);
+        public static readonly RadianAngle NegativeInfinity = new RadianAngle((double?)double.NegativeInfinity);
 
         public RadianAngle(double radians)
         {
             Assert.IsNotNaN(radians, nameof(radians));
+            Assert.IsInRange(radians, MinRadians, MaxRadians, nameof(radians));
+            _radians = radians;
+        }
+        private RadianAngle(double? radians)
+        {
             _radians = radians;
         }
 
