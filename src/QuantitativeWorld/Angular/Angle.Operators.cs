@@ -20,14 +20,14 @@ namespace QuantitativeWorld.Angular
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Angle operator +(Angle left, Angle right) =>
-            new Angle(formatUnit: left._formatUnit ?? right.Unit, turns: left.Turns + right.Turns);
+            new Angle(turns: left.Turns + right.Turns, value: null, unit: left._unit ?? right.Unit);
         public static Angle operator -(Angle left, Angle right) =>
-            new Angle(formatUnit: left._formatUnit ?? right.Unit, turns: left.Turns - right.Turns);
+            new Angle(turns: left.Turns - right.Turns, value: null, unit: left._unit ?? right.Unit);
         public static Angle operator -(Angle argument) =>
-            new Angle(formatUnit: argument.Unit, turns: -argument.Turns);
+            new Angle(turns: -argument.Turns, value: null, unit: argument._unit);
 
         public static Angle operator *(Angle argument, double factor) =>
-            new Angle(formatUnit: argument.Unit, turns: argument.Turns * factor);
+            new Angle(turns: argument.Turns * factor, value: null, unit: argument._unit);
         public static Angle operator *(double argument, Angle factor) =>
             factor * argument;
 
@@ -35,7 +35,7 @@ namespace QuantitativeWorld.Angular
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Angle(formatUnit: nominator.Unit, turns: nominator.Turns / denominator);
+            return new Angle(turns: nominator.Turns / denominator, value: null, unit: nominator._unit);
         }
         public static double operator /(Angle nominator, Angle denominator)
         {
@@ -48,7 +48,16 @@ namespace QuantitativeWorld.Angular
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Angle(nominator.Value % denominator, nominator.Unit);
+
+            var nominatorUnit = nominator.Unit;
+            if (nominatorUnit.IsEquivalentOf(DefaultUnit))
+                return new Angle(nominator.Turns % denominator, value: null, unit: nominator._unit);
+            else
+            {
+                double resultValue = nominator.Value % denominator;
+                double turns = GetTurns(resultValue, nominatorUnit);
+                return new Angle(turns, resultValue, nominatorUnit);
+            }
         }
 
         public static Angle? operator +(Angle? left, Angle? right)

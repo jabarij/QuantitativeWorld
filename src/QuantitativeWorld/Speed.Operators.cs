@@ -20,31 +20,14 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Speed operator +(Speed left, Speed right) =>
-            left.Unit.IsEquivalentOf(right.Unit)
-            ? new Speed(value: left.Value + right.Value, unit: left.Unit)
-            : new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond + right.MetresPerSecond);
+            new Speed(metresPerSecond: left.MetresPerSecond + right.MetresPerSecond, value: null, unit: left._unit ?? right.Unit);
         public static Speed operator -(Speed left, Speed right) =>
-            left.Unit.IsEquivalentOf(right.Unit)
-            ? new Speed(value: left.Value - right.Value, unit: left.Unit)
-            : new Speed(unit: left._unit ?? right.Unit, metresPerSecond: left.MetresPerSecond - right.MetresPerSecond);
+            new Speed(metresPerSecond: left.MetresPerSecond - right.MetresPerSecond, value: null, unit: left._unit ?? right.Unit);
         public static Speed operator -(Speed speed) =>
-            speed._value.HasValue
-            ? new Speed(value: -speed._value.Value, unit: speed.Unit)
-            : new Speed(unit: speed.Unit, metresPerSecond: -speed.MetresPerSecond);
+            new Speed(metresPerSecond: -speed.MetresPerSecond, value: null, unit: speed._unit);
 
-        public static Speed operator *(Speed speed, double factor)
-        {
-            if (double.IsNaN(factor))
-                throw new ArgumentException("Argument is not a number.", nameof(factor));
-            return
-                speed._value.HasValue
-                ? new Speed(
-                    value: speed._value.Value * factor,
-                    unit: speed._unit.Value)
-                : new Speed(
-                    unit: speed.Unit,
-                    metresPerSecond: speed.MetresPerSecond * factor);
-        }
+        public static Speed operator *(Speed speed, double factor) =>
+            new Speed(metresPerSecond: speed.MetresPerSecond * factor, value: null, unit: speed._unit);
         public static Speed operator *(double factor, Speed speed) =>
             speed * factor;
         public static Length operator *(Speed speed, Time time) =>
@@ -54,27 +37,15 @@ namespace QuantitativeWorld
 
         public static Speed operator /(Speed speed, double denominator)
         {
-            if (double.IsNaN(denominator))
-                throw new ArgumentException("Argument is not a number.", nameof(denominator));
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return
-                speed._value.HasValue
-                ? new Speed(
-                    value: speed._value.Value / denominator,
-                    unit: speed._unit.Value)
-                : new Speed(
-                    unit: speed.Unit,
-                    metresPerSecond: speed.MetresPerSecond / denominator);
+            return new Speed(metresPerSecond: speed.MetresPerSecond / denominator, value: null, unit: speed._unit);
         }
         public static double operator /(Speed speed, Speed denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
-            return
-                speed.Unit.IsEquivalentOf(denominator.Unit)
-                ? speed.Value / denominator.Value
-                : speed.MetresPerSecond / denominator.MetresPerSecond;
+            return speed.MetresPerSecond / denominator.MetresPerSecond;
         }
         public static Time operator /(Length length, Speed speed)
         {

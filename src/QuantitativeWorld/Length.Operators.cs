@@ -20,14 +20,14 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Length operator +(Length left, Length right) =>
-            new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres + right.Metres);
+            new Length(metres: left.Metres + right.Metres,value:null, unit: left._unit ?? right.Unit);
         public static Length operator -(Length left, Length right) =>
-            new Length(formatUnit: left._formatUnit ?? right.Unit, metres: left.Metres - right.Metres);
+            new Length(metres: left.Metres - right.Metres, value: null, unit: left._unit ?? right.Unit);
         public static Length operator -(Length length) =>
-            new Length(formatUnit: length.Unit, metres: -length.Metres);
+            new Length(metres: -length.Metres, value: null, unit: length._unit);
 
         public static Length operator *(Length length, double factor) =>
-            new Length(formatUnit: length.Unit, metres: length.Metres * factor);
+            new Length(metres: length.Metres * factor, value: null, unit: length._unit);
         public static Length operator *(double factor, Length length) =>
             length * factor;
 
@@ -38,7 +38,7 @@ namespace QuantitativeWorld
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Length(formatUnit: length.Unit, metres: length.Metres / denominator);
+            return new Length(metres: length.Metres / denominator, value: null, unit: length._unit);
         }
         public static double operator /(Length length, Length denominator)
         {
@@ -76,7 +76,7 @@ namespace QuantitativeWorld
             (length ?? default(Length)) / denominator;
         public static double operator /(Length? length, Length? denominator) =>
             (length ?? default(Length)) / (denominator ?? default(Length));
-        public static Speed operator /(Length? length, Time? time)=>
+        public static Speed operator /(Length? length, Time? time) =>
             (length ?? default(Length)) / (time ?? default(Time));
     }
 }

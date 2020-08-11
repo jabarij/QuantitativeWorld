@@ -20,14 +20,14 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Energy operator +(Energy left, Energy right) =>
-            new Energy(formatUnit: left._formatUnit ?? right.Unit, joules: left.Joules + right.Joules);
+            new Energy(joules: left.Joules + right.Joules, value: null, unit: left._unit ?? right.Unit);
         public static Energy operator -(Energy left, Energy right) =>
-            new Energy(formatUnit: left._formatUnit ?? right.Unit, joules: left.Joules - right.Joules);
+            new Energy(joules: left.Joules - right.Joules, value: null, unit: left._unit ?? right.Unit);
         public static Energy operator -(Energy energy) =>
-            new Energy(formatUnit: energy.Unit, joules: -energy.Joules);
+            new Energy(joules: -energy.Joules, value: null, unit: energy._unit);
 
         public static Energy operator *(Energy energy, double factor) =>
-            new Energy(formatUnit: energy.Unit, joules: energy.Joules * factor);
+            new Energy(joules: energy.Joules * factor, value: null, unit: energy._unit);
         public static Energy operator *(double factor, Energy energy) =>
             energy * factor;
 
@@ -35,7 +35,7 @@ namespace QuantitativeWorld
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Energy(formatUnit: energy.Unit, joules: energy.Joules / denominator);
+            return new Energy(joules: energy.Joules / denominator, value: null, unit: energy._unit);
         }
         public static double operator /(Energy energy, Energy denominator)
         {

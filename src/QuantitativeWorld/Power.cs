@@ -10,29 +10,52 @@ namespace QuantitativeWorld
         private const double MaxWatts = double.MaxValue;
 
         public static readonly PowerUnit DefaultUnit = PowerUnit.Watt;
+        public static readonly Power Zero = new Power(0d);
+        public static readonly Power PositiveInfinity = new Power(double.PositiveInfinity, null, null, false);
+        public static readonly Power NegativeInfinity = new Power(double.NegativeInfinity, null, null, false);
 
-        private readonly PowerUnit? _formatUnit;
+        private readonly PowerUnit? _unit;
+        private double? _value;
 
         public Power(double watts)
-            : this(formatUnit: null, watts: watts) { }
+            : this(
+                watts: watts,
+                value: null,
+                unit: null)
+        { }
         public Power(double value, PowerUnit unit)
-            : this(formatUnit: unit, watts: GetWatts(value, unit)) { }
-        private Power(PowerUnit? formatUnit, double watts)
+            : this(
+                watts: GetWatts(value, unit),
+                value: value,
+                unit: unit)
+        { }
+        private Power(double watts, double? value, PowerUnit? unit, bool validate = true)
         {
-            Assert.IsInRange(watts, MinWatts, MaxWatts, nameof(watts));
+            if (validate)
+                Assert.IsInRange(watts, MinWatts, MaxWatts, nameof(value));
 
-            _formatUnit = formatUnit;
             Watts = watts;
+            _value = value;
+            _unit = unit;
         }
 
         public double Watts { get; }
-        public double Value => GetValue(Watts, Unit);
-        public PowerUnit Unit => _formatUnit ?? DefaultUnit;
+        public double Value => EnsureValue();
+        public PowerUnit Unit => _unit ?? DefaultUnit;
+
         double ILinearQuantity<PowerUnit>.BaseValue => Watts;
         PowerUnit ILinearQuantity<PowerUnit>.BaseUnit => DefaultUnit;
 
         public Power Convert(PowerUnit targetUnit) =>
-            new Power(targetUnit, Watts);
+            targetUnit.IsEquivalentOf(Unit)
+            ? new Power(
+                watts: Watts,
+                value: _value,
+                unit: targetUnit)
+            : new Power(
+                watts: Watts,
+                value: null,
+                unit: targetUnit);
 
         public bool IsZero() =>
             Watts == 0d;
@@ -44,7 +67,14 @@ namespace QuantitativeWorld
 
         private static double GetWatts(double value, PowerUnit sourceUnit) =>
             value * sourceUnit.ValueInWatts;
-        private static double GetValue(double watts, PowerUnit targetUnit) =>
-            watts / targetUnit.ValueInWatts;
+        private static double GetValue(double metres, PowerUnit targetUnit) =>
+            metres / targetUnit.ValueInWatts;
+
+        private double EnsureValue()
+        {
+            if (!_value.HasValue)
+                _value = GetValue(Watts, Unit);
+            return _value.Value;
+        }
     }
 }

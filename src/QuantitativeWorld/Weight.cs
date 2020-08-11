@@ -10,29 +10,52 @@ namespace QuantitativeWorld
         private const double MaxKilograms = double.MaxValue;
 
         public static readonly WeightUnit DefaultUnit = WeightUnit.Kilogram;
+        public static readonly Weight Zero = new Weight(0d);
+        public static readonly Weight PositiveInfinity = new Weight(double.PositiveInfinity, null, null, false);
+        public static readonly Weight NegativeInfinity = new Weight(double.NegativeInfinity, null, null, false);
 
-        private readonly WeightUnit? _formatUnit;
+        private readonly WeightUnit? _unit;
+        private double? _value;
 
         public Weight(double kilograms)
-            : this(formatUnit: null, kilograms: kilograms) { }
+            : this(
+                kilograms: kilograms,
+                value: null,
+                unit: null)
+        { }
         public Weight(double value, WeightUnit unit)
-            : this(formatUnit: unit, kilograms: GetKilograms(value, unit)) { }
-        private Weight(WeightUnit? formatUnit, double kilograms)
+            : this(
+                kilograms: GetKilograms(value, unit),
+                value: value,
+                unit: unit)
+        { }
+        private Weight(double kilograms, double? value, WeightUnit? unit, bool validate = true)
         {
-            Assert.IsInRange(kilograms, MinKilograms, MaxKilograms, nameof(kilograms));
+            if (validate)
+                Assert.IsInRange(kilograms, MinKilograms, MaxKilograms, nameof(value));
 
-            _formatUnit = formatUnit;
             Kilograms = kilograms;
+            _value = value;
+            _unit = unit;
         }
 
         public double Kilograms { get; }
-        public double Value => GetValue(Kilograms, Unit);
-        public WeightUnit Unit => _formatUnit ?? DefaultUnit;
+        public double Value => EnsureValue();
+        public WeightUnit Unit => _unit ?? DefaultUnit;
+
         double ILinearQuantity<WeightUnit>.BaseValue => Kilograms;
         WeightUnit ILinearQuantity<WeightUnit>.BaseUnit => DefaultUnit;
 
         public Weight Convert(WeightUnit targetUnit) =>
-            new Weight(targetUnit, Kilograms);
+            targetUnit.IsEquivalentOf(Unit)
+            ? new Weight(
+                kilograms: Kilograms,
+                value: _value,
+                unit: targetUnit)
+            : new Weight(
+                kilograms: Kilograms,
+                value: null,
+                unit: targetUnit);
 
         public bool IsZero() =>
             Kilograms == 0d;
@@ -42,17 +65,16 @@ namespace QuantitativeWorld
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Weight, WeightUnit>(formatProvider, this);
 
-        private static double GetKilograms(double value, WeightUnit sourceUnit)
+        private static double GetKilograms(double value, WeightUnit sourceUnit) =>
+            value * sourceUnit.ValueInKilograms;
+        private static double GetValue(double metres, WeightUnit targetUnit) =>
+            metres / targetUnit.ValueInKilograms;
+
+        private double EnsureValue()
         {
-            double result =
-                sourceUnit.ValueInKilograms < 1d
-                ? value / (1d / sourceUnit.ValueInKilograms)
-                : value * sourceUnit.ValueInKilograms;
-            if (double.IsInfinity(result))
-                throw Error.ArgumentOutOfRange(nameof(value), value, $"{value} multiplied by {sourceUnit.ValueInKilograms} gave {result}.");
-            return result;
+            if (!_value.HasValue)
+                _value = GetValue(Kilograms, Unit);
+            return _value.Value;
         }
-        private static double GetValue(double kilograms, WeightUnit targetUnit) =>
-            kilograms / targetUnit.ValueInKilograms;
     }
 }

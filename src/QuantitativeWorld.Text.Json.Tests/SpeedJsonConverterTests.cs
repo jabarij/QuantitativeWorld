@@ -11,8 +11,8 @@ namespace QuantitativeWorld.Text.Json.Tests
         public SpeedJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(50d, SpeedJsonSerializationFormat.AsMetresPerSecond, "{\"MetresPerSecond\":13.888888888888891}")]
-        [InlineData(50d, SpeedJsonSerializationFormat.AsMetresPerSecondWithUnit, "{\"MetresPerSecond\":13.888888888888891,\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0.27777777777777779}}")]
+        [InlineData(50d, SpeedJsonSerializationFormat.AsMetresPerSecond, "{\"MetresPerSecond\":13.888888888888889}")]
+        [InlineData(50d, SpeedJsonSerializationFormat.AsMetresPerSecondWithUnit, "{\"MetresPerSecond\":13.888888888888889,\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0.27777777777777779}}")]
         [InlineData(50d, SpeedJsonSerializationFormat.AsValueWithUnit, "{\"Value\":50.0,\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0.27777777777777779}}")]
         public void Serialize_ShouldReturnValidJson(double kilometresPerHour, SpeedJsonSerializationFormat serializationFormat, string expectedJson)
         {

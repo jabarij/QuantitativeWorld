@@ -5,6 +5,9 @@ namespace QuantitativeWorld
 {
     public partial struct Time
     {
+        private const double MinTotalSeconds = double.MinValue;
+        private const double MaxTotalSeconds = double.MaxValue;
+
         public const int MinHours = 0;
         public const int MaxHours = 359;
         public const int MinMinutes = 0;
@@ -13,6 +16,8 @@ namespace QuantitativeWorld
         public const double ExclusiveMaxSeconds = 60d;
 
         public static readonly Time Zero = new Time(0d);
+        public static readonly Time PositiveInfinity = new Time((double?)double.PositiveInfinity);
+        public static readonly Time NegativeInfinity = new Time((double?)double.NegativeInfinity);
 
         private const double EmptyValue = 0d;
 
@@ -24,6 +29,7 @@ namespace QuantitativeWorld
         public Time(double totalSeconds)
         {
             Assert.IsNotNaN(totalSeconds, nameof(totalSeconds));
+            Assert.IsInRange(totalSeconds, MinTotalSeconds, MaxTotalSeconds, nameof(totalSeconds));
             _totalSeconds = totalSeconds;
         }
         public Time(int hours, int minutes, double seconds, bool isNegative)
@@ -40,6 +46,10 @@ namespace QuantitativeWorld
             : this(Math.Abs(hours), minutes, seconds, hours < 0) { }
         public Time(int minutes, double seconds)
             : this(0, Math.Abs(minutes), seconds, minutes < 0) { }
+        private Time(double? totalSeconds)
+        {
+            _totalSeconds = totalSeconds;
+        }
 
         public double TotalSeconds => _totalSeconds ?? EmptyValue;
         public double TotalMinutes =>
