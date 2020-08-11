@@ -20,27 +20,22 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Power operator +(Power left, Power right) =>
-            new Power(formatUnit: left._formatUnit ?? right.Unit, watts: left.Watts + right.Watts);
+            new Power(watts: left.Watts + right.Watts, value: null, unit: left._unit ?? right.Unit);
         public static Power operator -(Power left, Power right) =>
-            new Power(formatUnit: left._formatUnit ?? right.Unit, watts: left.Watts - right.Watts);
+            new Power(watts: left.Watts - right.Watts, value: null, unit: left._unit ?? right.Unit);
         public static Power operator -(Power power) =>
-            new Power(formatUnit: power.Unit, watts: -power.Watts);
+            new Power(watts: -power.Watts, value: null, unit: power._unit);
 
         public static Power operator *(Power power, double factor) =>
-            new Power(formatUnit: power.Unit, watts: power.Watts * factor);
+            new Power(watts: power.Watts * factor, value: null, unit: power._unit);
         public static Power operator *(double factor, Power power) =>
             power * factor;
-
-        public static Energy operator *(Power power, Time time) =>
-            new Energy(power.Watts * time.TotalSeconds);
-        public static Energy operator *(Time argument, Power factor) =>
-            new Energy(argument.TotalSeconds * factor.Watts);
 
         public static Power operator /(Power power, double denominator)
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Power(formatUnit: power.Unit, watts: power.Watts / denominator);
+            return new Power(watts: power.Watts / denominator, value: null, unit: power._unit);
         }
         public static double operator /(Power power, Power denominator)
         {
@@ -62,6 +57,17 @@ namespace QuantitativeWorld
             (power ?? default(Power)) * factor;
         public static Power? operator *(double factor, Power? power) =>
             power * factor;
+
+        public static Power? operator /(Power? power, double denominator) =>
+            (power ?? default(Power)) / denominator;
+        public static double operator /(Power? power, Power? denominator) =>
+            (power ?? default(Power)) / (denominator ?? default(Power));
+
+        public static Energy operator *(Power power, Time time) =>
+            new Energy(power.Watts * time.TotalSeconds);
+        public static Energy operator *(Time argument, Power factor) =>
+            new Energy(argument.TotalSeconds * factor.Watts);
+
         public static Energy? operator *(Power? power, Time? time) =>
             power.HasValue || time.HasValue
             ? (power ?? default(Power)) * (time ?? default(Time))
@@ -70,10 +76,5 @@ namespace QuantitativeWorld
             time.HasValue || power.HasValue
             ? (time ?? default(Time)) * (power ?? default(Power))
             : (Energy?)null;
-
-        public static Power? operator /(Power? power, double denominator) =>
-            (power ?? default(Power)) / denominator;
-        public static double operator /(Power? power, Power? denominator) =>
-            (power ?? default(Power)) / (denominator ?? default(Power));
     }
 }

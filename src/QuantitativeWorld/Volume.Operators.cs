@@ -20,14 +20,14 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Volume operator +(Volume left, Volume right) =>
-            new Volume(formatUnit: left._formatUnit ?? right.Unit, cubicMetres: left.CubicMetres + right.CubicMetres);
+            new Volume(cubicMetres: left.CubicMetres + right.CubicMetres, value: null, unit: left._unit ?? right.Unit);
         public static Volume operator -(Volume left, Volume right) =>
-            new Volume(formatUnit: left._formatUnit ?? right.Unit, cubicMetres: left.CubicMetres - right.CubicMetres);
+            new Volume(cubicMetres: left.CubicMetres - right.CubicMetres, value: null, unit: left._unit ?? right.Unit);
         public static Volume operator -(Volume argument) =>
-            new Volume(formatUnit: argument.Unit, cubicMetres: -argument.CubicMetres);
+            new Volume(cubicMetres: -argument.CubicMetres, value: null, unit: argument._unit);
 
         public static Volume operator *(Volume argument, double factor) =>
-            new Volume(formatUnit: argument.Unit, cubicMetres: argument.CubicMetres * factor);
+            new Volume(cubicMetres: argument.CubicMetres * factor, value: null, unit: argument._unit);
         public static Volume operator *(double argument, Volume factor) =>
             factor * argument;
 
@@ -35,7 +35,7 @@ namespace QuantitativeWorld
         {
             if (denominator == 0d)
                 throw new DivideByZeroException("Denominator is zero.");
-            return new Volume(formatUnit: nominator.Unit, cubicMetres: nominator.CubicMetres / denominator);
+            return new Volume(cubicMetres: nominator.CubicMetres / denominator, value: null, unit: nominator._unit);
         }
         public static double operator /(Volume nominator, Volume denominator)
         {

@@ -34,7 +34,7 @@ namespace QuantitativeWorld.Text.Json
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
                     if (reader.TryReadPropertyAsNullable(nameof(AngleUnit.UnitsPerTurn), serializer, e => e.ReadAsDouble(), out var baseValue))
-                        builder.SetUnitPerTurn(baseValue);
+                        builder.SetUnitsPerTurn(baseValue);
                     else if (reader.TryReadPropertyAs(nameof(AngleUnit.Name), serializer, e => e.ReadAsString(), out var name))
                         builder.SetName(name);
                     else if (reader.TryReadPropertyAs(nameof(AngleUnit.Abbreviation), serializer, e => e.ReadAsString(), out var abbreviation))

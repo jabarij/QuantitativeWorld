@@ -9,11 +9,6 @@ namespace QuantitativeWorld.Tests
         public WeightTests(TestFixture testFixture)
             : base(testFixture) { }
 
-        private Weight CreateWeightInUnit(WeightUnit unit) =>
-            Fixture
-            .Create<Weight>()
-            .Convert(unit);
-
         private Weight CreateWeightInUnitOtherThan(params WeightUnit[] unitsToExclude) =>
             Fixture
             .Create<Weight>()

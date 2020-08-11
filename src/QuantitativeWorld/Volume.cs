@@ -10,29 +10,52 @@ namespace QuantitativeWorld
         private const double MaxCubicMetres = double.MaxValue;
 
         public static readonly VolumeUnit DefaultUnit = VolumeUnit.CubicMetre;
+        public static readonly Volume Zero = new Volume(0d);
+        public static readonly Volume PositiveInfinity = new Volume(double.PositiveInfinity, null, null, false);
+        public static readonly Volume NegativeInfinity = new Volume(double.NegativeInfinity, null, null, false);
 
-        private readonly VolumeUnit? _formatUnit;
+        private readonly VolumeUnit? _unit;
+        private double? _value;
 
         public Volume(double cubicMetres)
-            : this(formatUnit: null, cubicMetres: cubicMetres) { }
+            : this(
+                cubicMetres: cubicMetres,
+                value: null,
+                unit: null)
+        { }
         public Volume(double value, VolumeUnit unit)
-            : this(formatUnit: unit, cubicMetres: GetCubicMetres(value, unit)) { }
-        private Volume(VolumeUnit? formatUnit, double cubicMetres)
+            : this(
+                cubicMetres: GetCubicMetres(value, unit),
+                value: value,
+                unit: unit)
+        { }
+        private Volume(double cubicMetres, double? value, VolumeUnit? unit, bool validate = true)
         {
-            Assert.IsInRange(cubicMetres, MinCubicMetres, MaxCubicMetres, nameof(cubicMetres));
+            if (validate)
+                Assert.IsInRange(cubicMetres, MinCubicMetres, MaxCubicMetres, nameof(value));
 
-            _formatUnit = formatUnit;
             CubicMetres = cubicMetres;
+            _value = value;
+            _unit = unit;
         }
 
         public double CubicMetres { get; }
-        public double Value => GetValue(CubicMetres, Unit);
-        public VolumeUnit Unit => _formatUnit ?? DefaultUnit;
+        public double Value => EnsureValue();
+        public VolumeUnit Unit => _unit ?? DefaultUnit;
+
         double ILinearQuantity<VolumeUnit>.BaseValue => CubicMetres;
         VolumeUnit ILinearQuantity<VolumeUnit>.BaseUnit => DefaultUnit;
 
         public Volume Convert(VolumeUnit targetUnit) =>
-            new Volume(targetUnit, CubicMetres);
+            targetUnit.IsEquivalentOf(Unit)
+            ? new Volume(
+                cubicMetres: CubicMetres,
+                value: _value,
+                unit: targetUnit)
+            : new Volume(
+                cubicMetres: CubicMetres,
+                value: null,
+                unit: targetUnit);
 
         public bool IsZero() =>
             CubicMetres == 0d;
@@ -46,5 +69,12 @@ namespace QuantitativeWorld
             value * sourceUnit.ValueInCubicMetres;
         private static double GetValue(double metres, VolumeUnit targetUnit) =>
             metres / targetUnit.ValueInCubicMetres;
+
+        private double EnsureValue()
+        {
+            if (!_value.HasValue)
+                _value = GetValue(CubicMetres, Unit);
+            return _value.Value;
+        }
     }
 }
