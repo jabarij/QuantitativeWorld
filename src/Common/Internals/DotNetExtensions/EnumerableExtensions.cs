@@ -21,6 +21,9 @@ namespace QuantitativeWorld.DotNetExtensions
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source) =>
             source == null || !source.Any();
 
+        public static bool IsEmpty<T>(this IEnumerable<T> source) =>
+            !source.Any();
+
         public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source) =>
             source ?? Enumerable.Empty<T>();
 
@@ -92,6 +95,9 @@ namespace QuantitativeWorld.DotNetExtensions
             source
             .EmptyIfNull()
             .Where(e => !string.IsNullOrWhiteSpace(e));
+
+        public static IEnumerable<(TSource, TSource)> Pairwise<TSource>(this IEnumerable<TSource> source) =>
+            source.Zip(source.Skip(1), (e, f) => (e, f));
 
         public static SortedDictionary<TKey, TSource> ToSortedDictionary<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) =>
             new SortedDictionary<TKey, TSource>(source.ToDictionary(keySelector));
