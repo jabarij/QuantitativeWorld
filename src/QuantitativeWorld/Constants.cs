@@ -150,8 +150,8 @@ namespace QuantitativeWorld
 
         public const double JoulesPerWattSecond = 1d;
         public const double JoulesPerWattHour = 3600d;
-        public const double JoulesPerKilowattHour = 3600d;
-        public const double JoulesPerMegawattHour = 3600000d;
+        public const double JoulesPerKilowattHour = 3600000d;
+        public const double JoulesPerMegawattHour = 3600000000d;
 
         public const double JoulesPerElectronvolt = 1.602176634E-19;
         public const double JoulesPerFootPoundForce = 1.3558179483314004d;
