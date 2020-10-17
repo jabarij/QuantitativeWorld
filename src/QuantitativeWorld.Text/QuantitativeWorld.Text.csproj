@@ -16,6 +16,7 @@
     <Compile Include="..\Common\Internals\DotNetExtensions\Error.cs" Link="DotNetExtensions\Error.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\HashCode.cs" Link="DotNetExtensions\HashCode.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\HashCodeExtensions.cs" Link="DotNetExtensions\HashCodeExtensions.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\HeadTailList.cs" Link="DotNetExtensions\HeadTailList.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\IntervalBoundaryType.cs" Link="DotNetExtensions\IntervalBoundaryType.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\ITransformation.cs" Link="DotNetExtensions\ITransformation.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\StringExtensions.cs" Link="DotNetExtensions\StringExtensions.cs" />
