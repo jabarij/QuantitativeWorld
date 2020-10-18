@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuantitativeWorld.Conversion\QuantitativeWorld.Conversion.csproj" />
     <ProjectReference Include="..\QuantitativeWorld\QuantitativeWorld.csproj" />
   </ItemGroup>
 

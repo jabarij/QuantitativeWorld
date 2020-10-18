@@ -10,8 +10,7 @@ var testsOutputDir = outputRootDir + "tests/";
 
 var sourceRootDir = "./src/";
 var solutionPath_QuantitativeWorld = sourceRootDir + "QuantitativeWorld.sln";
-var nugetPackageName_QuantitativeWorld = "SoterDevelopment.QuantitativeWorld";
-var nugetPackageNames = "SoterDevelopment.QuantitativeWorld|SoterDevelopment.QuantitativeWorld.Text.Json";
+var nugetPackageNames = "SoterDevelopment.QuantitativeWorld|SoterDevelopment.QuantitativeWorld.Text|SoterDevelopment.QuantitativeWorld.Text.Json";
 
 GitVersion version = null;
 
@@ -49,7 +48,7 @@ var runUnitTestsTask = Task("Run-UnitTests")
   .IsDependentOn(buildSolutionTask)
   .Does(() =>
   {
-    var testProjectFiles = GetFiles(sourceRootDir + "QuantitativeWorld/**/[!QuantitativeWorld.Text.Tests.csproj]*.Tests.csproj");
+    var testProjectFiles = GetFiles(sourceRootDir + "QuantitativeWorld/**/*.Tests.csproj");
     foreach (var project in testProjectFiles)
     {
       Information("Testing project: " + project);
@@ -102,8 +101,8 @@ var publishNuGetPackagesTask = Task("Publish-NuGet-Packages")
 var publishTargetValidateParamsTask = Task("Publish-ValidateParams")
   .Does(() =>
   {
-		var isNugetOrg = string.Equals(nugetPushSource, "https://api.nuget.org/v3/index.json", StringComparison.OrdinalIgnoreCase);
-		var hasNugetApiKey = !string.IsNullOrWhiteSpace(nugetApiKey);
+	var isNugetOrg = string.Equals(nugetPushSource, "https://api.nuget.org/v3/index.json", StringComparison.OrdinalIgnoreCase);
+	var hasNugetApiKey = !string.IsNullOrWhiteSpace(nugetApiKey);
     if (isNugetOrg && !hasNugetApiKey)		
       throw new Exception("-NuGetApiKey param is required to publish packages."); 
   });

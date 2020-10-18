@@ -1,5 +1,4 @@
-﻿using QuantitativeWorld.Conversion;
-using QuantitativeWorld.DotNetExtensions;
+﻿using QuantitativeWorld.DotNetExtensions;
 using System;
 using System.Globalization;
 
