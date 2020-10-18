@@ -40,6 +40,9 @@ jobs:
     - name: Build QuantitativeWorld
       run: dotnet build ./src/QuantitativeWorld/QuantitativeWorld.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
       
+    - name: Build QuantitativeWorld.Text
+      run: dotnet build ./src/QuantitativeWorld.Text/QuantitativeWorld.Text.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      
     - name: Build QuantitativeWorld.Text.Json
       run: dotnet build ./src/QuantitativeWorld.Text.Json/QuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
@@ -60,6 +63,9 @@ jobs:
           
     - name: Test QuantitativeWorld
       run: dotnet test ./src/QuantitativeWorld.Tests/QuantitativeWorld.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.TestsResults.trx"
+      
+    - name: Test QuantitativeWorld.Text
+      run: dotnet test ./src/QuantitativeWorld.Text.Tests/QuantitativeWorld.Text.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Text.TestsResults.trx"
       
     - name: Test QuantitativeWorld.Text.Json
       run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/QuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Text.Json.TestsResults.trx"
@@ -94,6 +100,7 @@ jobs:
       run: |
         mkdir -p ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.QuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         ls ./published
 
@@ -105,6 +112,9 @@ jobs:
       
     - name: Publish QuantitativeWorld
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
+    - name: Publish QuantitativeWorld.Text
+      run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
         
     - name: Publish QuantitativeWorld.Text.Json
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate

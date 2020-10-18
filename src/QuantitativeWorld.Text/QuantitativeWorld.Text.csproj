@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>SoterDevelopment.QuantitativeWorld.Text</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Bartłomiej Soter (soter.development@gmail.com)</Authors>
+    <Company>SoterDevelopment</Company>
+    <Description>Library handling transforming QuantitativeWorld's objects into text.</Description>
+    <Copyright>Copyright © SoterDevelopment 2020</Copyright>
+    <PackageProjectUrl>https://github.com/jabarij/QuantitativeWorld</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jabarij/QuantitativeWorld.git</RepositoryUrl>
+    <PackageTags>quantity weight length text</PackageTags>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
