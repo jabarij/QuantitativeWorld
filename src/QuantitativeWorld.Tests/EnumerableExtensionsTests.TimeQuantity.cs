@@ -8,6 +8,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class TimeQuantity : EnumerableExtensionsTests
@@ -51,7 +59,7 @@ namespace QuantitativeWorld.Tests
                     // arrange
                     var source = Fixture.CreateMany<Time>(3);
 
-                    double expectedResultInTotalSeconds = source.Average(e => e.TotalSeconds);
+                    number expectedResultInTotalSeconds = source.Average(e => e.TotalSeconds);
                     var expectedResult = new Time(expectedResultInTotalSeconds);
 
                     // act
@@ -117,7 +125,7 @@ namespace QuantitativeWorld.Tests
                     var source = Fixture.CreateMany<Time>(3).Select(e => new TestObject<Time>(e));
                     Func<TestObject<Time>, Time> selector = e => e.Property;
 
-                    double expectedResultInTotalSeconds = source.Average(e => e.Property.TotalSeconds);
+                    number expectedResultInTotalSeconds = source.Average(e => e.Property.TotalSeconds);
                     var expectedResult = new Time(expectedResultInTotalSeconds);
 
                     // act
@@ -388,7 +396,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var areas = Fixture.CreateMany<Time>(3);
-                    double expectedResultInTotalSeconds = areas.Sum(e => e.TotalSeconds);
+                    number expectedResultInTotalSeconds = areas.Sum(e => e.TotalSeconds);
                     var expectedResult = new Time(expectedResultInTotalSeconds);
 
                     // act
@@ -451,7 +459,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Time>(3).Select(e => new TestObject<Time>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.TotalSeconds);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.TotalSeconds);
                     var expectedResult = new Time(expectedResultInMetres);
 
                     // act

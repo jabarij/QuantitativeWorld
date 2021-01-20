@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class DegreeAngleTests
     {
         public class ToNormalized : DegreeAngleTests
@@ -21,37 +29,33 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = originalDegreeAngle.ToNormalized();
 
                 // assert
-                result.TotalSeconds.Should().BeApproximately(expectedDegreeAngle.TotalSeconds, DoublePrecision);
+                result.TotalSeconds.Should().BeApproximately(expectedDegreeAngle.TotalSeconds);
             }
 
             private static IEnumerable<ITestDataProvider> GetToNormalizedTestData()
             {
                 yield return new ToNormalizedTestData(new DegreeAngle(), new DegreeAngle());
-                yield return new ToNormalizedTestData(new DegreeAngle(0d), new DegreeAngle(0d));
-                yield return new ToNormalizedTestData(new DegreeAngle(-0d), new DegreeAngle(0d));
-                yield return new ToNormalizedTestData(new DegreeAngle(180d * 60d * 60d), new DegreeAngle(180d * 60d * 60d));
-                yield return new ToNormalizedTestData(new DegreeAngle(-180d * 60d * 60d), new DegreeAngle(-180d * 60d * 60d));
-                yield return new ToNormalizedTestData(new DegreeAngle(0.9999d * 360d * 60d * 60d), new DegreeAngle(0.9999d * 360d * 60d * 60d));
-                yield return new ToNormalizedTestData(new DegreeAngle(-0.9999d * 360d * 60d * 60d), new DegreeAngle(-0.9999d * 360d * 60d * 60d));
-                yield return new ToNormalizedTestData(new DegreeAngle(360d * 60d * 60d), new DegreeAngle(0d));
-                yield return new ToNormalizedTestData(new DegreeAngle(-360d * 60d * 60d), new DegreeAngle(0d));
-                yield return new ToNormalizedTestData(new DegreeAngle(73.5d * 360d * 60d * 60d), new DegreeAngle(180d * 60d * 60d));
-                yield return new ToNormalizedTestData(new DegreeAngle(-73.5d * 360d * 60d * 60d), new DegreeAngle(-180d * 60d * 60d));
+                yield return new ToNormalizedTestData(0m, 0m);
+                yield return new ToNormalizedTestData(-0m, 0m);
+                yield return new ToNormalizedTestData(180m * 60m * 60m, 180m * 60m * 60m);
+                yield return new ToNormalizedTestData(-180m * 60m * 60m, -180m * 60m * 60m);
+                yield return new ToNormalizedTestData(0.9999m * 360m * 60m * 60m, 0.9999m * 360m * 60m * 60m);
+                yield return new ToNormalizedTestData(-0.9999m * 360m * 60m * 60m, -0.9999m * 360m * 60m * 60m);
+                yield return new ToNormalizedTestData(360m * 60m * 60m, 0m);
+                yield return new ToNormalizedTestData(-360m * 60m * 60m, 0m);
+                yield return new ToNormalizedTestData(73.5m * 360m * 60m * 60m, 180m * 60m * 60m);
+                yield return new ToNormalizedTestData(-73.5m * 360m * 60m * 60m, -180m * 60m * 60m);
             }
 
-            class ToNormalizedTestData : ITestDataProvider
+            class ToNormalizedTestData : ConversionTestData<DegreeAngle>, ITestDataProvider
             {
-                public ToNormalizedTestData(DegreeAngle originalDegreeAngle, DegreeAngle expectedDegreeAngle)
-                {
-                    OriginalDegreeAngle = originalDegreeAngle;
-                    ExpectedDegreeAngle = expectedDegreeAngle;
-                }
+                public ToNormalizedTestData(DegreeAngle originalValue, DegreeAngle expectedValue)
+                    : base(originalValue, expectedValue) { }
+                public ToNormalizedTestData(decimal originalTotalSeconds, decimal expectedTotalSeconds)
+                    : base(new DegreeAngle((number)originalTotalSeconds), new DegreeAngle((number)expectedTotalSeconds)) { }
 
-                public DegreeAngle OriginalDegreeAngle { get; }
-                public DegreeAngle ExpectedDegreeAngle { get; }
-
-                public object[] SerializeTestData() =>
-                    new[] { (object)OriginalDegreeAngle, ExpectedDegreeAngle };
+                public object[] GetTestParameters() =>
+                    new[] { (object)OriginalValue, ExpectedValue };
             }
         }
     }

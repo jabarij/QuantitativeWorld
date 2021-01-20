@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class WeightTests
     {
         public class Operator_Oposite : WeightTests
@@ -64,7 +72,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultWeight = default(Weight);
-                var zeroTons = new Weight(0d, WeightUnit.Ton);
+                var zeroTons = new Weight(Constants.Zero, WeightUnit.Ton);
 
                 // act
                 var result1 = defaultWeight + zeroTons;
@@ -152,7 +160,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultWeight = default(Weight);
-                var zeroTons = new Weight(0d, WeightUnit.Ton);
+                var zeroTons = new Weight(Constants.Zero, WeightUnit.Ton);
 
                 // act
                 var result1 = defaultWeight - zeroTons;
@@ -225,8 +233,8 @@ namespace QuantitativeWorld.Tests
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
-                var weight = new Weight(2d, WeightUnit.Ton);
-                double factor = 3d;
+                var weight = new Weight(2, WeightUnit.Ton);
+                number factor = 3;
 
                 // act
                 var result = weight * factor;
@@ -242,7 +250,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Weight? nullWeight = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Weight) * factor;
 
                 // act
@@ -253,6 +261,7 @@ namespace QuantitativeWorld.Tests
                 result.Value.Should().Be(expectedResult);
             }
 
+#if !DECIMAL
             [Fact]
             public void MultiplyByNaN_ShouldTreatNullAsDefault()
             {
@@ -260,11 +269,12 @@ namespace QuantitativeWorld.Tests
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
 
                 // act
-                Func<Weight> multiplyByNaN = () => weight * double.NaN;
+                Func<Weight> multiplyByNaN = () => weight * number.NaN;
 
                 // assert
                 multiplyByNaN.Should().Throw<ArgumentException>();
             }
+#endif
         }
 
         public class Operator_DivideByDouble : WeightTests
@@ -278,12 +288,13 @@ namespace QuantitativeWorld.Tests
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
 
                 // act
-                Func<Weight> divideByZero = () => weight / 0d;
+                Func<Weight> divideByZero = () => weight / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
+#if !DECIMAL
             [Fact]
             public void DivideByNaN_ShouldThrow()
             {
@@ -291,24 +302,25 @@ namespace QuantitativeWorld.Tests
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
 
                 // act
-                Func<Weight> divideByNaN = () => weight / double.NaN;
+                Func<Weight> divideByNaN = () => weight / number.NaN;
 
                 // assert
                 divideByNaN.Should().Throw<ArgumentException>();
             }
+#endif
 
             [Fact]
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = weight / denominator;
 
                 // assert
-                result.Kilograms.Should().BeApproximately(weight.Kilograms / (double)denominator, DoublePrecision);
+                result.Kilograms.Should().BeApproximately(weight.Kilograms / denominator);
                 result.Unit.Should().Be(weight.Unit);
             }
 
@@ -317,7 +329,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Weight? nullWeight = null;
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Weight) / denominator;
 
                 // act
@@ -338,10 +350,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var weight = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
-                var denominator = new Weight(0d);
+                var denominator = new Weight(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => weight / denominator;
+                Func<number> divideByZero = () => weight / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -355,7 +367,7 @@ namespace QuantitativeWorld.Tests
                 Weight? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => weight / denominator;
+                Func<number> divideByZero = () => weight / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -367,14 +379,14 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateWeightInUnitOtherThan(WeightUnit.Kilogram);
                 var denominator = new Weight(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(WeightUnit.Kilogram, nominator.Unit));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
-                result.Should().BeApproximately(nominator.Kilograms / denominator.Kilograms, DoublePrecision, because: $"{nominator} divide by {denominator} shoud return {nominator.Kilograms / denominator.Kilograms} kg");
+                result.Should().BeApproximately(nominator.Kilograms / denominator.Kilograms, because: $"{nominator} divide by {denominator} shoud return {nominator.Kilograms / denominator.Kilograms} kg");
             }
         }
     }

@@ -3,6 +3,14 @@ using System;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct VolumeUnit : IEquatable<VolumeUnit>
     {
         public bool IsEquivalentOf(VolumeUnit other) =>

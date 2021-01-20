@@ -4,16 +4,24 @@ using System;
 
 namespace QuantitativeWorld.Text.Json.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public sealed class RadianAngleJsonConverter : JsonConverter<RadianAngle>
     {
         public override RadianAngle ReadJson(JsonReader reader, Type objectType, RadianAngle existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            double? radians = null;
+            number? radians = null;
             if (reader.TokenType == JsonToken.StartObject)
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(nameof(RadianAngle.Radians), serializer, e => e.ReadAsDouble(), out var value))
+                    if (reader.TryReadPropertyAsNullable(nameof(RadianAngle.Radians), serializer, e => e.ReadAsNumber(), out var value))
                         radians = value;
                 }
             }

@@ -9,6 +9,14 @@ using QuantitativeWorld.Angular;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class AngularEnumerableExtensionsTests
     {
         public class DegreeAngleQuantity : AngularEnumerableExtensionsTests
@@ -52,7 +60,7 @@ namespace QuantitativeWorld.Tests.Angular
                     // arrange
                     var source = Fixture.CreateMany<DegreeAngle>(3);
 
-                    double expectedResultInTotalSeconds = source.Average(e => e.TotalSeconds);
+                    number expectedResultInTotalSeconds = source.Average(e => e.TotalSeconds);
                     var expectedResult = new DegreeAngle(expectedResultInTotalSeconds);
 
                     // act
@@ -118,7 +126,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var source = Fixture.CreateMany<DegreeAngle>(3).Select(e => new TestObject<DegreeAngle>(e));
                     Func<TestObject<DegreeAngle>, DegreeAngle> selector = e => e.Property;
 
-                    double expectedResultInTotalSeconds = source.Average(e => e.Property.TotalSeconds);
+                    number expectedResultInTotalSeconds = source.Average(e => e.Property.TotalSeconds);
                     var expectedResult = new DegreeAngle(expectedResultInTotalSeconds);
 
                     // act
@@ -389,7 +397,7 @@ namespace QuantitativeWorld.Tests.Angular
                 {
                     // arrange
                     var areas = Fixture.CreateMany<DegreeAngle>(3);
-                    double expectedResultInTotalSeconds = areas.Sum(e => e.TotalSeconds);
+                    number expectedResultInTotalSeconds = areas.Sum(e => e.TotalSeconds);
                     var expectedResult = new DegreeAngle(expectedResultInTotalSeconds);
 
                     // act
@@ -452,7 +460,7 @@ namespace QuantitativeWorld.Tests.Angular
                 {
                     // arrange
                     var objects = Fixture.CreateMany<DegreeAngle>(3).Select(e => new TestObject<DegreeAngle>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.TotalSeconds);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.TotalSeconds);
                     var expectedResult = new DegreeAngle(expectedResultInMetres);
 
                     // act

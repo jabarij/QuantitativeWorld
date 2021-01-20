@@ -23,7 +23,7 @@ namespace QuantitativeWorld.Tests.Formatting
                 var weight = new WeightUnit(
                     name: unitName,
                     abbreviation: unitAbbreviation,
-                    valueInKilograms: Fixture.CreatePositive());
+                    valueInKilograms: Fixture.CreatePositiveNumber());
 
                 // act
                 string actualResult = formatter.Format(standardFormat, weight);

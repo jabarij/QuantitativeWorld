@@ -6,14 +6,21 @@ using Xunit;
 
 namespace QuantitativeWorld.Text.Json.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public class AreaUnitJsonConverterTests : TestsBase
     {
         public AreaUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"square millimetre\",\"Abbreviation\":\"mm²\",\"ValueInSquareMetres\":1E-06}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"square millimetre\",\"Abbreviation\":\"mm²\",\"ValueInSquareMetres\":(0\\.000001|1E-06)}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"mm²\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJson)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
         {
             // arrange
             var unit = AreaUnit.SquareMillimetre;
@@ -23,7 +30,7 @@ namespace QuantitativeWorld.Text.Json.Tests
             string actualJson = JsonConvert.SerializeObject(new SomeUnitOwner<AreaUnit> { Unit = unit }, converter);
 
             // assert
-            actualJson.Should().Be(expectedJson);
+            actualJson.Should().MatchRegex(expectedJsonPattern);
         }
 
         [Theory]
@@ -60,7 +67,39 @@ namespace QuantitativeWorld.Text.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInSquareMetres.Should().Be(123.456d);
+            result.ValueInSquareMetres.Should().Be((number)123.456m);
+        }
+
+        [Fact]
+        public void DeserializeCustomUnitAsPredefined_ShouldReturnValidResult()
+        {
+            // arrange
+            var someUnit = new AreaUnit(
+                name: "some unit",
+                abbreviation: "su",
+                valueInSquareMetres: (number)123.456m);
+            string json = @"{
+  'unit': 'su'
+}";
+            var converter = new AreaUnitJsonConverter(
+                serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                tryReadCustomPredefinedUnit: (string value, out AreaUnit predefinedUnit) =>
+                {
+                    if (value == someUnit.Abbreviation)
+                    {
+                        predefinedUnit = someUnit;
+                        return true;
+                    }
+
+                    predefinedUnit = default(AreaUnit);
+                    return false;
+                });
+
+            // act
+            var result = JsonConvert.DeserializeObject<SomeUnitOwner<AreaUnit>>(json, converter);
+
+            // assert
+            result.Unit.Should().Be(someUnit);
         }
 
         [Theory]

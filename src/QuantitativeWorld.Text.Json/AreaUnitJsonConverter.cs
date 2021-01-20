@@ -9,8 +9,9 @@ namespace QuantitativeWorld.Text.Json
         private readonly Dictionary<string, AreaUnit> _predefinedUnits;
 
         public AreaUnitJsonConverter(
-            LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull)
-            : base(serializationFormat)
+            LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull,
+            TryParseDelegate<AreaUnit> tryReadCustomPredefinedUnit = null)
+            : base(serializationFormat, tryReadCustomPredefinedUnit)
         {
             _predefinedUnits = AreaUnit.GetPredefinedUnits()
                 .ToDictionary(e => e.Abbreviation);

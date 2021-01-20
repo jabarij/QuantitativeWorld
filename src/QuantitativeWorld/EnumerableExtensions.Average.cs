@@ -5,9 +5,17 @@ using System.Collections.Generic;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnumerableExtensions
     {
-        public static TQuantity Average<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<double, TUnit, TQuantity> factory)
+        public static TQuantity Average<TQuantity, TUnit>(this IEnumerable<TQuantity> source, Func<number, TUnit, TQuantity> factory)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -25,7 +33,7 @@ namespace QuantitativeWorld
             return Average<TQuantity, TQuantity, TUnit>(source.GetEnumerator(), factory.Create, e => e);
         }
 
-        public static TQuantity Average<TSource, TQuantity, TUnit>(this IEnumerable<TSource> source, Func<double, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
+        public static TQuantity Average<TSource, TQuantity, TUnit>(this IEnumerable<TSource> source, Func<number, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -45,7 +53,7 @@ namespace QuantitativeWorld
             return Average<TSource, TQuantity, TUnit>(source.GetEnumerator(), factory.Create, selector);
         }
 
-        private static TQuantity Average<TSource, TQuantity, TUnit>(IEnumerator<TSource> enumerator, Func<double, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
+        private static TQuantity Average<TSource, TQuantity, TUnit>(IEnumerator<TSource> enumerator, Func<number, TUnit, TQuantity> factory, Func<TSource, TQuantity> selector)
             where TQuantity : ILinearQuantity<TUnit>
             where TUnit : ILinearUnit
         {
@@ -55,7 +63,7 @@ namespace QuantitativeWorld
 
             var targetUnit = selector(enumerator.Current).Unit;
             int count = 0;
-            double sumInBaseUnit = 0d;
+            number sumInBaseUnit = Constants.Zero;
             do
             {
                 var quantity = selector(enumerator.Current);
@@ -64,7 +72,7 @@ namespace QuantitativeWorld
             }
             while (enumerator.MoveNext());
 
-            if (targetUnit == null || targetUnit.ValueInBaseUnit == 0d)
+            if (targetUnit == null || targetUnit.ValueInBaseUnit == Constants.Zero)
                 throw new DivideByZeroException($"Could not find non-zero based unit of type {typeof(TUnit).FullName} in source.");
             return factory(sumInBaseUnit / targetUnit.ValueInBaseUnit / count, targetUnit);
         }

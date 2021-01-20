@@ -8,6 +8,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class AngleTests
     {
         public class Convert : AngleTests
@@ -24,12 +32,13 @@ namespace QuantitativeWorld.Tests.Angular
                 var actualAngle = originalAngle.Convert(targetUnit);
 
                 // assert
-                actualAngle.Should().Be(expectedAngle);
+                actualAngle.Value.Should().BeApproximately(expectedAngle.Value);
                 actualAngle.Unit.Should().Be(targetUnit);
             }
 
-            [Fact]
-            public void MultipleSerialConversion_ShouldHaveSameValueAtTheEnd()
+            [Theory]
+            [InlineData(123.45678d)]
+            public void MultipleSerialConversion_ShouldHaveSameValueAtTheEnd(number value)
             {
                 // arrange
                 var units = new List<AngleUnit>
@@ -40,7 +49,7 @@ namespace QuantitativeWorld.Tests.Angular
                     AngleUnit.Gradian,
                     AngleUnit.Turn
                 };
-                var initialAngle = new Angle(123.45678d, units.First());
+                var initialAngle = new Angle(value, units.First());
                 Angle? finalAngle = null;
 
                 // act
@@ -52,14 +61,14 @@ namespace QuantitativeWorld.Tests.Angular
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Angle(0.123d, AngleUnit.Turn), AngleUnit.Radian, new Angle(0.123d * (double)System.Math.PI, AngleUnit.Radian));
-                yield return new ConvertTestData(new Angle(123.456d, AngleUnit.Radian), AngleUnit.Turn, new Angle(123.456d / (double)System.Math.PI, AngleUnit.Turn));
+                yield return new ConvertTestData(0.123d, AngleUnit.Turn, AngleUnit.Radian, 0.123d * Math.PI, AngleUnit.Radian);
+                yield return new ConvertTestData(123.456d, AngleUnit.Radian, AngleUnit.Turn, 123.456d / Math.PI, AngleUnit.Turn);
 
-                yield return new ConvertTestData(new Angle(0.123456d, AngleUnit.Turn), AngleUnit.Degree, new Angle(0.123456d * 360d, AngleUnit.Degree));
-                yield return new ConvertTestData(new Angle(123.456d, AngleUnit.Degree), AngleUnit.Turn, new Angle(123.456d / 360d, AngleUnit.Turn));
+                yield return new ConvertTestData(0.123456d, AngleUnit.Turn, AngleUnit.Degree, 0.123456d * 360d, AngleUnit.Degree);
+                yield return new ConvertTestData(123.456d, AngleUnit.Degree, AngleUnit.Turn, 123.456d / 360d, AngleUnit.Turn);
 
-                yield return new ConvertTestData(new Angle(0.123456d, AngleUnit.Turn), AngleUnit.Gradian, new Angle(0.123456d * 400d, AngleUnit.Gradian));
-                yield return new ConvertTestData(new Angle(123.456d, AngleUnit.Gradian), AngleUnit.Turn, new Angle(123.456d / 400d, AngleUnit.Turn));
+                yield return new ConvertTestData(0.123456d, AngleUnit.Turn, AngleUnit.Gradian, 0.123456d * 400d, AngleUnit.Gradian);
+                yield return new ConvertTestData(123.456d, AngleUnit.Gradian, AngleUnit.Turn, 123.456d / 400d, AngleUnit.Turn);
             }
 
             class ConvertTestData : ITestDataProvider
@@ -70,12 +79,16 @@ namespace QuantitativeWorld.Tests.Angular
                     TargetUnit = targetUnit;
                     ExpectedAngle = expectedAngle;
                 }
+                public ConvertTestData(double originalValue, AngleUnit originalUnit, AngleUnit targetUnit, double expectedValue, AngleUnit expectedUnit)
+                    : this(new Angle((number)originalValue, originalUnit), targetUnit, new Angle((number)expectedValue, expectedUnit)) { }
+                public ConvertTestData(decimal originalValue, AngleUnit originalUnit, AngleUnit targetUnit, decimal expectedValue, AngleUnit expectedUnit)
+                    : this(new Angle((number)originalValue, originalUnit), targetUnit, new Angle((number)expectedValue, expectedUnit)) { }
 
                 public Angle OriginalAngle { get; }
                 public AngleUnit TargetUnit { get; }
                 public Angle ExpectedAngle { get; }
 
-                public object[] SerializeTestData() =>
+                public object[] GetTestParameters() =>
                     new[] { (object)OriginalAngle, TargetUnit, ExpectedAngle };
             }
         }

@@ -5,6 +5,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class GeoCoordinateTests
     {
         public class EqualityOperator : GeoCoordinateTests
@@ -25,10 +33,10 @@ namespace QuantitativeWorld.Tests
             }
 
             [Theory]
-            [InlineData(10d, 11d, 10d, 11d, true)]
-            [InlineData(10d, 11d, 20d, 11d, false)]
-            [InlineData(10d, 11d, 10d, 21d, false)]
-            public void ShouldReturnProperValue(double lat1, double lon1, double lat2, double lon2, bool expectedResult)
+            [InlineData(10, 11, 10, 11, true)]
+            [InlineData(10, 11, 20, 11, false)]
+            [InlineData(10, 11, 10, 21, false)]
+            public void ShouldReturnProperValue(number lat1, number lon1, number lat2, number lon2, bool expectedResult)
             {
                 // arrange
                 var sut = new GeoCoordinate(lat1, lon1);

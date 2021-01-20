@@ -1,9 +1,17 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class AreaBuilder : ILinearQuantityBuilder<Area, AreaUnit>
     {
-        private double? _squareMetres;
-        private double? _value;
+        private number? _squareMetres;
+        private number? _value;
         private AreaUnit? _unit;
 
         public AreaBuilder() { }
@@ -14,13 +22,13 @@
             _unit = area.Unit;
         }
 
-        public void SetBaseValue(double squareMetres)
+        public void SetBaseValue(number squareMetres)
         {
             _squareMetres = squareMetres;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _squareMetres = null;
             _value = value;
@@ -33,8 +41,8 @@
 
         public bool TryBuild(out Area result, AreaUnit? defaultUnit = null)
         {
-            double? squareMetres = _squareMetres;
-            double? value = _value;
+            number? squareMetres = _squareMetres;
+            number? value = _value;
             AreaUnit? unit = _unit ?? defaultUnit;
 
             if (squareMetres.HasValue)

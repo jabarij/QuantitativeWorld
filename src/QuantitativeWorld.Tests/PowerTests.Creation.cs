@@ -6,6 +6,13 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class PowerTests
     {
         public class Creation : PowerTests
@@ -17,7 +24,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForWatts_ShouldCreateValidPower()
             {
                 // arrange
-                double watts = Fixture.Create<double>();
+                number watts = Fixture.Create<number>();
 
                 // act
                 var power = new Power(watts);
@@ -34,40 +41,34 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 // act
-                var power = new Power(testData.Value, testData.Unit);
+                var power = new Power(testData.OriginalValue.Value, testData.OriginalValue.Unit);
 
                 // assert
-                power.Watts.Should().BeApproximately(testData.ExpectedWatts, DoublePrecision);
-                power.Value.Should().Be(testData.Value);
-                power.Unit.Should().Be(testData.Unit);
+                power.Watts.Should().BeApproximately(testData.ExpectedValue.Watts);
+                power.Value.Should().Be(testData.OriginalValue.Value);
+                power.Unit.Should().Be(testData.OriginalValue.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1d, PowerUnit.Watt, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1000d, PowerUnit.Milliwatt, 1d);
-                yield return new ConstructorForValueAndUnitTestData(0.001d, PowerUnit.Kilowatt, 1d);
-                yield return new ConstructorForValueAndUnitTestData(0.000001d, PowerUnit.Megawatt, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (76.0402249d * 9.80665d), PowerUnit.MechanicalHorsepower, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1m, PowerUnit.Watt, 1m, PowerUnit.Watt);
+                yield return new ConstructorForValueAndUnitTestData(1000m, PowerUnit.Milliwatt, 1m, PowerUnit.Watt);
+                yield return new ConstructorForValueAndUnitTestData(0.001m, PowerUnit.Kilowatt, 1m, PowerUnit.Watt);
+                yield return new ConstructorForValueAndUnitTestData(0.000001m, PowerUnit.Megawatt, 1m, PowerUnit.Watt);
+                yield return new ConstructorForValueAndUnitTestData(1 / (76.0402249m * 9.80665m), PowerUnit.MechanicalHorsepower, 1m, PowerUnit.Watt);
             }
-            public class ConstructorForValueAndUnitTestData
+            public class ConstructorForValueAndUnitTestData : ConversionTestData<Power>
             {
-                public ConstructorForValueAndUnitTestData(double value, PowerUnit unit, double expectedWatts)
-                {
-                    Value = value;
-                    Unit = unit;
-                    ExpectedWatts = expectedWatts;
-                }
-
-                public double Value { get; }
-                public PowerUnit Unit { get; }
-                public double ExpectedWatts { get; }
+                public ConstructorForValueAndUnitTestData(decimal originalValue, PowerUnit originalUnit, decimal expectedValue, PowerUnit expectedUnit)
+                    : base(new Power((number)originalValue, originalUnit), new Power((number)expectedValue, expectedUnit)) { }
+                public ConstructorForValueAndUnitTestData(double originalValue, PowerUnit originalUnit, double expectedValue, PowerUnit expectedUnit)
+                    : base(new Power((number)originalValue, originalUnit), new Power((number)expectedValue, expectedUnit)) { }
             }
 
             [Theory]
             [InlineData(0.001, 1000)]
             [InlineData(1, 1000000)]
             [InlineData(1000, 1000000000)]
-            public void FromKilowatts_ShouldCreateValidPower(double kilowatts, double milliwatts)
+            public void FromKilowatts_ShouldCreateValidPower(number kilowatts, number milliwatts)
             {
                 // arrange
                 var expectedPower = new Power(milliwatts, PowerUnit.Milliwatt);

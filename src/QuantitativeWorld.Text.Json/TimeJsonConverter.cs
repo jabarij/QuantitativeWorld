@@ -20,13 +20,13 @@ namespace QuantitativeWorld.Text.Json
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(nameof(Time.TotalSeconds), serializer, e => e.ReadAsDouble(), out var totalSeconds))
+                    if (reader.TryReadPropertyAsNullable(nameof(Time.TotalSeconds), serializer, e => e.ReadAsNumber(), out var totalSeconds))
                         builder.TotalSeconds = totalSeconds;
                     else if (reader.TryReadPropertyAsNullable(nameof(Time.Hours), serializer, e => e.ReadAsInt32(), out var hours))
                         builder.Hours = hours;
                     else if (reader.TryReadPropertyAsNullable(nameof(Time.Minutes), serializer, e => e.ReadAsInt32(), out var minutes))
                         builder.Minutes = minutes;
-                    else if (reader.TryReadPropertyAsNullable(nameof(Time.Seconds), serializer, e => e.ReadAsDouble(), out var seconds))
+                    else if (reader.TryReadPropertyAsNullable(nameof(Time.Seconds), serializer, e => e.ReadAsNumber(), out var seconds))
                         builder.Seconds = seconds;
                     else if (reader.TryReadPropertyAsNullable(nameof(Time.IsNegative), serializer, e => e.ReadAsBoolean(), out var isNegative))
                         builder.IsNegative = isNegative;

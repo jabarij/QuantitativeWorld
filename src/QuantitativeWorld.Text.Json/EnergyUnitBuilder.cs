@@ -1,10 +1,18 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class EnergyUnitBuilder : ILinearNamedUnitBuilder<EnergyUnit>
     {
         private string _name;
         private string _abbreviation;
-        private double? _valueInJoules;
+        private number? _valueInJoules;
 
         public EnergyUnitBuilder() { }
         public EnergyUnitBuilder(EnergyUnit unit)
@@ -20,14 +28,14 @@
         public void SetName(string name) =>
             _name = name;
 
-        public void SetValueInBaseUnit(double valueInBaseUnit) =>
+        public void SetValueInBaseUnit(number valueInBaseUnit) =>
             _valueInJoules = valueInBaseUnit;
 
         public bool TryBuild(out EnergyUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            double? valueInJoules = _valueInJoules;
+            number? valueInJoules = _valueInJoules;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

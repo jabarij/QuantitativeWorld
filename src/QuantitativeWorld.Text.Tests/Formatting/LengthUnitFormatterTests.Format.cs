@@ -23,7 +23,7 @@ namespace QuantitativeWorld.Tests.Formatting
                 var length = new LengthUnit(
                     name: unitName,
                     abbreviation: unitAbbreviation,
-                    valueInMetres: Fixture.CreatePositive());
+                    valueInMetres: Fixture.CreatePositiveNumber());
 
                 // act
                 string actualResult = formatter.Format(standardFormat, length);

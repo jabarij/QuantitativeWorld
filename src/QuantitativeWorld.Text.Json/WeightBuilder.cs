@@ -1,9 +1,17 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class WeightBuilder : ILinearQuantityBuilder<Weight, WeightUnit>
     {
-        private double? _kilograms;
-        private double? _value;
+        private number? _kilograms;
+        private number? _value;
         private WeightUnit? _unit;
 
         public WeightBuilder() { }
@@ -14,13 +22,13 @@
             _unit = weight.Unit;
         }
 
-        public void SetBaseValue(double kilograms)
+        public void SetBaseValue(number kilograms)
         {
             _kilograms = kilograms;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _kilograms = null;
             _value = value;
@@ -33,8 +41,8 @@
 
         public bool TryBuild(out Weight result, WeightUnit? defaultUnit = null)
         {
-            double? kilograms = _kilograms;
-            double? value = _value;
+            number? kilograms = _kilograms;
+            number? value = _value;
             WeightUnit? unit = _unit ?? defaultUnit;
 
             if (kilograms.HasValue)

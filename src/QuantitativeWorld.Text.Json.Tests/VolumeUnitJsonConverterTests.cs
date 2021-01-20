@@ -6,24 +6,31 @@ using Xunit;
 
 namespace QuantitativeWorld.Text.Json.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public class VolumeUnitJsonConverterTests : TestsBase
     {
         public VolumeUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"cubic millimetre\",\"Abbreviation\":\"mm³\",\"ValueInCubicMetres\":1E-09}}")]
-        [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"mm³\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJson)
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"cubic centimetre\",\"Abbreviation\":\"cm³\",\"ValueInCubicMetres\":(0\\.000001|1E-06)}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"cm³\"}")]
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
         {
             // arrange
-            var unit = VolumeUnit.CubicMillimetre;
+            var unit = VolumeUnit.CubicCentimetre;
             var converter = new VolumeUnitJsonConverter(serializationFormat);
 
             // act
             string actualJson = JsonConvert.SerializeObject(new SomeUnitOwner<VolumeUnit> { Unit = unit }, converter);
 
             // assert
-            actualJson.Should().Be(expectedJson);
+            actualJson.Should().MatchRegex(expectedJsonPattern);
         }
 
         [Theory]
@@ -60,7 +67,39 @@ namespace QuantitativeWorld.Text.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInCubicMetres.Should().Be(123.456d);
+            result.ValueInCubicMetres.Should().Be((number)123.456m);
+        }
+
+        [Fact]
+        public void DeserializeCustomUnitAsPredefined_ShouldReturnValidResult()
+        {
+            // arrange
+            var someUnit = new VolumeUnit(
+                name: "some unit",
+                abbreviation: "su",
+                valueInCubicMetres: (number)123.456m);
+            string json = @"{
+  'unit': 'su'
+}";
+            var converter = new VolumeUnitJsonConverter(
+                serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                tryReadCustomPredefinedUnit: (string value, out VolumeUnit predefinedUnit) =>
+                {
+                    if (value == someUnit.Abbreviation)
+                    {
+                        predefinedUnit = someUnit;
+                        return true;
+                    }
+
+                    predefinedUnit = default(VolumeUnit);
+                    return false;
+                });
+
+            // act
+            var result = JsonConvert.DeserializeObject<SomeUnitOwner<VolumeUnit>>(json, converter);
+
+            // assert
+            result.Unit.Should().Be(someUnit);
         }
 
         [Theory]

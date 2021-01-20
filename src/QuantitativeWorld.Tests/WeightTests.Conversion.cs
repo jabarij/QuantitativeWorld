@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class WeightTests
     {
         public class Convert : WeightTests
@@ -26,8 +34,9 @@ namespace QuantitativeWorld.Tests
                 actualWeight.Unit.Should().Be(targetUnit);
             }
 
-            [Fact]
-            public void MultipleSerialConversion_ShouldHaveSameValueAtTheEnd()
+            [Theory]
+            [InlineData(1234.5678d)]
+            public void MultipleSerialConversion_ShouldHaveSameValueAtTheEnd(number value)
             {
                 // arrange
                 var units = new List<WeightUnit>
@@ -39,7 +48,7 @@ namespace QuantitativeWorld.Tests
                     WeightUnit.Ounce,
                     WeightUnit.Kilogram
                 };
-                var initialWeight = new Weight(1234.5678d, units.First());
+                var initialWeight = new Weight(value, units.First());
                 Weight? finalWeight = null;
 
                 // act
@@ -51,14 +60,14 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Weight(123.456d, WeightUnit.Kilogram), WeightUnit.Decagram, new Weight(12345.6d, WeightUnit.Decagram));
-                yield return new ConvertTestData(new Weight(12345.6d, WeightUnit.Decagram), WeightUnit.Kilogram, new Weight(123.456d, WeightUnit.Kilogram));
+                yield return new ConvertTestData(123.456m, WeightUnit.Kilogram, WeightUnit.Decagram, 12345.6m);
+                yield return new ConvertTestData(12345.6m, WeightUnit.Decagram, WeightUnit.Kilogram, 123.456m);
 
-                yield return new ConvertTestData(new Weight(123.456d, WeightUnit.Kilogram), WeightUnit.Ton, new Weight(0.123456d, WeightUnit.Ton));
-                yield return new ConvertTestData(new Weight(0.123456d, WeightUnit.Ton), WeightUnit.Kilogram, new Weight(123.456d, WeightUnit.Kilogram));
+                yield return new ConvertTestData(123.456m, WeightUnit.Kilogram, WeightUnit.Ton, 0.123456m);
+                yield return new ConvertTestData(0.123456m, WeightUnit.Ton, WeightUnit.Kilogram, 123.456m);
 
-                yield return new ConvertTestData(new Weight(123.456d, WeightUnit.Kilogram), WeightUnit.Pound, new Weight(123.456d / 0.45359237d, WeightUnit.Pound));
-                yield return new ConvertTestData(new Weight(272.17389d, WeightUnit.Pound), WeightUnit.Kilogram, new Weight(272.17389d * 0.45359237d, WeightUnit.Kilogram));
+                yield return new ConvertTestData(123.456m, WeightUnit.Kilogram, WeightUnit.Pound, 123.456m / 0.45359237m);
+                yield return new ConvertTestData(272.17389m, WeightUnit.Pound, WeightUnit.Kilogram, 272.17389m * 0.45359237m);
             }
 
             class ConvertTestData : ITestDataProvider
@@ -69,12 +78,16 @@ namespace QuantitativeWorld.Tests
                     TargetUnit = targetUnit;
                     ExpectedWeight = expectedWeight;
                 }
+                public ConvertTestData(decimal value, WeightUnit unit, WeightUnit targetUnit, decimal expectedValue)
+                    : this(new Weight((number)value, unit), targetUnit, new Weight((number)expectedValue, targetUnit)) { }
+                public ConvertTestData(double value, WeightUnit unit, WeightUnit targetUnit, double expectedValue)
+                    : this(new Weight((number)value, unit), targetUnit, new Weight((number)expectedValue, targetUnit)) { }
 
                 public Weight OriginalWeight { get; }
                 public WeightUnit TargetUnit { get; }
                 public Weight ExpectedWeight { get; }
 
-                public object[] SerializeTestData() =>
+                public object[] GetTestParameters() =>
                     new[] { (object)OriginalWeight, TargetUnit, ExpectedWeight };
             }
         }

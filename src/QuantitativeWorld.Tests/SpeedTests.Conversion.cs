@@ -6,6 +6,13 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class SpeedTests
     {
         public class Convert : SpeedTests
@@ -22,8 +29,8 @@ namespace QuantitativeWorld.Tests
                 var actualSpeed = originalSpeed.Convert(targetUnit);
 
                 // assert
-                actualSpeed.MetresPerSecond.Should().BeApproximately(expectedSpeed.MetresPerSecond, DoublePrecision);
-                actualSpeed.Value.Should().BeApproximately(expectedSpeed.Value, DoublePrecision);
+                actualSpeed.MetresPerSecond.Should().BeApproximately(expectedSpeed.MetresPerSecond);
+                actualSpeed.Value.Should().BeApproximately(expectedSpeed.Value);
                 actualSpeed.Unit.Should().Be(targetUnit);
             }
 
@@ -38,7 +45,7 @@ namespace QuantitativeWorld.Tests
                     SpeedUnit.FootPerSecond,
                     SpeedUnit.MetrePerSecond
                 };
-                var initialSpeed = new Speed(1234.5678d, units.First());
+                var initialSpeed = new Speed((number)1234.5678m, units.First());
                 Speed? finalSpeed = null;
 
                 // act
@@ -50,28 +57,20 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Speed(123.456d, SpeedUnit.MetrePerSecond), SpeedUnit.KilometrePerHour, new Speed(444.4416d, SpeedUnit.KilometrePerHour));
-                //yield return new ConvertTestData(new Speed(444.4416d, SpeedUnit.KilometrePerHour), SpeedUnit.MetrePerSecond, new Speed(123.456d, SpeedUnit.MetrePerSecond));
+                yield return new ConvertTestData(123.456m, SpeedUnit.MetrePerSecond, 444.4416m, SpeedUnit.KilometrePerHour);
+                yield return new ConvertTestData(444.4416m, SpeedUnit.KilometrePerHour, 123.456m, SpeedUnit.MetrePerSecond);
 
-                //yield return new ConvertTestData(new Speed(123.456d, SpeedUnit.MetrePerSecond), SpeedUnit.MilePerHour, new Speed(276.1632068718683d, SpeedUnit.MilePerHour));
-                //yield return new ConvertTestData(new Speed(276.1632068718683d, SpeedUnit.MilePerHour), SpeedUnit.MetrePerSecond, new Speed(123.456d, SpeedUnit.MetrePerSecond));
+                yield return new ConvertTestData(123.456m, SpeedUnit.MetrePerSecond, 276.1632068718683m, SpeedUnit.MilePerHour);
+                yield return new ConvertTestData(276.1632068718683m, SpeedUnit.MilePerHour, 123.456m, SpeedUnit.MetrePerSecond);
             }
 
-            class ConvertTestData : ITestDataProvider
+            class ConvertTestData : ConversionTestData<Speed>, ITestDataProvider
             {
-                public ConvertTestData(Speed originalSpeed, SpeedUnit targetUnit, Speed expectedSpeed)
-                {
-                    OriginalSpeed = originalSpeed;
-                    TargetUnit = targetUnit;
-                    ExpectedSpeed = expectedSpeed;
-                }
+                public ConvertTestData(decimal originalValue, SpeedUnit originalUnit, decimal expectedValue, SpeedUnit expectedUnit)
+                    : base(new Speed((number)originalValue, originalUnit), new Speed((number)expectedValue, expectedUnit)) { }
 
-                public Speed OriginalSpeed { get; }
-                public SpeedUnit TargetUnit { get; }
-                public Speed ExpectedSpeed { get; }
-
-                public object[] SerializeTestData() =>
-                    new[] { (object)OriginalSpeed, TargetUnit, ExpectedSpeed };
+                public object[] GetTestParameters() =>
+                    new[] { (object)OriginalValue, ExpectedValue.Unit, ExpectedValue };
             }
         }
     }

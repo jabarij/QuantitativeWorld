@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;Debug DECIMAL;Release DECIMAL</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DECIMAL|AnyCPU'">
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DECIMAL|AnyCPU'">
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+    <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +33,8 @@
     <Compile Include="..\Common\Internals\DotNetExtensions\StringExtensions.cs" Link="DotNetExtensions\StringExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\TypeExtensions.cs" Link="DotNetExtensions\TypeExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\ValueRange.cs" Link="DotNetExtensions\ValueRange.cs" />
+    <Compile Include="..\QuantitativeWorld\DecimalConstants.cs" Link="DecimalConstants.cs" />
+    <Compile Include="..\QuantitativeWorld\DoubleConstants.cs" Link="DoubleConstants.cs" />
   </ItemGroup>
 
   <ItemGroup>

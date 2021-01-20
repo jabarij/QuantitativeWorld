@@ -8,6 +8,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class LengthQuantity : EnumerableExtensionsTests
@@ -51,7 +59,7 @@ namespace QuantitativeWorld.Tests
                     // arrange
                     var source = Fixture.CreateMany<Length>(3);
 
-                    double expectedResultInMetres = source.Average(e => e.Metres);
+                    number expectedResultInMetres = source.Average(e => e.Metres);
                     var expectedResultUnit = source.First().Unit;
                     var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -59,9 +67,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source);
 
                     // assert
-                    result.Metres.Should().BeApproximately(expectedResult.Metres, DoublePrecision);
+                    result.Metres.Should().BeApproximately(expectedResult.Metres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -120,7 +128,7 @@ namespace QuantitativeWorld.Tests
                     var source = Fixture.CreateMany<Length>(3).Select(e => new TestObject<Length>(e));
                     Func<TestObject<Length>, Length> selector = e => e.Property;
 
-                    double expectedResultInMetres = source.Average(e => e.Property.Metres);
+                    number expectedResultInMetres = source.Average(e => e.Property.Metres);
                     var expectedResultUnit = source.First().Property.Unit;
                     var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -128,9 +136,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source, selector);
 
                     // assert
-                    result.Metres.Should().BeApproximately(expectedResult.Metres, DoublePrecision);
+                    result.Metres.Should().BeApproximately(expectedResult.Metres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -394,7 +402,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var areas = Fixture.CreateMany<Length>(3);
-                    double expectedResultInMetres = areas.Sum(e => e.Metres);
+                    number expectedResultInMetres = areas.Sum(e => e.Metres);
                     var expectedResultUnit = areas.First().Unit;
                     var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -402,9 +410,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(areas);
 
                     // assert
-                    result.Metres.Should().BeApproximately(expectedResult.Metres, DoublePrecision);
+                    result.Metres.Should().BeApproximately(expectedResult.Metres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -460,7 +468,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Length>(3).Select(e => new TestObject<Length>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.Metres);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.Metres);
                     var expectedResultUnit = objects.First().Property.Unit;
                     var expectedResult = new Length(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -468,9 +476,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(objects, e => e.Property);
 
                     // assert
-                    result.Metres.Should().BeApproximately(expectedResult.Metres, DoublePrecision);
+                    result.Metres.Should().BeApproximately(expectedResult.Metres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
         }

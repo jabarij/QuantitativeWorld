@@ -5,10 +5,18 @@ using System.Reflection;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct PowerUnit
     {
         [Predefined]
-        public static readonly PowerUnit Watt = new PowerUnit(name: "watt", abbreviation: "W", valueInWatts: 1d);
+        public static readonly PowerUnit Watt = new PowerUnit(name: "watt", abbreviation: "W", valueInWatts: Constants.One);
         [Predefined]
         public static readonly PowerUnit Milliwatt = new PowerUnit(name: "milliwatt", abbreviation: "mW", valueInWatts: Constants.WattsPerMilliwatt);
         [Predefined]

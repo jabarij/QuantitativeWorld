@@ -8,6 +8,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class SumLinearQuantitiesWithFactoryFunctionBySelector : EnumerableExtensionsTests
@@ -19,7 +27,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 IEnumerable<TestObject<SomeQuantity>> objects = null;
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
                 Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
                 // act
@@ -35,7 +43,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var objects = Enumerable.Empty<TestObject<SomeQuantity>>();
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
                 Func<TestObject<SomeQuantity>, SomeQuantity> selector = null;
 
                 // act
@@ -51,7 +59,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var objects = Enumerable.Empty<TestObject<SomeQuantity>>();
-                Func<double, SomeUnit, SomeQuantity> factory = null;
+                Func<number, SomeUnit, SomeQuantity> factory = null;
                 Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
                 // act
@@ -67,7 +75,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var objects = Enumerable.Empty<TestObject<SomeQuantity>>();
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
                 Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
                 // act
@@ -82,10 +90,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var objects = Fixture.CreateMany<SomeQuantity>(3).Select(e => new TestObject<SomeQuantity>(e));
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
                 Func<TestObject<SomeQuantity>, SomeQuantity> selector = e => e.Property;
 
-                double expectedResultInWatts = objects.Sum(e => e.Property.Value * e.Property.Unit.ValueInUnits);
+                number expectedResultInWatts = objects.Sum(e => e.Property.Value * e.Property.Unit.ValueInUnits);
                 var expectedResultUnit = objects.First().Property.Unit;
                 var expectedResult = new SomeQuantity(expectedResultInWatts / expectedResultUnit.ValueInUnits, expectedResultUnit);
 

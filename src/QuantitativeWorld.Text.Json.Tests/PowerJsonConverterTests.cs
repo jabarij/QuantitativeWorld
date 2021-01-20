@@ -2,29 +2,77 @@
 using FluentAssertions;
 using Newtonsoft.Json;
 using QuantitativeWorld.TestAbstractions;
+using System.Collections.Generic;
 using Xunit;
 
 namespace QuantitativeWorld.Text.Json.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public class PowerJsonConverterTests : TestsBase
     {
         public PowerJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(5000d, PowerJsonSerializationFormat.AsWatts, "{\"Watts\":5.0}")]
-        [InlineData(5000d, PowerJsonSerializationFormat.AsWattsWithUnit, "{\"Watts\":5.0,\"Unit\":{\"Name\":\"milliwatt\",\"Abbreviation\":\"mW\",\"ValueInWatts\":0.001}}")]
-        [InlineData(5000d, PowerJsonSerializationFormat.AsValueWithUnit, "{\"Value\":5000.0,\"Unit\":{\"Name\":\"milliwatt\",\"Abbreviation\":\"mW\",\"ValueInWatts\":0.001}}")]
-        public void Serialize_ShouldReturnValidJson(double milliwatts, PowerJsonSerializationFormat serializationFormat, string expectedJson)
+        [MemberData(nameof(GetTestData), typeof(PowerJsonConverterTests), nameof(GetSerializeTestData))]
+        public void Serialize_ShouldReturnValidJson(PowerSerializeTestData testData)
         {
             // arrange
-            var power = new Power(milliwatts, PowerUnit.Milliwatt);
-            var converter = new PowerJsonConverter(serializationFormat);
+            var converter = new PowerJsonConverter(testData.Format, testData.UnitFormat);
 
             // act
-            string actualJson = JsonConvert.SerializeObject(power, converter);
+            string actualJson = JsonConvert.SerializeObject(testData.Quantity, converter);
 
             // assert
-            actualJson.Should().Be(expectedJson);
+            actualJson.Should().MatchRegex(testData.ExpectedJsonPattern);
+        }
+        private static IEnumerable<PowerSerializeTestData> GetSerializeTestData()
+        {
+            var testValue = new Power((number)5m, PowerUnit.Kilowatt);
+            yield return new PowerSerializeTestData(
+                value: testValue,
+                format: PowerJsonSerializationFormat.AsWatts,
+                unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                expectedJsonPattern: "{\"Watts\":5000(\\.0+)}");
+            yield return new PowerSerializeTestData(
+                value: testValue,
+                format: PowerJsonSerializationFormat.AsWattsWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                expectedJsonPattern: "{\"Watts\":5000(\\.0+),\"Unit\":\"kW\"}");
+            yield return new PowerSerializeTestData(
+                value: testValue,
+                format: PowerJsonSerializationFormat.AsValueWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                expectedJsonPattern: "{\"Value\":5(\\.0+),\"Unit\":\"kW\"}");
+            yield return new PowerSerializeTestData(
+                value: testValue,
+                format: PowerJsonSerializationFormat.AsWattsWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.AlwaysFull,
+                expectedJsonPattern: "{\"Watts\":5000(\\.0+),\"Unit\":{\"Name\":\"kilowatt\",\"Abbreviation\":\"kW\",\"ValueInWatts\":1000(\\.0+)}}");
+            yield return new PowerSerializeTestData(
+                value: testValue,
+                format: PowerJsonSerializationFormat.AsValueWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.AlwaysFull,
+                expectedJsonPattern: "{\"Value\":5(\\.0+),\"Unit\":{\"Name\":\"kilowatt\",\"Abbreviation\":\"kW\",\"ValueInWatts\":1000(\\.0+)}}");
+        }
+        public class PowerSerializeTestData : QuantitySerializeTestData<Power>
+        {
+            public PowerSerializeTestData(
+                Power value,
+                PowerJsonSerializationFormat format,
+                LinearUnitJsonSerializationFormat unitFormat,
+                string expectedJsonPattern)
+                : base(value, unitFormat, expectedJsonPattern)
+            {
+                Format = format;
+            }
+
+            public PowerJsonSerializationFormat Format { get; set; }
         }
 
         [Fact]
@@ -32,73 +80,76 @@ namespace QuantitativeWorld.Text.Json.Tests
         {
             // arrange
             string json = @"{
-  'watts': 0.123456
+  'watts': 123.456
 }";
             var converter = new PowerJsonConverter();
+            var expectedResult =
+                new Power(watts: (number)123.456m);
 
             // act
             var result = JsonConvert.DeserializeObject<Power>(json, converter);
 
             // assert
-            result.Watts.Should().Be(0.123456d);
-            result.Value.Should().Be(0.123456d);
-            result.Unit.Should().Be(PowerUnit.Watt);
+            result.Should().Be(expectedResult);
         }
 
         [Fact]
-        public void DeserializeAsWattsWithUnit_ShouldReturnValidResult()
+        public void DeserializeAsWattsWithPredefinedUnit_ShouldReturnValidResult()
         {
             // arrange
             string json = @"{
-  'watts': 5,
-  'unit': {
-    'name': 'milliwatt',
-    'abbreviation': 'mW',
-    'valueInWatts': '0.001'
-  }
+  'watts': 123.456,
+  'unit': 'kW'
 }";
             var converter = new PowerJsonConverter();
+            var expectedResult =
+                new Power(watts: (number)123.456m)
+                .Convert(PowerUnit.Kilowatt);
 
             // act
             var result = JsonConvert.DeserializeObject<Power>(json, converter);
 
             // assert
-            result.Watts.Should().Be(5d);
-            result.Value.Should().Be(5000d);
-            result.Unit.Should().Be(PowerUnit.Milliwatt);
+            result.Should().Be(expectedResult);
         }
 
         [Fact]
-        public void DeserializeAsValueWithUnit_ShouldReturnValidResult()
+        public void DeserializeAsWattsWithFullySerializedUnit_ShouldReturnValidResult()
         {
             // arrange
             string json = @"{
-  'value': 5000,
+  'watts': 123.456,
   'unit': {
-    'name': 'milliwatt',
-    'abbreviation': 'mW',
-    'valueInWatts': '0.001'
+    'name': 'kilowatt',
+    'abbreviation': 'kW',
+    'valueInWatts': '1000'
   }
 }";
             var converter = new PowerJsonConverter();
+            var expectedResult =
+                new Power(watts: (number)123.456m)
+                .Convert(new PowerUnit(
+                    name: "kilowatt",
+                    abbreviation: "kW",
+                    valueInWatts: (number)1000));
 
             // act
             var result = JsonConvert.DeserializeObject<Power>(json, converter);
 
             // assert
-            result.Watts.Should().Be(5d);
-            result.Value.Should().Be(5000d);
-            result.Unit.Should().Be(PowerUnit.Milliwatt);
+            result.Should().Be(expectedResult);
         }
 
         [Theory]
-        [InlineData(PowerJsonSerializationFormat.AsWatts)]
-        [InlineData(PowerJsonSerializationFormat.AsWattsWithUnit)]
-        public void SerializeAndDeserializeWithWatts_ShouldBeIdempotent(PowerJsonSerializationFormat serializationFormat)
+        [InlineData(PowerJsonSerializationFormat.AsWatts, LinearUnitJsonSerializationFormat.AlwaysFull)]
+        [InlineData(PowerJsonSerializationFormat.AsWatts, LinearUnitJsonSerializationFormat.PredefinedAsString)]
+        [InlineData(PowerJsonSerializationFormat.AsWattsWithUnit, LinearUnitJsonSerializationFormat.AlwaysFull)]
+        [InlineData(PowerJsonSerializationFormat.AsWattsWithUnit, LinearUnitJsonSerializationFormat.PredefinedAsString)]
+        public void SerializeAndDeserializeWithWatts_ShouldBeIdempotent(PowerJsonSerializationFormat format, LinearUnitJsonSerializationFormat unitFormat)
         {
             // arrange
             var power = Fixture.Create<Power>();
-            var converter = new PowerJsonConverter(serializationFormat);
+            var converter = new PowerJsonConverter(format, unitFormat);
 
             // act
             string serializedPower1 = JsonConvert.SerializeObject(power, converter);
@@ -128,8 +179,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var deserializedPower2 = JsonConvert.DeserializeObject<Power>(serializedPower2, converter);
 
             // assert
-            deserializedPower1.Watts.Should().BeApproximately(power.Watts, DoublePrecision);
-            deserializedPower2.Watts.Should().BeApproximately(power.Watts, DoublePrecision);
+            deserializedPower1.Watts.Should().BeApproximately(power.Watts);
+            deserializedPower2.Watts.Should().BeApproximately(power.Watts);
 
             deserializedPower2.Should().Be(deserializedPower1);
             serializedPower2.Should().Be(serializedPower1);

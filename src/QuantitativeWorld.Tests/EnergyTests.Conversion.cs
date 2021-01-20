@@ -6,6 +6,13 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnergyTests
     {
         public class Convert : EnergyTests
@@ -15,16 +22,16 @@ namespace QuantitativeWorld.Tests
 
             [Theory]
             [MemberData(nameof(GetTestData), typeof(Convert), nameof(GetConvertTestData))]
-            public void ShouldConvertToExpectedValue(Energy originalEnergy, EnergyUnit targetUnit, Energy expectedEnergy)
+            public void ShouldConvertToExpectedValue(Energy original, Energy expected)
             {
                 // arrange
                 // act
-                var actualEnergy = originalEnergy.Convert(targetUnit);
+                var actual = original.Convert(expected.Unit);
 
                 // assert
-                actualEnergy.Joules.Should().BeApproximately(expectedEnergy.Joules, DoublePrecision);
-                actualEnergy.Value.Should().BeApproximately(expectedEnergy.Value, DoublePrecision);
-                actualEnergy.Unit.Should().Be(targetUnit);
+                actual.Joules.Should().BeApproximately(expected.Joules);
+                actual.Value.Should().BeApproximately(expected.Value);
+                actual.Unit.Should().Be(expected.Unit);
             }
 
             [Fact]
@@ -39,7 +46,7 @@ namespace QuantitativeWorld.Tests
                     EnergyUnit.Kilocalorie,
                     EnergyUnit.Joule
                 };
-                var initialEnergy = new Energy(1234.5678d, units.First());
+                var initialEnergy = new Energy((number)1234.5678m, units.First());
                 Energy? finalEnergy = null;
 
                 // act
@@ -51,31 +58,23 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                //yield return new ConvertTestData(new Energy(123.456d, EnergyUnit.Joule), EnergyUnit.Kilocalorie, new Energy(0.0295066922d, EnergyUnit.Kilocalorie));
-                //yield return new ConvertTestData(new Energy(0.0295066922d, EnergyUnit.Kilocalorie), EnergyUnit.Joule, new Energy(123.456d, EnergyUnit.Joule));
+                yield return new ConvertTestData(123.456m, EnergyUnit.Joule, 0.0295066922m, EnergyUnit.Kilocalorie);
+                yield return new ConvertTestData(0.0295066922m, EnergyUnit.Kilocalorie, 123.456m, EnergyUnit.Joule);
 
-                //yield return new ConvertTestData(new Energy(123.456d, EnergyUnit.Joule), EnergyUnit.Kilojoule, new Energy(0.123456d, EnergyUnit.Kilojoule));
-                //yield return new ConvertTestData(new Energy(0.123456d, EnergyUnit.Kilojoule), EnergyUnit.Joule, new Energy(123.456d, EnergyUnit.Joule));
+                yield return new ConvertTestData(123.456m, EnergyUnit.Joule, 0.123456m, EnergyUnit.Kilojoule);
+                yield return new ConvertTestData(0.123456m, EnergyUnit.Kilojoule, 123.456m, EnergyUnit.Joule);
 
-                yield return new ConvertTestData(new Energy(123.456d, EnergyUnit.Joule), EnergyUnit.Erg, new Energy(1234560000d, EnergyUnit.Erg));
-                yield return new ConvertTestData(new Energy(1234560000d, EnergyUnit.Erg), EnergyUnit.Joule, new Energy(123.456d, EnergyUnit.Joule));
+                yield return new ConvertTestData(123.456m, EnergyUnit.Joule, 1234560000m, EnergyUnit.Erg);
+                yield return new ConvertTestData(1234560000m, EnergyUnit.Erg, 123.456m, EnergyUnit.Joule);
             }
 
-            class ConvertTestData : ITestDataProvider
+            class ConvertTestData : ConversionTestData<Energy>, ITestDataProvider
             {
-                public ConvertTestData(Energy originalEnergy, EnergyUnit targetUnit, Energy expectedEnergy)
-                {
-                    OriginalEnergy = originalEnergy;
-                    TargetUnit = targetUnit;
-                    ExpectedEnergy = expectedEnergy;
-                }
+                public ConvertTestData(decimal originalValue, EnergyUnit originalUnit, decimal expectedValue, EnergyUnit expectedUnit)
+                    : base(new Energy((number)originalValue, originalUnit), new Energy((number)expectedValue, expectedUnit)) { }
 
-                public Energy OriginalEnergy { get; }
-                public EnergyUnit TargetUnit { get; }
-                public Energy ExpectedEnergy { get; }
-
-                public object[] SerializeTestData() =>
-                    new[] { (object)OriginalEnergy, TargetUnit, ExpectedEnergy };
+                public object[] GetTestParameters() =>
+                    new[] { (object)OriginalValue, ExpectedValue };
             }
         }
     }

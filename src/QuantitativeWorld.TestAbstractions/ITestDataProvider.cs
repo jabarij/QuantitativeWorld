@@ -2,6 +2,6 @@
 {
     public interface ITestDataProvider
     {
-        object[] SerializeTestData();
+        object[] GetTestParameters();
     }
 }

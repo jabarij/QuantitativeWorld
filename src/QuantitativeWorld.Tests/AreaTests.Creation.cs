@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class AreaTests
     {
         public class Creation : AreaTests
@@ -17,7 +25,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForMetres_ShouldCreateValidArea()
             {
                 // arrange
-                double squareMetres = Fixture.Create<double>();
+                number squareMetres = Fixture.Create<number>();
 
                 // act
                 var area = new Area(squareMetres);
@@ -34,41 +42,33 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 // act
-                var area = new Area(testData.Value, testData.Unit);
+                var area = new Area(testData.OriginalValue.Value, testData.OriginalValue.Unit);
 
                 // assert
-                area.SquareMetres.Should().BeApproximately(testData.ExpectedMetres, DoublePrecision);
-                area.Value.Should().Be(testData.Value);
-                area.Unit.Should().Be(testData.Unit);
+                area.SquareMetres.Should().BeApproximately(testData.ExpectedValue.SquareMetres);
+                area.Value.Should().Be(testData.OriginalValue.Value);
+                area.Unit.Should().Be(testData.OriginalValue.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1d, AreaUnit.SquareMetre, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1000000d, AreaUnit.SquareMillimetre, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516d), AreaUnit.SquareInch, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516d * 144d), AreaUnit.SquareFoot, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516d * 144d * 9d), AreaUnit.SquareYard, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516d * 4014489600d), AreaUnit.SquareMile, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1m, AreaUnit.SquareMetre, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1000000m, AreaUnit.SquareMillimetre, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516m), AreaUnit.SquareInch, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516m * 144m), AreaUnit.SquareFoot, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516m * 144m * 9m), AreaUnit.SquareYard, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.00064516m * 4014489600m), AreaUnit.SquareMile, 1m);
             }
-            public class ConstructorForValueAndUnitTestData
+            public class ConstructorForValueAndUnitTestData : ConversionTestData<Area>
             {
-                public ConstructorForValueAndUnitTestData(double value, AreaUnit unit, double expectedSquareMetres)
-                {
-                    Value = value;
-                    Unit = unit;
-                    ExpectedMetres = expectedSquareMetres;
-                }
-
-                public double Value { get; }
-                public AreaUnit Unit { get; }
-                public double ExpectedMetres { get; }
+                public ConstructorForValueAndUnitTestData(decimal value, AreaUnit unit, decimal expectedSquareMetres)
+                    : base(new Area((number)value, unit), new Area((number)expectedSquareMetres)) { }
             }
 
             [Theory]
             [InlineData(0.000001, 1000000)]
             [InlineData(1, 1000000000000)]
             [InlineData(1000, 1000000000000000)]
-            public void FromSquareKilometres_ShouldCreateValidArea(double squareKilometres, double squareMillimetres)
+            public void FromSquareKilometres_ShouldCreateValidArea(number squareKilometres, number squareMillimetres)
             {
                 // arrange
                 var expectedArea = new Area(squareMillimetres, AreaUnit.SquareMillimetre);

@@ -21,7 +21,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = sut.ToTimeSpan();
 
                 // assert
-                result.TotalSeconds.Should().BeApproximately(sut.TotalSeconds, DoublePrecision);
+                result.TotalSeconds.Should().BeApproximately(sut.TotalSeconds);
             }
         }
     }

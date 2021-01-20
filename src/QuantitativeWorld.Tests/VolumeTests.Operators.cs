@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class VolumeTests
     {
         public class Operator_Oposite : VolumeTests
@@ -64,7 +72,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultVolume = default(Volume);
-                var zeroCubicKilometres = new Volume(0d, VolumeUnit.CubicKilometre);
+                var zeroCubicKilometres = new Volume(Constants.Zero, VolumeUnit.CubicKilometre);
 
                 // act
                 var result1 = defaultVolume + zeroCubicKilometres;
@@ -152,7 +160,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultVolume = default(Volume);
-                var zeroCubicKilometres = new Volume(0d, VolumeUnit.CubicKilometre);
+                var zeroCubicKilometres = new Volume(Constants.Zero, VolumeUnit.CubicKilometre);
 
                 // act
                 var result1 = defaultVolume - zeroCubicKilometres;
@@ -226,14 +234,14 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var volume = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = volume * factor;
 
                 // assert
-                result.CubicMetres.Should().BeApproximately(volume.CubicMetres * factor, DoublePrecision);
-                result.Value.Should().BeApproximately(volume.Value * factor, DoublePrecision);
+                result.CubicMetres.Should().BeApproximately(volume.CubicMetres * factor);
+                result.Value.Should().BeApproximately(volume.Value * factor);
                 result.Unit.Should().Be(volume.Unit);
             }
 
@@ -242,7 +250,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Volume? nullVolume = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Volume) * factor;
 
                 // act
@@ -253,6 +261,7 @@ namespace QuantitativeWorld.Tests
                 result.Value.Should().Be(expectedResult);
             }
 
+#if !DECIMAL
             [Fact]
             public void MultiplyByNaN_ShouldThrow()
             {
@@ -265,6 +274,7 @@ namespace QuantitativeWorld.Tests
                 // assert
                 multiplyByNaN.Should().Throw<ArgumentException>();
             }
+#endif
         }
 
         public class Operator_DivideByDouble : VolumeTests
@@ -278,12 +288,13 @@ namespace QuantitativeWorld.Tests
                 var volume = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
 
                 // act
-                Func<Volume> divideByZero = () => volume / 0d;
+                Func<Volume> divideByZero = () => volume / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
+#if !DECIMAL
             [Fact]
             public void DivideByNaN_ShouldThrow()
             {
@@ -291,24 +302,25 @@ namespace QuantitativeWorld.Tests
                 var volume = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
 
                 // act
-                Func<Volume> divideByNaN = () => volume / double.NaN;
+                Func<Volume> divideByNaN = () => volume / number.NaN;
 
                 // assert
                 divideByNaN.Should().Throw<ArgumentException>();
             }
+#endif
 
             [Fact]
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var volume = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = volume / denominator;
 
                 // assert
-                result.CubicMetres.Should().BeApproximately(volume.CubicMetres / (double)denominator, DoublePrecision);
+                result.CubicMetres.Should().BeApproximately(volume.CubicMetres / (number)denominator);
                 result.Unit.Should().Be(volume.Unit);
             }
 
@@ -317,7 +329,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Volume? nullVolume = null;
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Volume) / denominator;
 
                 // act
@@ -339,7 +351,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
                 var denominator = new Length(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<LengthUnit>());
 
                 // act
@@ -356,7 +368,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Volume? nominator = null;
                 var denominator = new Length(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<LengthUnit>());
                 var expectedResult = default(Volume) / denominator;
 
@@ -408,7 +420,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
                 var denominator = new Area(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<AreaUnit>());
 
                 // act
@@ -425,7 +437,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Volume? nominator = null;
                 var denominator = new Area(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<AreaUnit>());
                 var expectedResult = default(Volume) / denominator;
 
@@ -475,10 +487,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var volume = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
-                var denominator = new Volume(0d);
+                var denominator = new Volume(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => volume / denominator;
+                Func<number> divideByZero = () => volume / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -492,7 +504,7 @@ namespace QuantitativeWorld.Tests
                 Volume? denominator = null;
 
                 // act
-                Func<double> divideByNull = () => nominator / denominator;
+                Func<number> divideByNull = () => nominator / denominator;
 
                 // assert
                 divideByNull.Should().Throw<DivideByZeroException>();
@@ -504,11 +516,11 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Volume? nominator = null;
                 var denominator = new Volume(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(VolumeUnit.CubicMetre));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
                 result.Should().Be(default(Volume) / denominator);
@@ -520,11 +532,11 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateVolumeInUnitOtherThan(VolumeUnit.CubicMetre);
                 var denominator = new Volume(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(VolumeUnit.CubicMetre, nominator.Unit));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
                 result.Should().Be(nominator.CubicMetres / denominator.CubicMetres);

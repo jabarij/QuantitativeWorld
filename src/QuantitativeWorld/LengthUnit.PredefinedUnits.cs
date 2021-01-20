@@ -5,10 +5,18 @@ using System.Reflection;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct LengthUnit
     {
         [Predefined]
-        public static readonly LengthUnit Metre = new LengthUnit(name: "metre", abbreviation: "m", valueInMetres: 1d);
+        public static readonly LengthUnit Metre = new LengthUnit(name: "metre", abbreviation: "m", valueInMetres: Constants.One);
         [Predefined]
         public static readonly LengthUnit Millimetre = new LengthUnit(name: "millimetre", abbreviation: "mm", valueInMetres: Constants.MetresPerMillimetre);
         [Predefined]

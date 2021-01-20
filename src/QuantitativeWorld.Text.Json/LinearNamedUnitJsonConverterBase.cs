@@ -8,10 +8,16 @@ namespace QuantitativeWorld.Text.Json
         where TUnit : ILinearUnit, INamedUnit
     {
         private readonly LinearUnitJsonSerializationFormat _serializationFormat;
+        private readonly TryParseDelegate<TUnit> _tryReadCustomPredefinedUnit;
 
-        protected LinearNamedUnitJsonConverterBase(LinearUnitJsonSerializationFormat serializationFormat)
+        protected LinearNamedUnitJsonConverterBase(
+            LinearUnitJsonSerializationFormat serializationFormat,
+            TryParseDelegate<TUnit> tryReadCustomPredefinedUnit)
         {
             _serializationFormat = serializationFormat;
+            _tryReadCustomPredefinedUnit =
+                tryReadCustomPredefinedUnit
+                ?? TryReadCustomPredefinedUnit;
         }
 
         protected abstract string ValueInBaseUnitPropertyName { get; }
@@ -29,7 +35,7 @@ namespace QuantitativeWorld.Text.Json
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(ValueInBaseUnitPropertyName, serializer, e => e.ReadAsDouble(), out var baseValue))
+                    if (reader.TryReadPropertyAsNullable(ValueInBaseUnitPropertyName, serializer, e => e.ReadAsNumber(), out var baseValue))
                         builder.SetValueInBaseUnit(baseValue);
                     else if (reader.TryReadPropertyAs(nameof(INamedUnit.Name), serializer, e => e.ReadAsString(), out var name))
                         builder.SetName(name);
@@ -62,14 +68,17 @@ namespace QuantitativeWorld.Text.Json
             writer.WriteEndObject();
         }
 
-        protected virtual bool TryReadPredefinedUnit(string value, out TUnit predefinedUnit)
-        {
-            predefinedUnit = default(TUnit);
-            return false;
-        }
+        protected virtual bool TryReadPredefinedUnit(string value, out TUnit predefinedUnit) =>
+            _tryReadCustomPredefinedUnit(value, out predefinedUnit);
         protected virtual bool TryWritePredefinedUnit(JsonWriter writer, TUnit value, JsonSerializer serializer) =>
             false;
 
         protected abstract ILinearNamedUnitBuilder<TUnit> CreateBuilder();
+
+        private static bool TryReadCustomPredefinedUnit(string value, out TUnit predefinedUnit)
+        {
+            predefinedUnit = default(TUnit);
+            return false;
+        }
     }
 }

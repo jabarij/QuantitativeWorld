@@ -5,6 +5,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class SpeedTests
     {
         public class Equality : SpeedTests
@@ -17,45 +25,45 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultSpeed = default(Speed);
-                var zeroMetresPerSecondSpeed = new Speed(0d);
+                var zeroMetresPerSecondSpeed = new Speed(Constants.Zero);
 
                 // act
                 // assert
-                zeroMetresPerSecondSpeed.Equals(defaultSpeed).Should().BeTrue(because: "'new Speed(0d)' should be equal 'default(Speed)'");
-                defaultSpeed.Equals(zeroMetresPerSecondSpeed).Should().BeTrue(because: "'default(Speed)' should be equal 'new Speed(0d)'");
+                zeroMetresPerSecondSpeed.Equals(defaultSpeed).Should().BeTrue(because: "'new Speed(Constants.Zero)' should be equal 'default(Speed)'");
+                defaultSpeed.Equals(zeroMetresPerSecondSpeed).Should().BeTrue(because: "'default(Speed)' should be equal 'new Speed(Constants.Zero)'");
             }
 
             [Fact]
             public void SpeedCreateUsingParamlessConstructor_ShouldBeEqualToZeroMetresPerSecond()
             {
                 // arrange
-                var zeroMetresPerSecondSpeed = new Speed(0d);
+                var zeroMetresPerSecondSpeed = new Speed(Constants.Zero);
                 var paramlessConstructedSpeed = new Speed();
 
                 // act
                 // assert
-                zeroMetresPerSecondSpeed.Equals(paramlessConstructedSpeed).Should().BeTrue(because: "'new Speed(0d)' should be equal 'new Speed()'");
-                paramlessConstructedSpeed.Equals(zeroMetresPerSecondSpeed).Should().BeTrue(because: "'new Speed()' should be equal 'new Speed(0d)'");
+                zeroMetresPerSecondSpeed.Equals(paramlessConstructedSpeed).Should().BeTrue(because: "'new Speed(Constants.Zero)' should be equal 'new Speed()'");
+                paramlessConstructedSpeed.Equals(zeroMetresPerSecondSpeed).Should().BeTrue(because: "'new Speed()' should be equal 'new Speed(Constants.Zero)'");
             }
 
             [Fact]
             public void ZeroUnitsSpeed_ShouldBeEqualToZeroMetresPerSecond()
             {
                 // arrange
-                var zeroMetresPerSecondSpeed = new Speed(0d);
-                var zeroUnitsSpeed = new Speed(0d, CreateUnitOtherThan(SpeedUnit.MetrePerSecond));
+                var zeroMetresPerSecondSpeed = new Speed(Constants.Zero);
+                var zeroUnitsSpeed = new Speed(Constants.Zero, CreateUnitOtherThan(SpeedUnit.MetrePerSecond));
 
                 // act
                 // assert
-                zeroMetresPerSecondSpeed.Equals(zeroUnitsSpeed).Should().BeTrue(because: "'new Speed(0d)' should be equal 'new Speed(0d, SomeUnit)'");
-                zeroUnitsSpeed.Equals(zeroMetresPerSecondSpeed).Should().BeTrue(because: "'new Speed(0d, SomeUnit)' should be equal 'new Speed(0d)'");
+                zeroMetresPerSecondSpeed.Equals(zeroUnitsSpeed).Should().BeTrue(because: "'new Speed(Constants.Zero)' should be equal 'new Speed(Constants.Zero, SomeUnit)'");
+                zeroUnitsSpeed.Equals(zeroMetresPerSecondSpeed).Should().BeTrue(because: "'new Speed(Constants.Zero, SomeUnit)' should be equal 'new Speed(Constants.Zero)'");
             }
 
             [Fact]
             public void SpeedsConvertedToDifferentUnitsEqualInMetresPerSecond_ShouldBeEqual()
             {
                 // arrange
-                var length1 = new Speed(Fixture.Create<double>()).Convert(Fixture.Create<SpeedUnit>());
+                var length1 = new Speed(Fixture.Create<number>()).Convert(Fixture.Create<SpeedUnit>());
                 var length2 = new Speed(length1.MetresPerSecond).Convert(CreateUnitOtherThan(length1.Unit));
 
                 // act

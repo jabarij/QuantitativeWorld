@@ -3,6 +3,14 @@ using System;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct Time
     {
         public static explicit operator TimeSpan(Time time) =>
@@ -31,18 +39,18 @@ namespace QuantitativeWorld
         public static Time operator -(Time time) =>
             new Time(-time.TotalSeconds);
 
-        public static Time operator *(Time time, double factor) =>
+        public static Time operator *(Time time, number factor) =>
             new Time(time.TotalSeconds * factor);
-        public static Time operator *(double factor, Time time) =>
+        public static Time operator *(number factor, Time time) =>
             time * factor;
 
-        public static Time operator /(Time time, double denominator)
+        public static Time operator /(Time time, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Time(time.TotalSeconds / denominator);
         }
-        public static double operator /(Time time, Time denominator)
+        public static number operator /(Time time, Time denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -58,14 +66,14 @@ namespace QuantitativeWorld
             ? (left ?? default(Time)) - (right ?? default(Time))
             : (Time?)null;
 
-        public static Time? operator *(Time? time, double factor) =>
+        public static Time? operator *(Time? time, number factor) =>
             (time ?? default(Time)) * factor;
-        public static Time? operator *(double factor, Time? time) =>
+        public static Time? operator *(number factor, Time? time) =>
             time * factor;
 
-        public static Time? operator /(Time? time, double denominator) =>
+        public static Time? operator /(Time? time, number denominator) =>
             (time ?? default(Time)) / denominator;
-        public static double operator /(Time? time, Time? denominator) =>
+        public static number operator /(Time? time, Time? denominator) =>
             (time ?? default(Time)) / (denominator ?? default(Time));
     }
 }

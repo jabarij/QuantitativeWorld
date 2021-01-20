@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class PowerTests
     {
         public class Operator_Oposite : PowerTests
@@ -64,7 +72,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultPower = default(Power);
-                var zeroKilowatts = new Power(0d, PowerUnit.Kilowatt);
+                var zeroKilowatts = new Power(Constants.Zero, PowerUnit.Kilowatt);
 
                 // act
                 var result1 = defaultPower + zeroKilowatts;
@@ -152,7 +160,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultPower = default(Power);
-                var zeroKilowatts = new Power(0d, PowerUnit.Kilowatt);
+                var zeroKilowatts = new Power(Constants.Zero, PowerUnit.Kilowatt);
 
                 // act
                 var result1 = defaultPower - zeroKilowatts;
@@ -226,14 +234,14 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = power * factor;
 
                 // assert
-                result.Watts.Should().BeApproximately(power.Watts * factor, DoublePrecision);
-                result.Value.Should().BeApproximately(power.Value * factor, DoublePrecision);
+                result.Watts.Should().BeApproximately(power.Watts * factor);
+                result.Value.Should().BeApproximately(power.Value * factor);
                 result.Unit.Should().Be(power.Unit);
             }
 
@@ -242,7 +250,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Power? nullPower = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Power) * factor;
 
                 // act
@@ -253,6 +261,7 @@ namespace QuantitativeWorld.Tests
                 result.Value.Should().Be(expectedResult);
             }
 
+#if !DECIMAL
             [Fact]
             public void MultiplyByNaN_ShouldTreatNullAsDefault()
             {
@@ -265,6 +274,7 @@ namespace QuantitativeWorld.Tests
                 // assert
                 multiplyByNaN.Should().Throw<ArgumentException>();
             }
+#endif
         }
 
         public class Operator_MultiplyByTime : PowerTests
@@ -278,7 +288,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var argument = CreatePowerInUnitOtherThan(PowerUnit.Watt);
                 var factor = new Time(
-                    totalSeconds: Fixture.CreateNonZeroDouble());
+                    totalSeconds: Fixture.CreateNonZeroNumber());
 
                 // act
                 var result = argument * factor;
@@ -294,7 +304,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Power? argument = null;
                 var factor = new Time(
-                    totalSeconds: Fixture.CreateNonZeroDouble());
+                    totalSeconds: Fixture.CreateNonZeroNumber());
                 var expectedResult = default(Power) * factor;
 
                 // act
@@ -345,12 +355,13 @@ namespace QuantitativeWorld.Tests
                 var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
 
                 // act
-                Func<Power> divideByZero = () => power / 0d;
+                Func<Power> divideByZero = () => power / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
+#if !DECIMAL
             [Fact]
             public void DivideByNaN_ShouldThrow()
             {
@@ -363,19 +374,20 @@ namespace QuantitativeWorld.Tests
                 // assert
                 divideByNaN.Should().Throw<ArgumentException>();
             }
+#endif
 
             [Fact]
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = power / denominator;
 
                 // assert
-                result.Watts.Should().BeApproximately(power.Watts / (double)denominator, DoublePrecision);
+                result.Watts.Should().BeApproximately(power.Watts / (number)denominator);
                 result.Unit.Should().Be(power.Unit);
             }
 
@@ -384,7 +396,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Power? nullPower = null;
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Power) / denominator;
 
                 // act
@@ -405,10 +417,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var power = CreatePowerInUnitOtherThan(PowerUnit.Watt);
-                var denominator = new Power(0d);
+                var denominator = new Power(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => power / denominator;
+                Func<number> divideByZero = () => power / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -422,7 +434,7 @@ namespace QuantitativeWorld.Tests
                 Power? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => power / denominator;
+                Func<number> divideByZero = () => power / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -434,14 +446,14 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreatePowerInUnitOtherThan(PowerUnit.Watt);
                 var denominator = new Power(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(PowerUnit.Watt, nominator.Unit));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
-                result.Should().BeApproximately(nominator.Watts / denominator.Watts, DoublePrecision);
+                result.Should().BeApproximately(nominator.Watts / denominator.Watts);
             }
         }
     }

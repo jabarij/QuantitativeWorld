@@ -2,10 +2,18 @@
 
 namespace QuantitativeWorld.Text.Json.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class AngleBuilder : ILinearQuantityBuilder<Angle, AngleUnit>
     {
-        private double? _turns;
-        private double? _value;
+        private number? _turns;
+        private number? _value;
         private AngleUnit? _unit;
 
         public AngleBuilder() { }
@@ -16,13 +24,13 @@ namespace QuantitativeWorld.Text.Json.Angular
             _unit = angle.Unit;
         }
 
-        public void SetBaseValue(double turns)
+        public void SetBaseValue(number turns)
         {
             _turns = turns;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _turns = null;
             _value = value;
@@ -35,8 +43,8 @@ namespace QuantitativeWorld.Text.Json.Angular
 
         public bool TryBuild(out Angle result, AngleUnit? defaultUnit = null)
         {
-            double? turns = _turns;
-            double? value = _value;
+            number? turns = _turns;
+            number? value = _value;
             AngleUnit? unit = _unit ?? defaultUnit;
 
             if (turns.HasValue)

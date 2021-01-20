@@ -5,6 +5,13 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class DegreeAngleTests
     {
         public class ToAngle : DegreeAngleTests
@@ -21,7 +28,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = sut.ToAngle();
 
                 // assert
-                result.Value.Should().BeApproximately((double)sut.TotalDegrees, DoublePrecision);
+                result.Value.Should().BeApproximately((number)sut.TotalDegrees);
                 result.Unit.Should().Be(AngleUnit.Degree);
             }
         }

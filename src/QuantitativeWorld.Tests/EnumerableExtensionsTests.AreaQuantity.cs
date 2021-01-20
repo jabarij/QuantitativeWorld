@@ -8,6 +8,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class AreaQuantity : EnumerableExtensionsTests
@@ -51,7 +59,7 @@ namespace QuantitativeWorld.Tests
                     // arrange
                     var source = Fixture.CreateMany<Area>(3);
 
-                    double expectedResultInSquareMetres = source.Average(e => e.SquareMetres);
+                    number expectedResultInSquareMetres = source.Average(e => e.SquareMetres);
                     var expectedResultUnit = source.First().Unit;
                     var expectedResult = new Area(expectedResultInSquareMetres).Convert(expectedResultUnit);
 
@@ -59,9 +67,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source);
 
                     // assert
-                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres, DoublePrecision);
+                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -120,7 +128,7 @@ namespace QuantitativeWorld.Tests
                     var source = Fixture.CreateMany<Area>(3).Select(e => new TestObject<Area>(e));
                     Func<TestObject<Area>, Area> selector = e => e.Property;
 
-                    double expectedResultInSquareMetres = source.Average(e => e.Property.SquareMetres);
+                    number expectedResultInSquareMetres = source.Average(e => e.Property.SquareMetres);
                     var expectedResultUnit = source.First().Property.Unit;
                     var expectedResult = new Area(expectedResultInSquareMetres).Convert(expectedResultUnit);
 
@@ -128,9 +136,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source, selector);
 
                     // assert
-                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres, DoublePrecision);
+                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -394,7 +402,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var areas = Fixture.CreateMany<Area>(3);
-                    double expectedResultInSquareMetres = areas.Sum(e => e.SquareMetres);
+                    number expectedResultInSquareMetres = areas.Sum(e => e.SquareMetres);
                     var expectedResultUnit = areas.First().Unit;
                     var expectedResult = new Area(expectedResultInSquareMetres).Convert(expectedResultUnit);
 
@@ -402,9 +410,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(areas);
 
                     // assert
-                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres, DoublePrecision);
+                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -460,7 +468,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Area>(3).Select(e => new TestObject<Area>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.SquareMetres);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.SquareMetres);
                     var expectedResultUnit = objects.First().Property.Unit;
                     var expectedResult = new Area(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -468,9 +476,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(objects, e => e.Property);
 
                     // assert
-                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres, DoublePrecision);
+                    result.SquareMetres.Should().BeApproximately(expectedResult.SquareMetres);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
