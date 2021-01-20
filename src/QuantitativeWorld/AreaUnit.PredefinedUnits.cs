@@ -5,10 +5,18 @@ using System.Reflection;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct AreaUnit
     {
         [Predefined]
-        public static readonly AreaUnit SquareMetre = new AreaUnit(name: "square metre", abbreviation: "m²", valueInSquareMetres: 1d);
+        public static readonly AreaUnit SquareMetre = new AreaUnit(name: "square metre", abbreviation: "m²", valueInSquareMetres: Constants.One);
         [Predefined]
         public static readonly AreaUnit SquareMillimetre = new AreaUnit(name: "square millimetre", abbreviation: "mm²", valueInSquareMetres: Constants.SquareMetresPerSquareMillimetre);
         [Predefined]

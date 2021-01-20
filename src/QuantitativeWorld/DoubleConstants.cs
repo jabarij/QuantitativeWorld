@@ -2,8 +2,18 @@
 
 namespace QuantitativeWorld
 {
-    static class Constants
+    static class DoubleConstants
     {
+        public const double MinusOne = -1d;
+        public const double Zero = 0d;
+        public const double Half = 0.5d;
+        public const double Quarter = 0.25d;
+        public const double One = 1d;
+        public const double Thousand = 1000d;
+        public const double Million = 1000000d;
+        public const double Billion = 1000000000d;
+        public const double PI = Math.PI;
+
         #region Time
 
         public const double SecondsPerMinute = 60d;
@@ -134,7 +144,7 @@ namespace QuantitativeWorld
         public const double ArcsecondsPerArcminute = 60d;
         public const double ArcsecondsPerDegree = ArcsecondsPerArcminute * ArcminutesPerDegree;
 
-        public const double RadiansPerTurn = Math.PI;
+        public const double RadiansPerTurn = PI;
         public const double DegreesPerTurn = 360d;
         public const double ArcminutesPerTurn = DegreesPerTurn * ArcminutesPerDegree;
         public const double ArcsecondsPerTurn = ArcminutesPerTurn * ArcsecondsPerArcminute;
@@ -153,13 +163,13 @@ namespace QuantitativeWorld
         public const double JoulesPerKilowattHour = 3600000d;
         public const double JoulesPerMegawattHour = 3600000000d;
 
-        public const double JoulesPerElectronvolt = 1.602176634E-19;
+        public const double JoulesPerElectronvolt = 1.602176634E-19d;
         public const double JoulesPerFootPoundForce = 1.3558179483314004d;
-        public const double JoulesPerErg = 1E-7;
+        public const double JoulesPerErg = 1E-7d;
         public const double JoulesPerStheneMetre = 1000d;
 
-        public const double JoulesPerCalorie = 4184d;
-        public const double JoulesPerKilocalorie = 4184000d;
+        public const double JoulesPerCalorie = 4.184d;
+        public const double JoulesPerKilocalorie = 4184d;
 
         #endregion
     }

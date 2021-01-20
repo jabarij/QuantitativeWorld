@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnergyTests
     {
         public class Operator_Oposite : EnergyTests
@@ -64,7 +72,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultEnergy = default(Energy);
-                var zeroKilojoules = new Energy(0d, EnergyUnit.Kilojoule);
+                var zeroKilojoules = new Energy(Constants.Zero, EnergyUnit.Kilojoule);
 
                 // act
                 var result1 = defaultEnergy + zeroKilojoules;
@@ -152,7 +160,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultEnergy = default(Energy);
-                var zeroKilojoules = new Energy(0d, EnergyUnit.Kilojoule);
+                var zeroKilojoules = new Energy(Constants.Zero, EnergyUnit.Kilojoule);
 
                 // act
                 var result1 = defaultEnergy - zeroKilojoules;
@@ -226,14 +234,14 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var energy = CreateEnergyInUnitOtherThan(EnergyUnit.Joule, EnergyUnit.Electronvolt);
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = energy * factor;
 
                 // assert
-                result.Joules.Should().BeApproximately(energy.Joules * factor, DoublePrecision);
-                result.Value.Should().BeApproximately(energy.Value * factor, DoublePrecision);
+                result.Joules.Should().BeApproximately(energy.Joules * factor);
+                result.Value.Should().BeApproximately(energy.Value * factor);
                 result.Unit.Should().Be(energy.Unit);
             }
 
@@ -242,7 +250,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Energy? nullEnergy = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Energy) * factor;
 
                 // act
@@ -253,6 +261,7 @@ namespace QuantitativeWorld.Tests
                 result.Value.Should().Be(expectedResult);
             }
 
+#if !DECIMAL
             [Fact]
             public void MultiplyByNaN_ShouldTreatNullAsDefault()
             {
@@ -265,6 +274,7 @@ namespace QuantitativeWorld.Tests
                 // assert
                 multiplyByNaN.Should().Throw<ArgumentException>();
             }
+#endif
         }
 
         public class Operator_DivideByDouble : EnergyTests
@@ -278,12 +288,13 @@ namespace QuantitativeWorld.Tests
                 var energy = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
 
                 // act
-                Func<Energy> divideByZero = () => energy / 0d;
+                Func<Energy> divideByZero = () => energy / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
+#if !DECIMAL
             [Fact]
             public void DivideByNaN_ShouldThrow()
             {
@@ -296,19 +307,20 @@ namespace QuantitativeWorld.Tests
                 // assert
                 divideByNaN.Should().Throw<ArgumentException>();
             }
+#endif
 
             [Fact]
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var energy = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = energy / denominator;
 
                 // assert
-                result.Joules.Should().BeApproximately(energy.Joules / (double)denominator, DoublePrecision);
+                result.Joules.Should().BeApproximately(energy.Joules / (number)denominator);
                 result.Unit.Should().Be(energy.Unit);
             }
 
@@ -317,7 +329,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Energy? nullEnergy = null;
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Energy) / denominator;
 
                 // act
@@ -338,10 +350,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var energy = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
-                var denominator = new Energy(0d);
+                var denominator = new Energy(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => energy / denominator;
+                Func<number> divideByZero = () => energy / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -355,7 +367,7 @@ namespace QuantitativeWorld.Tests
                 Energy? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => energy / denominator;
+                Func<number> divideByZero = () => energy / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -367,14 +379,14 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
                 var denominator = new Energy(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(EnergyUnit.Joule, nominator.Unit));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
-                result.Should().BeApproximately(nominator.Joules / denominator.Joules, DoublePrecision);
+                result.Should().BeApproximately(nominator.Joules / denominator.Joules);
             }
         }
 
@@ -389,7 +401,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
                 var denominator = new Time(
-                    totalSeconds: Fixture.CreateNonZeroDouble());
+                    totalSeconds: Fixture.CreateNonZeroNumber());
 
                 // act
                 var result = nominator / denominator;
@@ -405,7 +417,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Energy? nominator = null;
                 var denominator = new Time(
-                    totalSeconds: Fixture.CreateNonZeroDouble());
+                    totalSeconds: Fixture.CreateNonZeroNumber());
                 var expectedResult = default(Energy) / denominator;
 
                 // act
@@ -456,7 +468,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateEnergyInUnitOtherThan(EnergyUnit.Joule);
                 var denominator = new Power(
-                    watts: Fixture.CreateNonZeroDouble());
+                    watts: Fixture.CreateNonZeroNumber());
 
                 // act
                 var result = nominator / denominator;
@@ -471,7 +483,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Energy? nominator = null;
                 var denominator = new Power(
-                    watts: Fixture.CreateNonZeroDouble());
+                    watts: Fixture.CreateNonZeroNumber());
                 var expectedResult = default(Energy) / denominator;
 
                 // act

@@ -9,6 +9,14 @@ using QuantitativeWorld.Angular;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class AngularEnumerableExtensionsTests
     {
         public class AngleQuantity : AngularEnumerableExtensionsTests
@@ -52,7 +60,7 @@ namespace QuantitativeWorld.Tests.Angular
                     // arrange
                     var source = Fixture.CreateMany<Angle>(3);
 
-                    double expectedResultInTurns = source.Average(e => e.Turns);
+                    number expectedResultInTurns = source.Average(e => e.Turns);
                     var expectedResult = new Angle(expectedResultInTurns);
 
                     // act
@@ -118,7 +126,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var source = Fixture.CreateMany<Angle>(3).Select(e => new TestObject<Angle>(e));
                     Func<TestObject<Angle>, Angle> selector = e => e.Property;
 
-                    double expectedResultInTurns = source.Average(e => e.Property.Turns);
+                    number expectedResultInTurns = source.Average(e => e.Property.Turns);
                     var expectedResult = new Angle(expectedResultInTurns);
 
                     // act
@@ -389,7 +397,7 @@ namespace QuantitativeWorld.Tests.Angular
                 {
                     // arrange
                     var angles = Fixture.CreateMany<Angle>(3);
-                    double expectedResultInTurns = angles.Sum(e => e.Turns);
+                    number expectedResultInTurns = angles.Sum(e => e.Turns);
                     var expectedResult = new Angle(expectedResultInTurns);
 
                     // act
@@ -452,7 +460,7 @@ namespace QuantitativeWorld.Tests.Angular
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Angle>(3).Select(e => new TestObject<Angle>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.Turns);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.Turns);
                     var expectedResult = new Angle(expectedResultInMetres);
 
                     // act

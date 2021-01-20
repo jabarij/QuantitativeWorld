@@ -7,6 +7,13 @@ using Xunit;
 
 namespace QuantitativeWorld.Text.Json.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public class AngleUnitJsonConverterTests : TestsBase
     {
         public AngleUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
@@ -63,7 +70,40 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
             result.Symbol.Should().Be("?");
-            result.UnitsPerTurn.Should().Be(123.456d);
+            result.UnitsPerTurn.Should().Be((number)123.456m);
+        }
+
+        [Fact]
+        public void DeserializeCustomUnitAsPredefined_ShouldReturnValidResult()
+        {
+            // arrange
+            var someUnit = new AngleUnit(
+                name: "some unit",
+                abbreviation: "su",
+                symbol: "?",
+                unitsPerTurn: (number)123.456m);
+            string json = @"{
+  'unit': 'su'
+}";
+            var converter = new AngleUnitJsonConverter(
+                serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                tryReadCustomPredefinedUnit: (string value, out AngleUnit predefinedUnit) =>
+                {
+                    if (value == someUnit.Abbreviation)
+                    {
+                        predefinedUnit = someUnit;
+                        return true;
+                    }
+
+                    predefinedUnit = default(AngleUnit);
+                    return false;
+                });
+
+            // act
+            var result = JsonConvert.DeserializeObject<SomeUnitOwner<AngleUnit>>(json, converter);
+
+            // assert
+            result.Unit.Should().Be(someUnit);
         }
 
         [Theory]

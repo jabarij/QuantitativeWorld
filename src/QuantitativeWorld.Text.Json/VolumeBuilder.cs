@@ -1,9 +1,17 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class VolumeBuilder : ILinearQuantityBuilder<Volume, VolumeUnit>
     {
-        private double? _cubicMetres;
-        private double? _value;
+        private number? _cubicMetres;
+        private number? _value;
         private VolumeUnit? _unit;
 
         public VolumeBuilder() { }
@@ -14,13 +22,13 @@
             _unit = volume.Unit;
         }
 
-        public void SetBaseValue(double cubicMetres)
+        public void SetBaseValue(number cubicMetres)
         {
             _cubicMetres = cubicMetres;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _cubicMetres = null;
             _value = value;
@@ -33,8 +41,8 @@
 
         public bool TryBuild(out Volume result, VolumeUnit? defaultUnit = null)
         {
-            double? cubicMetres = _cubicMetres;
-            double? value = _value;
+            number? cubicMetres = _cubicMetres;
+            number? value = _value;
             VolumeUnit? unit = _unit ?? defaultUnit;
 
             if (cubicMetres.HasValue)

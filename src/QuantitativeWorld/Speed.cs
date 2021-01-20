@@ -4,32 +4,38 @@ using System;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public partial struct Speed : ILinearQuantity<SpeedUnit>
     {
-        private const double MinMetresPerSecond = double.MinValue;
-        private const double MaxMetresPerSecond = double.MaxValue;
+        private const number MinMetresPerSecond = number.MinValue;
+        private const number MaxMetresPerSecond = number.MaxValue;
 
         public static readonly SpeedUnit DefaultUnit = SpeedUnit.MetrePerSecond;
-        public static readonly Speed Zero = new Speed(0d);
-        public static readonly Speed PositiveInfinity = new Speed(double.PositiveInfinity, null, null, false);
-        public static readonly Speed NegativeInfinity = new Speed(double.NegativeInfinity, null, null, false);
+        public static readonly Speed Zero = new Speed(Constants.Zero);
 
         private readonly SpeedUnit? _unit;
-        private double? _value;
+        private number? _value;
 
-        public Speed(double metresPerSecond)
+        public Speed(number metresPerSecond)
             : this(
                 metresPerSecond: metresPerSecond,
                 value: null,
                 unit: null)
         { }
-        public Speed(double value, SpeedUnit unit)
+        public Speed(number value, SpeedUnit unit)
             : this(
                 metresPerSecond: GetMetresPerSecond(value, unit),
                 value: value,
                 unit: unit)
         { }
-        private Speed(double metresPerSecond, double? value, SpeedUnit? unit, bool validate = true)
+        private Speed(number metresPerSecond, number? value, SpeedUnit? unit, bool validate = true)
         {
             if (validate)
                 Assert.IsInRange(metresPerSecond, MinMetresPerSecond, MaxMetresPerSecond, nameof(value));
@@ -39,11 +45,11 @@ namespace QuantitativeWorld
             _unit = unit;
         }
 
-        public double MetresPerSecond { get; }
-        public double Value => EnsureValue();
+        public number MetresPerSecond { get; }
+        public number Value => EnsureValue();
         public SpeedUnit Unit => _unit ?? DefaultUnit;
 
-        double ILinearQuantity<SpeedUnit>.BaseValue => MetresPerSecond;
+        number ILinearQuantity<SpeedUnit>.BaseValue => MetresPerSecond;
         SpeedUnit ILinearQuantity<SpeedUnit>.BaseUnit => DefaultUnit;
 
         public Speed Convert(SpeedUnit targetUnit) =>
@@ -58,19 +64,19 @@ namespace QuantitativeWorld
                 unit: targetUnit);
 
         public bool IsZero() =>
-            MetresPerSecond == 0d;
+            MetresPerSecond == Constants.Zero;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Speed, SpeedUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Speed, SpeedUnit>(formatProvider, this);
 
-        private static double GetMetresPerSecond(double value, SpeedUnit sourceUnit) =>
+        private static number GetMetresPerSecond(number value, SpeedUnit sourceUnit) =>
             value * sourceUnit.ValueInMetresPerSecond;
-        private static double GetValue(double metres, SpeedUnit targetUnit) =>
+        private static number GetValue(number metres, SpeedUnit targetUnit) =>
             metres / targetUnit.ValueInMetresPerSecond;
 
-        private double EnsureValue()
+        private number EnsureValue()
         {
             if (!_value.HasValue)
                 _value = GetValue(MetresPerSecond, Unit);

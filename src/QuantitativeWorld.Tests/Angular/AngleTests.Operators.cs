@@ -7,6 +7,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class AngleTests
     {
         public class Operator_Oposite : AngleTests
@@ -65,7 +73,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultAngle = default(Angle);
-                var zeroDegrees = new Angle(0d, AngleUnit.Degree);
+                var zeroDegrees = new Angle(Constants.Zero, AngleUnit.Degree);
 
                 // act
                 var result1 = defaultAngle + zeroDegrees;
@@ -153,7 +161,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultAngle = default(Angle);
-                var zeroDegrees = new Angle(0d, AngleUnit.Degree);
+                var zeroDegrees = new Angle(Constants.Zero, AngleUnit.Degree);
 
                 // act
                 var result1 = defaultAngle - zeroDegrees;
@@ -227,14 +235,14 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = angle * factor;
 
                 // assert
-                result.Turns.Should().Be(angle.Turns * factor);
-                result.Value.Should().BeApproximately(angle.Value * factor, DoublePrecision);
+                result.Turns.Should().BeApproximately(angle.Turns * factor);
+                result.Value.Should().BeApproximately(angle.Value * factor);
                 result.Unit.Should().Be(angle.Unit);
             }
 
@@ -243,7 +251,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 Angle? nullAngle = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Angle) * factor;
 
                 // act
@@ -266,7 +274,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
 
                 // act
-                Func<Angle> divideByZero = () => angle / 0d;
+                Func<Angle> divideByZero = () => angle / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -277,13 +285,13 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = angle / denominator;
 
                 // assert
-                result.Turns.Should().BeApproximately(angle.Turns / denominator, DoublePrecision);
+                result.Turns.Should().BeApproximately(angle.Turns / denominator);
                 result.Unit.Should().Be(angle.Unit);
             }
 
@@ -292,7 +300,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 Angle? nullAngle = null;
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Angle) / denominator;
 
                 // act
@@ -315,7 +323,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
 
                 // act
-                Func<Angle> moduloByZero = () => angle % 0d;
+                Func<Angle> moduloByZero = () => angle % Constants.Zero;
 
                 // assert
                 moduloByZero.Should().Throw<DivideByZeroException>();
@@ -326,13 +334,13 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = angle % denominator;
 
                 // assert
-                result.Value.Should().BeApproximately(angle.Value % denominator, DoublePrecision);
+                result.Value.Should().BeApproximately(angle.Value % denominator);
                 result.Unit.Should().Be(angle.Unit);
             }
 
@@ -341,7 +349,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 Angle? nullAngle = null;
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Angle) % denominator;
 
                 // act
@@ -362,10 +370,10 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var angle = CreateAngleInUnitOtherThan(AngleUnit.Turn);
-                var denominator = new Angle(0d);
+                var denominator = new Angle(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => angle / denominator;
+                Func<number> divideByZero = () => angle / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -379,7 +387,7 @@ namespace QuantitativeWorld.Tests.Angular
                 Angle? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => angle / denominator;
+                Func<number> divideByZero = () => angle / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -391,14 +399,14 @@ namespace QuantitativeWorld.Tests.Angular
                 // arrange
                 var nominator = CreateAngleInUnitOtherThan(AngleUnit.Turn);
                 var denominator = new Angle(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(AngleUnit.Turn, nominator.Unit));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
-                result.Should().BeApproximately(nominator.Turns / denominator.Turns, DoublePrecision);
+                result.Should().BeApproximately(nominator.Turns / denominator.Turns);
             }
         }
     }

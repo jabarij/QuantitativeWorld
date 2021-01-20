@@ -5,10 +5,18 @@ using System.Reflection;
 
 namespace QuantitativeWorld.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct AngleUnit
     {
         [Predefined]
-        public static readonly AngleUnit Turn = new AngleUnit(name: "turn", abbreviation: "tr", symbol: "tr", unitsPerTurn: 1d);
+        public static readonly AngleUnit Turn = new AngleUnit(name: "turn", abbreviation: "tr", symbol: "tr", unitsPerTurn: Constants.One);
         [Predefined]
         public static readonly AngleUnit Radian = new AngleUnit(name: "radian", abbreviation: "rad", symbol: "c", unitsPerTurn: Constants.RadiansPerTurn);
         [Predefined]

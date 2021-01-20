@@ -8,6 +8,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Text.Json.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public class DegreeAngleJsonConverterTests : TestsBase
     {
         public DegreeAngleJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
@@ -19,7 +27,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         [InlineData(DegreeAngleJsonSerializationFormat.Extended, -30.5d, "{\"Circles\":0,\"Degrees\":0,\"Minutes\":0,\"Seconds\":30.5,\"IsNegative\":true}")]
         [InlineData(DegreeAngleJsonSerializationFormat.Extended, 1 * 1296000d + 180 * 3600d + 30 * 60d + 30.5d, "{\"Circles\":1,\"Degrees\":180,\"Minutes\":30,\"Seconds\":30.5,\"IsNegative\":false}")]
         [InlineData(DegreeAngleJsonSerializationFormat.Extended, -(1 * 1296000d + 180 * 3600d + 30 * 60d + 30.5d), "{\"Circles\":1,\"Degrees\":180,\"Minutes\":30,\"Seconds\":30.5,\"IsNegative\":true}")]
-        public void Serialize_ShouldReturnValidJson(DegreeAngleJsonSerializationFormat format, double totalSeconds, string expectedJson)
+        public void Serialize_ShouldReturnValidJson(DegreeAngleJsonSerializationFormat format, number totalSeconds, string expectedJson)
         {
             // arrange
             var angle = new DegreeAngle(totalSeconds);
@@ -35,7 +43,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
         [Theory]
         //[InlineData("{'totalSeconds': 180}", 180)]
         [InlineData("{'circles':1,'degrees':180,'minutes':30,'seconds':30.5,'isNegative':true}", -(1 * 1296000d + 180 * 3600d + 30 * 60d + 30.5d))]
-        public void DeserializeAsTurns_ShouldReturnValidResult(string json, double expectedTotalSeconds)
+        public void DeserializeAsTurns_ShouldReturnValidResult(string json, number expectedTotalSeconds)
         {
             // arrange
             var converter = new DegreeAngleJsonConverter();

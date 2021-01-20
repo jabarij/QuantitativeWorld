@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using Constants = QuantitativeWorld.DecimalConstants;
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class WeightTests
     {
         public class Creation : WeightTests
@@ -17,7 +25,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForKilograms_ShouldCreateValidWeight()
             {
                 // arrange
-                double kilograms = Fixture.Create<double>();
+                number kilograms = Fixture.Create<number>();
 
                 // act
                 var weight = new Weight(kilograms);
@@ -34,40 +42,34 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 // act
-                var weight = new Weight(testData.Value, testData.Unit);
+                var weight = new Weight(testData.OriginalValue.Value, testData.OriginalValue.Unit);
 
                 // assert
-                weight.Kilograms.Should().Be(testData.ExpectedKilograms);
-                weight.Value.Should().Be(testData.Value);
-                weight.Unit.Should().Be(testData.Unit);
+                weight.Kilograms.Should().BeApproximately(testData.ExpectedValue.Kilograms);
+                weight.Value.Should().BeApproximately(testData.OriginalValue.Value);
+                weight.Unit.Should().Be(testData.OriginalValue.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1d, WeightUnit.Kilogram, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1000d, WeightUnit.Gram, 1d);
-                yield return new ConstructorForValueAndUnitTestData(100d, WeightUnit.Decagram, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / 0.45359237d, WeightUnit.Pound, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1 / (0.45359237d / 16d), WeightUnit.Ounce, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1m, WeightUnit.Kilogram, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1000m, WeightUnit.Gram, 1m);
+                yield return new ConstructorForValueAndUnitTestData(100m, WeightUnit.Decagram, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1 / 0.45359237m, WeightUnit.Pound, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1 / (0.45359237m / 16m), WeightUnit.Ounce, 1m);
             }
-            public class ConstructorForValueAndUnitTestData
+            public class ConstructorForValueAndUnitTestData : ConversionTestData<Weight>
             {
                 public ConstructorForValueAndUnitTestData(double value, WeightUnit unit, double expectedKilograms)
-                {
-                    Value = value;
-                    Unit = unit;
-                    ExpectedKilograms = expectedKilograms;
-                }
-
-                public double Value { get; }
-                public WeightUnit Unit { get; }
-                public double ExpectedKilograms { get; }
+                    : base(new Weight((number)value, unit), new Weight((number)expectedKilograms)) { }
+                public ConstructorForValueAndUnitTestData(decimal value, WeightUnit unit, decimal expectedKilograms)
+                    : base(new Weight((number)value, unit), new Weight((number)expectedKilograms)) { }
             }
 
             [Theory]
             [InlineData(0.001, 1000)]
             [InlineData(1, 1000000)]
             [InlineData(1000, 1000000000)]
-            public void FromTons_ShouldCreateValidWeight(double tons, double grams)
+            public void FromTons_ShouldCreateValidWeight(number tons, number grams)
             {
                 // arrange
                 var expectedWeight = new Weight(grams, WeightUnit.Gram);

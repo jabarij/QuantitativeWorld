@@ -11,13 +11,18 @@ namespace QuantitativeWorld.Text.Json
     {
         private readonly Dictionary<string, AngleUnit> _predefinedUnits;
         private readonly LinearUnitJsonSerializationFormat _serializationFormat;
+        private readonly TryParseDelegate<AngleUnit> _tryReadCustomPredefinedUnit;
 
         public AngleUnitJsonConverter(
-            LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull)
+            LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull,
+            TryParseDelegate<AngleUnit> tryReadCustomPredefinedUnit = null)
         {
             _predefinedUnits = AngleUnit.GetPredefinedUnits()
                 .ToDictionary(e => e.Abbreviation);
             _serializationFormat = serializationFormat;
+            _tryReadCustomPredefinedUnit =
+                tryReadCustomPredefinedUnit
+                ?? TryReadCustomPredefinedUnit;
         }
 
         public override AngleUnit ReadJson(JsonReader reader, Type objectType, AngleUnit existingValue, bool hasExistingValue, JsonSerializer serializer)
@@ -33,7 +38,7 @@ namespace QuantitativeWorld.Text.Json
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(nameof(AngleUnit.UnitsPerTurn), serializer, e => e.ReadAsDouble(), out var baseValue))
+                    if (reader.TryReadPropertyAsNullable(nameof(AngleUnit.UnitsPerTurn), serializer, e => e.ReadAsNumber(), out var baseValue))
                         builder.SetUnitsPerTurn(baseValue);
                     else if (reader.TryReadPropertyAs(nameof(AngleUnit.Name), serializer, e => e.ReadAsString(), out var name))
                         builder.SetName(name);
@@ -71,7 +76,8 @@ namespace QuantitativeWorld.Text.Json
         }
 
         protected virtual bool TryReadPredefinedUnit(string value, out AngleUnit predefinedUnit) =>
-            _predefinedUnits.TryGetValue(value, out predefinedUnit);
+            _predefinedUnits.TryGetValue(value, out predefinedUnit)
+            || _tryReadCustomPredefinedUnit(value, out predefinedUnit);
         protected virtual bool TryWritePredefinedUnit(JsonWriter writer, AngleUnit unit, JsonSerializer serializer)
         {
             if (_predefinedUnits.TryGetValue(unit.Abbreviation, out var _))
@@ -80,6 +86,12 @@ namespace QuantitativeWorld.Text.Json
                 return true;
             }
 
+            return false;
+        }
+
+        private static bool TryReadCustomPredefinedUnit(string value, out AngleUnit predefinedUnit)
+        {
+            predefinedUnit = default(AngleUnit);
             return false;
         }
     }

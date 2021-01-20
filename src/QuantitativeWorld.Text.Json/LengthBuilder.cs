@@ -1,9 +1,17 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class LengthBuilder : ILinearQuantityBuilder<Length, LengthUnit>
     {
-        private double? _metres;
-        private double? _value;
+        private number? _metres;
+        private number? _value;
         private LengthUnit? _unit;
 
         public LengthBuilder() { }
@@ -14,13 +22,13 @@
             _unit = length.Unit;
         }
 
-        public void SetBaseValue(double metres)
+        public void SetBaseValue(number metres)
         {
             _metres = metres;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _metres = null;
             _value = value;
@@ -33,8 +41,8 @@
 
         public bool TryBuild(out Length result, LengthUnit? defaultUnit = null)
         {
-            double? metres = _metres;
-            double? value = _value;
+            number? metres = _metres;
+            number? value = _value;
             LengthUnit? unit = _unit ?? defaultUnit;
 
             if (metres.HasValue)

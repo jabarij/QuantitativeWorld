@@ -8,6 +8,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class SpeedQuantity : EnumerableExtensionsTests
@@ -51,7 +59,7 @@ namespace QuantitativeWorld.Tests
                     // arrange
                     var source = Fixture.CreateMany<Speed>(3);
 
-                    double expectedResultInMetresPerSecond = source.Average(e => e.MetresPerSecond);
+                    number expectedResultInMetresPerSecond = source.Average(e => e.MetresPerSecond);
                     var expectedResultUnit = source.First().Unit;
                     var expectedResult = new Speed(expectedResultInMetresPerSecond).Convert(expectedResultUnit);
 
@@ -59,9 +67,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source);
 
                     // assert
-                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond, DoublePrecision);
+                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -120,7 +128,7 @@ namespace QuantitativeWorld.Tests
                     var source = Fixture.CreateMany<Speed>(3).Select(e => new TestObject<Speed>(e));
                     Func<TestObject<Speed>, Speed> selector = e => e.Property;
 
-                    double expectedResultInMetresPerSecond = source.Average(e => e.Property.MetresPerSecond);
+                    number expectedResultInMetresPerSecond = source.Average(e => e.Property.MetresPerSecond);
                     var expectedResultUnit = source.First().Property.Unit;
                     var expectedResult = new Speed(expectedResultInMetresPerSecond).Convert(expectedResultUnit);
 
@@ -128,9 +136,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source, selector);
 
                     // assert
-                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond, DoublePrecision);
+                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -394,7 +402,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var areas = Fixture.CreateMany<Speed>(3);
-                    double expectedResultInMetresPerSecond = areas.Sum(e => e.MetresPerSecond);
+                    number expectedResultInMetresPerSecond = areas.Sum(e => e.MetresPerSecond);
                     var expectedResultUnit = areas.First().Unit;
                     var expectedResult = new Speed(expectedResultInMetresPerSecond).Convert(expectedResultUnit);
 
@@ -402,9 +410,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(areas);
 
                     // assert
-                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond, DoublePrecision);
+                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -460,7 +468,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Speed>(3).Select(e => new TestObject<Speed>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.MetresPerSecond);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.MetresPerSecond);
                     var expectedResultUnit = objects.First().Property.Unit;
                     var expectedResult = new Speed(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -468,9 +476,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(objects, e => e.Property);
 
                     // assert
-                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond, DoublePrecision);
+                    result.MetresPerSecond.Should().BeApproximately(expectedResult.MetresPerSecond);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
         }

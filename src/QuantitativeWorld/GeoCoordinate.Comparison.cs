@@ -6,21 +6,19 @@ namespace QuantitativeWorld
     partial struct GeoCoordinate : IEquatable<GeoCoordinate>
     {
         public bool Equals(GeoCoordinate other) =>
-            Equals(Latitude, other.Latitude)
-            && Equals(Longitude, other.Longitude)
-            && Equals(Altitude, other.Altitude);
+            _latitude == other._latitude
+            && _longitude == other._longitude;
         public override bool Equals(object obj) =>
-            !ReferenceEquals(obj, null)
-            && obj is GeoCoordinate other
+            obj is GeoCoordinate other
             && Equals(other);
         public override int GetHashCode() =>
             new HashCode()
-            .Append(Latitude, Longitude, Altitude)
+            .Append(_latitude, _longitude)
             .CurrentHash;
 
         public static bool operator ==(GeoCoordinate left, GeoCoordinate right) =>
             left.Equals(right);
         public static bool operator !=(GeoCoordinate left, GeoCoordinate right) =>
-            !(left == right);
+            !left.Equals(right);
     }
 }

@@ -3,8 +3,12 @@
     public sealed class SpeedJsonConverter : LinearQuantityJsonConverterBase<Speed, SpeedUnit>
     {
         public SpeedJsonConverter(
-            SpeedJsonSerializationFormat serializationFormat = SpeedJsonSerializationFormat.AsMetresPerSecondWithUnit)
-            : base(serializationFormat: (QuantityJsonSerializationFormat)serializationFormat) { }
+            SpeedJsonSerializationFormat serializationFormat = SpeedJsonSerializationFormat.AsMetresPerSecondWithUnit,
+            LinearUnitJsonSerializationFormat unitSerializationFormat = LinearUnitJsonSerializationFormat.PredefinedAsString)
+            : base(
+                  unitConverter: new SpeedUnitJsonConverter(unitSerializationFormat),
+                  serializationFormat: (QuantityJsonSerializationFormat)serializationFormat)
+        { }
 
         protected override string BaseValuePropertyName =>
             nameof(Speed.MetresPerSecond);

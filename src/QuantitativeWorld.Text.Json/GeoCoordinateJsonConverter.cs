@@ -3,19 +3,27 @@ using System;
 
 namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public sealed class GeoCoordinateJsonConverter : JsonConverter<GeoCoordinate>
     {
         public override GeoCoordinate ReadJson(JsonReader reader, Type objectType, GeoCoordinate existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            double? latitude = null;
-            double? longitude = null;
+            number? latitude = null;
+            number? longitude = null;
             if (reader.TokenType == JsonToken.StartObject)
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(nameof(GeoCoordinate.Latitude), serializer, e => e.ReadAsDouble(), out var latitudeValue))
+                    if (reader.TryReadPropertyAsNullable(nameof(GeoCoordinate.Latitude), serializer, e => e.ReadAsNumber(), out var latitudeValue))
                         latitude = latitudeValue;
-                    else if (reader.TryReadPropertyAsNullable(nameof(GeoCoordinate.Longitude), serializer, e => e.ReadAsDouble(), out var longitudeValue))
+                    else if (reader.TryReadPropertyAsNullable(nameof(GeoCoordinate.Longitude), serializer, e => e.ReadAsNumber(), out var longitudeValue))
                         longitude = longitudeValue;
 
                 }
@@ -32,9 +40,9 @@ namespace QuantitativeWorld.Text.Json
         {
             writer.WriteStartObject();
             writer.WritePropertyName(nameof(GeoCoordinate.Latitude));
-            writer.WriteValue(value.Latitude);
+            writer.WriteValue(value.Latitude.TotalDegrees);
             writer.WritePropertyName(nameof(GeoCoordinate.Longitude));
-            writer.WriteValue(value.Longitude);
+            writer.WriteValue(value.Longitude.TotalDegrees);
             writer.WriteEndObject();
         }
     }

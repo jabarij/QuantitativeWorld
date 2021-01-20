@@ -2,18 +2,26 @@
 
 namespace QuantitativeWorld.Text.Json.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class DegreeAngleBuilder
     {
-        public double? TotalSeconds { get; set; }
+        public number? TotalSeconds { get; set; }
         public int? Circles { get; set; }
         public int? Degrees { get; set; }
         public int? Minutes { get; set; }
-        public double? Seconds { get; set; }
+        public number? Seconds { get; set; }
         public bool? IsNegative { get; set; }
 
         public bool TryBuild(out DegreeAngle result)
         {
-            double? totalSeconds = TotalSeconds;
+            number? totalSeconds = TotalSeconds;
             if (totalSeconds.HasValue)
             {
                 result = new DegreeAngle(totalSeconds.Value);
@@ -23,7 +31,7 @@ namespace QuantitativeWorld.Text.Json.Angular
             int? circles = Circles;
             int? degrees = Degrees;
             int? minutes = Minutes;
-            double? seconds = Seconds;
+            number? seconds = Seconds;
             bool? isNegative = IsNegative;
             if (circles.HasValue
                 && degrees.HasValue

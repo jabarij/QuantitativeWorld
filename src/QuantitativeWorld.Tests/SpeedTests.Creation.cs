@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class SpeedTests
     {
         public class Creation : SpeedTests
@@ -17,7 +25,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForMetresPerSecond_ShouldCreateValidSpeed()
             {
                 // arrange
-                double metresPerSecond = Fixture.Create<double>();
+                number metresPerSecond = Fixture.Create<number>();
 
                 // act
                 var length = new Speed(metresPerSecond);
@@ -37,8 +45,8 @@ namespace QuantitativeWorld.Tests
                 var length = new Speed(testData.Value, testData.Unit);
 
                 // assert
-                length.MetresPerSecond.Should().BeApproximately(testData.ExpectedMetresPerSecond, DoublePrecision);
-                length.Value.Should().BeApproximately(testData.Value, DoublePrecision);
+                length.MetresPerSecond.Should().BeApproximately(testData.ExpectedMetresPerSecond);
+                length.Value.Should().BeApproximately(testData.Value);
                 length.Unit.Should().Be(testData.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
@@ -51,21 +59,27 @@ namespace QuantitativeWorld.Tests
             {
                 public ConstructorForValueAndUnitTestData(double value, SpeedUnit unit, double expectedMetresPerSecond)
                 {
-                    Value = value;
+                    Value = (number)value;
                     Unit = unit;
-                    ExpectedMetresPerSecond = expectedMetresPerSecond;
+                    ExpectedMetresPerSecond = (number)expectedMetresPerSecond;
+                }
+                public ConstructorForValueAndUnitTestData(decimal value, SpeedUnit unit, decimal expectedMetresPerSecond)
+                {
+                    Value = (number)value;
+                    Unit = unit;
+                    ExpectedMetresPerSecond = (number)expectedMetresPerSecond;
                 }
 
-                public double Value { get; }
+                public number Value { get; }
                 public SpeedUnit Unit { get; }
-                public double ExpectedMetresPerSecond { get; }
+                public number ExpectedMetresPerSecond { get; }
             }
 
             [Theory]
-            [InlineData(100d, 100d / 3.6d)]
+            [InlineData(100, 100 / 3.6d)]
             [InlineData(1d, 1d / 3.6d)]
             [InlineData(0.01d, 0.01d / 3.6d)]
-            public void FromKilometresPerHour_ShouldCreateValidSpeed(double kilometresPerHour, double metresPerSecond)
+            public void FromKilometresPerHour_ShouldCreateValidSpeed(number kilometresPerHour, number metresPerSecond)
             {
                 // arrange
                 var expectedSpeed = new Speed(metresPerSecond, SpeedUnit.MetrePerSecond);
@@ -74,7 +88,7 @@ namespace QuantitativeWorld.Tests
                 var actualSpeed = new Speed(kilometresPerHour, SpeedUnit.KilometrePerHour);
 
                 // assert
-                actualSpeed.MetresPerSecond.Should().BeApproximately(expectedSpeed.MetresPerSecond, DoublePrecision);
+                actualSpeed.MetresPerSecond.Should().BeApproximately(expectedSpeed.MetresPerSecond);
             }
         }
     }

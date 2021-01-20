@@ -6,6 +6,13 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class AreaTests
     {
         public class Convert : AreaTests
@@ -22,8 +29,8 @@ namespace QuantitativeWorld.Tests
                 var actualArea = originalArea.Convert(targetUnit);
 
                 // assert
-                actualArea.SquareMetres.Should().BeApproximately(expectedArea.SquareMetres, DoublePrecision);
-                actualArea.Value.Should().BeApproximately(expectedArea.Value, DoublePrecision);
+                actualArea.SquareMetres.Should().BeApproximately(expectedArea.SquareMetres);
+                actualArea.Value.Should().BeApproximately(expectedArea.Value);
                 actualArea.Unit.Should().Be(targetUnit);
             }
 
@@ -40,7 +47,7 @@ namespace QuantitativeWorld.Tests
                     AreaUnit.SquareInch,
                     AreaUnit.SquareMetre
                 };
-                var initialArea = new Area(1234.5678d, units.First());
+                var initialArea = new Area((number)1234.5678m, units.First());
                 Area? finalArea = null;
 
                 // act
@@ -52,28 +59,20 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Area(123456d, AreaUnit.SquareMetre), AreaUnit.SquareKilometre, new Area(0.123456d, AreaUnit.SquareKilometre));
-                yield return new ConvertTestData(new Area(0.123456d, AreaUnit.SquareKilometre), AreaUnit.SquareMetre, new Area(123456d, AreaUnit.SquareMetre));
+                yield return new ConvertTestData(123456m, AreaUnit.SquareMetre, 0.123456m, AreaUnit.SquareKilometre);
+                yield return new ConvertTestData(0.123456m, AreaUnit.SquareKilometre, 123456m, AreaUnit.SquareMetre);
 
-                yield return new ConvertTestData(new Area(123.456d, AreaUnit.Are), AreaUnit.Hectare, new Area(1.23456d, AreaUnit.Hectare));
-                yield return new ConvertTestData(new Area(1.23456d, AreaUnit.Hectare), AreaUnit.Are, new Area(123.456d, AreaUnit.Are));
+                yield return new ConvertTestData(123.456m, AreaUnit.Are, 1.23456m, AreaUnit.Hectare);
+                yield return new ConvertTestData(1.23456m, AreaUnit.Hectare, 123.456m, AreaUnit.Are);
             }
 
-            class ConvertTestData : ITestDataProvider
+            class ConvertTestData : ConversionTestData<Area>, ITestDataProvider
             {
-                public ConvertTestData(Area originalArea, AreaUnit targetUnit, Area expectedArea)
-                {
-                    OriginalArea = originalArea;
-                    TargetUnit = targetUnit;
-                    ExpectedArea = expectedArea;
-                }
+                public ConvertTestData(decimal originalValue, AreaUnit originalUnit, decimal expectedValue, AreaUnit expectedUnit)
+                    : base(new Area((number)originalValue, originalUnit), new Area((number)expectedValue, expectedUnit)) { }
 
-                public Area OriginalArea { get; }
-                public AreaUnit TargetUnit { get; }
-                public Area ExpectedArea { get; }
-
-                public object[] SerializeTestData() =>
-                    new[] { (object)OriginalArea, TargetUnit, ExpectedArea };
+                public object[] GetTestParameters() =>
+                    new[] { (object)OriginalValue, ExpectedValue.Unit, ExpectedValue };
             }
         }
     }

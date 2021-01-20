@@ -1,11 +1,19 @@
 ﻿namespace QuantitativeWorld.Interfaces
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public interface ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
-        double BaseValue { get; }
+        number BaseValue { get; }
         TUnit BaseUnit { get; }
-        double Value { get; }
+        number Value { get; }
         TUnit Unit { get; }
     }
 }

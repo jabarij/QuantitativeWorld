@@ -1,10 +1,18 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class LengthUnitBuilder : ILinearNamedUnitBuilder<LengthUnit>
     {
         private string _name;
         private string _abbreviation;
-        private double? _valueInMetres;
+        private number? _valueInMetres;
 
         public LengthUnitBuilder() { }
         public LengthUnitBuilder(LengthUnit unit)
@@ -20,14 +28,14 @@
         public void SetName(string name) =>
             _name = name;
 
-        public void SetValueInBaseUnit(double valueInBaseUnit) =>
+        public void SetValueInBaseUnit(number valueInBaseUnit) =>
             _valueInMetres = valueInBaseUnit;
 
         public bool TryBuild(out LengthUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            double? valueInMetres = _valueInMetres;
+            number? valueInMetres = _valueInMetres;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

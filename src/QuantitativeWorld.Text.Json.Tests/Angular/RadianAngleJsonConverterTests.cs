@@ -8,13 +8,21 @@ using Xunit;
 
 namespace QuantitativeWorld.Text.Json.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public class RadianAngleJsonConverterTests : TestsBase
     {
         public RadianAngleJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
         [InlineData(0.5d, "{\"Radians\":0.5}")]
-        public void Serialize_ShouldReturnValidJson(double radians, string expectedJson)
+        public void Serialize_ShouldReturnValidJson(number radians, string expectedJson)
         {
             // arrange
             var angle = new RadianAngle(radians);
@@ -29,7 +37,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
 
         [Theory]
         [InlineData("{'radians': 0.5}", 0.5d)]
-        public void DeserializeAsTurns_ShouldReturnValidResult(string json, double expectedRadians)
+        public void DeserializeAsTurns_ShouldReturnValidResult(string json, number expectedRadians)
         {
             // arrange
             var converter = new GeoCoordinateJsonConverter();

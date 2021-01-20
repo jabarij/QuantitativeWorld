@@ -6,6 +6,14 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class RadianAngleTests
     {
         public class Creation : RadianAngleTests
@@ -17,7 +25,7 @@ namespace QuantitativeWorld.Tests.Angular
             public void Constructor_ShouldCreateValidRadianAngle()
             {
                 // arrange
-                double radians = Fixture.Create<double>();
+                number radians = Fixture.Create<number>();
 
                 // act
                 var radianAngle = new RadianAngle(radians);
@@ -36,7 +44,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var radianAngle = RadianAngle.FromAngle(angle);
 
                 // assert
-                radianAngle.Radians.Should().BeApproximately((double)angle.Convert(AngleUnit.Radian).Value, DoublePrecision);
+                radianAngle.Radians.Should().BeApproximately((number)angle.Convert(AngleUnit.Radian).Value);
             }
         }
     }

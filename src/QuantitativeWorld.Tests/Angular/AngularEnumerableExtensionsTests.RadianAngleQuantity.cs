@@ -9,6 +9,14 @@ using QuantitativeWorld.Angular;
 
 namespace QuantitativeWorld.Tests.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class AngularEnumerableExtensionsTests
     {
         public class RadianAngleQuantity : AngularEnumerableExtensionsTests
@@ -52,7 +60,7 @@ namespace QuantitativeWorld.Tests.Angular
                     // arrange
                     var source = Fixture.CreateMany<RadianAngle>(3);
 
-                    double expectedResultInRadians = source.Average(e => e.Radians);
+                    number expectedResultInRadians = source.Average(e => e.Radians);
                     var expectedResult = new RadianAngle(expectedResultInRadians);
 
                     // act
@@ -118,7 +126,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var source = Fixture.CreateMany<RadianAngle>(3).Select(e => new TestObject<RadianAngle>(e));
                     Func<TestObject<RadianAngle>, RadianAngle> selector = e => e.Property;
 
-                    double expectedResultInRadians = source.Average(e => e.Property.Radians);
+                    number expectedResultInRadians = source.Average(e => e.Property.Radians);
                     var expectedResult = new RadianAngle(expectedResultInRadians);
 
                     // act
@@ -389,7 +397,7 @@ namespace QuantitativeWorld.Tests.Angular
                 {
                     // arrange
                     var areas = Fixture.CreateMany<RadianAngle>(3);
-                    double expectedResultInRadians = areas.Sum(e => e.Radians);
+                    number expectedResultInRadians = areas.Sum(e => e.Radians);
                     var expectedResult = new RadianAngle(expectedResultInRadians);
 
                     // act
@@ -452,7 +460,7 @@ namespace QuantitativeWorld.Tests.Angular
                 {
                     // arrange
                     var objects = Fixture.CreateMany<RadianAngle>(3).Select(e => new TestObject<RadianAngle>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.Radians);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.Radians);
                     var expectedResult = new RadianAngle(expectedResultInMetres);
 
                     // act

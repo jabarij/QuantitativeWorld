@@ -1,9 +1,17 @@
 ﻿namespace QuantitativeWorld.Text.Json
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class EnergyBuilder : ILinearQuantityBuilder<Energy, EnergyUnit>
     {
-        private double? _joules;
-        private double? _value;
+        private number? _joules;
+        private number? _value;
         private EnergyUnit? _unit;
 
         public EnergyBuilder() { }
@@ -14,13 +22,13 @@
             _unit = weight.Unit;
         }
 
-        public void SetBaseValue(double joules)
+        public void SetBaseValue(number joules)
         {
             _joules = joules;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _joules = null;
             _value = value;
@@ -33,8 +41,8 @@
 
         public bool TryBuild(out Energy result, EnergyUnit? defaultUnit = null)
         {
-            double? joules = _joules;
-            double? value = _value;
+            number? joules = _joules;
+            number? value = _value;
             EnergyUnit? unit = _unit ?? defaultUnit;
 
             if (joules.HasValue)

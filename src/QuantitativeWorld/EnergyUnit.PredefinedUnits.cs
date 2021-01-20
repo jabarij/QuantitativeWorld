@@ -5,10 +5,18 @@ using System.Reflection;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct EnergyUnit
     {
         [Predefined]
-        public static readonly EnergyUnit Joule = new EnergyUnit(name: "joule", abbreviation: "J", valueInJoules: 1d);
+        public static readonly EnergyUnit Joule = new EnergyUnit(name: "joule", abbreviation: "J", valueInJoules: Constants.One);
         [Predefined]
         public static readonly EnergyUnit Kilojoule = new EnergyUnit(name: "kilojoule", abbreviation: "kJ", valueInJoules: Constants.JoulesPerKilojoule);
         [Predefined]

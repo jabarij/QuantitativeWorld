@@ -9,10 +9,13 @@ namespace QuantitativeWorld.Text.Json
         where TUnit : struct, ILinearUnit
     {
         private readonly QuantityJsonSerializationFormat _serializationFormat;
+        private readonly JsonConverter<TUnit> _unitConverter;
 
         public LinearQuantityJsonConverterBase(
+            JsonConverter<TUnit> unitConverter,
             QuantityJsonSerializationFormat serializationFormat = QuantityJsonSerializationFormat.AsBaseValueWithUnit)
         {
+            _unitConverter = unitConverter;
             _serializationFormat = serializationFormat;
         }
 
@@ -20,16 +23,18 @@ namespace QuantitativeWorld.Text.Json
 
         public override TQuantity ReadJson(JsonReader reader, Type objectType, TQuantity existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
+            EnsureUnitConverter(serializer);
+
             var builder = CreateBuilder();
             if (reader.TokenType == JsonToken.StartObject)
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(BaseValuePropertyName, serializer, e => e.ReadAsDouble(), out var baseValue))
+                    if (reader.TryReadPropertyAsNullable(BaseValuePropertyName, serializer, e => e.ReadAsNumber(), out var baseValue))
                         builder.SetBaseValue(baseValue);
                     else if (reader.TryDeserializeProperty(nameof(ILinearQuantity<TUnit>.Unit), serializer, out TUnit unit))
                         builder.SetUnit(unit);
-                    else if (reader.TryReadPropertyAsNullable(nameof(ILinearQuantity<TUnit>.Value), serializer, e => e.ReadAsDouble(), out var value))
+                    else if (reader.TryReadPropertyAsNullable(nameof(ILinearQuantity<TUnit>.Value), serializer, e => e.ReadAsNumber(), out var value))
                         builder.SetValue(value);
                 }
             }
@@ -42,6 +47,8 @@ namespace QuantitativeWorld.Text.Json
 
         public override void WriteJson(JsonWriter writer, TQuantity value, JsonSerializer serializer)
         {
+            EnsureUnitConverter(serializer);
+
             writer.WriteStartObject();
 
             switch (_serializationFormat)
@@ -70,5 +77,11 @@ namespace QuantitativeWorld.Text.Json
         }
 
         protected abstract ILinearQuantityBuilder<TQuantity, TUnit> CreateBuilder();
+
+        private void EnsureUnitConverter(JsonSerializer serializer)
+        {
+            if (_unitConverter != null && !serializer.Converters.Contains(_unitConverter))
+                serializer.Converters.Add(_unitConverter);
+        }
     }
 }

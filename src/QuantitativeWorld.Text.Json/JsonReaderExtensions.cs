@@ -5,6 +5,14 @@ namespace QuantitativeWorld.Text.Json
 {
     internal static class JsonReaderExtensions
     {
+#if DECIMAL
+        public static decimal? ReadAsNumber(this JsonReader reader) =>
+            reader.ReadAsDecimal();
+#else
+        public static double? ReadAsNumber(this JsonReader reader) =>
+            reader.ReadAsDouble();
+#endif
+
         public static bool TryGetPropertyName(this JsonReader reader, out string propertyName)
         {
             if (reader.TokenType == JsonToken.PropertyName

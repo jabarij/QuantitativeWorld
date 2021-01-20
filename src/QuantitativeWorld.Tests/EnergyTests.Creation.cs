@@ -6,6 +6,13 @@ using Xunit;
 
 namespace QuantitativeWorld.Tests
 {
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial class EnergyTests
     {
         public class Creation : EnergyTests
@@ -17,7 +24,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForJoules_ShouldCreateValidEnergy()
             {
                 // arrange
-                double watts = Fixture.Create<double>();
+                number watts = Fixture.Create<number>();
 
                 // act
                 var energy = new Energy(watts);
@@ -34,37 +41,29 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 // act
-                var energy = new Energy(testData.Value, testData.Unit);
+                var energy = new Energy(testData.OriginalValue.Value, testData.OriginalValue.Unit);
 
                 // assert
-                energy.Joules.Should().BeApproximately(testData.ExpectedJoules, DoublePrecision);
-                energy.Value.Should().Be(testData.Value);
-                energy.Unit.Should().Be(testData.Unit);
+                energy.Joules.Should().BeApproximately(testData.ExpectedValue.Joules);
+                energy.Value.Should().Be(testData.OriginalValue.Value);
+                energy.Unit.Should().Be(testData.OriginalValue.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1d, EnergyUnit.Joule, 1d);
-                yield return new ConstructorForValueAndUnitTestData(0.001d, EnergyUnit.Kilojoule, 1d);
-                yield return new ConstructorForValueAndUnitTestData(0.000001d, EnergyUnit.Megajoule, 1d);
+                yield return new ConstructorForValueAndUnitTestData(1m, EnergyUnit.Joule, 1m);
+                yield return new ConstructorForValueAndUnitTestData(0.001m, EnergyUnit.Kilojoule, 1m);
+                yield return new ConstructorForValueAndUnitTestData(0.000001m, EnergyUnit.Megajoule, 1m);
             }
-            public class ConstructorForValueAndUnitTestData
+            public class ConstructorForValueAndUnitTestData : ConversionTestData<Energy>
             {
-                public ConstructorForValueAndUnitTestData(double value, EnergyUnit unit, double expectedJoules)
-                {
-                    Value = value;
-                    Unit = unit;
-                    ExpectedJoules = expectedJoules;
-                }
-
-                public double Value { get; }
-                public EnergyUnit Unit { get; }
-                public double ExpectedJoules { get; }
+                public ConstructorForValueAndUnitTestData(decimal value, EnergyUnit unit, decimal expectedJoules)
+                    : base(new Energy((number)value, unit), new Energy((number)expectedJoules)) { }
             }
 
             [Theory]
             [InlineData(1, 1000)]
             [InlineData(1000, 1000000)]
-            public void FromKilojoules_ShouldCreateValidEnergy(double kilojoules, double wattSeconds)
+            public void FromKilojoules_ShouldCreateValidEnergy(number kilojoules, number wattSeconds)
             {
                 // arrange
                 var expectedEnergy = new Energy(wattSeconds, EnergyUnit.WattSecond);

@@ -2,12 +2,20 @@
 
 namespace QuantitativeWorld.Text.Json.Angular
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     internal class AngleUnitBuilder
     {
         private string _name;
         private string _abbreviation;
         private string _symbol;
-        private double? _unitsPerTurn;
+        private number? _unitsPerTurn;
 
         public AngleUnitBuilder() { }
         public AngleUnitBuilder(AngleUnit unit)
@@ -27,7 +35,7 @@ namespace QuantitativeWorld.Text.Json.Angular
         public void SetSymbol(string symbol) =>
             _symbol = symbol;
 
-        public void SetUnitsPerTurn(double unitsPerTurn) =>
+        public void SetUnitsPerTurn(number unitsPerTurn) =>
             _unitsPerTurn = unitsPerTurn;
 
         public bool TryBuild(out AngleUnit result)
@@ -35,7 +43,7 @@ namespace QuantitativeWorld.Text.Json.Angular
             string name = _name;
             string abbreviation = _abbreviation;
             string symbol = _symbol;
-            double? unitsPerTurn = _unitsPerTurn;
+            number? unitsPerTurn = _unitsPerTurn;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

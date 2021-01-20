@@ -5,10 +5,18 @@ using System.Reflection;
 
 namespace QuantitativeWorld
 {
+#if DECIMAL
+    using number = System.Decimal;
+    using Constants = QuantitativeWorld.DecimalConstants;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     partial struct SpeedUnit
     {
         [Predefined]
-        public static readonly SpeedUnit MetrePerSecond = new SpeedUnit(name: "metre per second", abbreviation: "m/s", valueInMetresPerSecond: 1d);
+        public static readonly SpeedUnit MetrePerSecond = new SpeedUnit(name: "metre per second", abbreviation: "m/s", valueInMetresPerSecond: Constants.One);
         [Predefined]
         public static readonly SpeedUnit KilometrePerHour = new SpeedUnit(name: "kilometre per hour", abbreviation: "km/h", valueInMetresPerSecond: Constants.MetresPerSecondPerKilometrePerHour);
 
