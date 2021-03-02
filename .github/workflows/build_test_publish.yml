@@ -17,9 +17,7 @@ jobs:
       run: git fetch --prune --unshallow
   
     - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9
-      with:
-          versionSpec: '5.1.x'
+      uses: gittools/actions/gitversion/setup@v0.9.9
     
     - name: Use GitVersion
       id: gitversion  # step id used as reference for output values
