@@ -23,7 +23,7 @@ jobs:
     
     - name: Use GitVersion
       id: gitversion  # step id used as reference for output values
-      uses: nmcc/actions-gitversion@v1
+      uses: roryprimrose/rungitversion@v1.0.0
       
     - name: Output version values 
       run: |
