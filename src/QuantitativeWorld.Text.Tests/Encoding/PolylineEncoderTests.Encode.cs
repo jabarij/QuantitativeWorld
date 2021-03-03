@@ -1,18 +1,19 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Encoding;
 using System.Collections.Generic;
-using System.Globalization;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Encoding
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using DecimalQuantitativeWorld.Text.Encoding;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Encoding
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
+    using QuantitativeWorld.TestAbstractions;
+    using QuantitativeWorld.Text.Encoding;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     partial class PolylineEncoderTests

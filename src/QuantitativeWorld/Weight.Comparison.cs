@@ -1,8 +1,13 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+#else
 namespace QuantitativeWorld
 {
+#endif
     partial struct Weight : IEquatable<Weight>, IComparable<Weight>, IComparable
     {
         public bool Equals(Weight other) =>

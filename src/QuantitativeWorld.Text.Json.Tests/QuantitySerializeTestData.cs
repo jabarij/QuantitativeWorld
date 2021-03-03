@@ -1,5 +1,10 @@
-﻿namespace QuantitativeWorld.Text.Json.Tests
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests
 {
+#else
+namespace QuantitativeWorld.Text.Json.Tests
+{
+#endif
     public class QuantitySerializeTestData<TQuantity>
     {
         public QuantitySerializeTestData(

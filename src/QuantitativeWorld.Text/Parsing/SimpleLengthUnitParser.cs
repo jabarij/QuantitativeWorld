@@ -1,10 +1,15 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Parsing
+{
+#else
 namespace QuantitativeWorld.Text.Parsing
 {
+#endif
     internal class SimpleLengthUnitParser : IParser<LengthUnit>
     {
         private readonly Dictionary<string, LengthUnit> _unitsByNames;

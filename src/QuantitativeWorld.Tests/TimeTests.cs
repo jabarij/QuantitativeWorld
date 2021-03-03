@@ -1,14 +1,15 @@
 using AutoFixture;
-using QuantitativeWorld.TestAbstractions;
 
-namespace QuantitativeWorld.Tests.Angular
-{
 #if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
 #else
+namespace QuantitativeWorld.Tests
+{
+    using QuantitativeWorld.TestAbstractions;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public partial class TimeTests : TestsBase

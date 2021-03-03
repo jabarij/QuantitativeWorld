@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Parsing
+{
+#else
 namespace QuantitativeWorld.Text.Parsing
 {
+#endif
     public class WeightUnitParser : IParser<WeightUnit>, IFormattedParser<WeightUnit>
     {
         private readonly SimpleWeightUnitParser _parser = new SimpleWeightUnitParser();

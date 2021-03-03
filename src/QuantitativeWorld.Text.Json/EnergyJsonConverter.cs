@@ -1,5 +1,10 @@
-﻿namespace QuantitativeWorld.Text.Json
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
 {
+#else
+namespace QuantitativeWorld.Text.Json
+{
+#endif
     public sealed class EnergyJsonConverter : LinearQuantityJsonConverterBase<Energy, EnergyUnit>
     {
         public EnergyJsonConverter(

@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+#else
 namespace QuantitativeWorld
 {
+#endif
     static class DecimalConstants
     {
         public const decimal MinusOne = -1m;

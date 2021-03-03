@@ -1,20 +1,19 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Json.Angular;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests.Angular
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Tests.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
+    using QuantitativeWorld.TestAbstractions;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public class GeoCoordinateJsonConverterTests : TestsBase

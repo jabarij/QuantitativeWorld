@@ -1,10 +1,15 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+#else
 namespace QuantitativeWorld
 {
+#endif
     partial class EnumerableExtensions
     {
         public static Energy Average(this IEnumerable<Energy> source)

@@ -1,9 +1,15 @@
 using AutoFixture;
-using QuantitativeWorld.TestAbstractions;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+#endif
     public partial class PowerTests : TestsBase
     {
         public PowerTests(TestFixture testFixture)

@@ -1,17 +1,19 @@
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     partial class DegreeAngleTests

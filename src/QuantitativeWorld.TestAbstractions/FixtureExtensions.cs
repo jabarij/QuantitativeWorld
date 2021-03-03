@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.TestAbstractions
+{
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.TestAbstractions
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using number = Double;
 #endif
 
     public static class FixtureExtensions

@@ -1,18 +1,22 @@
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
-#if DECIMAL
-    using Constants = QuantitativeWorld.DecimalConstants;
-    using number = System.Decimal;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = Double;
 #endif
 
     partial class GeoCoordinateTests
@@ -227,16 +231,21 @@ namespace QuantitativeWorld.Tests
             }
             private static IEnumerable<ITestDataProvider> GetCreateWithGivenValuesTestData()
             {
-                const decimal pi = DecimalConstants.PI;
-                yield return new CreateWithGivenValuesTestData(0m, 0m);
-                yield return new CreateWithGivenValuesTestData(-pi / 2m, 0m);
-                yield return new CreateWithGivenValuesTestData(-pi / 4m, 0m);
-                yield return new CreateWithGivenValuesTestData(pi / 4m, 0m);
-                yield return new CreateWithGivenValuesTestData(pi / 2m, 0m);
-                yield return new CreateWithGivenValuesTestData(0m, -0.99m * pi);
-                yield return new CreateWithGivenValuesTestData(0m, -0.5m * pi);
-                yield return new CreateWithGivenValuesTestData(0m, 0.5m * pi);
-                yield return new CreateWithGivenValuesTestData(0m, 0.99m * pi);
+                const number zero = (number)0;
+                const number half = (number)0.5m;
+                const number almostOne = (number)0.99m;
+                const number two = (number)2;
+                const number four = (number)4;
+                const number pi = Constants.PI;
+                yield return new CreateWithGivenValuesTestData(zero, zero);
+                yield return new CreateWithGivenValuesTestData(-pi / two, zero);
+                yield return new CreateWithGivenValuesTestData(-pi / four, zero);
+                yield return new CreateWithGivenValuesTestData(pi / four, zero);
+                yield return new CreateWithGivenValuesTestData(pi / two, zero);
+                yield return new CreateWithGivenValuesTestData(zero, -almostOne * pi);
+                yield return new CreateWithGivenValuesTestData(zero, -half * pi);
+                yield return new CreateWithGivenValuesTestData(zero, half * pi);
+                yield return new CreateWithGivenValuesTestData(zero, almostOne * pi);
             }
             private class CreateWithGivenValuesTestData : ITestDataProvider
             {

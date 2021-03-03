@@ -1,14 +1,17 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using Constants = DecimalQuantitativeWorld.DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
+    using QuantitativeWorld.Interfaces;
     using Constants = QuantitativeWorld.DoubleConstants;
+    using number = System.Double;
 #endif
 
     public partial struct AngleUnit : ILinearUnit, INamedUnit, ISymbolicUnit

@@ -1,11 +1,11 @@
-﻿namespace QuantitativeWorld.Text.Json
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
 {
-#if DECIMAL
     using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
 #else
+namespace QuantitativeWorld.Text.Json
+{
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     internal class LengthUnitBuilder : ILinearNamedUnitBuilder<LengthUnit>

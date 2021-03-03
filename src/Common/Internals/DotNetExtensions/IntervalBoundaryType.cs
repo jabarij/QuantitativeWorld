@@ -1,4 +1,4 @@
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 {
     internal enum IntervalBoundaryType
 	{

@@ -2,8 +2,13 @@
 using FluentAssertions.Numeric;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.TestAbstractions
+{
+#else
 namespace QuantitativeWorld.TestAbstractions
 {
+#endif
     public static class NumericAssertionsExtensions
     {
         public static AndConstraint<NumericAssertions<decimal>> Be(this NullableNumericAssertions<decimal> parent, double? expectedValue, string because = "", params object[] becauseArgs) =>

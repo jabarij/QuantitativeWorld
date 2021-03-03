@@ -1,17 +1,19 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using Xunit;
 
-namespace QuantitativeWorld.Text.Json.Tests
-{
 #if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
 #else
+namespace QuantitativeWorld.Text.Json.Tests
+{
+    using QuantitativeWorld.TestAbstractions;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public class VolumeJsonConverterTests : TestsBase

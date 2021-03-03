@@ -1,17 +1,21 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
-namespace QuantitativeWorld.Tests.Angular
-{
 #if DECIMAL
-    using Constants = QuantitativeWorld.DecimalConstants;
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
     using number = System.Decimal;
 #else
+namespace QuantitativeWorld.Tests.Angular
+{
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     partial class DegreeAngleTests

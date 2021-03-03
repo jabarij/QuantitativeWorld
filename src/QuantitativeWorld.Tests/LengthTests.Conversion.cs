@@ -1,16 +1,19 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace QuantitativeWorld.Tests
-{
 #if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
 #else
+namespace QuantitativeWorld.Tests
+{
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     partial class LengthTests

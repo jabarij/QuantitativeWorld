@@ -1,12 +1,19 @@
 ﻿using Newtonsoft.Json;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.Text.Json.Angular;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.Text.Json.Angular;
+#else
 namespace QuantitativeWorld.Text.Json
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.Text.Json.Angular;
+#endif
     public class AngleUnitJsonConverter : JsonConverter<AngleUnit>
     {
         private readonly Dictionary<string, AngleUnit> _predefinedUnits;

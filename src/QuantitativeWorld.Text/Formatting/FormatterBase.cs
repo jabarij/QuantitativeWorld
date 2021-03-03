@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+#endif
     public abstract class FormatterBase<T> : ICustomFormatter<T>, IFormatProvider, ICustomFormatter
     {
         public virtual string Format(string format, T arg, IFormatProvider formatProvider) =>

@@ -1,19 +1,23 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = Double;
 #endif
 
     partial class GeoCoordinateTests
@@ -64,15 +68,16 @@ namespace QuantitativeWorld.Tests
             }
             private static IEnumerable<ITestDataProvider> GetBearingTestData()
             {
-                const decimal pi = DecimalConstants.PI;
-                yield return new BearingTestData(0m, 0m, 90, 0m, 0m * pi / 180);
-                yield return new BearingTestData(0m, 0m, 0m, 90, 90 * pi / 180);
-                yield return new BearingTestData(0m, 0m, -90, 0m, 180 * pi / 180);
-                yield return new BearingTestData(0m, 0m, 0m, -90, -90 * pi / 180);
-                yield return new BearingTestData(0m, 0m, 45, 90, 45 * pi / 180);
-                yield return new BearingTestData(0m, 0m, -45, 90, 135 * pi / 180);
-                yield return new BearingTestData(0m, 0m, -45, -90, -135 * pi / 180);
-                yield return new BearingTestData(0m, 0m, 45, -90, -45 * pi / 180);
+                const number zero = (number)0;
+                const number pi = Constants.PI;
+                yield return new BearingTestData(zero, zero, 90, zero, zero * pi / 180);
+                yield return new BearingTestData(zero, zero, zero, 90, 90 * pi / 180);
+                yield return new BearingTestData(zero, zero, -90, zero, 180 * pi / 180);
+                yield return new BearingTestData(zero, zero, zero, -90, -90 * pi / 180);
+                yield return new BearingTestData(zero, zero, 45, 90, 45 * pi / 180);
+                yield return new BearingTestData(zero, zero, -45, 90, 135 * pi / 180);
+                yield return new BearingTestData(zero, zero, -45, -90, -135 * pi / 180);
+                yield return new BearingTestData(zero, zero, 45, -90, -45 * pi / 180);
                 yield return new BearingTestData(50.233620m, 18.991077m, 52.256371m, 21.011800m, 0.54517783m);
             }
             class BearingTestData : ITestDataProvider

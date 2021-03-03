@@ -1,15 +1,17 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
-namespace QuantitativeWorld.Tests.Angular
-{
 #if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
 #else
+namespace QuantitativeWorld.Tests
+{
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     partial class TimeTests

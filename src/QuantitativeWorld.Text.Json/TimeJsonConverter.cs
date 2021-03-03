@@ -1,8 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+#else
 namespace QuantitativeWorld.Text.Json
 {
+#endif
     public sealed class TimeJsonConverter : JsonConverter<Time>
     {
         private readonly TimeJsonSerializationFormat _serializationFormat;

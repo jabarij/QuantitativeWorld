@@ -1,10 +1,11 @@
-﻿namespace QuantitativeWorld.Angular
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
 {
-#if DECIMAL
-    using Constants = QuantitativeWorld.DecimalConstants;
+    using Constants = DecimalConstants;
 #else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+namespace QuantitativeWorld.Angular
+{
+    using Constants = DoubleConstants;
 #endif
 
     partial struct RadianAngle

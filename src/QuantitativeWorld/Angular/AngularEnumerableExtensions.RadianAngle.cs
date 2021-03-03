@@ -1,10 +1,15 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+#else
 namespace QuantitativeWorld.Angular
 {
+#endif
     partial class AngularEnumerableExtensions
     {
         public static RadianAngle Average(this IEnumerable<RadianAngle> source)

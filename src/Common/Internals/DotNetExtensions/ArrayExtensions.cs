@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 {
     internal static class ArrayExtensions
     {

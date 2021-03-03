@@ -2,8 +2,13 @@
 using FluentAssertions.Execution;
 using FluentAssertions.Numeric;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.FluentAssertions
+{
+#else
 namespace QuantitativeWorld.FluentAssertions
 {
+#endif
 #if DECIMAL
     using number = System.Decimal;
 #else

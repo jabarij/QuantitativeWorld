@@ -1,19 +1,21 @@
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using number = Double;
 #endif
 
     partial class AngleTests

@@ -1,8 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+#else
 namespace QuantitativeWorld.Text.Json
 {
+#endif
     internal static class JsonReaderExtensions
     {
 #if DECIMAL

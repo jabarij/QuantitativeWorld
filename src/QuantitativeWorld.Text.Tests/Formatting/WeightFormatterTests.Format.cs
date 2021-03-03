@@ -1,17 +1,19 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Formatting;
 using System.Globalization;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Formatting
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using DecimalQuantitativeWorld.Text.Formatting;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Formatting
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
+    using QuantitativeWorld.TestAbstractions;
+    using QuantitativeWorld.Text.Formatting;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     partial class WeightFormatterTests

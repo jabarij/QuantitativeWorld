@@ -1,15 +1,16 @@
 ﻿using Newtonsoft.Json;
-using QuantitativeWorld.Angular;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Angular;
+    using number = Double;
 #endif
 
     public sealed class RadianAngleJsonConverter : JsonConverter<RadianAngle>

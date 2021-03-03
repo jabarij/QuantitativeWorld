@@ -1,5 +1,10 @@
-﻿namespace QuantitativeWorld.Text.Encoding
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Encoding
 {
+#else
+namespace QuantitativeWorld.Text.Encoding
+{
+#endif
     public abstract class PolylineEncoding
     {
         public static readonly PolylineEncoding Polyline5 = new Polyline5Encoding();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 {
     [System.Diagnostics.DebuggerDisplay("{DebuggerDisplay}")]
     internal struct ValueRange<TValue> : IEquatable<ValueRange<TValue>>
