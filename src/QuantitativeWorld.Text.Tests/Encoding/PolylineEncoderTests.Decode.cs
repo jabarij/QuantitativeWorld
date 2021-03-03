@@ -1,12 +1,21 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Encoding;
 using System.Collections.Generic;
-using System.Globalization;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Encoding
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using DecimalQuantitativeWorld.Text.Encoding;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Encoding
 {
+    using QuantitativeWorld.TestAbstractions;
+    using QuantitativeWorld.Text.Encoding;
+    using number = System.Double;
+#endif
+
     partial class PolylineEncoderTests
     {
         public class Decode : PolylineEncoderTests
@@ -59,17 +68,17 @@ namespace QuantitativeWorld.Tests.Encoding
                     polyline: "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
                     expectedResult: new[]
                     {
-                        new GeoCoordinate(38.5d, -120.2d),
-                        new GeoCoordinate(40.7d, -120.95d),
-                        new GeoCoordinate(43.252d, -126.453d)
+                        new GeoCoordinate((number)38.5d, -(number)120.2d),
+                        new GeoCoordinate((number)40.7d, -(number)120.95d),
+                        new GeoCoordinate((number)43.252d, -(number)126.453d)
                     });
                 yield return new DecodeTestData(
                     polyline: "{ig~Fnh`vOmxCc`EpPzyE",
                     expectedResult: new[]
                     {
-                        new GeoCoordinate(41.82190d, -87.66104d),
-                        new GeoCoordinate(41.84645d, -87.63014d),
-                        new GeoCoordinate(41.84364d, -87.66516d)
+                        new GeoCoordinate((number)41.82190d, -(number)87.66104d),
+                        new GeoCoordinate((number)41.84645d, -(number)87.63014d),
+                        new GeoCoordinate((number)41.84364d, -(number)87.66516d)
                     });
             }
             public class DecodeTestData

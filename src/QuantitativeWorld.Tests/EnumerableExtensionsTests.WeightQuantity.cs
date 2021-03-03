@@ -1,13 +1,23 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class WeightQuantity : EnumerableExtensionsTests
@@ -51,7 +61,7 @@ namespace QuantitativeWorld.Tests
                     // arrange
                     var source = Fixture.CreateMany<Weight>(3);
 
-                    double expectedResultInKilograms = source.Average(e => e.Kilograms);
+                    number expectedResultInKilograms = source.Average(e => e.Kilograms);
                     var expectedResultUnit = source.First().Unit;
                     var expectedResult = new Weight(expectedResultInKilograms).Convert(expectedResultUnit);
 
@@ -59,9 +69,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source);
 
                     // assert
-                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms, DoublePrecision);
+                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -120,7 +130,7 @@ namespace QuantitativeWorld.Tests
                     var source = Fixture.CreateMany<Weight>(3).Select(e => new TestObject<Weight>(e));
                     Func<TestObject<Weight>, Weight> selector = e => e.Property;
 
-                    double expectedResultInKilograms = source.Average(e => e.Property.Kilograms);
+                    number expectedResultInKilograms = source.Average(e => e.Property.Kilograms);
                     var expectedResultUnit = source.First().Property.Unit;
                     var expectedResult = new Weight(expectedResultInKilograms).Convert(expectedResultUnit);
 
@@ -128,9 +138,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source, selector);
 
                     // assert
-                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms, DoublePrecision);
+                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -394,7 +404,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var areas = Fixture.CreateMany<Weight>(3);
-                    double expectedResultInKilograms = areas.Sum(e => e.Kilograms);
+                    number expectedResultInKilograms = areas.Sum(e => e.Kilograms);
                     var expectedResultUnit = areas.First().Unit;
                     var expectedResult = new Weight(expectedResultInKilograms).Convert(expectedResultUnit);
 
@@ -402,9 +412,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(areas);
 
                     // assert
-                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms, DoublePrecision);
+                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -460,7 +470,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Weight>(3).Select(e => new TestObject<Weight>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.Kilograms);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.Kilograms);
                     var expectedResultUnit = objects.First().Property.Unit;
                     var expectedResult = new Weight(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -468,9 +478,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(objects, e => e.Property);
 
                     // assert
-                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms, DoublePrecision);
+                    result.Kilograms.Should().BeApproximately(expectedResult.Kilograms);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
         }

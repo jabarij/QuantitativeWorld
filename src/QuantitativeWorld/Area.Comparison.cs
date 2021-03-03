@@ -1,8 +1,13 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+#else
 namespace QuantitativeWorld
 {
+#endif
     partial struct Area : IEquatable<Area>, IComparable<Area>, IComparable
     {
         public bool Equals(Area other) =>

@@ -1,14 +1,23 @@
-﻿using QuantitativeWorld.Parsing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Parsing;
+    using Constants = DecimalConstants;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Parsing;
+    using Constants = DoubleConstants;
+#endif
+
     partial struct AreaUnit
     {
         [Predefined]
-        public static readonly AreaUnit SquareMetre = new AreaUnit(name: "square metre", abbreviation: "m²", valueInSquareMetres: 1d);
+        public static readonly AreaUnit SquareMetre = new AreaUnit(name: "square metre", abbreviation: "m²", valueInSquareMetres: Constants.One);
         [Predefined]
         public static readonly AreaUnit SquareMillimetre = new AreaUnit(name: "square millimetre", abbreviation: "mm²", valueInSquareMetres: Constants.SquareMetresPerSquareMillimetre);
         [Predefined]

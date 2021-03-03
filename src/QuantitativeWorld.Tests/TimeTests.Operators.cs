@@ -1,11 +1,22 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using Xunit;
 
-namespace QuantitativeWorld.Tests.Angular
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
 {
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Tests
+{
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class TimeTests
     {
         public class Operator_Oposite : TimeTests
@@ -49,7 +60,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultTime = default(Time);
-                var zeroHours = new Time(0d);
+                var zeroHours = new Time(Constants.Zero);
 
                 // act
                 var result1 = defaultTime + zeroHours;
@@ -132,7 +143,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultTime = default(Time);
-                var zeroHours = new Time(0d);
+                var zeroHours = new Time(Constants.Zero);
 
                 // act
                 var result1 = defaultTime - zeroHours;
@@ -201,7 +212,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var time = CreateTime();
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = time * factor;
@@ -215,7 +226,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 Time? nullTime = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Time) * factor;
 
                 // act
@@ -238,7 +249,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var time = CreateTime();
 
                 // act
-                Func<Time> divideByZero = () => time / 0d;
+                Func<Time> divideByZero = () => time / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -249,7 +260,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var time = CreateTime();
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = time / denominator;
@@ -263,7 +274,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 Time? nullTime = null;
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Time) / denominator;
 
                 // act
@@ -284,10 +295,10 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var time = CreateTime();
-                var denominator = new Time(0d);
+                var denominator = new Time(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => time / denominator;
+                Func<number> divideByZero = () => time / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -301,7 +312,7 @@ namespace QuantitativeWorld.Tests.Angular
                 Time? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => time / denominator;
+                Func<number> divideByZero = () => time / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -312,10 +323,10 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var nominator = CreateTime();
-                var denominator = new Time(Fixture.CreateNonZeroDouble());
+                var denominator = new Time(Fixture.CreateNonZeroNumber());
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
                 result.Should().Be(nominator.TotalSeconds / denominator.TotalSeconds);

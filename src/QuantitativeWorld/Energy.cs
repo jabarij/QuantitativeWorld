@@ -1,35 +1,44 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Interfaces;
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     public partial struct Energy : ILinearQuantity<EnergyUnit>
     {
-        private const double MinJoules = double.MinValue;
-        private const double MaxJoules = double.MaxValue;
+        private const number MinJoules = number.MinValue;
+        private const number MaxJoules = number.MaxValue;
 
         public static readonly EnergyUnit DefaultUnit = EnergyUnit.Joule;
-        public static readonly Energy Zero = new Energy(0d);
-        public static readonly Energy PositiveInfinity = new Energy(double.PositiveInfinity, null, null, false);
-        public static readonly Energy NegativeInfinity = new Energy(double.NegativeInfinity, null, null, false);
+        public static readonly Energy Zero = new Energy(Constants.Zero);
 
         private readonly EnergyUnit? _unit;
-        private double? _value;
+        private number? _value;
 
-        public Energy(double joules)
+        public Energy(number joules)
             : this(
                 joules: joules,
                 value: null,
                 unit: null)
         { }
-        public Energy(double value, EnergyUnit unit)
+        public Energy(number value, EnergyUnit unit)
             : this(
                 joules: GetJoules(value, unit),
                 value: value,
                 unit: unit)
         { }
-        private Energy(double joules, double? value, EnergyUnit? unit, bool validate = true)
+        private Energy(number joules, number? value, EnergyUnit? unit, bool validate = true)
         {
             if (validate)
                 Assert.IsInRange(joules, MinJoules, MaxJoules, nameof(value));
@@ -39,11 +48,11 @@ namespace QuantitativeWorld
             _unit = unit;
         }
 
-        public double Joules { get; }
-        public double Value => EnsureValue();
+        public number Joules { get; }
+        public number Value => EnsureValue();
         public EnergyUnit Unit => _unit ?? DefaultUnit;
 
-        double ILinearQuantity<EnergyUnit>.BaseValue => Joules;
+        number ILinearQuantity<EnergyUnit>.BaseValue => Joules;
         EnergyUnit ILinearQuantity<EnergyUnit>.BaseUnit => DefaultUnit;
 
         public Energy Convert(EnergyUnit targetUnit) =>
@@ -58,19 +67,19 @@ namespace QuantitativeWorld
                 unit: targetUnit);
 
         public bool IsZero() =>
-            Joules == 0d;
+            Joules == Constants.Zero;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Energy, EnergyUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Energy, EnergyUnit>(formatProvider, this);
 
-        private static double GetJoules(double value, EnergyUnit sourceUnit) =>
+        private static number GetJoules(number value, EnergyUnit sourceUnit) =>
             value * sourceUnit.ValueInJoules;
-        private static double GetValue(double metres, EnergyUnit targetUnit) =>
+        private static number GetValue(number metres, EnergyUnit targetUnit) =>
             metres / targetUnit.ValueInJoules;
 
-        private double EnsureValue()
+        private number EnsureValue()
         {
             if (!_value.HasValue)
                 _value = GetValue(Joules, Unit);

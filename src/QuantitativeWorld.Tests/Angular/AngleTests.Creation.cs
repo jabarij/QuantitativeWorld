@@ -1,13 +1,24 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
-using System;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class AngleTests
     {
         public class Creation : AngleTests
@@ -19,7 +30,7 @@ namespace QuantitativeWorld.Tests.Angular
             public void ConstructorForTurns_ShouldCreateValidAngle()
             {
                 // arrange
-                double turns = Fixture.Create<double>();
+                number turns = Fixture.Create<number>();
 
                 // act
                 var angle = new Angle(turns);
@@ -36,35 +47,30 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 // act
-                var angle = new Angle(testData.Value, testData.Unit);
+                var angle = testData.OriginalValue;
 
                 // assert
-                angle.Turns.Should().BeApproximately(testData.ExpectedTurns, DoublePrecision);
-                angle.Value.Should().Be(testData.Value);
-                angle.Unit.Should().Be(testData.Unit);
+                angle.Turns.Should().BeApproximately(testData.ExpectedValue.Turns);
+                angle.Value.Should().BeApproximately(testData.OriginalValue.Value);
+                angle.Unit.Should().Be(testData.OriginalValue.Unit);
             }
             private static IEnumerable<ConstructorForValueAndUnitTestData> GetConstructorForValueAndUnitTestData()
             {
-                yield return new ConstructorForValueAndUnitTestData(1d, AngleUnit.Turn, 1d);
-                yield return new ConstructorForValueAndUnitTestData((double)System.Math.PI, AngleUnit.Radian, 1d);
-                yield return new ConstructorForValueAndUnitTestData(360d, AngleUnit.Degree, 1d);
-                yield return new ConstructorForValueAndUnitTestData(21600d, AngleUnit.Arcminute, 1d);
-                yield return new ConstructorForValueAndUnitTestData(1296000d, AngleUnit.Arcsecond, 1d);
-                yield return new ConstructorForValueAndUnitTestData(400d, AngleUnit.Gradian, 1d);
-                yield return new ConstructorForValueAndUnitTestData(6400d, AngleUnit.NATOMil, 1d);
+                const number one = (number)1m;
+                yield return new ConstructorForValueAndUnitTestData(Constants.One, AngleUnit.Turn, one);
+                yield return new ConstructorForValueAndUnitTestData(Constants.PI, AngleUnit.Radian, one);
+                yield return new ConstructorForValueAndUnitTestData(360m, AngleUnit.Degree, 1m);
+                yield return new ConstructorForValueAndUnitTestData(21600m, AngleUnit.Arcminute, 1m);
+                yield return new ConstructorForValueAndUnitTestData(1296000m, AngleUnit.Arcsecond, 1m);
+                yield return new ConstructorForValueAndUnitTestData(400m, AngleUnit.Gradian, 1m);
+                yield return new ConstructorForValueAndUnitTestData(6400m, AngleUnit.NATOMil, 1m);
             }
-            public class ConstructorForValueAndUnitTestData
+            public class ConstructorForValueAndUnitTestData : ConversionTestData<Angle>
             {
-                public ConstructorForValueAndUnitTestData(double value, AngleUnit unit, double expectedTurns)
-                {
-                    Value = value;
-                    Unit = unit;
-                    ExpectedTurns = expectedTurns;
-                }
-
-                public double Value { get; }
-                public AngleUnit Unit { get; }
-                public double ExpectedTurns { get; }
+                public ConstructorForValueAndUnitTestData(double originalValue, AngleUnit unit, double expectedTurns)
+                    : base(new Angle((number)originalValue, unit), new Angle((number)expectedTurns)) { }
+                public ConstructorForValueAndUnitTestData(decimal originalValue, AngleUnit unit, decimal expectedTurns)
+                    : base(new Angle((number)originalValue, unit), new Angle((number)expectedTurns)) { }
             }
         }
     }

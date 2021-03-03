@@ -1,5 +1,10 @@
-﻿namespace QuantitativeWorld.Text.Encoding
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Encoding
 {
+#else
+namespace QuantitativeWorld.Text.Encoding
+{
+#endif
     internal struct PolylinePoint
     {
         public static readonly PolylinePoint Zero = new PolylinePoint();

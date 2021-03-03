@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+#endif
     class StandardLengthFormatter : FormatterBase<Length>
     {
         public override bool TryFormat(string format, Length length, IFormatProvider formatProvider, out string result)

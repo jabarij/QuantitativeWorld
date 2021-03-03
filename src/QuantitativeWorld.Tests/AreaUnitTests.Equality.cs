@@ -1,9 +1,16 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+#endif
+
     partial class AreaUnitTests
     {
         public class Equality : AreaUnitTests

@@ -1,20 +1,29 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Json.Angular;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     public class RadianAngleJsonConverterTests : TestsBase
     {
         public RadianAngleJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
         [InlineData(0.5d, "{\"Radians\":0.5}")]
-        public void Serialize_ShouldReturnValidJson(double radians, string expectedJson)
+        public void Serialize_ShouldReturnValidJson(number radians, string expectedJson)
         {
             // arrange
             var angle = new RadianAngle(radians);
@@ -29,7 +38,7 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
 
         [Theory]
         [InlineData("{'radians': 0.5}", 0.5d)]
-        public void DeserializeAsTurns_ShouldReturnValidResult(string json, double expectedRadians)
+        public void DeserializeAsTurns_ShouldReturnValidResult(string json, number expectedRadians)
         {
             // arrange
             var converter = new GeoCoordinateJsonConverter();

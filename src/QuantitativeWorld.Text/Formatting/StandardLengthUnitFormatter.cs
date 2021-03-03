@@ -1,10 +1,17 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Text.Globalization;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+    using DecimalQuantitativeWorld.Text.Globalization;
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+    using QuantitativeWorld.Text.Globalization;
+#endif
+
     class StandardLengthUnitFormatter : FormatterBase<LengthUnit>
     {
         internal const string DefaultFormat = "s";

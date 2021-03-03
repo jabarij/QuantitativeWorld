@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+#endif
     internal class CustomWeightFormatInfo
     {
         public CustomWeightFormatInfo(

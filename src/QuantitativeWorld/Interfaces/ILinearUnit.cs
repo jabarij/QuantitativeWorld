@@ -1,7 +1,15 @@
-﻿namespace QuantitativeWorld.Interfaces
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Interfaces
 {
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Interfaces
+{
+    using number = System.Double;
+#endif
+
     public interface ILinearUnit
     {
-        double ValueInBaseUnit { get; }
+        number ValueInBaseUnit { get; }
     }
 }

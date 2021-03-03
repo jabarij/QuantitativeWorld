@@ -1,22 +1,30 @@
 ﻿using System;
 using System.Globalization;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Parsing
+{
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Text.Parsing
 {
-    public class FormattedDoubleParser : IFormattedParser<double>
-    {
-        public double ParseExact(string value, string format, IFormatProvider formatProvider) =>
-            double.Parse(value, formatProvider);
+    using number = Double;
+#endif
 
-        public bool TryParseExact(string value, string format, IFormatProvider formatProvider, out double result)
+    public class FormattedDoubleParser : IFormattedParser<number>
+    {
+        public number ParseExact(string value, string format, IFormatProvider formatProvider) =>
+            number.Parse(value, formatProvider);
+
+        public bool TryParseExact(string value, string format, IFormatProvider formatProvider, out number result)
         {
             if (TryParseNumberStyles(value, format, formatProvider, out var style)
-                && double.TryParse(value, style, formatProvider, out result))
+                && number.TryParse(value, style, formatProvider, out result))
             {
                 return true;
             }
 
-            result = default(double);
+            result = default(number);
             return false;
         }
 

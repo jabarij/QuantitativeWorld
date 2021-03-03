@@ -1,10 +1,19 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Conversion.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Conversion.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     partial class LinearUnitConverterTests
     {
         public class ConvertValue : LinearUnitConverterTests
@@ -20,10 +29,10 @@ namespace QuantitativeWorld.Conversion.Tests
                 var converter = new LinearUnitConverter<LengthUnit>();
 
                 // act
-                double actualValue = converter.ConvertValue(testData.Value, testData.SourceUnit, testData.TargetUnit);
+                number actualValue = converter.ConvertValue(testData.Value, testData.SourceUnit, testData.TargetUnit);
 
                 // assert
-                actualValue.Should().BeApproximately(testData.ExpectedValue, DoublePrecision);
+                actualValue.Should().BeApproximately(testData.ExpectedValue);
             }
 
             private static IEnumerable<ConvertValueTestData> GetConvertTestData()
@@ -36,16 +45,23 @@ namespace QuantitativeWorld.Conversion.Tests
             {
                 public ConvertValueTestData(double value, LengthUnit sourceUnit, LengthUnit targetUnit, double expectedValue)
                 {
-                    Value = value;
+                    Value = (number)value;
                     SourceUnit = sourceUnit;
                     TargetUnit = targetUnit;
-                    ExpectedValue = expectedValue;
+                    ExpectedValue = (number)expectedValue;
+                }
+                public ConvertValueTestData(decimal value, LengthUnit sourceUnit, LengthUnit targetUnit, decimal expectedValue)
+                {
+                    Value = (number)value;
+                    SourceUnit = sourceUnit;
+                    TargetUnit = targetUnit;
+                    ExpectedValue = (number)expectedValue;
                 }
 
-                public double Value { get; }
+                public number Value { get; }
                 public LengthUnit SourceUnit { get; }
                 public LengthUnit TargetUnit { get; }
-                public double ExpectedValue { get; }
+                public number ExpectedValue { get; }
 
                 public override string ToString() =>
                     $"{Value} {SourceUnit} should be {ExpectedValue} {TargetUnit}";

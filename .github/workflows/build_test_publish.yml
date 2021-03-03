@@ -42,6 +42,12 @@ jobs:
       
     - name: Build QuantitativeWorld.Text.Json
       run: dotnet build ./src/QuantitativeWorld.Text.Json/QuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+        
+    - name: Build DecimalQuantitativeWorld
+      run: dotnet build ./src/QuantitativeWorld/DecimalQuantitativeWorld.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      
+    - name: Build DecimalQuantitativeWorld.Text.Json
+      run: dotnet build ./src/QuantitativeWorld.Text.Json/DecimalQuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v1
@@ -63,6 +69,12 @@ jobs:
       
     - name: Test QuantitativeWorld.Text.Json
       run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/QuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Text.Json.TestsResults.trx"
+          
+    - name: Test DecimalQuantitativeWorld
+      run: dotnet test ./src/QuantitativeWorld.Tests/DecimalQuantitativeWorld.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.TestsResults.trx"
+      
+    - name: Test DecimalQuantitativeWorld.Text.Json
+      run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/DecimalQuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.Json.TestsResults.trx"
 
     - name: Upload test results
       uses: actions/upload-artifact@v1
@@ -75,12 +87,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.release != null && github.event.action == 'published'
     steps:
-    - name: Setup NuGet
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-api-key: ${{ secrets.NMPW2H0J }}
-        nuget-version: '5.x'
-          
     - name: Download build artifacts
       uses: actions/download-artifact@v1
       with:
@@ -95,6 +101,8 @@ jobs:
         mkdir -p ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.DecimalQuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         ls ./published
 
     - name: Upload published packages
@@ -102,9 +110,21 @@ jobs:
       with:
         name: published
         path: ./published
+        
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-api-key: ${{ secrets.NMPW2H0J }}
+        nuget-version: '5.x'
       
     - name: Publish QuantitativeWorld
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
         
     - name: Publish QuantitativeWorld.Text.Json
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+      
+    - name: Publish DecimalQuantitativeWorld
+      run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
+    - name: Publish DecimalQuantitativeWorld.Text.Json
+      run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate

@@ -1,11 +1,21 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Formatting;
 using System.Globalization;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Formatting
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using DecimalQuantitativeWorld.Text.Formatting;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Formatting
 {
+    using QuantitativeWorld.TestAbstractions;
+    using QuantitativeWorld.Text.Formatting;
+    using number = System.Double;
+#endif
+
     partial class WeightFormatterTests
     {
         public class Format : WeightFormatterTests
@@ -20,8 +30,8 @@ namespace QuantitativeWorld.Tests.Formatting
             [InlineData(1d, StandardFormats.MKS, "en-US", "1 kg", "weight in format 'MKS' should be printed in kilograms")]
             [InlineData(1d, StandardFormats.MTS, "en-US", "0.001 t", "weight in format 'MKS' should be printed in tons")]
             [InlineData(0.000000009d, StandardFormats.SI, "en-US", "0.00000001 kg", "weight in standard format should be printed with max 8 decimal places")]
-            [InlineData(123.456d, StandardFormats.SI, "pl-PL", "123,456 kg", "weight in standard format should be printed with double separator appropriate to given culture")]
-            public void StandardFormat_ShouldReturnProperValue(double kilograms, string standardFormat, string cultureName, string expectedResult, string reason)
+            [InlineData(123.456d, StandardFormats.SI, "pl-PL", "123,456 kg", "weight in standard format should be printed with number separator appropriate to given culture")]
+            public void StandardFormat_ShouldReturnProperValue(number kilograms, string standardFormat, string cultureName, string expectedResult, string reason)
             {
                 // arrange
                 var formatter = new WeightFormatter(CultureInfo.GetCultureInfo(cultureName));
@@ -43,7 +53,7 @@ namespace QuantitativeWorld.Tests.Formatting
             [InlineData(1d, "lbs|ull", "en-US", "2.20462262 pounds")]
             [InlineData(1d, "lbs|ull|v0.###", "en-US", "2.205 pounds")]
             [InlineData(1d, "t", "pl-PL", "0,001 t")]
-            public void CustomFormat_ShouldReturnProperValue(double kilograms, string customFormat, string cultureName, string expectedResult)
+            public void CustomFormat_ShouldReturnProperValue(number kilograms, string customFormat, string cultureName, string expectedResult)
             {
                 // arrange
                 var formatter = new WeightFormatter(CultureInfo.GetCultureInfo(cultureName));

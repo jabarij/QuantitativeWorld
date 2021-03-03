@@ -1,10 +1,15 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Encoding
+{
+#else
 namespace QuantitativeWorld.Text.Encoding
 {
+#endif
     public class PolylineEncoder
     {
         private readonly PolylineEncoding _encoding;

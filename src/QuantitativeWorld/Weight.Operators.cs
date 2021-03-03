@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     partial struct Weight
     {
         public static bool operator ==(Weight left, Weight right) =>
@@ -26,18 +36,18 @@ namespace QuantitativeWorld
         public static Weight operator -(Weight weight) =>
             new Weight(kilograms: -weight.Kilograms, value: null, unit: weight.Unit);
 
-        public static Weight operator *(Weight weight, double factor) =>
+        public static Weight operator *(Weight weight, number factor) =>
             new Weight(kilograms: weight.Kilograms * factor, value: null, unit: weight._unit);
-        public static Weight operator *(double factor, Weight weight) =>
+        public static Weight operator *(number factor, Weight weight) =>
             weight * factor;
 
-        public static Weight operator /(Weight weight, double denominator)
+        public static Weight operator /(Weight weight, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Weight(kilograms: weight.Kilograms / denominator, value: null, unit: weight._unit);
         }
-        public static double operator /(Weight weight, Weight denominator)
+        public static number operator /(Weight weight, Weight denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -53,14 +63,14 @@ namespace QuantitativeWorld
             ? (left ?? default(Weight)) - (right ?? default(Weight))
             : (Weight?)null;
 
-        public static Weight? operator *(Weight? weight, double factor) =>
+        public static Weight? operator *(Weight? weight, number factor) =>
             (weight ?? default(Weight)) * factor;
-        public static Weight? operator *(double factor, Weight? weight) =>
+        public static Weight? operator *(number factor, Weight? weight) =>
             weight * factor;
 
-        public static Weight? operator /(Weight? weight, double denominator) =>
+        public static Weight? operator /(Weight? weight, number denominator) =>
             (weight ?? default(Weight)) / denominator;
-        public static double operator /(Weight? weight, Weight? denominator) =>
+        public static number operator /(Weight? weight, Weight? denominator) =>
             (weight ?? default(Weight)) / (denominator ?? default(Weight));
     }
 }

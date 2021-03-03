@@ -1,19 +1,28 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     public class EnergyUnitJsonConverterTests : TestsBase
     {
         public EnergyUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"kilojoule\",\"Abbreviation\":\"kJ\",\"ValueInJoules\":1000.0}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"kilojoule\",\"Abbreviation\":\"kJ\",\"ValueInJoules\":1000(\\.0+)}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"kJ\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJson)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
         {
             // arrange
             var unit = EnergyUnit.Kilojoule;
@@ -23,7 +32,7 @@ namespace QuantitativeWorld.Text.Json.Tests
             string actualJson = JsonConvert.SerializeObject(new SomeUnitOwner<EnergyUnit> { Unit = unit }, converter);
 
             // assert
-            actualJson.Should().Be(expectedJson);
+            actualJson.Should().MatchRegex(expectedJsonPattern);
         }
 
         [Theory]
@@ -60,7 +69,39 @@ namespace QuantitativeWorld.Text.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInJoules.Should().Be(123.456d);
+            result.ValueInJoules.Should().Be((number)123.456m);
+        }
+
+        [Fact]
+        public void DeserializeCustomUnitAsPredefined_ShouldReturnValidResult()
+        {
+            // arrange
+            var someUnit = new EnergyUnit(
+                name: "some unit",
+                abbreviation: "su",
+                valueInJoules: (number)123.456m);
+            string json = @"{
+  'unit': 'su'
+}";
+            var converter = new EnergyUnitJsonConverter(
+                serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                tryReadCustomPredefinedUnit: (string value, out EnergyUnit predefinedUnit) =>
+                {
+                    if (value == someUnit.Abbreviation)
+                    {
+                        predefinedUnit = someUnit;
+                        return true;
+                    }
+
+                    predefinedUnit = default(EnergyUnit);
+                    return false;
+                });
+
+            // act
+            var result = JsonConvert.DeserializeObject<SomeUnitOwner<EnergyUnit>>(json, converter);
+
+            // assert
+            result.Unit.Should().Be(someUnit);
         }
 
         [Theory]

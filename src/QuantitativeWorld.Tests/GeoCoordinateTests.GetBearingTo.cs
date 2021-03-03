@@ -1,11 +1,25 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     partial class GeoCoordinateTests
     {
         public class GetBearingTo : GeoCoordinateTests
@@ -41,25 +55,50 @@ namespace QuantitativeWorld.Tests
             }
 
             [Theory]
-            [InlineData(0d, 0d, 90d, 0d, 0d * Math.PI / 180d)]
-            [InlineData(0d, 0d, 0d, 90d, 90d * Math.PI / 180d)]
-            [InlineData(0d, 0d, -90d, 0d, 180d * Math.PI / 180d)]
-            [InlineData(0d, 0d, 0d, -90d, -90d * Math.PI / 180d)]
-            [InlineData(0d, 0d, 45d, 90d, 45d * Math.PI / 180d)]
-            [InlineData(0d, 0d, -45d, 90d, 135d * Math.PI / 180d)]
-            [InlineData(0d, 0d, -45d, -90d, -135d * Math.PI / 180d)]
-            [InlineData(0d, 0d, 45d, -90d, -45d * Math.PI / 180d)]
-            [InlineData(50.233620d, 18.991077d, 52.256371d, 21.011800d, 0.54517783d)]
-            public void ShouldReturnProperValue(double lat1, double lon1, double lat2, double lon2, double expectedResult)
+            [MemberData(nameof(GetTestData), typeof(GetBearingTo), nameof(GetBearingTestData))]
+            
+            public void ShouldReturnProperValue(GeoCoordinate from, GeoCoordinate to, RadianAngle expectedResult)
             {
                 // arrange
-                var sut = new GeoCoordinate(lat1, lon1);
-
                 // act
-                var result = sut.GetBearingTo(new GeoCoordinate(lat2, lon2));
+                var result = from.GetBearingTo(to);
 
                 // assert
-                result.Radians.Should().BeApproximately(expectedResult, 0.005d);
+                result.Radians.Should().BeApproximately(expectedResult.Radians);
+            }
+            private static IEnumerable<ITestDataProvider> GetBearingTestData()
+            {
+                const number zero = (number)0;
+                const number pi = Constants.PI;
+                yield return new BearingTestData(zero, zero, 90, zero, zero * pi / 180);
+                yield return new BearingTestData(zero, zero, zero, 90, 90 * pi / 180);
+                yield return new BearingTestData(zero, zero, -90, zero, 180 * pi / 180);
+                yield return new BearingTestData(zero, zero, zero, -90, -90 * pi / 180);
+                yield return new BearingTestData(zero, zero, 45, 90, 45 * pi / 180);
+                yield return new BearingTestData(zero, zero, -45, 90, 135 * pi / 180);
+                yield return new BearingTestData(zero, zero, -45, -90, -135 * pi / 180);
+                yield return new BearingTestData(zero, zero, 45, -90, -45 * pi / 180);
+                yield return new BearingTestData(50.233620m, 18.991077m, 52.256371m, 21.011800m, 0.54517783m);
+            }
+            class BearingTestData : ITestDataProvider
+            {
+                public BearingTestData(GeoCoordinate from, GeoCoordinate to, RadianAngle expected)
+                {
+                    From = from;
+                    To = to;
+                    Expected = expected;
+                }
+                public BearingTestData(decimal fromLatitude, decimal fromLongitude, decimal toLatitude, decimal toLongitude, decimal expectedRadians)
+                    : this(new GeoCoordinate((number)fromLatitude, (number)fromLongitude), new GeoCoordinate((number)toLatitude, (number)toLongitude), new RadianAngle((number)expectedRadians)) { }
+                public BearingTestData(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude, double expectedRadians)
+                    : this(new GeoCoordinate((number)fromLatitude, (number)fromLongitude), new GeoCoordinate((number)toLatitude, (number)toLongitude), new RadianAngle((number)expectedRadians)) { }
+
+                public GeoCoordinate From { get; set; }
+                public GeoCoordinate To { get; set; }
+                public RadianAngle Expected { get; set; }
+
+                public object[] GetTestParameters() =>
+                    new[] { (object)From, To, Expected };
             }
         }
     }

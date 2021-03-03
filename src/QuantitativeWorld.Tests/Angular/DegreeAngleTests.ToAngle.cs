@@ -1,10 +1,20 @@
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     partial class DegreeAngleTests
     {
         public class ToAngle : DegreeAngleTests
@@ -21,7 +31,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = sut.ToAngle();
 
                 // assert
-                result.Value.Should().BeApproximately((double)sut.TotalDegrees, DoublePrecision);
+                result.Value.Should().BeApproximately((number)sut.TotalDegrees);
                 result.Unit.Should().Be(AngleUnit.Degree);
             }
         }

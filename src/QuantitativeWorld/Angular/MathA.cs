@@ -1,47 +1,56 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+    using Math = MathDecimal;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Angular
 {
+    using number = Double;
+#endif
+
     public static class MathA
     {
         #region RadianAngle
 
-        public static double Cos(RadianAngle a) =>
+        public static number Cos(RadianAngle a) =>
             Math.Cos(a.Radians);
-        public static double Sin(RadianAngle a) =>
+        public static number Sin(RadianAngle a) =>
             Math.Sin(a.Radians);
-        public static double Tan(RadianAngle a) =>
+        public static number Tan(RadianAngle a) =>
             Math.Tan(a.Radians);
 
-        public static RadianAngle Acos(double x) =>
+        public static RadianAngle Acos(number x) =>
             new RadianAngle(Math.Acos(x));
-        public static RadianAngle Asin(double x) =>
+        public static RadianAngle Asin(number x) =>
             new RadianAngle(Math.Asin(x));
-        public static RadianAngle Atan(double x) =>
+        public static RadianAngle Atan(number x) =>
             new RadianAngle(Math.Atan(x));
-        public static RadianAngle Atan2(double y, double x) =>
+        public static RadianAngle Atan2(number y, number x) =>
             new RadianAngle(Math.Atan2(y, x));
 
         #endregion
 
         #region DegreeAngle
 
-        public static double Cos(DegreeAngle a) =>
+        public static number Cos(DegreeAngle a) =>
             Cos(a.ToRadianAngle());
-        public static double Sin(DegreeAngle a) =>
+        public static number Sin(DegreeAngle a) =>
             Sin(a.ToRadianAngle());
-        public static double Tan(DegreeAngle a) =>
+        public static number Tan(DegreeAngle a) =>
             Tan(a.ToRadianAngle());
 
         #endregion
 
         #region Angle
 
-        public static double Cos(Angle a) =>
+        public static number Cos(Angle a) =>
             Cos(RadianAngle.FromAngle(a));
-        public static double Sin(Angle a) =>
+        public static number Sin(Angle a) =>
             Sin(RadianAngle.FromAngle(a));
-        public static double Tan(Angle a) =>
+        public static number Tan(Angle a) =>
             Tan(RadianAngle.FromAngle(a));
 
         #endregion

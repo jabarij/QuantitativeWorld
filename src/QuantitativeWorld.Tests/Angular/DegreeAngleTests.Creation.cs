@@ -1,11 +1,21 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     partial class DegreeAngleTests
     {
         public class Creation : DegreeAngleTests
@@ -14,11 +24,11 @@ namespace QuantitativeWorld.Tests.Angular
                 : base(testFixture) { }
 
             [Theory]
-            [InlineData(0.5d, 0, 0, 0, 0.5d, false)]
-            [InlineData(-0.5d, 0, 0, 0, 0.5d, true)]
-            [InlineData(1 * 1296000d + 180 * 3600d + 30 * 60d + 30.5d, 1, 180, 30, 30.5d, false)]
-            [InlineData(-(1 * 1296000d + 180 * 3600d + 30 * 60d + 30.5d), 1, 180, 30, 30.5d, true)]
-            public void ConstructorForTotalSeconds_ShouldCreateValidDegreeAngle(float totalSeconds, int expectedCircles, int expectedDegrees, int expectedMinutes, double expectedSeconds, bool expectedIsNegative)
+            [InlineData(0.5, 0, 0, 0, 0.5, false)]
+            [InlineData(-0.5, 0, 0, 0, 0.5, true)]
+            [InlineData(1 * 1296000 + 180 * 3600 + 30 * 60 + 30.5, 1, 180, 30, 30.5, false)]
+            [InlineData(-(1 * 1296000 + 180 * 3600 + 30 * 60 + 30.5), 1, 180, 30, 30.5, true)]
+            public void ConstructorForTotalSeconds_ShouldCreateValidDegreeAngle(number totalSeconds, int expectedCircles, int expectedDegrees, int expectedMinutes, number expectedSeconds, bool expectedIsNegative)
             {
                 // arrange
                 // act
@@ -43,7 +53,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var degreeAngle = DegreeAngle.FromAngle(angle);
 
                 // assert
-                degreeAngle.TotalSeconds.Should().BeApproximately((double)angle.Convert(AngleUnit.Arcsecond).Value, DoublePrecision);
+                degreeAngle.TotalSeconds.Should().BeApproximately((number)angle.Convert(AngleUnit.Arcsecond).Value);
             }
         }
     }

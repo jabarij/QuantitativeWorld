@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     partial struct Power
     {
         public static bool operator ==(Power left, Power right) =>
@@ -26,18 +36,18 @@ namespace QuantitativeWorld
         public static Power operator -(Power power) =>
             new Power(watts: -power.Watts, value: null, unit: power._unit);
 
-        public static Power operator *(Power power, double factor) =>
+        public static Power operator *(Power power, number factor) =>
             new Power(watts: power.Watts * factor, value: null, unit: power._unit);
-        public static Power operator *(double factor, Power power) =>
+        public static Power operator *(number factor, Power power) =>
             power * factor;
 
-        public static Power operator /(Power power, double denominator)
+        public static Power operator /(Power power, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Power(watts: power.Watts / denominator, value: null, unit: power._unit);
         }
-        public static double operator /(Power power, Power denominator)
+        public static number operator /(Power power, Power denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -53,14 +63,14 @@ namespace QuantitativeWorld
             ? (left ?? default(Power)) - (right ?? default(Power))
             : (Power?)null;
 
-        public static Power? operator *(Power? power, double factor) =>
+        public static Power? operator *(Power? power, number factor) =>
             (power ?? default(Power)) * factor;
-        public static Power? operator *(double factor, Power? power) =>
+        public static Power? operator *(number factor, Power? power) =>
             power * factor;
 
-        public static Power? operator /(Power? power, double denominator) =>
+        public static Power? operator /(Power? power, number denominator) =>
             (power ?? default(Power)) / denominator;
-        public static double operator /(Power? power, Power? denominator) =>
+        public static number operator /(Power? power, Power? denominator) =>
             (power ?? default(Power)) / (denominator ?? default(Power));
 
         public static Energy operator *(Power power, Time time) =>

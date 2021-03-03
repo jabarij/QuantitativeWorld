@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+#endif
     public class WeightUnitFormatter : FormatterBase<WeightUnit>
     {
         private readonly StandardWeightUnitFormatter _standardFormatter = new StandardWeightUnitFormatter();

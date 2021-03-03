@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+#else
 namespace QuantitativeWorld.Text.Json
 {
+#endif
     public sealed class WeightUnitJsonConverter : LinearNamedUnitJsonConverterBase<WeightUnit>
     {
         private readonly Dictionary<string, WeightUnit> _predefinedUnits;
 
         public WeightUnitJsonConverter(
-            LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull)
-            : base(serializationFormat)
+            LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull,
+            TryParseDelegate<WeightUnit> tryReadCustomPredefinedUnit = null)
+            : base(serializationFormat, tryReadCustomPredefinedUnit)
         {
             _predefinedUnits = WeightUnit.GetPredefinedUnits()
                 .ToDictionary(e => e.Abbreviation);

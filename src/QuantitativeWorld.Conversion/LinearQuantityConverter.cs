@@ -1,8 +1,14 @@
-﻿using QuantitativeWorld.Interfaces;
-using System;
+﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Conversion
+{
+    using DecimalQuantitativeWorld.Interfaces;
+#else
 namespace QuantitativeWorld.Conversion
 {
+    using QuantitativeWorld.Interfaces;
+#endif
     public class LinearQuantityConverter<TQuantity, TUnit> : ILinearQuantityConverter<TQuantity, TUnit>
         where TQuantity : ILinearQuantity<TUnit>
         where TUnit : ILinearUnit

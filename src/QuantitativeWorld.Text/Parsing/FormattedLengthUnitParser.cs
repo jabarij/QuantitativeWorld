@@ -1,11 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Text.Globalization;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Parsing
+{
+    using DecimalQuantitativeWorld.Text.Globalization;
+#else
 namespace QuantitativeWorld.Text.Parsing
 {
+    using QuantitativeWorld.Text.Globalization;
+#endif
+
     internal class FormattedLengthUnitParser : IFormattedParser<LengthUnit>
     {
         private readonly Dictionary<string, LengthUnit> _unitsByNames;

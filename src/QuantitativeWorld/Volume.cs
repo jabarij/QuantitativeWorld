@@ -1,35 +1,44 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Interfaces;
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     public partial struct Volume : ILinearQuantity<VolumeUnit>
     {
-        private const double MinCubicMetres = double.MinValue;
-        private const double MaxCubicMetres = double.MaxValue;
+        private const number MinCubicMetres = number.MinValue;
+        private const number MaxCubicMetres = number.MaxValue;
 
         public static readonly VolumeUnit DefaultUnit = VolumeUnit.CubicMetre;
-        public static readonly Volume Zero = new Volume(0d);
-        public static readonly Volume PositiveInfinity = new Volume(double.PositiveInfinity, null, null, false);
-        public static readonly Volume NegativeInfinity = new Volume(double.NegativeInfinity, null, null, false);
+        public static readonly Volume Zero = new Volume(Constants.Zero);
 
         private readonly VolumeUnit? _unit;
-        private double? _value;
+        private number? _value;
 
-        public Volume(double cubicMetres)
+        public Volume(number cubicMetres)
             : this(
                 cubicMetres: cubicMetres,
                 value: null,
                 unit: null)
         { }
-        public Volume(double value, VolumeUnit unit)
+        public Volume(number value, VolumeUnit unit)
             : this(
                 cubicMetres: GetCubicMetres(value, unit),
                 value: value,
                 unit: unit)
         { }
-        private Volume(double cubicMetres, double? value, VolumeUnit? unit, bool validate = true)
+        private Volume(number cubicMetres, number? value, VolumeUnit? unit, bool validate = true)
         {
             if (validate)
                 Assert.IsInRange(cubicMetres, MinCubicMetres, MaxCubicMetres, nameof(value));
@@ -39,11 +48,11 @@ namespace QuantitativeWorld
             _unit = unit;
         }
 
-        public double CubicMetres { get; }
-        public double Value => EnsureValue();
+        public number CubicMetres { get; }
+        public number Value => EnsureValue();
         public VolumeUnit Unit => _unit ?? DefaultUnit;
 
-        double ILinearQuantity<VolumeUnit>.BaseValue => CubicMetres;
+        number ILinearQuantity<VolumeUnit>.BaseValue => CubicMetres;
         VolumeUnit ILinearQuantity<VolumeUnit>.BaseUnit => DefaultUnit;
 
         public Volume Convert(VolumeUnit targetUnit) =>
@@ -58,19 +67,19 @@ namespace QuantitativeWorld
                 unit: targetUnit);
 
         public bool IsZero() =>
-            CubicMetres == 0d;
+            CubicMetres == Constants.Zero;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Volume, VolumeUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Volume, VolumeUnit>(formatProvider, this);
 
-        private static double GetCubicMetres(double value, VolumeUnit sourceUnit) =>
+        private static number GetCubicMetres(number value, VolumeUnit sourceUnit) =>
             value * sourceUnit.ValueInCubicMetres;
-        private static double GetValue(double metres, VolumeUnit targetUnit) =>
+        private static number GetValue(number metres, VolumeUnit targetUnit) =>
             metres / targetUnit.ValueInCubicMetres;
 
-        private double EnsureValue()
+        private number EnsureValue()
         {
             if (!_value.HasValue)
                 _value = GetValue(CubicMetres, Unit);

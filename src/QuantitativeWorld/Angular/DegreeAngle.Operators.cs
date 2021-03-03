@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Angular
 {
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial struct DegreeAngle
     {
         public static bool operator ==(DegreeAngle left, DegreeAngle right) =>
@@ -26,23 +36,25 @@ namespace QuantitativeWorld.Angular
         public static DegreeAngle operator -(DegreeAngle argument) =>
             new DegreeAngle(-argument.TotalSeconds);
 
-        public static DegreeAngle operator *(DegreeAngle argument, double factor) =>
+        public static DegreeAngle operator *(DegreeAngle argument, number factor) =>
             new DegreeAngle(argument.TotalSeconds * factor);
-        public static DegreeAngle operator *(double argument, DegreeAngle factor) =>
+        public static DegreeAngle operator *(number argument, DegreeAngle factor) =>
             factor * argument;
 
-        public static DegreeAngle operator /(DegreeAngle nominator, double denominator)
+        public static DegreeAngle operator /(DegreeAngle nominator, number denominator)
         {
-            if (double.IsNaN(denominator))
+#if !DECIMAL
+            if (number.IsNaN(denominator))
                 throw new ArgumentException("Denominator is not a number.", nameof(denominator));
-            if (double.IsInfinity(denominator))
+            if (number.IsInfinity(denominator))
                 throw new ArgumentException("Denominator is not finite number.", nameof(denominator));
-            if (denominator == 0d)
+#endif
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
 
             return new DegreeAngle(nominator.TotalSeconds / denominator);
         }
-        public static double operator /(DegreeAngle nominator, DegreeAngle denominator)
+        public static number operator /(DegreeAngle nominator, DegreeAngle denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -50,9 +62,9 @@ namespace QuantitativeWorld.Angular
             return nominator.TotalSeconds / denominator.TotalSeconds;
         }
 
-        public static DegreeAngle operator %(DegreeAngle nominator, double denominator)
+        public static DegreeAngle operator %(DegreeAngle nominator, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new DegreeAngle(nominator.TotalSeconds % denominator);
         }
@@ -80,17 +92,17 @@ namespace QuantitativeWorld.Angular
                 return -right.Value;
         }
 
-        public static DegreeAngle? operator *(DegreeAngle? argument, double factor) =>
+        public static DegreeAngle? operator *(DegreeAngle? argument, number factor) =>
             (argument ?? default(DegreeAngle)) * factor;
-        public static DegreeAngle? operator *(double argument, DegreeAngle? factor) =>
+        public static DegreeAngle? operator *(number argument, DegreeAngle? factor) =>
             factor * argument;
 
-        public static DegreeAngle? operator /(DegreeAngle? nominator, double denominator) =>
+        public static DegreeAngle? operator /(DegreeAngle? nominator, number denominator) =>
             (nominator ?? default(DegreeAngle)) / denominator;
-        public static double operator /(DegreeAngle? nominator, DegreeAngle? denominator) =>
+        public static number operator /(DegreeAngle? nominator, DegreeAngle? denominator) =>
             (nominator ?? default(DegreeAngle)) / (denominator ?? default(DegreeAngle));
 
-        public static DegreeAngle? operator %(DegreeAngle? nominator, double denominator) =>
+        public static DegreeAngle? operator %(DegreeAngle? nominator, number denominator) =>
             (nominator ?? default(DegreeAngle)) % denominator;
     }
 }

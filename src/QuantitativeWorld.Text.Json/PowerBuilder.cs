@@ -1,9 +1,17 @@
-﻿namespace QuantitativeWorld.Text.Json
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
 {
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Text.Json
+{
+    using number = System.Double;
+#endif
+
     internal class PowerBuilder : ILinearQuantityBuilder<Power, PowerUnit>
     {
-        private double? _watts;
-        private double? _value;
+        private number? _watts;
+        private number? _value;
         private PowerUnit? _unit;
 
         public PowerBuilder() { }
@@ -14,13 +22,13 @@
             _unit = weight.Unit;
         }
 
-        public void SetBaseValue(double watts)
+        public void SetBaseValue(number watts)
         {
             _watts = watts;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _watts = null;
             _value = value;
@@ -33,8 +41,8 @@
 
         public bool TryBuild(out Power result, PowerUnit? defaultUnit = null)
         {
-            double? watts = _watts;
-            double? value = _value;
+            number? watts = _watts;
+            number? value = _value;
             PowerUnit? unit = _unit ?? defaultUnit;
 
             if (watts.HasValue)

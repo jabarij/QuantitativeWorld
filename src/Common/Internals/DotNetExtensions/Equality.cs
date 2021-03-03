@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 {
     internal static class Equality
     {

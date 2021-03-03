@@ -1,35 +1,44 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Interfaces;
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     public partial struct Weight : ILinearQuantity<WeightUnit>
     {
-        private const double MinKilograms = double.MinValue;
-        private const double MaxKilograms = double.MaxValue;
+        private const number MinKilograms = number.MinValue;
+        private const number MaxKilograms = number.MaxValue;
 
         public static readonly WeightUnit DefaultUnit = WeightUnit.Kilogram;
-        public static readonly Weight Zero = new Weight(0d);
-        public static readonly Weight PositiveInfinity = new Weight(double.PositiveInfinity, null, null, false);
-        public static readonly Weight NegativeInfinity = new Weight(double.NegativeInfinity, null, null, false);
+        public static readonly Weight Zero = new Weight(Constants.Zero);
 
         private readonly WeightUnit? _unit;
-        private double? _value;
+        private number? _value;
 
-        public Weight(double kilograms)
+        public Weight(number kilograms)
             : this(
                 kilograms: kilograms,
                 value: null,
                 unit: null)
         { }
-        public Weight(double value, WeightUnit unit)
+        public Weight(number value, WeightUnit unit)
             : this(
                 kilograms: GetKilograms(value, unit),
                 value: value,
                 unit: unit)
         { }
-        private Weight(double kilograms, double? value, WeightUnit? unit, bool validate = true)
+        private Weight(number kilograms, number? value, WeightUnit? unit, bool validate = true)
         {
             if (validate)
                 Assert.IsInRange(kilograms, MinKilograms, MaxKilograms, nameof(value));
@@ -39,11 +48,11 @@ namespace QuantitativeWorld
             _unit = unit;
         }
 
-        public double Kilograms { get; }
-        public double Value => EnsureValue();
+        public number Kilograms { get; }
+        public number Value => EnsureValue();
         public WeightUnit Unit => _unit ?? DefaultUnit;
 
-        double ILinearQuantity<WeightUnit>.BaseValue => Kilograms;
+        number ILinearQuantity<WeightUnit>.BaseValue => Kilograms;
         WeightUnit ILinearQuantity<WeightUnit>.BaseUnit => DefaultUnit;
 
         public Weight Convert(WeightUnit targetUnit) =>
@@ -58,19 +67,19 @@ namespace QuantitativeWorld
                 unit: targetUnit);
 
         public bool IsZero() =>
-            Kilograms == 0d;
+            Kilograms == Constants.Zero;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Weight, WeightUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Weight, WeightUnit>(formatProvider, this);
 
-        private static double GetKilograms(double value, WeightUnit sourceUnit) =>
+        private static number GetKilograms(number value, WeightUnit sourceUnit) =>
             value * sourceUnit.ValueInKilograms;
-        private static double GetValue(double metres, WeightUnit targetUnit) =>
+        private static number GetValue(number metres, WeightUnit targetUnit) =>
             metres / targetUnit.ValueInKilograms;
 
-        private double EnsureValue()
+        private number EnsureValue()
         {
             if (!_value.HasValue)
                 _value = GetValue(Kilograms, Unit);

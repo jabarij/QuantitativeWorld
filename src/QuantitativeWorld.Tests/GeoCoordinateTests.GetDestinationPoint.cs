@@ -1,12 +1,25 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class GeoCoordinateTests
     {
         public class GetDestinationPoint : GeoCoordinateTests
@@ -20,39 +33,87 @@ namespace QuantitativeWorld.Tests
                 var sut = GeoCoordinate.Empty;
 
                 // act
-                Action getDistanceTo = () => sut.GetDestinationPoint(Fixture.Create<Length>(), new DegreeAngle(Fixture.CreateInRange(-180d, 180d)));
+                Action getDistanceTo = () => sut.GetDestinationPoint(Fixture.Create<Length>(), new DegreeAngle(Fixture.CreateInRange((number)(-180), 180)));
 
                 // assert
                 getDistanceTo.Should().Throw<ArgumentException>().And
                     .Message.Should().Be("Cannot compute destination point from unknown coordinate.");
             }
 
-            private const double OneDegreeOfLatitudeInMeters = 111000d;
-            private const double OneDegreeOfLongitudeInMetersAtTheEquator = 111321d;
+            private const number TenDegreeOfLatitudeInMeters = (number)1111960m;
+            private const number TenDegreeOfLongitudeInMetersAtTheEquator = (number)1111960m;
             [Theory]
-            [InlineData(0d, 0d, OneDegreeOfLatitudeInMeters, 0d, 1d, 0d)]
-            [InlineData(0d, 0d, OneDegreeOfLatitudeInMeters, Math.PI, -1d, 0d)]
-            [InlineData(0d, 0d, OneDegreeOfLatitudeInMeters, -Math.PI, -1d, 0d)]
-            [InlineData(0d, 0d, OneDegreeOfLatitudeInMeters, 2 * Math.PI, 1d, 0d)]
-            [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 0.5d * Math.PI, 0d, 1d)]
-            [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 1.5d * Math.PI, 0d, -1d)]
-            [InlineData(0d, 0d, OneDegreeOfLongitudeInMetersAtTheEquator, 2.5d * Math.PI, 0d, 1d)]
-            [InlineData(50.233620d, 18.991077d, 170000d, 0.545178d, 51.53388889d, 20.26555556d)]
-            [InlineData(50.233620d, 18.991077d, 270000000d, 0.545178d, -34.83527778d, -20.16722222d)]
-            [InlineData(50.23362d, 18.991077d, 17000000d, 0.54517663057804711d, -25.77861111d, -176.2261111d)]
-            public void ShouldReturnProperValue(double lat, double lon, double metres, double bearing, double expectedLatitude, double expectedLongitude)
+            [MemberData(nameof(GetTestData), typeof(GetDestinationPoint), nameof(GetDestinationPointTestData))]
+            public void ShouldReturnProperValue(GeoCoordinate from, Length distance, RadianAngle bearing, GeoCoordinate expected)
             {
                 // arrange
-                var sut = new GeoCoordinate(lat, lon);
-                var distance = new Length(metres);
-                var bearingAngle = new RadianAngle(bearing);
+                number precision = (number)0.01m;
 
                 // act
-                var result = sut.GetDestinationPoint(distance, bearingAngle);
+                var result = from.GetDestinationPoint(distance, bearing);
 
                 // assert
-                result.Latitude.Should().BeApproximately(expectedLatitude, 0.005d);
-                result.Longitude.Should().BeApproximately(expectedLongitude, 0.005d);
+                result.Latitude.TotalDegrees.Should().BeApproximately(expected.Latitude.TotalDegrees, precision);
+                result.Longitude.TotalDegrees.Should().BeApproximately(expected.Longitude.TotalDegrees, precision);
+            }
+            private static IEnumerable<DestinationPointTestData> GetDestinationPointTestData()
+            {
+                const number zero = (number)0m;
+                const number half = (number)0.5m;
+                const number one = (number)1m;
+                const number two = (number)2m;
+                const number ten = (number)10m;
+                yield return new DestinationPointTestData(zero, zero, TenDegreeOfLatitudeInMeters, zero, ten, zero);
+                yield return new DestinationPointTestData(zero, zero, TenDegreeOfLatitudeInMeters, Constants.PI, -ten, zero);
+                yield return new DestinationPointTestData(zero, zero, TenDegreeOfLatitudeInMeters, -Constants.PI, -ten, zero);
+                yield return new DestinationPointTestData(zero, zero, TenDegreeOfLatitudeInMeters, 2 * Constants.PI, ten, zero);
+                yield return new DestinationPointTestData(zero, zero, TenDegreeOfLongitudeInMetersAtTheEquator, half * Constants.PI, zero, ten);
+                yield return new DestinationPointTestData(zero, zero, TenDegreeOfLongitudeInMetersAtTheEquator, (one + half) * Constants.PI, zero, -ten);
+                yield return new DestinationPointTestData(zero, zero, TenDegreeOfLongitudeInMetersAtTheEquator, (two + half) * Constants.PI, zero, ten);
+            }
+            private class DestinationPointTestData : ITestDataProvider
+            {
+                public DestinationPointTestData(GeoCoordinate from, Length distance, RadianAngle bearing, GeoCoordinate expected)
+                {
+                    From = from;
+                    Distance = distance;
+                    Bearing = bearing;
+                    Expected = expected;
+                }
+                public DestinationPointTestData(
+                    decimal fromLatitude,
+                    decimal fromLongitude,
+                    decimal distanceInMetres,
+                    decimal bearingInRadians,
+                    decimal expectedLatitude,
+                    decimal expectedLongitude)
+                    : this(
+                          from: new GeoCoordinate((number)fromLatitude, (number)fromLongitude),
+                          distance: new Length((number)distanceInMetres),
+                          bearing: new RadianAngle((number)bearingInRadians),
+                          expected: new GeoCoordinate((number)expectedLatitude, (number)expectedLongitude))
+                { }
+                public DestinationPointTestData(
+                    double fromLatitude,
+                    double fromLongitude,
+                    double distanceInMetres,
+                    double bearingInRadians,
+                    double expectedLatitude,
+                    double expectedLongitude)
+                    : this(
+                          from: new GeoCoordinate((number)fromLatitude, (number)fromLongitude),
+                          distance: new Length((number)distanceInMetres),
+                          bearing: new RadianAngle((number)bearingInRadians),
+                          expected: new GeoCoordinate((number)expectedLatitude, (number)expectedLongitude))
+                { }
+
+                public GeoCoordinate From { get; }
+                public Length Distance { get; }
+                public RadianAngle Bearing { get; }
+                public GeoCoordinate Expected { get; }
+
+                public object[] GetTestParameters() =>
+                    new[] { (object)From, Distance, Bearing, Expected };
             }
         }
     }

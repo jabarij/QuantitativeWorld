@@ -1,13 +1,23 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class EnergyQuantity : EnumerableExtensionsTests
@@ -51,7 +61,7 @@ namespace QuantitativeWorld.Tests
                     // arrange
                     var source = Fixture.CreateMany<Energy>(3);
 
-                    double expectedResultInJoules = source.Average(e => e.Joules);
+                    number expectedResultInJoules = source.Average(e => e.Joules);
                     var expectedResultUnit = source.First().Unit;
                     var expectedResult = new Energy(expectedResultInJoules).Convert(expectedResultUnit);
 
@@ -59,9 +69,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source);
 
                     // assert
-                    result.Joules.Should().BeApproximately(expectedResult.Joules, DoublePrecision);
+                    result.Joules.Should().BeApproximately(expectedResult.Joules);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -120,7 +130,7 @@ namespace QuantitativeWorld.Tests
                     var source = Fixture.CreateMany<Energy>(3).Select(e => new TestObject<Energy>(e));
                     Func<TestObject<Energy>, Energy> selector = e => e.Property;
 
-                    double expectedResultInJoules = source.Average(e => e.Property.Joules);
+                    number expectedResultInJoules = source.Average(e => e.Property.Joules);
                     var expectedResultUnit = source.First().Property.Unit;
                     var expectedResult = new Energy(expectedResultInJoules).Convert(expectedResultUnit);
 
@@ -128,9 +138,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source, selector);
 
                     // assert
-                    result.Joules.Should().BeApproximately(expectedResult.Joules, DoublePrecision);
+                    result.Joules.Should().BeApproximately(expectedResult.Joules);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -394,7 +404,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var areas = Fixture.CreateMany<Energy>(3);
-                    double expectedResultInJoules = areas.Sum(e => e.Joules);
+                    number expectedResultInJoules = areas.Sum(e => e.Joules);
                     var expectedResultUnit = areas.First().Unit;
                     var expectedResult = new Energy(expectedResultInJoules).Convert(expectedResultUnit);
 
@@ -402,9 +412,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(areas);
 
                     // assert
-                    result.Joules.Should().BeApproximately(expectedResult.Joules, DoublePrecision);
+                    result.Joules.Should().BeApproximately(expectedResult.Joules);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -460,7 +470,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Energy>(3).Select(e => new TestObject<Energy>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.Joules);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.Joules);
                     var expectedResultUnit = objects.First().Property.Unit;
                     var expectedResult = new Energy(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -468,9 +478,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(objects, e => e.Property);
 
                     // assert
-                    result.Joules.Should().BeApproximately(expectedResult.Joules, DoublePrecision);
+                    result.Joules.Should().BeApproximately(expectedResult.Joules);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
         }

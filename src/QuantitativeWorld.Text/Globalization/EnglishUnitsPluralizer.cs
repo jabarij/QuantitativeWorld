@@ -1,8 +1,13 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System.Collections.Generic;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Globalization
+{
+#else
 namespace QuantitativeWorld.Text.Globalization
 {
+#endif
     class DictionaryPluralizer : IPluralizer
     {
         private readonly ITransformation<string> _pluralizer;

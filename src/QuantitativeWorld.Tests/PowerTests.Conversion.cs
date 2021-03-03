@@ -1,11 +1,21 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class PowerTests
     {
         public class Convert : PowerTests
@@ -39,7 +49,7 @@ namespace QuantitativeWorld.Tests
                     PowerUnit.MechanicalHorsepower,
                     PowerUnit.Watt
                 };
-                var initialPower = new Power(1234.5678d, units.First());
+                var initialPower = new Power((number)1234.5678m, units.First());
                 Power? finalPower = null;
 
                 // act
@@ -51,31 +61,22 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Power(123.456d, PowerUnit.Watt), PowerUnit.Milliwatt, new Power(123456d, PowerUnit.Milliwatt));
-                yield return new ConvertTestData(new Power(123456d, PowerUnit.Milliwatt), PowerUnit.Watt, new Power(123.456d, PowerUnit.Watt));
+                yield return new ConvertTestData(123.456m, PowerUnit.Watt, 123456m, PowerUnit.Milliwatt);
+                yield return new ConvertTestData(123456m, PowerUnit.Milliwatt, 123.456m, PowerUnit.Watt);
 
-                yield return new ConvertTestData(new Power(123.456d, PowerUnit.Watt), PowerUnit.Kilowatt, new Power(0.123456d, PowerUnit.Kilowatt));
-                yield return new ConvertTestData(new Power(0.123456d, PowerUnit.Kilowatt), PowerUnit.Watt, new Power(123.456d, PowerUnit.Watt));
+                yield return new ConvertTestData(123.456m, PowerUnit.Watt, 0.123456m, PowerUnit.Kilowatt);
+                yield return new ConvertTestData(0.123456m, PowerUnit.Kilowatt, 123.456m, PowerUnit.Watt);
 
-                yield return new ConvertTestData(new Power(1234.56d, PowerUnit.Watt), PowerUnit.MechanicalHorsepower, new Power(1234.56d / (76.0402249d * 9.80665d), PowerUnit.MechanicalHorsepower));
-                yield return new ConvertTestData(new Power(123.456d, PowerUnit.MechanicalHorsepower), PowerUnit.Watt, new Power(123.456d * (76.0402249d * 9.80665d), PowerUnit.Watt));
+                yield return new ConvertTestData(1234.56m, PowerUnit.Watt, 1234.56m / (76.0402249m * 9.80665m), PowerUnit.MechanicalHorsepower);
+                yield return new ConvertTestData(123.456m, PowerUnit.MechanicalHorsepower, 123.456m * (76.0402249m * 9.80665m), PowerUnit.Watt);
             }
-
-            class ConvertTestData : ITestDataProvider
+            class ConvertTestData : ConversionTestData<Power>, ITestDataProvider
             {
-                public ConvertTestData(Power originalPower, PowerUnit targetUnit, Power expectedPower)
-                {
-                    OriginalPower = originalPower;
-                    TargetUnit = targetUnit;
-                    ExpectedPower = expectedPower;
-                }
+                public ConvertTestData(decimal originalValue, PowerUnit originalUnit, decimal expectedValue, PowerUnit expectedUnit)
+                    : base(new Power((number)originalValue, originalUnit), new Power((number)expectedValue, expectedUnit)) { }
 
-                public Power OriginalPower { get; }
-                public PowerUnit TargetUnit { get; }
-                public Power ExpectedPower { get; }
-
-                public object[] SerializeTestData() =>
-                    new[] { (object)OriginalPower, TargetUnit, ExpectedPower };
+                public object[] GetTestParameters() =>
+                    new[] { (object)OriginalValue, ExpectedValue.Unit, ExpectedValue };
             }
         }
     }

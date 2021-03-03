@@ -1,19 +1,30 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Interfaces;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     public partial struct EnergyUnit : ILinearUnit, INamedUnit
     {
         private readonly string _name;
         private readonly string _abbreviation;
-        private readonly double? _valueInJoules;
+        private readonly number? _valueInJoules;
 
-        public EnergyUnit(string name, string abbreviation, double valueInJoules)
+        public EnergyUnit(string name, string abbreviation, number valueInJoules)
         {
             Assert.IsNotNullOrWhiteSpace(name, nameof(name));
             Assert.IsNotNullOrWhiteSpace(abbreviation, nameof(abbreviation));
-            Assert.IsGreaterThan(valueInJoules, 0d, nameof(valueInJoules));
+            Assert.IsGreaterThan(valueInJoules, Constants.Zero, nameof(valueInJoules));
 
             _name = name;
             _abbreviation = abbreviation;
@@ -22,10 +33,10 @@ namespace QuantitativeWorld
 
         public string Name => _name ?? Joule._name;
         public string Abbreviation => _abbreviation ?? Joule._abbreviation;
-        public double ValueInJoules => _valueInJoules ?? Joule._valueInJoules.Value;
+        public number ValueInJoules => _valueInJoules ?? Joule._valueInJoules.Value;
 
         public override string ToString() => Abbreviation;
 
-        double ILinearUnit.ValueInBaseUnit => ValueInJoules;
+        number ILinearUnit.ValueInBaseUnit => ValueInJoules;
     }
 }

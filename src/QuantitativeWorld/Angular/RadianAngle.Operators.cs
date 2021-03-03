@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Angular
 {
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     partial struct RadianAngle
     {
         public static bool operator ==(RadianAngle left, RadianAngle right) =>
@@ -26,27 +36,27 @@ namespace QuantitativeWorld.Angular
         public static RadianAngle operator -(RadianAngle argument) =>
             new RadianAngle(-argument.Radians);
 
-        public static RadianAngle operator *(RadianAngle argument, double factor) =>
+        public static RadianAngle operator *(RadianAngle argument, number factor) =>
             new RadianAngle(argument.Radians * factor);
-        public static RadianAngle operator *(double argument, RadianAngle factor) =>
+        public static RadianAngle operator *(number argument, RadianAngle factor) =>
             factor * argument;
 
-        public static RadianAngle operator /(RadianAngle nominator, double denominator)
+        public static RadianAngle operator /(RadianAngle nominator, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new RadianAngle(nominator.Radians / denominator);
         }
-        public static double operator /(RadianAngle nominator, RadianAngle denominator)
+        public static number operator /(RadianAngle nominator, RadianAngle denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
             return nominator.Radians / denominator.Radians;
         }
 
-        public static RadianAngle operator %(RadianAngle nominator, double denominator)
+        public static RadianAngle operator %(RadianAngle nominator, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new RadianAngle(nominator.Radians % denominator);
         }
@@ -60,17 +70,17 @@ namespace QuantitativeWorld.Angular
             ? (RadianAngle?)null
             : (left ?? default(RadianAngle)) - (right ?? default(RadianAngle));
 
-        public static RadianAngle? operator *(RadianAngle? argument, double factor) =>
+        public static RadianAngle? operator *(RadianAngle? argument, number factor) =>
             (argument ?? default(RadianAngle)) * factor;
-        public static RadianAngle? operator *(double argument, RadianAngle? factor) =>
+        public static RadianAngle? operator *(number argument, RadianAngle? factor) =>
             factor * argument;
 
-        public static RadianAngle? operator /(RadianAngle? nominator, double denominator) =>
+        public static RadianAngle? operator /(RadianAngle? nominator, number denominator) =>
             (nominator ?? default(RadianAngle)) / denominator;
-        public static double operator /(RadianAngle? nominator, RadianAngle? denominator) =>
+        public static number operator /(RadianAngle? nominator, RadianAngle? denominator) =>
             (nominator ?? default(RadianAngle)) / (denominator ?? default(RadianAngle));
 
-        public static RadianAngle? operator %(RadianAngle? nominator, double denominator) =>
+        public static RadianAngle? operator %(RadianAngle? nominator, number denominator) =>
             (nominator ?? default(RadianAngle)) % denominator;
     }
 }

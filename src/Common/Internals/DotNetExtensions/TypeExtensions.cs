@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 {
     internal static class TypeExtensions
     {

@@ -1,19 +1,28 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     public class SpeedUnitJsonConverterTests : TestsBase
     {
         public SpeedUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0.27777777777777779}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0\\.2777777777777777+(80*|9*)}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"km/h\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJson)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
         {
             // arrange
             var unit = SpeedUnit.KilometrePerHour;
@@ -23,7 +32,7 @@ namespace QuantitativeWorld.Text.Json.Tests
             string actualJson = JsonConvert.SerializeObject(new SomeUnitOwner<SpeedUnit> { Unit = unit }, converter);
 
             // assert
-            actualJson.Should().Be(expectedJson);
+            actualJson.Should().MatchRegex(expectedJsonPattern);
         }
 
         [Theory]
@@ -60,7 +69,39 @@ namespace QuantitativeWorld.Text.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInMetresPerSecond.Should().Be(123.456d);
+            result.ValueInMetresPerSecond.Should().Be((number)123.456d);
+        }
+
+        [Fact]
+        public void DeserializeCustomUnitAsPredefined_ShouldReturnValidResult()
+        {
+            // arrange
+            var someUnit = new SpeedUnit(
+                name: "some unit",
+                abbreviation: "su",
+                valueInMetresPerSecond: (number)123.456m);
+            string json = @"{
+  'unit': 'su'
+}";
+            var converter = new SpeedUnitJsonConverter(
+                serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                tryReadCustomPredefinedUnit: (string value, out SpeedUnit predefinedUnit) =>
+                {
+                    if (value == someUnit.Abbreviation)
+                    {
+                        predefinedUnit = someUnit;
+                        return true;
+                    }
+
+                    predefinedUnit = default(SpeedUnit);
+                    return false;
+                });
+
+            // act
+            var result = JsonConvert.DeserializeObject<SomeUnitOwner<SpeedUnit>>(json, converter);
+
+            // assert
+            result.Unit.Should().Be(someUnit);
         }
 
         [Theory]
