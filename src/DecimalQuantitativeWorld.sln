@@ -7,10 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6C22BF23
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecimalQuantitativeWorld", "QuantitativeWorld\DecimalQuantitativeWorld.csproj", "{BB457C49-17D4-437E-B872-180B7516FFE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecimalQuantitativeWorld.Conversion", "QuantitativeWorld.Conversion\DecimalQuantitativeWorld.Conversion.csproj", "{1C18D720-0C10-4FE5-8566-AAA26F8A112B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecimalQuantitativeWorld.Conversion.Tests", "QuantitativeWorld.Conversion.Tests\DecimalQuantitativeWorld.Conversion.Tests.csproj", "{84A156AC-BD77-44C4-B12A-F303C21F59A6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecimalQuantitativeWorld.FluentAssertions", "QuantitativeWorld.FluentAssertions\DecimalQuantitativeWorld.FluentAssertions.csproj", "{910D64A2-8B0B-42BC-AAAA-BCE8ED9088FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DecimalQuantitativeWorld.Text.Tests", "QuantitativeWorld.Text.Tests\DecimalQuantitativeWorld.Text.Tests.csproj", "{036CDA38-3726-4003-9822-552F38AF2D08}"
