@@ -6,21 +6,21 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\QuantitativeWorld\DoubleConstants.cs" Link="DoubleConstants.cs" />
+    <Compile Include="..\QuantitativeWorld\DecimalConstants.cs" Link="DecimalConstants.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuantitativeWorld\QuantitativeWorld.csproj" />
+    <ProjectReference Include="..\QuantitativeWorld\DecimalQuantitativeWorld.csproj" />
   </ItemGroup>
 
 </Project>

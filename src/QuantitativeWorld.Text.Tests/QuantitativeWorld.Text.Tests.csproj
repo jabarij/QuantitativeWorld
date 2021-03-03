@@ -5,21 +5,20 @@
 
     <IsPackable>false</IsPackable>
 
-    <Configurations>Debug;Release;Debug DECIMAL;Release DECIMAL</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DECIMAL|AnyCPU'">
-    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DECIMAL|AnyCPU'">
-    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\QuantitativeWorld\DecimalConstants.cs" Link="DecimalConstants.cs" />
     <Compile Include="..\QuantitativeWorld\DoubleConstants.cs" Link="DoubleConstants.cs" />
   </ItemGroup>
 

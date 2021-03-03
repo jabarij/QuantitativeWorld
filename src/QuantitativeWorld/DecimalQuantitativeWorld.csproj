@@ -1,17 +1,27 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>SoterDevelopment.DecimalQuantitativeWorld</PackageId>
+    <Authors>Bartłomiej Soter (soter.development@gmail.com)</Authors>
+    <Company>SoterDevelopment</Company>
+    <Description>Library containing quantities with units and basic algebra.</Description>
+    <Copyright>Copyright © SoterDevelopment 2021</Copyright>
+    <PackageProjectUrl>https://github.com/jabarij/QuantitativeWorld</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jabarij/QuantitativeWorld.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>quantity weight length decimal</PackageTags>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
@@ -19,6 +29,7 @@
     <Compile Include="..\Common\Internals\DotNetExtensions\ArrayExtensions.cs" Link="DotNetExtensions\ArrayExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\Assert.cs" Link="DotNetExtensions\Assert.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\Check.cs" Link="DotNetExtensions\Check.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\DecimalExtensions.cs" Link="DotNetExtensions\DecimalExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\DecimalInfo.cs" Link="DotNetExtensions\DecimalInfo.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\DictionaryTransformationWrapper.cs" Link="DotNetExtensions\DictionaryTransformationWrapper.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\EnumerableExtensions.cs" Link="DotNetExtensions\EnumerableExtensions.cs" />
@@ -26,22 +37,11 @@
     <Compile Include="..\Common\Internals\DotNetExtensions\Error.cs" Link="DotNetExtensions\Error.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\HashCode.cs" Link="DotNetExtensions\HashCode.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\HashCodeExtensions.cs" Link="DotNetExtensions\HashCodeExtensions.cs" />
-    <Compile Include="..\Common\Internals\DotNetExtensions\HeadTailList.cs" Link="DotNetExtensions\HeadTailList.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\IntervalBoundaryType.cs" Link="DotNetExtensions\IntervalBoundaryType.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\ITransformation.cs" Link="DotNetExtensions\ITransformation.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\StringExtensions.cs" Link="DotNetExtensions\StringExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\TypeExtensions.cs" Link="DotNetExtensions\TypeExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\ValueRange.cs" Link="DotNetExtensions\ValueRange.cs" />
-    <Compile Include="..\QuantitativeWorld\DoubleConstants.cs" Link="DoubleConstants.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\QuantitativeWorld.Conversion\QuantitativeWorld.Conversion.csproj" />
-    <ProjectReference Include="..\QuantitativeWorld\QuantitativeWorld.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DotNetExtensions\" />
   </ItemGroup>
 
 </Project>

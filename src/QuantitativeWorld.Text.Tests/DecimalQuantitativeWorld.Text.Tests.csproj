@@ -9,29 +9,29 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DECIMAL</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\QuantitativeWorld\DoubleConstants.cs" Link="DoubleConstants.cs" />
+    <Compile Include="..\QuantitativeWorld\DecimalConstants.cs" Link="DecimalConstants.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.0" />
+    <PackageReference Include="fluentassertions" Version="5.10.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuantitativeWorld.TestAbstractions\QuantitativeWorld.TestAbstractions.csproj" />
-    <ProjectReference Include="..\QuantitativeWorld\QuantitativeWorld.csproj" />
+    <ProjectReference Include="..\QuantitativeWorld.TestAbstractions\DecimalQuantitativeWorld.TestAbstractions.csproj" />
+    <ProjectReference Include="..\QuantitativeWorld.Text\DecimalQuantitativeWorld.Text.csproj" />
   </ItemGroup>
 
 </Project>
