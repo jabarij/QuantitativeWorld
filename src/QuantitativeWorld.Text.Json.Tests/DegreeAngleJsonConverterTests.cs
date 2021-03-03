@@ -1,11 +1,20 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     public class TimeJsonConverterTests : TestsBase
     {
         public TimeJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
@@ -17,7 +26,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         [InlineData(TimeJsonSerializationFormat.Extended, -30.5d, "{\"Hours\":0,\"Minutes\":0,\"Seconds\":30.5,\"IsNegative\":true}")]
         [InlineData(TimeJsonSerializationFormat.Extended, 180 * 3600d + 30 * 60d + 30.5d, "{\"Hours\":180,\"Minutes\":30,\"Seconds\":30.5,\"IsNegative\":false}")]
         [InlineData(TimeJsonSerializationFormat.Extended, -(180 * 3600d + 30 * 60d + 30.5d), "{\"Hours\":180,\"Minutes\":30,\"Seconds\":30.5,\"IsNegative\":true}")]
-        public void Serialize_ShouldReturnValidJson(TimeJsonSerializationFormat format, double totalSeconds, string expectedJson)
+        public void Serialize_ShouldReturnValidJson(TimeJsonSerializationFormat format, number totalSeconds, string expectedJson)
         {
             // arrange
             var angle = new Time(totalSeconds);
@@ -33,7 +42,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         [Theory]
         //[InlineData("{'totalSeconds': 180}", 180)]
         [InlineData("{'hours':180,'minutes':30,'seconds':30.5,'isNegative':true}", -(180 * 3600d + 30 * 60d + 30.5d))]
-        public void DeserializeAsTurns_ShouldReturnValidResult(string json, double expectedTotalSeconds)
+        public void DeserializeAsTurns_ShouldReturnValidResult(string json, number expectedTotalSeconds)
         {
             // arrange
             var converter = new TimeJsonConverter();

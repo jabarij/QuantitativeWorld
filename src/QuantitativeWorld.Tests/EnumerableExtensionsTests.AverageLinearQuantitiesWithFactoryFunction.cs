@@ -1,13 +1,23 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class AverageLinearQuantitiesWithFactoryFunction : EnumerableExtensionsTests
@@ -19,7 +29,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 IEnumerable<SomeQuantity> source = null;
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
                 // act
                 Action average = () => EnumerableExtensions.Average<SomeQuantity, SomeUnit>(source, factory);
@@ -34,7 +44,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Fixture.CreateMany<SomeQuantity>(3);
-                Func<double, SomeUnit, SomeQuantity> factory = null;
+                Func<number, SomeUnit, SomeQuantity> factory = null;
 
                 // act
                 Action average = () => EnumerableExtensions.Average<SomeQuantity, SomeUnit>(source, factory);
@@ -49,7 +59,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Enumerable.Empty<SomeQuantity>();
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
                 // act
                 Action average = () => EnumerableExtensions.Average(source, factory);
@@ -64,9 +74,9 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var source = Fixture.CreateMany<SomeQuantity>(3);
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
-                double expectedResultInWatts = source.Average(e => e.Value * e.Unit.ValueInUnits);
+                number expectedResultInWatts = source.Average(e => e.Value * e.Unit.ValueInUnits);
                 var expectedResultUnit = source.First().Unit;
                 var expectedResult = new SomeQuantity(expectedResultInWatts / expectedResultUnit.ValueInUnits, expectedResultUnit);
 
@@ -75,7 +85,7 @@ namespace QuantitativeWorld.Tests
 
                 // assert
                 result.Unit.Should().Be(expectedResult.Unit);
-                result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                result.Value.Should().BeApproximately(expectedResult.Value);
             }
         }
     }

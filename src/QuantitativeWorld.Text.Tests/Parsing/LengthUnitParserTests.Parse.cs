@@ -1,13 +1,20 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Parsing;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Parsing
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using DecimalQuantitativeWorld.Text.Parsing;
+#else
 namespace QuantitativeWorld.Tests.Parsing
 {
+    using QuantitativeWorld.TestAbstractions;
+    using QuantitativeWorld.Text.Parsing;
+#endif
     partial class LengthUnitParserTests
     {
         public class Parse : LengthUnitParserTests

@@ -1,10 +1,18 @@
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+#endif
+
     partial class AngleUnitTests
     {
         public class Equality : AngleUnitTests

@@ -1,16 +1,24 @@
-﻿namespace QuantitativeWorld.Text.Json
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
 {
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Text.Json
+{
+    using number = System.Double;
+#endif
+
     internal class TimeBuilder
     {
-        public double? TotalSeconds { get; set; }
+        public number? TotalSeconds { get; set; }
         public int? Hours { get; set; }
         public int? Minutes { get; set; }
-        public double? Seconds { get; set; }
+        public number? Seconds { get; set; }
         public bool? IsNegative { get; set; }
 
         public bool TryBuild(out Time result)
         {
-            double? totalSeconds = TotalSeconds;
+            number? totalSeconds = TotalSeconds;
             if (totalSeconds.HasValue)
             {
                 result = new Time(totalSeconds.Value);
@@ -19,7 +27,7 @@
 
             int? hours = Hours;
             int? minutes = Minutes;
-            double? seconds = Seconds;
+            number? seconds = Seconds;
             bool? isNegative = IsNegative;
             if (hours.HasValue
                 && minutes.HasValue

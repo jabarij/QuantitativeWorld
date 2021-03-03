@@ -1,14 +1,23 @@
-﻿using QuantitativeWorld.Parsing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Parsing;
+    using Constants = DecimalConstants;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Parsing;
+    using Constants = DoubleConstants;
+#endif
+
     partial struct WeightUnit
     {
         [Predefined]
-        public static readonly WeightUnit Kilogram = new WeightUnit(name: "kilogram", abbreviation: "kg", valueInKilograms: 1d);
+        public static readonly WeightUnit Kilogram = new WeightUnit(name: "kilogram", abbreviation: "kg", valueInKilograms: Constants.One);
         [Predefined]
         public static readonly WeightUnit Gram = new WeightUnit(name: "gram", abbreviation: "g", valueInKilograms: Constants.KilogramsPerGram);
         [Predefined]

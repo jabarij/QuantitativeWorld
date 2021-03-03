@@ -1,10 +1,18 @@
-﻿namespace QuantitativeWorld.Text.Json
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
 {
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Text.Json
+{
+    using number = System.Double;
+#endif
+
     internal class SpeedUnitBuilder : ILinearNamedUnitBuilder<SpeedUnit>
     {
         private string _name;
         private string _abbreviation;
-        private double? _valueInMetresPerSecond;
+        private number? _valueInMetresPerSecond;
 
         public SpeedUnitBuilder() { }
         public SpeedUnitBuilder(SpeedUnit unit)
@@ -20,14 +28,14 @@
         public void SetName(string name) =>
             _name = name;
 
-        public void SetValueInBaseUnit(double valueInBaseUnit) =>
+        public void SetValueInBaseUnit(number valueInBaseUnit) =>
             _valueInMetresPerSecond = valueInBaseUnit;
 
         public bool TryBuild(out SpeedUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            double? valueInMetresPerSecond = _valueInMetresPerSecond;
+            number? valueInMetresPerSecond = _valueInMetresPerSecond;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

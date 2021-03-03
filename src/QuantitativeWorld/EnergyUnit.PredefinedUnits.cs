@@ -1,14 +1,23 @@
-﻿using QuantitativeWorld.Parsing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Parsing;
+    using Constants = DecimalConstants;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Parsing;
+    using Constants = DoubleConstants;
+#endif
+
     partial struct EnergyUnit
     {
         [Predefined]
-        public static readonly EnergyUnit Joule = new EnergyUnit(name: "joule", abbreviation: "J", valueInJoules: 1d);
+        public static readonly EnergyUnit Joule = new EnergyUnit(name: "joule", abbreviation: "J", valueInJoules: Constants.One);
         [Predefined]
         public static readonly EnergyUnit Kilojoule = new EnergyUnit(name: "kilojoule", abbreviation: "kJ", valueInJoules: Constants.JoulesPerKilojoule);
         [Predefined]

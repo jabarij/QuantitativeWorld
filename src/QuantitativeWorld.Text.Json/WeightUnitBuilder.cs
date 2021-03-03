@@ -1,10 +1,18 @@
-﻿namespace QuantitativeWorld.Text.Json
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
 {
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Text.Json
+{
+    using number = System.Double;
+#endif
+
     internal class WeightUnitBuilder : ILinearNamedUnitBuilder<WeightUnit>
     {
         private string _name;
         private string _abbreviation;
-        private double? _valueInKilograms;
+        private number? _valueInKilograms;
 
         public WeightUnitBuilder() { }
         public WeightUnitBuilder(WeightUnit unit)
@@ -20,14 +28,14 @@
         public void SetName(string name) =>
             _name = name;
 
-        public void SetValueInBaseUnit(double valueInBaseUnit) =>
+        public void SetValueInBaseUnit(number valueInBaseUnit) =>
             _valueInKilograms = valueInBaseUnit;
 
         public bool TryBuild(out WeightUnit result)
         {
             string name = _name;
             string abbreviation = _abbreviation;
-            double? valueInKilograms = _valueInKilograms;
+            number? valueInKilograms = _valueInKilograms;
 
             if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(abbreviation)

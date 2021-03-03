@@ -5,8 +5,13 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+#endif
     public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         private readonly OrderedDictionary _inner;

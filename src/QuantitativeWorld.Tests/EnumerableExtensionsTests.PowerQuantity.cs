@@ -1,13 +1,23 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class PowerQuantity : EnumerableExtensionsTests
@@ -51,7 +61,7 @@ namespace QuantitativeWorld.Tests
                     // arrange
                     var source = Fixture.CreateMany<Power>(3);
 
-                    double expectedResultInWatts = source.Average(e => e.Watts);
+                    number expectedResultInWatts = source.Average(e => e.Watts);
                     var expectedResultUnit = source.First().Unit;
                     var expectedResult = new Power(expectedResultInWatts).Convert(expectedResultUnit);
 
@@ -59,9 +69,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source);
 
                     // assert
-                    result.Watts.Should().BeApproximately(expectedResult.Watts, DoublePrecision);
+                    result.Watts.Should().BeApproximately(expectedResult.Watts);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -120,7 +130,7 @@ namespace QuantitativeWorld.Tests
                     var source = Fixture.CreateMany<Power>(3).Select(e => new TestObject<Power>(e));
                     Func<TestObject<Power>, Power> selector = e => e.Property;
 
-                    double expectedResultInWatts = source.Average(e => e.Property.Watts);
+                    number expectedResultInWatts = source.Average(e => e.Property.Watts);
                     var expectedResultUnit = source.First().Property.Unit;
                     var expectedResult = new Power(expectedResultInWatts).Convert(expectedResultUnit);
 
@@ -128,9 +138,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Average(source, selector);
 
                     // assert
-                    result.Watts.Should().BeApproximately(expectedResult.Watts, DoublePrecision);
+                    result.Watts.Should().BeApproximately(expectedResult.Watts);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -394,7 +404,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var areas = Fixture.CreateMany<Power>(3);
-                    double expectedResultInWatts = areas.Sum(e => e.Watts);
+                    number expectedResultInWatts = areas.Sum(e => e.Watts);
                     var expectedResultUnit = areas.First().Unit;
                     var expectedResult = new Power(expectedResultInWatts).Convert(expectedResultUnit);
 
@@ -402,9 +412,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(areas);
 
                     // assert
-                    result.Watts.Should().BeApproximately(expectedResult.Watts, DoublePrecision);
+                    result.Watts.Should().BeApproximately(expectedResult.Watts);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
 
@@ -460,7 +470,7 @@ namespace QuantitativeWorld.Tests
                 {
                     // arrange
                     var objects = Fixture.CreateMany<Power>(3).Select(e => new TestObject<Power>(e));
-                    double expectedResultInMetres = objects.Sum(e => e.Property.Watts);
+                    number expectedResultInMetres = objects.Sum(e => e.Property.Watts);
                     var expectedResultUnit = objects.First().Property.Unit;
                     var expectedResult = new Power(expectedResultInMetres).Convert(expectedResultUnit);
 
@@ -468,9 +478,9 @@ namespace QuantitativeWorld.Tests
                     var result = EnumerableExtensions.Sum(objects, e => e.Property);
 
                     // assert
-                    result.Watts.Should().BeApproximately(expectedResult.Watts, DoublePrecision);
+                    result.Watts.Should().BeApproximately(expectedResult.Watts);
                     result.Unit.Should().Be(expectedResult.Unit);
-                    result.Value.Should().BeApproximately(expectedResult.Value, DoublePrecision);
+                    result.Value.Should().BeApproximately(expectedResult.Value);
                 }
             }
         }

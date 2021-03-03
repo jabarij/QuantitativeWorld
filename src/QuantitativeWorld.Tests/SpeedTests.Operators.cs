@@ -1,11 +1,22 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class SpeedTests
     {
         public class Operator_Oposite : SpeedTests
@@ -64,7 +75,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultSpeed = default(Speed);
-                var zeroKilometresPerHour = new Speed(0d, SpeedUnit.KilometrePerHour);
+                var zeroKilometresPerHour = new Speed(Constants.Zero, SpeedUnit.KilometrePerHour);
 
                 // act
                 var result1 = defaultSpeed + zeroKilometresPerHour;
@@ -152,7 +163,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultSpeed = default(Speed);
-                var zeroKilometresPerHour = new Speed(0d, SpeedUnit.KilometrePerHour);
+                var zeroKilometresPerHour = new Speed(Constants.Zero, SpeedUnit.KilometrePerHour);
 
                 // act
                 var result1 = defaultSpeed - zeroKilometresPerHour;
@@ -226,14 +237,14 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var length = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = length * factor;
 
                 // assert
-                result.MetresPerSecond.Should().BeApproximately(length.MetresPerSecond * factor, DoublePrecision);
-                result.Value.Should().BeApproximately(length.Value * factor, DoublePrecision);
+                result.MetresPerSecond.Should().BeApproximately(length.MetresPerSecond * factor);
+                result.Value.Should().BeApproximately(length.Value * factor);
                 result.Unit.Should().Be(length.Unit);
             }
 
@@ -242,7 +253,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Speed? nullSpeed = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Speed) * factor;
 
                 // act
@@ -253,6 +264,7 @@ namespace QuantitativeWorld.Tests
                 result.Value.Should().Be(expectedResult);
             }
 
+#if !DECIMAL
             [Fact]
             public void MultiplyByNaN_ShouldTreatNullAsDefault()
             {
@@ -265,6 +277,7 @@ namespace QuantitativeWorld.Tests
                 // assert
                 multiplyByNaN.Should().Throw<ArgumentException>();
             }
+#endif
         }
 
         public class Operator_MultiplyByTime : SpeedTests
@@ -277,7 +290,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var length = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
-                var time = new Time(totalSeconds: Fixture.CreateNonZeroDouble());
+                var time = new Time(totalSeconds: Fixture.CreateNonZeroNumber());
 
                 // act
                 var result = length * time;
@@ -293,7 +306,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Speed? nullSpeed = null;
-                Time? time = new Time(totalSeconds: Fixture.CreateNonZeroDouble());
+                Time? time = new Time(totalSeconds: Fixture.CreateNonZeroNumber());
                 var expectedResult = default(Speed) * time;
 
                 // act
@@ -316,12 +329,13 @@ namespace QuantitativeWorld.Tests
                 var length = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
 
                 // act
-                Func<Speed> divideByZero = () => length / 0d;
+                Func<Speed> divideByZero = () => length / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
+#if !DECIMAL
             [Fact]
             public void DivideByNaN_ShouldThrow()
             {
@@ -334,19 +348,20 @@ namespace QuantitativeWorld.Tests
                 // assert
                 divideByNaN.Should().Throw<ArgumentException>();
             }
+#endif
 
             [Fact]
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var length = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = length / denominator;
 
                 // assert
-                result.MetresPerSecond.Should().BeApproximately(length.MetresPerSecond / (double)denominator, DoublePrecision);
+                result.MetresPerSecond.Should().BeApproximately(length.MetresPerSecond / (number)denominator);
                 result.Unit.Should().Be(length.Unit);
             }
 
@@ -355,7 +370,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Speed? nullSpeed = null;
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Speed) / denominator;
 
                 // act
@@ -376,10 +391,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var nominator = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
-                var denominator = new Speed(0d);
+                var denominator = new Speed(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => nominator / denominator;
+                Func<number> divideByZero = () => nominator / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -393,7 +408,7 @@ namespace QuantitativeWorld.Tests
                 Speed? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => nominator / denominator;
+                Func<number> divideByZero = () => nominator / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -405,11 +420,11 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateSpeedInUnitOtherThan(SpeedUnit.MetrePerSecond);
                 var denominator = new Speed(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(SpeedUnit.MetrePerSecond, nominator.Unit));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
                 result.Should().Be(nominator.MetresPerSecond / denominator.MetresPerSecond);
@@ -425,7 +440,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var nominator = CreateLengthInUnitOtherThan(LengthUnit.Metre);
-                var denominator = new Speed(0d);
+                var denominator = new Speed(Constants.Zero);
 
                 // act
                 Func<Time> divideByZero = () => nominator / denominator;
@@ -454,7 +469,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateLengthInUnitOtherThan(LengthUnit.Metre);
                 var denominator = new Speed(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(SpeedUnit.MetrePerSecond));
 
                 // act

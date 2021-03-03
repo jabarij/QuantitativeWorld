@@ -1,8 +1,13 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+#else
 namespace QuantitativeWorld.Angular
 {
+#endif
     partial struct RadianAngle : IEquatable<RadianAngle>, IComparable<RadianAngle>, IComparable
     {
         public bool Equals(RadianAngle other) =>

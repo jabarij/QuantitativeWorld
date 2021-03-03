@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     partial struct Volume
     {
         public static bool operator ==(Volume left, Volume right) =>
@@ -26,18 +36,18 @@ namespace QuantitativeWorld
         public static Volume operator -(Volume argument) =>
             new Volume(cubicMetres: -argument.CubicMetres, value: null, unit: argument._unit);
 
-        public static Volume operator *(Volume argument, double factor) =>
+        public static Volume operator *(Volume argument, number factor) =>
             new Volume(cubicMetres: argument.CubicMetres * factor, value: null, unit: argument._unit);
-        public static Volume operator *(double argument, Volume factor) =>
+        public static Volume operator *(number argument, Volume factor) =>
             factor * argument;
 
-        public static Volume operator /(Volume nominator, double denominator)
+        public static Volume operator /(Volume nominator, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Volume(cubicMetres: nominator.CubicMetres / denominator, value: null, unit: nominator._unit);
         }
-        public static double operator /(Volume nominator, Volume denominator)
+        public static number operator /(Volume nominator, Volume denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -65,14 +75,14 @@ namespace QuantitativeWorld
             ? (left ?? default(Volume)) - (right ?? default(Volume))
             : (Volume?)null;
 
-        public static Volume? operator *(Volume? argument, double factor) =>
+        public static Volume? operator *(Volume? argument, number factor) =>
             (argument ?? default(Volume)) * factor;
-        public static Volume? operator *(double argument, Volume? factor) =>
+        public static Volume? operator *(number argument, Volume? factor) =>
             factor * argument;
 
-        public static Volume? operator /(Volume? nominator, double denominator) =>
+        public static Volume? operator /(Volume? nominator, number denominator) =>
             (nominator ?? default(Volume)) / denominator;
-        public static double operator /(Volume? nominator, Volume? denominator) =>
+        public static number operator /(Volume? nominator, Volume? denominator) =>
             (nominator ?? default(Volume)) / (denominator ?? default(Volume));
         public static Area? operator /(Volume? nominator, Length? denominator) =>
             (nominator ?? default(Volume)) / (denominator ?? default(Length));

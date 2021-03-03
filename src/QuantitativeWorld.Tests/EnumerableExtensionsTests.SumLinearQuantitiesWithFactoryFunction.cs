@@ -1,13 +1,23 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class EnumerableExtensionsTests
     {
         public class SumLinearQuantitiesWithFactoryFunction : EnumerableExtensionsTests
@@ -19,7 +29,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 IEnumerable<SomeQuantity> quantities = null;
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
                 // act
                 Action sum = () => EnumerableExtensions.Sum<SomeQuantity, SomeUnit>(quantities, factory);
@@ -34,7 +44,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var quantities = Fixture.CreateMany<SomeQuantity>(3);
-                Func<double, SomeUnit, SomeQuantity> factory = null;
+                Func<number, SomeUnit, SomeQuantity> factory = null;
 
                 // act
                 Action sum = () => EnumerableExtensions.Sum<SomeQuantity, SomeUnit>(quantities, factory);
@@ -49,7 +59,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var quantities = Enumerable.Empty<SomeQuantity>();
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
                 // act
                 var result = EnumerableExtensions.Sum<SomeQuantity, SomeUnit>(quantities, factory);
@@ -63,9 +73,9 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var quantities = Fixture.CreateMany<SomeQuantity>(3);
-                Func<double, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
+                Func<number, SomeUnit, SomeQuantity> factory = SomeQuantityFactory.Create;
 
-                double expectedResultInWatts = quantities.Sum(e => e.Value * e.Unit.ValueInUnits);
+                number expectedResultInWatts = quantities.Sum(e => e.Value * e.Unit.ValueInUnits);
                 var expectedResultUnit = quantities.First().Unit;
                 var expectedResult = new SomeQuantity(expectedResultInWatts / expectedResultUnit.ValueInUnits, expectedResultUnit);
 

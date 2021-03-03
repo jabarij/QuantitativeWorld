@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     partial struct Area
     {
         public static bool operator ==(Area left, Area right) =>
@@ -26,9 +36,9 @@ namespace QuantitativeWorld
         public static Area operator -(Area argument) =>
             new Area(squareMetres: -argument.SquareMetres, value: null, unit: argument._unit);
 
-        public static Area operator *(Area argument, double factor) =>
+        public static Area operator *(Area argument, number factor) =>
             new Area(squareMetres: argument.SquareMetres * factor, value: null, unit: argument._unit);
-        public static Area operator *(double argument, Area factor) =>
+        public static Area operator *(number argument, Area factor) =>
             factor * argument;
 
         public static Volume operator *(Area argument, Length factor) =>
@@ -36,13 +46,13 @@ namespace QuantitativeWorld
         public static Volume operator *(Length argument, Area factor) =>
             factor * argument;
 
-        public static Area operator /(Area nominator, double denominator)
+        public static Area operator /(Area nominator, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Area(squareMetres: nominator.SquareMetres / denominator, value: null, unit: nominator._unit);
         }
-        public static double operator /(Area nominator, Area denominator)
+        public static number operator /(Area nominator, Area denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -64,9 +74,9 @@ namespace QuantitativeWorld
             ? (left ?? default(Area)) - (right ?? default(Area))
             : (Area?)null;
 
-        public static Area? operator *(Area? argument, double factor) =>
+        public static Area? operator *(Area? argument, number factor) =>
             (argument ?? default(Area)) * factor;
-        public static Area? operator *(double argument, Area? factor) =>
+        public static Area? operator *(number argument, Area? factor) =>
             factor * argument;
 
         public static Volume? operator *(Area? argument, Length? factor) =>
@@ -76,9 +86,9 @@ namespace QuantitativeWorld
         public static Volume? operator *(Length? argument, Area? factor) =>
             factor * argument;
 
-        public static Area? operator /(Area? nominator, double denominator) =>
+        public static Area? operator /(Area? nominator, number denominator) =>
             (nominator ?? default(Area)) / denominator;
-        public static double operator /(Area? nominator, Area? denominator) =>
+        public static number operator /(Area? nominator, Area? denominator) =>
             (nominator ?? default(Area)) / (denominator ?? default(Area));
         public static Length? operator /(Area? nominator, Length? denominator) =>
             (nominator ?? default(Area)) / (denominator ?? default(Length));

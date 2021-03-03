@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 {
     internal static class Assert
     {
@@ -165,5 +165,7 @@ namespace QuantitativeWorld.DotNetExtensions
 
         public static double IsNotNaN(double value, string paramName) =>
             MatchesPredicate(value, e => !double.IsNaN(e), () => new ArgumentException("Double precision value is NaN.", paramName));
+        public static decimal IsNotNaN(decimal value, string paramName) =>
+            value;
     }
 }

@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+#endif
     class StandardWeightFormatter : FormatterBase<Weight>
     {
         public override bool TryFormat(string format, Weight weight, IFormatProvider formatProvider, out string result)

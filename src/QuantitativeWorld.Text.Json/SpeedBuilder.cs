@@ -1,9 +1,17 @@
-﻿namespace QuantitativeWorld.Text.Json
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
 {
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Text.Json
+{
+    using number = System.Double;
+#endif
+
     internal class SpeedBuilder : ILinearQuantityBuilder<Speed, SpeedUnit>
     {
-        private double? _metresPerSecond;
-        private double? _value;
+        private number? _metresPerSecond;
+        private number? _value;
         private SpeedUnit? _unit;
 
         public SpeedBuilder() { }
@@ -14,13 +22,13 @@
             _unit = speed.Unit;
         }
 
-        public void SetBaseValue(double metresPerSecond)
+        public void SetBaseValue(number metresPerSecond)
         {
             _metresPerSecond = metresPerSecond;
             _value = null;
         }
 
-        public void SetValue(double value)
+        public void SetValue(number value)
         {
             _metresPerSecond = null;
             _value = value;
@@ -33,8 +41,8 @@
 
         public bool TryBuild(out Speed result, SpeedUnit? defaultUnit = null)
         {
-            double? metresPerSecond = _metresPerSecond;
-            double? value = _value;
+            number? metresPerSecond = _metresPerSecond;
+            number? value = _value;
             SpeedUnit? unit = _unit ?? defaultUnit;
 
             if (metresPerSecond.HasValue)

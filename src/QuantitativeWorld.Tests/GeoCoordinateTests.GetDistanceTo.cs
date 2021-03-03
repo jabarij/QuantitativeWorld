@@ -1,11 +1,22 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class GeoCoordinateTests
     {
         public class GetDistanceTo : GeoCoordinateTests
@@ -42,9 +53,9 @@ namespace QuantitativeWorld.Tests
 
             [Theory]
             [InlineData(0d, 0d, 0d, 0d, 0d)]
-            [InlineData(0d, -180d, 0d, 180d, 0d)]
+            [InlineData(0d, -180, 0d, 180, 0d)]
             [InlineData(50.5d, 10.5d, 51.5d, 10.5d, 111195.07d)]
-            public void ShouldReturnProperValue(double lat1, double lon1, double lat2, double lon2, double expectedResult)
+            public void ShouldReturnProperValue(number lat1, number lon1, number lat2, number lon2, number expectedResult)
             {
                 // arrange
                 var sut = new GeoCoordinate(lat1, lon1);
@@ -53,7 +64,7 @@ namespace QuantitativeWorld.Tests
                 var result = sut.GetDistanceTo(new GeoCoordinate(lat2, lon2));
 
                 // assert
-                result.Metres.Should().BeApproximately(expectedResult, 1d);
+                result.Metres.Should().BeApproximately(expectedResult, Constants.One);
             }
         }
     }

@@ -1,8 +1,13 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Globalization
+{
+#else
 namespace QuantitativeWorld.Text.Globalization
 {
+#endif
     class PluralizeEnglishWordStringTransformation : ITransformation<string>
     {
         public string Transform(string value)

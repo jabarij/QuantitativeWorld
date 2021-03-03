@@ -1,23 +1,30 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Json.Angular;
+using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests.Angular
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Tests.Angular
 {
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     public class GeoCoordinateJsonConverterTests : TestsBase
     {
         public GeoCoordinateJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(0.5d, -0.5d, "{\"Latitude\":0.5,\"Longitude\":-0.5}")]
-        public void Serialize_ShouldReturnValidJson(double latitude, double longitude, string expectedJson)
+        [MemberData(nameof(GetTestData), typeof(GeoCoordinateJsonConverterTests), nameof(GetSerializeTestData))]
+        public void Serialize_ShouldReturnValidJson(GeoCoordinate location, string expectedJson)
         {
             // arrange
-            var location = new GeoCoordinate(latitude, longitude);
             var converter = new GeoCoordinateJsonConverter();
 
             // act
@@ -26,10 +33,32 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             // assert
             actualJson.Should().Be(expectedJson);
         }
+        private static IEnumerable<SerializeTestData> GetSerializeTestData()
+        {
+            yield return new SerializeTestData(0.5m, -0.5m, "{\"Latitude\":0.5,\"Longitude\":-0.5}");
+        }
+        private class SerializeTestData : ITestDataProvider
+        {
+            public SerializeTestData(GeoCoordinate value, string expectedJson)
+            {
+                Value = value;
+                ExpectedJson = expectedJson;
+            }
+            public SerializeTestData(decimal latitude, decimal longitude, string expectedJson)
+                : this(new GeoCoordinate((number)latitude, (number)longitude), expectedJson) { }
+            public SerializeTestData(double latitude, double longitude, string expectedJson)
+                : this(new GeoCoordinate((number)latitude, (number)longitude), expectedJson) { }
+
+            public GeoCoordinate Value { get; }
+            public string ExpectedJson { get; }
+
+            public object[] GetTestParameters() =>
+                new[] { (object)Value, ExpectedJson };
+        }
 
         [Theory]
-        [InlineData("{'latitude': 0.5, 'longitude': -0.5}", 0.5d, -0.5d)]
-        public void DeserializeAsTurns_ShouldReturnValidResult(string json, double expectedLatitude, double expectedLongitude)
+        [MemberData(nameof(GetTestData), typeof(GeoCoordinateJsonConverterTests), nameof(GetDeserializeTestData))]
+        public void Deserialize_ShouldReturnValidResult(string json, GeoCoordinate expected)
         {
             // arrange
             var converter = new GeoCoordinateJsonConverter();
@@ -38,8 +67,29 @@ namespace QuantitativeWorld.Text.Json.Tests.Angular
             var result = JsonConvert.DeserializeObject<GeoCoordinate>(json, converter);
 
             // assert
-            result.Latitude.Should().Be(expectedLatitude);
-            result.Longitude.Should().Be(expectedLongitude);
+            result.Should().Be(expected);
+        }
+        private static IEnumerable<DeserializeTestData> GetDeserializeTestData()
+        {
+            yield return new DeserializeTestData("{'latitude': 0.5, 'longitude': -0.5}", 0.5m, -0.5m);
+        }
+        private class DeserializeTestData : ITestDataProvider
+        {
+            public DeserializeTestData(string json, GeoCoordinate expected)
+            {
+                Json = json;
+                Expected = expected;
+            }
+            public DeserializeTestData(string json, decimal expectedLatitude, decimal expectedLongitude)
+                : this(json, new GeoCoordinate((number)expectedLatitude, (number)expectedLongitude)) { }
+            public DeserializeTestData(string json, double expectedLatitude, double expectedLongitude)
+                : this(json, new GeoCoordinate((number)expectedLatitude, (number)expectedLongitude)) { }
+
+            public string Json { get; }
+            public GeoCoordinate Expected { get; }
+
+            public object[] GetTestParameters() =>
+                new[] { (object)Json, Expected };
         }
 
         [Fact]

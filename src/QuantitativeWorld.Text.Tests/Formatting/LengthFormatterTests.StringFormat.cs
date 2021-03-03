@@ -1,11 +1,21 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Formatting;
 using System.Globalization;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Formatting
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using DecimalQuantitativeWorld.Text.Formatting;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Formatting
 {
+    using QuantitativeWorld.TestAbstractions;
+    using QuantitativeWorld.Text.Formatting;
+    using number = System.Double;
+#endif
+
     partial class LengthFormatterTests
     {
         public class StringFormat : LengthFormatterTests
@@ -20,8 +30,8 @@ namespace QuantitativeWorld.Tests.Formatting
             [InlineData(1d, "Length is: {0:" + StandardFormats.MKS + "}", "en-US", "Length is: 1 m", "length in format 'MKS' should be printed in metres")]
             [InlineData(1d, "Length is: {0:" + StandardFormats.MTS + "}", "en-US", "Length is: 1 m", "length in format 'MKS' should be printed in metres")]
             [InlineData(0.000000009d, "Length is: {0:" + StandardFormats.SI + "}", "en-US", "Length is: 0.00000001 m", "length in standard format should be printed with max 8 decimal places")]
-            [InlineData(123.456d, "Length is: {0:" + StandardFormats.SI + "}", "pl-PL", "Length is: 123,456 m", "length in standard format should be printed with double separator appropriate to given culture")]
-            public void StringFormat_StandardFormat_ShouldReturnProperValue(double kilograms, string format, string cultureName, string expectedResult, string reason)
+            [InlineData(123.456d, "Length is: {0:" + StandardFormats.SI + "}", "pl-PL", "Length is: 123,456 m", "length in standard format should be printed with number separator appropriate to given culture")]
+            public void StringFormat_StandardFormat_ShouldReturnProperValue(number kilograms, string format, string cultureName, string expectedResult, string reason)
             {
                 // arrange
                 var formatter = new LengthFormatter(CultureInfo.GetCultureInfo(cultureName));
@@ -43,7 +53,7 @@ namespace QuantitativeWorld.Tests.Formatting
             [InlineData(1d, "Length is: {0:ft|ull}", "en-US", "Length is: 3.2808399 feet")]
             [InlineData(1d, "Length is: {0:ft|ull|v0.###}", "en-US", "Length is: 3.281 feet")]
             [InlineData(1d, "D³ugoœæ wynosi: {0:km}", "pl-PL", "D³ugoœæ wynosi: 0,001 km")]
-            public void StringFormat_CustomFormat_ShouldReturnProperValue(double kilograms, string customFormat, string cultureName, string expectedResult)
+            public void StringFormat_CustomFormat_ShouldReturnProperValue(number kilograms, string customFormat, string cultureName, string expectedResult)
             {
                 // arrange
                 var formatter = new LengthFormatter(CultureInfo.GetCultureInfo(cultureName));

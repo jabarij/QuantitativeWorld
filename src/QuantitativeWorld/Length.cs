@@ -1,35 +1,44 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Interfaces;
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     public partial struct Length : ILinearQuantity<LengthUnit>
     {
-        private const double MinMetres = double.MinValue;
-        private const double MaxMetres = double.MaxValue;
+        private const number MinMetres = number.MinValue;
+        private const number MaxMetres = number.MaxValue;
 
         public static readonly LengthUnit DefaultUnit = LengthUnit.Metre;
-        public static readonly Length Zero = new Length(0d);
-        public static readonly Length PositiveInfinity = new Length(double.PositiveInfinity, null, null, false);
-        public static readonly Length NegativeInfinity = new Length(double.NegativeInfinity, null, null, false);
+        public static readonly Length Zero = new Length(Constants.Zero);
 
         private readonly LengthUnit? _unit;
-        private double? _value;
+        private number? _value;
 
-        public Length(double metres)
+        public Length(number metres)
             : this(
                 metres: metres,
                 value: null,
                 unit: null)
         { }
-        public Length(double value, LengthUnit unit)
+        public Length(number value, LengthUnit unit)
             : this(
                 metres: GetMetres(value, unit),
                 value: value,
                 unit: unit)
         { }
-        private Length(double metres, double? value, LengthUnit? unit, bool validate = true)
+        private Length(number metres, number? value, LengthUnit? unit, bool validate = true)
         {
             if (validate)
                 Assert.IsInRange(metres, MinMetres, MaxMetres, nameof(value));
@@ -39,11 +48,11 @@ namespace QuantitativeWorld
             _unit = unit;
         }
 
-        public double Metres { get; }
-        public double Value => EnsureValue();
+        public number Metres { get; }
+        public number Value => EnsureValue();
         public LengthUnit Unit => _unit ?? DefaultUnit;
 
-        double ILinearQuantity<LengthUnit>.BaseValue => Metres;
+        number ILinearQuantity<LengthUnit>.BaseValue => Metres;
         LengthUnit ILinearQuantity<LengthUnit>.BaseUnit => DefaultUnit;
 
         public Length Convert(LengthUnit targetUnit) =>
@@ -58,19 +67,19 @@ namespace QuantitativeWorld
                 unit: targetUnit);
 
         public bool IsZero() =>
-            Metres == 0d;
+            Metres == Constants.Zero;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Length, LengthUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Length, LengthUnit>(formatProvider, this);
 
-        private static double GetMetres(double value, LengthUnit sourceUnit) =>
+        private static number GetMetres(number value, LengthUnit sourceUnit) =>
             value * sourceUnit.ValueInMetres;
-        private static double GetValue(double metres, LengthUnit targetUnit) =>
+        private static number GetValue(number metres, LengthUnit targetUnit) =>
             metres / targetUnit.ValueInMetres;
 
-        private double EnsureValue()
+        private number EnsureValue()
         {
             if (!_value.HasValue)
                 _value = GetValue(Metres, Unit);

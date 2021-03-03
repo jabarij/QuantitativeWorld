@@ -1,8 +1,14 @@
-﻿using QuantitativeWorld.Interfaces;
-using System;
+﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Interfaces;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Interfaces;
+#endif
     static class DummyStaticFormatter
     {
         public static string ToString<TQuantity, TUnit>(TQuantity quantity)

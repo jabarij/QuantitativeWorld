@@ -1,19 +1,28 @@
 ﻿using Newtonsoft.Json;
-using QuantitativeWorld.Angular;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Angular
 {
+    using QuantitativeWorld.Angular;
+    using number = Double;
+#endif
+
     public sealed class RadianAngleJsonConverter : JsonConverter<RadianAngle>
     {
         public override RadianAngle ReadJson(JsonReader reader, Type objectType, RadianAngle existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            double? radians = null;
+            number? radians = null;
             if (reader.TokenType == JsonToken.StartObject)
             {
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
-                    if (reader.TryReadPropertyAsNullable(nameof(RadianAngle.Radians), serializer, e => e.ReadAsDouble(), out var value))
+                    if (reader.TryReadPropertyAsNullable(nameof(RadianAngle.Radians), serializer, e => e.ReadAsNumber(), out var value))
                         radians = value;
                 }
             }

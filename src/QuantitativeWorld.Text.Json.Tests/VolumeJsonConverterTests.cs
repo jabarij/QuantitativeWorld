@@ -1,56 +1,126 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Newtonsoft.Json;
-using QuantitativeWorld.TestAbstractions;
+using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using number = System.Double;
+#endif
+
     public class VolumeJsonConverterTests : TestsBase
     {
         public VolumeJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
 
         [Theory]
-        [InlineData(5000000d, VolumeJsonSerializationFormat.AsCubicMetres, "{\"CubicMetres\":5.0}")]
-        [InlineData(5000000d, VolumeJsonSerializationFormat.AsCubicMetresWithUnit, "{\"CubicMetres\":5.0,\"Unit\":{\"Name\":\"cubic centimetre\",\"Abbreviation\":\"cm³\",\"ValueInCubicMetres\":1E-06}}")]
-        [InlineData(5000000d, VolumeJsonSerializationFormat.AsValueWithUnit, "{\"Value\":5000000.0,\"Unit\":{\"Name\":\"cubic centimetre\",\"Abbreviation\":\"cm³\",\"ValueInCubicMetres\":1E-06}}")]
-        public void Serialize_ShouldReturnValidJson(double cubicCentimetres, VolumeJsonSerializationFormat serializationFormat, string expectedJson)
+        [MemberData(nameof(GetTestData), typeof(VolumeJsonConverterTests), nameof(GetSerializeTestData))]
+        public void Serialize_ShouldReturnValidJson(VolumeSerializeTestData testData)
         {
             // arrange
-            var volume = new Volume(cubicCentimetres, VolumeUnit.CubicCentimetre);
-            var converter = new VolumeJsonConverter(serializationFormat);
+            var converter = new VolumeJsonConverter(testData.Format, testData.UnitFormat);
 
             // act
-            string actualJson = JsonConvert.SerializeObject(volume, converter);
+            string actualJson = JsonConvert.SerializeObject(testData.Quantity, converter);
 
             // assert
-            actualJson.Should().Be(expectedJson);
+            actualJson.Should().MatchRegex(testData.ExpectedJsonPattern);
+        }
+        private static IEnumerable<VolumeSerializeTestData> GetSerializeTestData()
+        {
+            var testValue = new Volume((number)5000000m, VolumeUnit.CubicCentimetre);
+            yield return new VolumeSerializeTestData(
+                value: testValue,
+                format: VolumeJsonSerializationFormat.AsCubicMetres,
+                unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                expectedJsonPattern: "{\"CubicMetres\":5(\\.0+)}");
+            yield return new VolumeSerializeTestData(
+                value: testValue,
+                format: VolumeJsonSerializationFormat.AsCubicMetresWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                expectedJsonPattern: "{\"CubicMetres\":5(\\.0+),\"Unit\":\"cm³\"}");
+            yield return new VolumeSerializeTestData(
+                value: testValue,
+                format: VolumeJsonSerializationFormat.AsValueWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
+                expectedJsonPattern: "{\"Value\":5000000(\\.0+),\"Unit\":\"cm³\"}");
+            yield return new VolumeSerializeTestData(
+                value: testValue,
+                format: VolumeJsonSerializationFormat.AsCubicMetresWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.AlwaysFull,
+                expectedJsonPattern: "{\"CubicMetres\":5(\\.0+),\"Unit\":{\"Name\":\"cubic centimetre\",\"Abbreviation\":\"cm³\",\"ValueInCubicMetres\":(0\\.000001|1E-06)}}");
+            yield return new VolumeSerializeTestData(
+                value: testValue,
+                format: VolumeJsonSerializationFormat.AsValueWithUnit,
+                unitFormat: LinearUnitJsonSerializationFormat.AlwaysFull,
+                expectedJsonPattern: "{\"Value\":5000000(\\.0+),\"Unit\":{\"Name\":\"cubic centimetre\",\"Abbreviation\":\"cm³\",\"ValueInCubicMetres\":(0\\.000001|1E-06)}}");
+        }
+        public class VolumeSerializeTestData : QuantitySerializeTestData<Volume>
+        {
+            public VolumeSerializeTestData(
+                Volume value,
+                VolumeJsonSerializationFormat format,
+                LinearUnitJsonSerializationFormat unitFormat,
+                string expectedJsonPattern)
+                : base(value, unitFormat, expectedJsonPattern)
+            {
+                Format = format;
+            }
+
+            public VolumeJsonSerializationFormat Format { get; set; }
         }
 
         [Fact]
-        public void DeserializeAsMetres_ShouldReturnValidResult()
+        public void DeserializeAsCubicMetres_ShouldReturnValidResult()
         {
             // arrange
             string json = @"{
-  'cubicMetres': 0.123456
+  'cubicMetres': 123.456
 }";
             var converter = new VolumeJsonConverter();
+            var expectedResult =
+                new Volume(cubicMetres: (number)123.456m);
 
             // act
             var result = JsonConvert.DeserializeObject<Volume>(json, converter);
 
             // assert
-            result.CubicMetres.Should().Be(0.123456d);
-            result.Value.Should().Be(0.123456d);
-            result.Unit.Should().Be(VolumeUnit.CubicMetre);
+            result.Should().Be(expectedResult);
         }
 
         [Fact]
-        public void DeserializeAsMetresWithUnit_ShouldReturnValidResult()
+        public void DeserializeAsCubicMetresWithPredefinedUnit_ShouldReturnValidResult()
         {
             // arrange
             string json = @"{
-  'cubicMetres': 0.123456,
+  'cubicMetres': 123.456,
+  'unit': 'cm³'
+}";
+            var converter = new VolumeJsonConverter();
+            var expectedResult =
+                new Volume(cubicMetres: (number)123.456m)
+                .Convert(VolumeUnit.CubicMillimetre);
+
+            // act
+            var result = JsonConvert.DeserializeObject<Volume>(json, converter);
+
+            // assert
+            result.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        public void DeserializeAsCubicMetresWithFullySerializedUnit_ShouldReturnValidResult()
+        {
+            // arrange
+            string json = @"{
+  'cubicMetres': 123.456,
   'unit': {
     'name': 'cubic centimetre',
     'abbreviation': 'cm³',
@@ -58,47 +128,30 @@ namespace QuantitativeWorld.Text.Json.Tests
   }
 }";
             var converter = new VolumeJsonConverter();
+            var expectedResult =
+                new Volume(cubicMetres: (number)123.456m)
+                .Convert(new VolumeUnit(
+                    name: "cubic millimetre",
+                    abbreviation: "cm³",
+                    valueInCubicMetres: (number)0.000001));
 
             // act
             var result = JsonConvert.DeserializeObject<Volume>(json, converter);
 
             // assert
-            result.CubicMetres.Should().Be(0.123456d);
-            result.Value.Should().BeApproximately(123456d, DoublePrecision);
-            result.Unit.Should().Be(VolumeUnit.CubicCentimetre);
-        }
-
-        [Fact]
-        public void DeserializeAsValueWithUnit_ShouldReturnValidResult()
-        {
-            // arrange
-            string json = @"{
-  'value': 123456,
-  'unit': {
-    'name': 'cubic centimetre',
-    'abbreviation': 'cm³',
-    'valueInCubicMetres': '0.000001'
-  }
-}";
-            var converter = new VolumeJsonConverter();
-
-            // act
-            var result = JsonConvert.DeserializeObject<Volume>(json, converter);
-
-            // assert
-            result.CubicMetres.Should().BeApproximately(0.123456d, DoublePrecision);
-            result.Value.Should().BeApproximately(123456d, DoublePrecision);
-            result.Unit.Should().Be(VolumeUnit.CubicCentimetre);
+            result.Should().Be(expectedResult);
         }
 
         [Theory]
-        [InlineData(VolumeJsonSerializationFormat.AsCubicMetres)]
-        [InlineData(VolumeJsonSerializationFormat.AsCubicMetresWithUnit)]
-        public void SerializeAndDeserializeWithMetres_ShouldBeIdempotent(VolumeJsonSerializationFormat serializationFormat)
+        [InlineData(VolumeJsonSerializationFormat.AsCubicMetres, LinearUnitJsonSerializationFormat.AlwaysFull)]
+        [InlineData(VolumeJsonSerializationFormat.AsCubicMetres, LinearUnitJsonSerializationFormat.PredefinedAsString)]
+        [InlineData(VolumeJsonSerializationFormat.AsCubicMetresWithUnit, LinearUnitJsonSerializationFormat.AlwaysFull)]
+        [InlineData(VolumeJsonSerializationFormat.AsCubicMetresWithUnit, LinearUnitJsonSerializationFormat.PredefinedAsString)]
+        public void SerializeAndDeserializeWithCubicMetres_ShouldBeIdempotent(VolumeJsonSerializationFormat format, LinearUnitJsonSerializationFormat unitFormat)
         {
             // arrange
             var volume = Fixture.Create<Volume>();
-            var converter = new VolumeJsonConverter(serializationFormat);
+            var converter = new VolumeJsonConverter(format, unitFormat);
 
             // act
             string serializedVolume1 = JsonConvert.SerializeObject(volume, converter);
@@ -115,7 +168,7 @@ namespace QuantitativeWorld.Text.Json.Tests
         }
 
         [Fact]
-        public void SerializeAndDeserializeWithoutMetres_ShouldBeApproximatelyIdempotent()
+        public void SerializeAndDeserializeWithoutCubicMetres_ShouldBeApproximatelyIdempotent()
         {
             // arrange
             var volume = Fixture.Create<Volume>();
@@ -128,8 +181,8 @@ namespace QuantitativeWorld.Text.Json.Tests
             var deserializedVolume2 = JsonConvert.DeserializeObject<Volume>(serializedVolume2, converter);
 
             // assert
-            deserializedVolume1.CubicMetres.Should().BeApproximately(volume.CubicMetres, DoublePrecision);
-            deserializedVolume2.CubicMetres.Should().BeApproximately(volume.CubicMetres, DoublePrecision);
+            deserializedVolume1.CubicMetres.Should().BeApproximately(volume.CubicMetres);
+            deserializedVolume2.CubicMetres.Should().BeApproximately(volume.CubicMetres);
 
             deserializedVolume2.Should().Be(deserializedVolume1);
             serializedVolume2.Should().Be(serializedVolume1);

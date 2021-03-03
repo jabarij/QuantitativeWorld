@@ -1,7 +1,12 @@
-﻿using QuantitativeWorld.TestAbstractions;
-
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.TestAbstractions;
+#endif
     public partial class AngularEnumerableExtensionsTests : TestsBase
     {
         public AngularEnumerableExtensionsTests(TestFixture testFixture)

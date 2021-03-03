@@ -1,9 +1,16 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Text.Globalization;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+    using DecimalQuantitativeWorld.Text.Globalization;
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+    using QuantitativeWorld.Text.Globalization;
+#endif
+
     class StandardWeightUnitFormatter : FormatterBase<WeightUnit>
     {
         internal const string DefaultFormat = "s";

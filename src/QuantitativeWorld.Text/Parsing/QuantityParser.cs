@@ -1,14 +1,23 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Parsing
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Parsing
 {
+    using QuantitativeWorld.Interfaces;
+    using number = System.Double;
+#endif
+
     public class QuantityParser<TQuantity, TUnit> : IParser<TQuantity>
         where TQuantity : ILinearQuantity<TUnit>
         where TUnit : ILinearUnit
     {
-        private readonly IParser<double> _valueParser;
+        private readonly IParser<number> _valueParser;
         private readonly IParser<TUnit> _unitParser;
         private readonly ILinearQuantityFactory<TQuantity, TUnit> _quantityFactory;
 
@@ -21,7 +30,7 @@ namespace QuantitativeWorld.Text.Parsing
                  quantityFactory: quantityFactory)
         { }
         public QuantityParser(
-            IParser<double> valueParser,
+            IParser<number> valueParser,
             IParser<TUnit> unitParser,
             ILinearQuantityFactory<TQuantity, TUnit> quantityFactory)
         {

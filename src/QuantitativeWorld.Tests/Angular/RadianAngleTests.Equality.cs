@@ -1,11 +1,22 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class RadianAngleTests
     {
         public class Equality : RadianAngleTests
@@ -18,25 +29,25 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultRadianAngle = default(RadianAngle);
-                var zeroRadiansRadianAngle = new RadianAngle(0d);
+                var zeroRadiansRadianAngle = new RadianAngle(Constants.Zero);
 
                 // act
                 // assert
-                zeroRadiansRadianAngle.Equals(defaultRadianAngle).Should().BeTrue(because: "'new RadianAngle(0d)' should be equal 'default(RadianAngle)'");
-                defaultRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'default(RadianAngle)' should be equal 'new RadianAngle(0d)'");
+                zeroRadiansRadianAngle.Equals(defaultRadianAngle).Should().BeTrue(because: "'new RadianAngle(Constants.Zero)' should be equal 'default(RadianAngle)'");
+                defaultRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'default(RadianAngle)' should be equal 'new RadianAngle(Constants.Zero)'");
             }
 
             [Fact]
             public void RadianAngleCreateUsingParamlessConstructor_ShouldBeEqualToZeroRadians()
             {
                 // arrange
-                var zeroRadiansRadianAngle = new RadianAngle(0d);
+                var zeroRadiansRadianAngle = new RadianAngle(Constants.Zero);
                 var paramlessConstructedRadianAngle = new RadianAngle();
 
                 // act
                 // assert
-                zeroRadiansRadianAngle.Equals(paramlessConstructedRadianAngle).Should().BeTrue(because: "'new RadianAngle(0d)' should be equal 'new RadianAngle()'");
-                paramlessConstructedRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'new RadianAngle()' should be equal 'new RadianAngle(0d)'");
+                zeroRadiansRadianAngle.Equals(paramlessConstructedRadianAngle).Should().BeTrue(because: "'new RadianAngle(Constants.Zero)' should be equal 'new RadianAngle()'");
+                paramlessConstructedRadianAngle.Equals(zeroRadiansRadianAngle).Should().BeTrue(because: "'new RadianAngle()' should be equal 'new RadianAngle(Constants.Zero)'");
             }
 
             [Fact]

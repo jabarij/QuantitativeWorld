@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 {
     internal class HashCode
     {

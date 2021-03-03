@@ -1,14 +1,23 @@
-﻿using QuantitativeWorld.Parsing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Parsing;
+    using Constants = DecimalConstants;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Parsing;
+    using Constants = DoubleConstants;
+#endif
+
     partial struct PowerUnit
     {
         [Predefined]
-        public static readonly PowerUnit Watt = new PowerUnit(name: "watt", abbreviation: "W", valueInWatts: 1d);
+        public static readonly PowerUnit Watt = new PowerUnit(name: "watt", abbreviation: "W", valueInWatts: Constants.One);
         [Predefined]
         public static readonly PowerUnit Milliwatt = new PowerUnit(name: "milliwatt", abbreviation: "mW", valueInWatts: Constants.WattsPerMilliwatt);
         [Predefined]

@@ -1,10 +1,21 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class AreaTests
     {
         public class Equality : AreaTests
@@ -17,45 +28,45 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultArea = default(Area);
-                var zeroMetresArea = new Area(0d);
+                var zeroMetresArea = new Area(Constants.Zero);
 
                 // act
                 // assert
-                zeroMetresArea.Equals(defaultArea).Should().BeTrue(because: "'new Area(0d)' should be equal 'default(Area)'");
-                defaultArea.Equals(zeroMetresArea).Should().BeTrue(because: "'default(Area)' should be equal 'new Area(0d)'");
+                zeroMetresArea.Equals(defaultArea).Should().BeTrue(because: "'new Area(Constants.Zero)' should be equal 'default(Area)'");
+                defaultArea.Equals(zeroMetresArea).Should().BeTrue(because: "'default(Area)' should be equal 'new Area(Constants.Zero)'");
             }
 
             [Fact]
             public void AreaCreateUsingParamlessConstructor_ShouldBeEqualToZeroMetres()
             {
                 // arrange
-                var zeroMetresArea = new Area(0d);
+                var zeroMetresArea = new Area(Constants.Zero);
                 var paramlessConstructedArea = new Area();
 
                 // act
                 // assert
-                zeroMetresArea.Equals(paramlessConstructedArea).Should().BeTrue(because: "'new Area(0d)' should be equal 'new Area()'");
-                paramlessConstructedArea.Equals(zeroMetresArea).Should().BeTrue(because: "'new Area()' should be equal 'new Area(0d)'");
+                zeroMetresArea.Equals(paramlessConstructedArea).Should().BeTrue(because: "'new Area(Constants.Zero)' should be equal 'new Area()'");
+                paramlessConstructedArea.Equals(zeroMetresArea).Should().BeTrue(because: "'new Area()' should be equal 'new Area(Constants.Zero)'");
             }
 
             [Fact]
             public void ZeroUnitsArea_ShouldBeEqualToZeroMetres()
             {
                 // arrange
-                var zeroMetresArea = new Area(0d);
-                var zeroUnitsArea = new Area(0d, CreateUnitOtherThan(AreaUnit.SquareMetre));
+                var zeroMetresArea = new Area(Constants.Zero);
+                var zeroUnitsArea = new Area(Constants.Zero, CreateUnitOtherThan(AreaUnit.SquareMetre));
 
                 // act
                 // assert
-                zeroMetresArea.Equals(zeroUnitsArea).Should().BeTrue(because: "'new Area(0d)' should be equal 'new Area(0d, SomeUnit)'");
-                zeroUnitsArea.Equals(zeroMetresArea).Should().BeTrue(because: "'new Area(0d, SomeUnit)' should be equal 'new Area(0d)'");
+                zeroMetresArea.Equals(zeroUnitsArea).Should().BeTrue(because: "'new Area(Constants.Zero)' should be equal 'new Area(Constants.Zero, SomeUnit)'");
+                zeroUnitsArea.Equals(zeroMetresArea).Should().BeTrue(because: "'new Area(Constants.Zero, SomeUnit)' should be equal 'new Area(Constants.Zero)'");
             }
 
             [Fact]
             public void AreasConvertedToDifferentUnitsEqualInMetres_ShouldBeEqual()
             {
                 // arrange
-                var area1 = new Area(Fixture.Create<double>()).Convert(Fixture.Create<AreaUnit>());
+                var area1 = new Area(Fixture.Create<number>()).Convert(Fixture.Create<AreaUnit>());
                 var area2 = new Area(area1.SquareMetres).Convert(CreateUnitOtherThan(area1.Unit));
 
                 // act

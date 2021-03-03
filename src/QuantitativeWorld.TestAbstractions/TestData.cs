@@ -6,8 +6,14 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.TestAbstractions
+{
+#else
 namespace QuantitativeWorld.TestAbstractions
 {
+#endif
+
     public class TestsBase : IClassFixture<TestFixture>
     {
         private readonly TestFixture _testFixture;
@@ -18,7 +24,11 @@ namespace QuantitativeWorld.TestAbstractions
         }
 
         protected IFixture Fixture => _testFixture.Fixture;
+        public const decimal DecimalPrecision = 0.000005m;
+        public const decimal DecimalPrecisionPercentage = 0.0001m;
         public const double DoublePrecision = 0.000005d;
+        public const double DoublePrecisionPercentage = 0.0001d;
+
 
         public static IEnumerable<object[]> GetTestData(Type sourceType, string dataSourceName)
         {
@@ -50,7 +60,7 @@ namespace QuantitativeWorld.TestAbstractions
 
             if (dataSource is IEnumerable<ITestDataProvider> testDataProviders)
                 return testDataProviders
-                    .Select(e => e.SerializeTestData());
+                    .Select(e => e.GetTestParameters());
             else if (dataSource is IEnumerable enumerable)
                 return enumerable
                     .Cast<object>()

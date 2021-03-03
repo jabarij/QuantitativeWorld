@@ -1,12 +1,24 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class RadianAngleTests
     {
         public class Operator_Oposite : RadianAngleTests
@@ -50,7 +62,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultRadianAngle = default(RadianAngle);
-                var zeroRadians = new RadianAngle(0d);
+                var zeroRadians = new RadianAngle(Constants.Zero);
 
                 // act
                 var result1 = defaultRadianAngle + zeroRadians;
@@ -133,7 +145,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var defaultRadianAngle = default(RadianAngle);
-                var zeroRadians = new RadianAngle(0d);
+                var zeroRadians = new RadianAngle(Constants.Zero);
 
                 // act
                 var result1 = defaultRadianAngle - zeroRadians;
@@ -202,7 +214,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var radianAngle = CreateRadianAngle();
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = radianAngle * factor;
@@ -216,7 +228,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 RadianAngle? nullRadianAngle = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(RadianAngle) * factor;
 
                 // act
@@ -239,7 +251,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var radianAngle = CreateRadianAngle();
 
                 // act
-                Func<RadianAngle> divideByZero = () => radianAngle / 0d;
+                Func<RadianAngle> divideByZero = () => radianAngle / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -250,7 +262,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var radianAngle = CreateRadianAngle();
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = radianAngle / denominator;
@@ -264,7 +276,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 RadianAngle? nullRadianAngle = null;
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(RadianAngle) / denominator;
 
                 // act
@@ -287,7 +299,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var radianAngle = CreateRadianAngle();
 
                 // act
-                Func<RadianAngle> moduloByZero = () => radianAngle % 0d;
+                Func<RadianAngle> moduloByZero = () => radianAngle % Constants.Zero;
 
                 // assert
                 moduloByZero.Should().Throw<DivideByZeroException>();
@@ -298,7 +310,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var radianAngle = CreateRadianAngle();
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
 
                 // act
                 var result = radianAngle % denominator;
@@ -312,7 +324,7 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 RadianAngle? nullRadianAngle = null;
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(RadianAngle) % denominator;
 
                 // act
@@ -333,10 +345,10 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var radianAngle = CreateRadianAngle();
-                var denominator = new RadianAngle(0d);
+                var denominator = new RadianAngle(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => radianAngle / denominator;
+                Func<number> divideByZero = () => radianAngle / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -350,7 +362,7 @@ namespace QuantitativeWorld.Tests.Angular
                 RadianAngle? denominator = null;
 
                 // act
-                Func<double> divideByZero = () => radianAngle / denominator;
+                Func<number> divideByZero = () => radianAngle / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -361,10 +373,10 @@ namespace QuantitativeWorld.Tests.Angular
             {
                 // arrange
                 var nominator = CreateRadianAngle();
-                var denominator = new RadianAngle(Fixture.CreateNonZeroDouble());
+                var denominator = new RadianAngle(Fixture.CreateNonZeroNumber());
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
                 result.Should().Be(nominator.Radians / denominator.Radians);

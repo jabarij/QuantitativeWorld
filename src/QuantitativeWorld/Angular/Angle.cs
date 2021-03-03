@@ -1,35 +1,48 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Angular
 {
+    using QuantitativeWorld.Interfaces;
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     public partial struct Angle : ILinearQuantity<AngleUnit>
     {
-        private const double MinTurns = double.MinValue;
-        private const double MaxTurns = double.MaxValue;
+        private const number MinTurns = number.MinValue;
+        private const number MaxTurns = number.MaxValue;
 
         public static readonly AngleUnit DefaultUnit = AngleUnit.Turn;
-        public static readonly Angle Zero = new Angle(0d);
-        public static readonly Angle PositiveInfinity = new Angle(double.PositiveInfinity, null, null, false);
-        public static readonly Angle NegativeInfinity = new Angle(double.NegativeInfinity, null, null, false);
+        public static readonly Angle Zero = new Angle(Constants.Zero);
+#if !DECIMAL
+        public static readonly Angle PositiveInfinity = new Angle(number.PositiveInfinity, null, null, false);
+        public static readonly Angle NegativeInfinity = new Angle(number.NegativeInfinity, null, null, false);
+#endif
 
         private readonly AngleUnit? _unit;
-        private double? _value;
+        private number? _value;
 
-        public Angle(double turns)
+        public Angle(number turns)
             : this(
                 turns: turns,
                 value: null,
                 unit: null)
         { }
-        public Angle(double value, AngleUnit unit)
+        public Angle(number value, AngleUnit unit)
             : this(
                 turns: GetTurns(value, unit),
                 value: value,
                 unit: unit)
         { }
-        private Angle(double turns, double? value, AngleUnit? unit, bool validate = true)
+        private Angle(number turns, number? value, AngleUnit? unit, bool validate = true)
         {
             if (validate)
                 Assert.IsInRange(turns, MinTurns, MaxTurns, nameof(value));
@@ -39,11 +52,11 @@ namespace QuantitativeWorld.Angular
             _unit = unit;
         }
 
-        public double Turns { get; }
-        public double Value => EnsureValue();
+        public number Turns { get; }
+        public number Value => EnsureValue();
         public AngleUnit Unit => _unit ?? DefaultUnit;
 
-        double ILinearQuantity<AngleUnit>.BaseValue => Turns;
+        number ILinearQuantity<AngleUnit>.BaseValue => Turns;
         AngleUnit ILinearQuantity<AngleUnit>.BaseUnit => DefaultUnit;
 
         public Angle Convert(AngleUnit targetUnit) =>
@@ -58,24 +71,24 @@ namespace QuantitativeWorld.Angular
                 unit: targetUnit);
         public Angle ToNormalized() =>
             new Angle(
-                turns: Turns % 1d,
+                turns: Turns % Constants.One,
                 value: null,
                 unit: _unit);
 
         public bool IsZero() =>
-            Turns == 0d;
+            Turns == Constants.Zero;
 
         public override string ToString() =>
             DummyStaticFormatter.ToString<Angle, AngleUnit>(this);
         public string ToString(IFormatProvider formatProvider) =>
             DummyStaticFormatter.ToString<Angle, AngleUnit>(formatProvider, this);
 
-        private static double GetTurns(double value, AngleUnit sourceUnit) =>
+        private static number GetTurns(number value, AngleUnit sourceUnit) =>
             value / sourceUnit.UnitsPerTurn;
-        private static double GetValue(double turns, AngleUnit targetUnit) =>
+        private static number GetValue(number turns, AngleUnit targetUnit) =>
             turns * targetUnit.UnitsPerTurn;
 
-        private double EnsureValue()
+        private number EnsureValue()
         {
             if (!_value.HasValue)
                 _value = GetValue(Turns, Unit);

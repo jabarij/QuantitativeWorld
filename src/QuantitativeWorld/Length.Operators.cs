@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using Constants = DecimalConstants;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using Constants = DoubleConstants;
+    using number = Double;
+#endif
+
     partial struct Length
     {
         public static bool operator ==(Length left, Length right) =>
@@ -26,21 +36,21 @@ namespace QuantitativeWorld
         public static Length operator -(Length length) =>
             new Length(metres: -length.Metres, value: null, unit: length._unit);
 
-        public static Length operator *(Length length, double factor) =>
+        public static Length operator *(Length length, number factor) =>
             new Length(metres: length.Metres * factor, value: null, unit: length._unit);
-        public static Length operator *(double factor, Length length) =>
+        public static Length operator *(number factor, Length length) =>
             length * factor;
 
         public static Area operator *(Length argument, Length factor) =>
             new Area(argument.Metres * factor.Metres);
 
-        public static Length operator /(Length length, double denominator)
+        public static Length operator /(Length length, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Length(metres: length.Metres / denominator, value: null, unit: length._unit);
         }
-        public static double operator /(Length length, Length denominator)
+        public static number operator /(Length length, Length denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -62,9 +72,9 @@ namespace QuantitativeWorld
             ? (left ?? default(Length)) - (right ?? default(Length))
             : (Length?)null;
 
-        public static Length? operator *(Length? length, double factor) =>
+        public static Length? operator *(Length? length, number factor) =>
             (length ?? default(Length)) * factor;
-        public static Length? operator *(double factor, Length? length) =>
+        public static Length? operator *(number factor, Length? length) =>
             length * factor;
 
         public static Area? operator *(Length? argument, Length? factor) =>
@@ -72,11 +82,24 @@ namespace QuantitativeWorld
             ? (argument ?? default(Length)) * (factor ?? default(Length))
             : (Area?)null;
 
-        public static Length? operator /(Length? length, double denominator) =>
+        public static Length? operator /(Length? length, number denominator) =>
             (length ?? default(Length)) / denominator;
-        public static double operator /(Length? length, Length? denominator) =>
+        public static number operator /(Length? length, Length? denominator) =>
             (length ?? default(Length)) / (denominator ?? default(Length));
         public static Speed operator /(Length? length, Time? time) =>
             (length ?? default(Length)) / (time ?? default(Time));
+
+        public static Length Abs(Length length) =>
+            new Length(
+                metres: Math.Abs(length.Metres),
+                value:
+                    length._value.HasValue
+                    ? Math.Abs(length._value.Value)
+                    : (number?)null,
+                unit: length._unit);
+        public static Length? Abs(Length? length) =>
+            length.HasValue
+            ? Abs(length.Value)
+            : (Length?)null;
     }
 }

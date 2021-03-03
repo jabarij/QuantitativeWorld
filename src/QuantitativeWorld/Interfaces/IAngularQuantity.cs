@@ -1,10 +1,18 @@
-﻿namespace QuantitativeWorld.Interfaces
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Interfaces
 {
+    using number = System.Decimal;
+#else
+namespace QuantitativeWorld.Interfaces
+{
+    using number = System.Double;
+#endif
+
     public interface IAngularQuantity<TUnit>
         where TUnit : IAngularUnit
     {
-        double Turns { get; }
-        double Value { get; }
+        number Turns { get; }
+        number Value { get; }
         TUnit Unit { get; }
     }
 }

@@ -1,11 +1,22 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class AreaTests
     {
         public class Operator_Oposite : AreaTests
@@ -64,7 +75,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultArea = default(Area);
-                var zeroSquareKilometres = new Area(0d, AreaUnit.SquareKilometre);
+                var zeroSquareKilometres = new Area(Constants.Zero, AreaUnit.SquareKilometre);
 
                 // act
                 var result1 = defaultArea + zeroSquareKilometres;
@@ -152,7 +163,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var defaultArea = default(Area);
-                var zeroSquareKilometres = new Area(0d, AreaUnit.SquareKilometre);
+                var zeroSquareKilometres = new Area(Constants.Zero, AreaUnit.SquareKilometre);
 
                 // act
                 var result1 = defaultArea - zeroSquareKilometres;
@@ -226,14 +237,14 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
 
                 // act
                 var result = area * factor;
 
                 // assert
-                result.SquareMetres.Should().BeApproximately(area.SquareMetres * factor, DoublePrecision);
-                result.Value.Should().BeApproximately(area.Value * factor, DoublePrecision);
+                result.SquareMetres.Should().BeApproximately(area.SquareMetres * factor);
+                result.Value.Should().BeApproximately(area.Value * factor);
                 result.Unit.Should().Be(area.Unit);
             }
 
@@ -242,7 +253,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Area? nullArea = null;
-                double factor = Fixture.Create<double>();
+                number factor = Fixture.Create<number>();
                 var expectedResult = default(Area) * factor;
 
                 // act
@@ -253,6 +264,7 @@ namespace QuantitativeWorld.Tests
                 result.Value.Should().Be(expectedResult);
             }
 
+#if !DECIMAL
             [Fact]
             public void MultiplyByNaN_ShouldThrow()
             {
@@ -260,11 +272,12 @@ namespace QuantitativeWorld.Tests
                 var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
 
                 // act
-                Func<Area> multiplyByNaN = () => area * double.NaN;
+                Func<Area> multiplyByNaN = () => area * number.NaN;
 
                 // assert
                 multiplyByNaN.Should().Throw<ArgumentException>();
             }
+#endif
         }
 
         public class Operator_MultiplyByLength : AreaTests
@@ -278,7 +291,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var argument = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
                 var factor = new Length(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<LengthUnit>());
 
                 // act
@@ -298,7 +311,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Area? argument = null;
                 var factor = new Length(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<LengthUnit>());
                 var expectedResult = default(Area) * factor;
 
@@ -356,12 +369,13 @@ namespace QuantitativeWorld.Tests
                 var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
 
                 // act
-                Func<Area> divideByZero = () => area / 0d;
+                Func<Area> divideByZero = () => area / Constants.Zero;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
             }
 
+#if !DECIMAL
             [Fact]
             public void DivideByNaN_ShouldThrow()
             {
@@ -373,20 +387,22 @@ namespace QuantitativeWorld.Tests
 
                 // assert
                 divideByNaN.Should().Throw<ArgumentException>();
-            }
+            } 
+#endif
 
             [Fact]
             public void ShouldProduceValidResultInSameUnit()
             {
                 // arrange
                 var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
-                double denominator = (double)Fixture.CreateNonZeroDouble();
+                number denominator = (number)Fixture.CreateNonZeroNumber();
+                number expectedSquareMetres = area.SquareMetres / (number)denominator;
 
                 // act
                 var result = area / denominator;
 
                 // assert
-                result.SquareMetres.Should().BeApproximately(area.SquareMetres / (double)denominator, DoublePrecision);
+                result.SquareMetres.Should().BeApproximately(expectedSquareMetres);
                 result.Unit.Should().Be(area.Unit);
             }
 
@@ -395,7 +411,7 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 Area? nullArea = null;
-                double denominator = Fixture.CreateNonZeroDouble();
+                number denominator = Fixture.CreateNonZeroNumber();
                 var expectedResult = default(Area) / denominator;
 
                 // act
@@ -417,7 +433,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
                 var denominator = new Length(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<LengthUnit>());
 
                 // act
@@ -434,7 +450,7 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Area? nominator = null;
                 var denominator = new Length(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: Fixture.Create<LengthUnit>());
                 var expectedResult = default(Area) / denominator;
 
@@ -484,10 +500,10 @@ namespace QuantitativeWorld.Tests
             {
                 // arrange
                 var area = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
-                var denominator = new Area(0d);
+                var denominator = new Area(Constants.Zero);
 
                 // act
-                Func<double> divideByZero = () => area / denominator;
+                Func<number> divideByZero = () => area / denominator;
 
                 // assert
                 divideByZero.Should().Throw<DivideByZeroException>();
@@ -501,7 +517,7 @@ namespace QuantitativeWorld.Tests
                 Area? denominator = null;
 
                 // act
-                Func<double> divideByNull = () => nominator / denominator;
+                Func<number> divideByNull = () => nominator / denominator;
 
                 // assert
                 divideByNull.Should().Throw<DivideByZeroException>();
@@ -513,11 +529,11 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 Area? nominator = null;
                 var denominator = new Area(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(AreaUnit.SquareMetre));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
                 result.Should().Be(default(Area) / denominator);
@@ -529,11 +545,11 @@ namespace QuantitativeWorld.Tests
                 // arrange
                 var nominator = CreateAreaInUnitOtherThan(AreaUnit.SquareMetre);
                 var denominator = new Area(
-                    value: Fixture.CreateNonZeroDouble(),
+                    value: Fixture.CreateNonZeroNumber(),
                     unit: CreateUnitOtherThan(AreaUnit.SquareMetre, nominator.Unit));
 
                 // act
-                double result = nominator / denominator;
+                number result = nominator / denominator;
 
                 // assert
                 result.Should().Be(nominator.SquareMetres / denominator.SquareMetres);

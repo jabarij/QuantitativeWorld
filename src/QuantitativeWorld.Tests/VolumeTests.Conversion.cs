@@ -1,11 +1,21 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class VolumeTests
     {
         public class Convert : VolumeTests
@@ -22,8 +32,8 @@ namespace QuantitativeWorld.Tests
                 var actualVolume = originalVolume.Convert(targetUnit);
 
                 // assert
-                actualVolume.CubicMetres.Should().BeApproximately(expectedVolume.CubicMetres, DoublePrecision);
-                actualVolume.Value.Should().BeApproximately(expectedVolume.Value, DoublePrecision);
+                actualVolume.CubicMetres.Should().BeApproximately(expectedVolume.CubicMetres);
+                actualVolume.Value.Should().BeApproximately(expectedVolume.Value);
                 actualVolume.Unit.Should().Be(targetUnit);
             }
 
@@ -40,7 +50,7 @@ namespace QuantitativeWorld.Tests
                     VolumeUnit.CubicInch,
                     VolumeUnit.CubicMetre
                 };
-                var initialVolume = new Volume(1234.5678d, units.First());
+                var initialVolume = new Volume((number)1234.5678m, units.First());
                 Volume? finalVolume = null;
 
                 // act
@@ -52,28 +62,22 @@ namespace QuantitativeWorld.Tests
 
             private static IEnumerable<ITestDataProvider> GetConvertTestData()
             {
-                yield return new ConvertTestData(new Volume(123456000d, VolumeUnit.CubicMetre), VolumeUnit.CubicKilometre, new Volume(0.123456d, VolumeUnit.CubicKilometre));
-                yield return new ConvertTestData(new Volume(0.123456d, VolumeUnit.CubicKilometre), VolumeUnit.CubicMetre, new Volume(123456000d, VolumeUnit.CubicMetre));
+                yield return new ConvertTestData(123456000d, VolumeUnit.CubicMetre, 0.123456d, VolumeUnit.CubicKilometre);
+                yield return new ConvertTestData(0.123456d, VolumeUnit.CubicKilometre, 123456000d, VolumeUnit.CubicMetre);
 
-                yield return new ConvertTestData(new Volume(1234.56d, VolumeUnit.CubicCentimetre), VolumeUnit.Litre, new Volume(1.23456d, VolumeUnit.Litre));
-                yield return new ConvertTestData(new Volume(1.23456d, VolumeUnit.Litre), VolumeUnit.CubicCentimetre, new Volume(1234.56d, VolumeUnit.CubicCentimetre));
+                yield return new ConvertTestData(1234.56d, VolumeUnit.CubicCentimetre, 1.23456d, VolumeUnit.Litre);
+                yield return new ConvertTestData(1.23456d, VolumeUnit.Litre, 1234.56d, VolumeUnit.CubicCentimetre);
             }
 
-            class ConvertTestData : ITestDataProvider
+            class ConvertTestData : ConversionTestData<Volume>, ITestDataProvider
             {
-                public ConvertTestData(Volume originalVolume, VolumeUnit targetUnit, Volume expectedVolume)
-                {
-                    OriginalVolume = originalVolume;
-                    TargetUnit = targetUnit;
-                    ExpectedVolume = expectedVolume;
-                }
+                public ConvertTestData(double originalValue, VolumeUnit originalUnit, double expectedValue, VolumeUnit expectedUnit)
+                    : base(new Volume((number)originalValue, originalUnit), new Volume((number)expectedValue, expectedUnit)) { }
+                public ConvertTestData(decimal originalValue, VolumeUnit originalUnit, decimal expectedValue, VolumeUnit expectedUnit)
+                    : base(new Volume((number)originalValue, originalUnit), new Volume((number)expectedValue, expectedUnit)) { }
 
-                public Volume OriginalVolume { get; }
-                public VolumeUnit TargetUnit { get; }
-                public Volume ExpectedVolume { get; }
-
-                public object[] SerializeTestData() =>
-                    new[] { (object)OriginalVolume, TargetUnit, ExpectedVolume };
+                public object[] GetTestParameters() =>
+                    new[] { (object)OriginalValue, ExpectedValue.Unit, ExpectedValue };
             }
         }
     }

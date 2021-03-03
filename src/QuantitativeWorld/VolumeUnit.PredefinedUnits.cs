@@ -1,14 +1,24 @@
-﻿using QuantitativeWorld.Parsing;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Parsing;
+    using Constants = DecimalConstants;
+#else
 namespace QuantitativeWorld
 {
+    using QuantitativeWorld.Parsing;
+    using Constants = DoubleConstants;
+#endif
+
     partial struct VolumeUnit
     {
         [Predefined]
-        public static readonly VolumeUnit CubicMetre = new VolumeUnit(name: "cubic metre", abbreviation: "m³", valueInCubicMetres: 1d);
+        public static readonly VolumeUnit CubicMetre = new VolumeUnit(name: "cubic metre", abbreviation: "m³", valueInCubicMetres: Constants.One);
         [Predefined]
         public static readonly VolumeUnit CubicMillimetre = new VolumeUnit(name: "cubic millimetre", abbreviation: "mm³", valueInCubicMetres: Constants.CubicMetresPerCubicMillimetre);
         [Predefined]
@@ -61,11 +71,11 @@ namespace QuantitativeWorld
         [Predefined]
         public static readonly VolumeUnit OilBarrel = new VolumeUnit(name: "oil barrel", abbreviation: "bbl", valueInCubicMetres: Constants.USLiquidGallonsPerOilBarrel);
         [Predefined]
-        public static readonly VolumeUnit ThousandOilBarrels = new VolumeUnit(name: "thousand of oil barrels", abbreviation: "Mbbl", valueInCubicMetres: OilBarrel.ValueInCubicMetres * 1000d);
+        public static readonly VolumeUnit ThousandOilBarrels = new VolumeUnit(name: "thousand of oil barrels", abbreviation: "Mbbl", valueInCubicMetres: OilBarrel.ValueInCubicMetres * Constants.Thousand);
         [Predefined]
-        public static readonly VolumeUnit MillionOilBarrels = new VolumeUnit(name: "million of oil barrels", abbreviation: "MMbbl", valueInCubicMetres: OilBarrel.ValueInCubicMetres * 1000000d);
+        public static readonly VolumeUnit MillionOilBarrels = new VolumeUnit(name: "million of oil barrels", abbreviation: "MMbbl", valueInCubicMetres: OilBarrel.ValueInCubicMetres * Constants.Million);
         [Predefined]
-        public static readonly VolumeUnit BillionOilBarrels = new VolumeUnit(name: "billion of oil barrel", abbreviation: "Gbbl", valueInCubicMetres: OilBarrel.ValueInCubicMetres * 1000000000d);
+        public static readonly VolumeUnit BillionOilBarrels = new VolumeUnit(name: "billion of oil barrel", abbreviation: "Gbbl", valueInCubicMetres: OilBarrel.ValueInCubicMetres * Constants.Billion);
 
         public static IEnumerable<VolumeUnit> GetPredefinedUnits() =>
             typeof(VolumeUnit).GetFields(BindingFlags.Static | BindingFlags.Public)

@@ -1,14 +1,23 @@
-﻿using QuantitativeWorld.Parsing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+    using DecimalQuantitativeWorld.Parsing;
+    using Constants = DecimalConstants;
+#else
 namespace QuantitativeWorld.Angular
 {
+    using QuantitativeWorld.Parsing;
+    using Constants = DoubleConstants;
+#endif
+
     partial struct AngleUnit
     {
         [Predefined]
-        public static readonly AngleUnit Turn = new AngleUnit(name: "turn", abbreviation: "tr", symbol: "tr", unitsPerTurn: 1d);
+        public static readonly AngleUnit Turn = new AngleUnit(name: "turn", abbreviation: "tr", symbol: "tr", unitsPerTurn: Constants.One);
         [Predefined]
         public static readonly AngleUnit Radian = new AngleUnit(name: "radian", abbreviation: "rad", symbol: "c", unitsPerTurn: Constants.RadiansPerTurn);
         [Predefined]

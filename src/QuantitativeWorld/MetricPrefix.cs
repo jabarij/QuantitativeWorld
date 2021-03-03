@@ -1,11 +1,23 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+#else
 namespace QuantitativeWorld
 {
+#endif
+#if DECIMAL
+    using number = System.Decimal;
+#else
+    using number = System.Double;
+    using Constants = QuantitativeWorld.DoubleConstants;
+#endif
+
     public struct MetricPrefix
     {
-        public const double Base = 10d;
+        public const number Base = 10;
 
         public static readonly MetricPrefix Yotta = new MetricPrefix(name: "yotta", symbol: "Y", exponent: 24);
         public static readonly MetricPrefix Zetta = new MetricPrefix(name: "zetta", symbol: "Z", exponent: 21);
@@ -41,7 +53,7 @@ namespace QuantitativeWorld
 
         public string Name { get; }
         public string Symbol { get; }
-        public double Factor { get; }
+        public number Factor { get; }
 
         public static MetricPrefix FromExponent(int exponent)
         {
@@ -72,9 +84,9 @@ namespace QuantitativeWorld
             }
         }
 
-        public static double operator *(double value, MetricPrefix prefix) =>
+        public static number operator *(number value, MetricPrefix prefix) =>
             value * prefix.Factor;
-        public static double operator *(MetricPrefix prefix, double value) =>
+        public static number operator *(MetricPrefix prefix, number value) =>
             value * prefix;
 
         public static LengthUnit operator *(LengthUnit unit, MetricPrefix prefix) =>

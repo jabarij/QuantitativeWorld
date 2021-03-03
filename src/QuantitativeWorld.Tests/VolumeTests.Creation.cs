@@ -1,11 +1,21 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System.Collections.Generic;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests
 {
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class VolumeTests
     {
         public class Creation : VolumeTests
@@ -17,7 +27,7 @@ namespace QuantitativeWorld.Tests
             public void ConstructorForMetres_ShouldCreateValidVolume()
             {
                 // arrange
-                double cubicMetres = Fixture.Create<double>();
+                number cubicMetres = Fixture.Create<number>();
 
                 // act
                 var volume = new Volume(cubicMetres);
@@ -37,7 +47,7 @@ namespace QuantitativeWorld.Tests
                 var volume = new Volume(testData.Value, testData.Unit);
 
                 // assert
-                volume.CubicMetres.Should().BeApproximately(testData.ExpectedMetres, DoublePrecision);
+                volume.CubicMetres.Should().BeApproximately(testData.ExpectedMetres);
                 volume.Value.Should().Be(testData.Value);
                 volume.Unit.Should().Be(testData.Unit);
             }
@@ -49,23 +59,29 @@ namespace QuantitativeWorld.Tests
             }
             public class ConstructorForValueAndUnitTestData
             {
-                public ConstructorForValueAndUnitTestData(double value, VolumeUnit unit, double expectedCubicMetres)
+                public ConstructorForValueAndUnitTestData(double value, VolumeUnit unit, double expectedMetres)
                 {
-                    Value = value;
+                    Value = (number)value;
                     Unit = unit;
-                    ExpectedMetres = expectedCubicMetres;
+                    ExpectedMetres = (number)expectedMetres;
+                }
+                public ConstructorForValueAndUnitTestData(decimal value, VolumeUnit unit, decimal expectedMetres)
+                {
+                    Value = (number)value;
+                    Unit = unit;
+                    ExpectedMetres = (number)expectedMetres;
                 }
 
-                public double Value { get; }
+                public number Value { get; }
                 public VolumeUnit Unit { get; }
-                public double ExpectedMetres { get; }
+                public number ExpectedMetres { get; }
             }
 
             [Theory]
             [InlineData(0.001d, 1d)]
             [InlineData(1d, 1000d)]
             [InlineData(1000d, 1000000d)]
-            public void FromCubicKilometres_ShouldCreateValidVolume(double litres, double cubicCentimetres)
+            public void FromCubicKilometres_ShouldCreateValidVolume(number litres, number cubicCentimetres)
             {
                 // arrange
                 var expectedVolume = new Volume(cubicCentimetres, VolumeUnit.CubicCentimetre);

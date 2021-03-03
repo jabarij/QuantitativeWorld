@@ -1,12 +1,23 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
-using System;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial class RadianAngleTests
     {
         public class ToDegreeAngle : RadianAngleTests
@@ -23,7 +34,7 @@ namespace QuantitativeWorld.Tests.Angular
                 var result = sut.ToDegreeAngle();
 
                 // assert
-                result.TotalDegrees.Should().BeApproximately(sut.Radians * 180d / Math.PI, DoublePrecision);
+                result.TotalDegrees.Should().BeApproximately(sut.Radians * (number)180m / Constants.PI);
             }
         }
     }

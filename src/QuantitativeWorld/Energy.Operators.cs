@@ -1,8 +1,18 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using Constants = DecimalConstants;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld
 {
+    using Constants = DoubleConstants;
+    using number = System.Double;
+#endif
+
     partial struct Energy
     {
         public static bool operator ==(Energy left, Energy right) =>
@@ -26,18 +36,18 @@ namespace QuantitativeWorld
         public static Energy operator -(Energy energy) =>
             new Energy(joules: -energy.Joules, value: null, unit: energy._unit);
 
-        public static Energy operator *(Energy energy, double factor) =>
+        public static Energy operator *(Energy energy, number factor) =>
             new Energy(joules: energy.Joules * factor, value: null, unit: energy._unit);
-        public static Energy operator *(double factor, Energy energy) =>
+        public static Energy operator *(number factor, Energy energy) =>
             energy * factor;
 
-        public static Energy operator /(Energy energy, double denominator)
+        public static Energy operator /(Energy energy, number denominator)
         {
-            if (denominator == 0d)
+            if (denominator == Constants.Zero)
                 throw new DivideByZeroException("Denominator is zero.");
             return new Energy(joules: energy.Joules / denominator, value: null, unit: energy._unit);
         }
-        public static double operator /(Energy energy, Energy denominator)
+        public static number operator /(Energy energy, Energy denominator)
         {
             if (denominator.IsZero())
                 throw new DivideByZeroException("Denominator is zero.");
@@ -66,14 +76,14 @@ namespace QuantitativeWorld
             ? (left ?? default(Energy)) - (right ?? default(Energy))
             : (Energy?)null;
 
-        public static Energy? operator *(Energy? energy, double factor) =>
+        public static Energy? operator *(Energy? energy, number factor) =>
             (energy ?? default(Energy)) * factor;
-        public static Energy? operator *(double factor, Energy? energy) =>
+        public static Energy? operator *(number factor, Energy? energy) =>
             energy * factor;
 
-        public static Energy? operator /(Energy? energy, double denominator) =>
+        public static Energy? operator /(Energy? energy, number denominator) =>
             (energy ?? default(Energy)) / denominator;
-        public static double operator /(Energy? energy, Energy? denominator) =>
+        public static number operator /(Energy? energy, Energy? denominator) =>
             (energy ?? default(Energy)) / (denominator ?? default(Energy));
         public static Power? operator /(Energy? energy, Time? time) =>
             (energy ?? default(Energy)) / (time ?? default(Time));
