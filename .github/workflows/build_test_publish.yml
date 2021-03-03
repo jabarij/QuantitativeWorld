@@ -133,12 +133,6 @@ jobs:
     - name: Publish QuantitativeWorld.Text.Json
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
       
-    - name: Setup NuGet
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-api-key: ${{ secrets.NMPW2H0J }}
-        nuget-version: '5.x'
-      
     - name: Publish DecimalQuantitativeWorld
       run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
         
