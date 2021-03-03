@@ -7,21 +7,21 @@
     <Authors>Bartłomiej Soter (soter.development@gmail.com)</Authors>
     <Company>SoterDevelopment</Company>
     <Description>Library containing quantities with units and basic algebra.</Description>
-    <Copyright>Copyright © SoterDevelopment 2020</Copyright>
+    <Copyright>Copyright © SoterDevelopment 2021</Copyright>
     <PackageProjectUrl>https://github.com/jabarij/QuantitativeWorld</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jabarij/QuantitativeWorld.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>quantity weight length</PackageTags>
-    <Configurations>Debug;Release;Debug DECIMAL;Release DECIMAL</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DECIMAL|AnyCPU'">
-    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DECIMAL|AnyCPU'">
-    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>
 
@@ -29,9 +29,8 @@
     <Compile Include="..\Common\Internals\DotNetExtensions\ArrayExtensions.cs" Link="DotNetExtensions\ArrayExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\Assert.cs" Link="DotNetExtensions\Assert.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\Check.cs" Link="DotNetExtensions\Check.cs" />
-    <Compile Include="..\Common\Internals\DotNetExtensions\DecimalExtensions.cs" Link="DotNetExtensions\DecimalExtensions.cs" />
-    <Compile Include="..\Common\Internals\DotNetExtensions\DecimalInfo.cs" Link="DotNetExtensions\DecimalInfo.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\DictionaryTransformationWrapper.cs" Link="DotNetExtensions\DictionaryTransformationWrapper.cs" />
+    <Compile Include="..\Common\Internals\DotNetExtensions\DoubleExtensions.cs" Link="DotNetExtensions\DoubleExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\EnumerableExtensions.cs" Link="DotNetExtensions\EnumerableExtensions.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\Equality.cs" Link="DotNetExtensions\Equality.cs" />
     <Compile Include="..\Common\Internals\DotNetExtensions\Error.cs" Link="DotNetExtensions\Error.cs" />

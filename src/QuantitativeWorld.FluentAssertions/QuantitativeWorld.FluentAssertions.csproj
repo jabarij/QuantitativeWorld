@@ -12,16 +12,16 @@
     <RepositoryUrl>https://github.com/jabarij/QuantitativeWorld.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>quantity weight length test</PackageTags>
-    <Configurations>Debug;Release;Debug DECIMAL;Release DECIMAL</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release DECIMAL|AnyCPU'">
-    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug DECIMAL|AnyCPU'">
-    <DefineConstants>TRACE;DECIMAL</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>
 

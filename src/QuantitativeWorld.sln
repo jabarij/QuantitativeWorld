@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Text.Json
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.Text.Json.Tests", "QuantitativeWorld.Text.Json.Tests\QuantitativeWorld.Text.Json.Tests.csproj", "{7595B135-BAEC-4CCE-A64C-0C930471D830}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeWorld.FluentAssertions", "QuantitativeWorld.FluentAssertions\QuantitativeWorld.FluentAssertions.csproj", "{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuantitativeWorld.FluentAssertions", "QuantitativeWorld.FluentAssertions\QuantitativeWorld.FluentAssertions.csproj", "{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,12 +63,8 @@ Global
 		{7595B135-BAEC-4CCE-A64C-0C930471D830}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7595B135-BAEC-4CCE-A64C-0C930471D830}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7595B135-BAEC-4CCE-A64C-0C930471D830}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Debug DECIMAL|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Debug DECIMAL|Any CPU.Build.0 = Debug|Any CPU
 		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Release DECIMAL|Any CPU.ActiveCfg = Release|Any CPU
-		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Release DECIMAL|Any CPU.Build.0 = Release|Any CPU
 		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D3D33B4-CE6D-4A16-956E-B9BCEFFBAA9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
