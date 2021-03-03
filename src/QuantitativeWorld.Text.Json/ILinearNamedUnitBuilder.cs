@@ -1,13 +1,13 @@
-﻿using QuantitativeWorld.Interfaces;
-
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using number = System.Decimal;
+#else
 namespace QuantitativeWorld.Text.Json
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
+    using QuantitativeWorld.Interfaces;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public interface ILinearNamedUnitBuilder<TUnit>

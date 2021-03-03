@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Text.Json
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using number = Double;
 #endif
 
     public sealed class GeoCoordinateJsonConverter : JsonConverter<GeoCoordinate>

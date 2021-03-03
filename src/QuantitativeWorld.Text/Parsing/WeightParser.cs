@@ -1,9 +1,14 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Globalization;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Parsing
+{
+#else
 namespace QuantitativeWorld.Text.Parsing
 {
+#endif
     public class WeightParser : IParser<Weight>, IFormattedParser<Weight>
     {
         private readonly IParser<Weight> _parser;

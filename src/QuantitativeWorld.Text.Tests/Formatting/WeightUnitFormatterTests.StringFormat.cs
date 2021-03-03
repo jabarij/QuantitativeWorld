@@ -1,10 +1,18 @@
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
-using QuantitativeWorld.Text.Formatting;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Formatting
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using DecimalQuantitativeWorld.Text.Formatting;
+#else
 namespace QuantitativeWorld.Tests.Formatting
 {
+    using QuantitativeWorld.TestAbstractions;
+    using QuantitativeWorld.Text.Formatting;
+#endif
+
     partial class WeightUnitFormatterTests
     {
         public class StringFormat : WeightUnitFormatterTests

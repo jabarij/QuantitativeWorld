@@ -1,13 +1,11 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Encoding
+{
+#else
 namespace QuantitativeWorld.Text.Encoding
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public class Polyline6Encoding : PolylineEncoding

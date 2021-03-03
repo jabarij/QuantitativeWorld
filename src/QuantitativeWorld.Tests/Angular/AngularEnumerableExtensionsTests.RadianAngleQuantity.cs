@@ -1,20 +1,22 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using QuantitativeWorld.Angular;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using number = Double;
 #endif
 
     partial class AngularEnumerableExtensionsTests
@@ -60,7 +62,7 @@ namespace QuantitativeWorld.Tests.Angular
                     // arrange
                     var source = Fixture.CreateMany<RadianAngle>(3);
 
-                    number expectedResultInRadians = source.Average(e => e.Radians);
+                    number expectedResultInRadians = Enumerable.Average(source, e => e.Radians);
                     var expectedResult = new RadianAngle(expectedResultInRadians);
 
                     // act
@@ -126,7 +128,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var source = Fixture.CreateMany<RadianAngle>(3).Select(e => new TestObject<RadianAngle>(e));
                     Func<TestObject<RadianAngle>, RadianAngle> selector = e => e.Property;
 
-                    number expectedResultInRadians = source.Average(e => e.Property.Radians);
+                    number expectedResultInRadians = Enumerable.Average(source, e => e.Property.Radians);
                     var expectedResult = new RadianAngle(expectedResultInRadians);
 
                     // act
@@ -396,12 +398,12 @@ namespace QuantitativeWorld.Tests.Angular
                 public void ShouldReturnValidResult()
                 {
                     // arrange
-                    var areas = Fixture.CreateMany<RadianAngle>(3);
-                    number expectedResultInRadians = areas.Sum(e => e.Radians);
+                    var source = Fixture.CreateMany<RadianAngle>(3);
+                    number expectedResultInRadians = Enumerable.Sum(source, e => e.Radians);
                     var expectedResult = new RadianAngle(expectedResultInRadians);
 
                     // act
-                    var result = AngularEnumerableExtensions.Sum(areas);
+                    var result = AngularEnumerableExtensions.Sum(source);
 
                     // assert
                     result.Radians.Should().Be(expectedResult.Radians);
@@ -459,12 +461,12 @@ namespace QuantitativeWorld.Tests.Angular
                 public void ShouldReturnValidResult()
                 {
                     // arrange
-                    var objects = Fixture.CreateMany<RadianAngle>(3).Select(e => new TestObject<RadianAngle>(e));
-                    number expectedResultInMetres = objects.Sum(e => e.Property.Radians);
+                    var source = Fixture.CreateMany<RadianAngle>(3).Select(e => new TestObject<RadianAngle>(e));
+                    number expectedResultInMetres = Enumerable.Sum(source, e => e.Property.Radians);
                     var expectedResult = new RadianAngle(expectedResultInMetres);
 
                     // act
-                    var result = AngularEnumerableExtensions.Sum(objects, e => e.Property);
+                    var result = AngularEnumerableExtensions.Sum(source, e => e.Property);
 
                     // assert
                     result.Radians.Should().Be(expectedResult.Radians);

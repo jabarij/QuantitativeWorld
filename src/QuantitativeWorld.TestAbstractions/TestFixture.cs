@@ -1,14 +1,16 @@
 ﻿using AutoFixture;
-using QuantitativeWorld.Angular;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.TestAbstractions
+{
+    using DecimalQuantitativeWorld.Angular;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.TestAbstractions
 {
-#if DECIMAL
-    using number = System.Decimal;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Angular;
+    using number = Double;
 #endif
 
     public class TestFixture

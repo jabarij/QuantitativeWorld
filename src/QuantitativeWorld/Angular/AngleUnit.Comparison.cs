@@ -1,8 +1,13 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+#else
 namespace QuantitativeWorld.Angular
 {
+#endif
     partial struct AngleUnit : IEquatable<AngleUnit>
     {
         public bool IsEquivalentOf(AngleUnit other) =>

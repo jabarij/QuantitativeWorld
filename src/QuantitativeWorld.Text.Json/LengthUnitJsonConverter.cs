@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+#else
 namespace QuantitativeWorld.Text.Json
 {
+#endif
     public sealed class LengthUnitJsonConverter : LinearNamedUnitJsonConverterBase<LengthUnit>
     {
         private readonly Dictionary<string, LengthUnit> _predefinedUnits;

@@ -1,11 +1,16 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+#else
 namespace QuantitativeWorld
 {
+#endif
     partial class EnumerableExtensions
     {
         public static TSource Max<TSource>(this IEnumerable<TSource> source)

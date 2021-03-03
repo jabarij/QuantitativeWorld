@@ -1,9 +1,14 @@
-﻿using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Globalization;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
+{
+#else
 namespace QuantitativeWorld.Text.Formatting
 {
+#endif
     public class LengthFormatter : FormatterBase<Length>, ICustomFormatter
     {
         private readonly StandardLengthFormatter _standardFormatter = new StandardLengthFormatter();

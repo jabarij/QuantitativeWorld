@@ -1,7 +1,7 @@
 ﻿#if DECIMAL
-namespace DecimalQuantitativeWorld.DotNetExtensions
+namespace DecimalCommon.Internals.DotNetExtensions
 #else
-namespace QuantitativeWorld.DotNetExtensions
+namespace Common.Internals.DotNetExtensions
 #endif
 {
     internal static class DoubleExtensions

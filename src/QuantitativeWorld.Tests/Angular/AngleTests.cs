@@ -1,10 +1,17 @@
 using AutoFixture;
-using QuantitativeWorld.Angular;
-using QuantitativeWorld.TestAbstractions;
 using System.Linq;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+#endif
     public partial class AngleTests : TestsBase
     {
         public AngleTests(TestFixture testFixture)

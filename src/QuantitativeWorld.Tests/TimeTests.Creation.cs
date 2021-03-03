@@ -1,17 +1,20 @@
 using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace QuantitativeWorld.Tests.Angular
-{
 #if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
 #else
+namespace QuantitativeWorld.Tests
+{
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     partial class TimeTests

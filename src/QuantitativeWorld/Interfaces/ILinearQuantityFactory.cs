@@ -1,11 +1,11 @@
-﻿namespace QuantitativeWorld.Interfaces
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Interfaces
 {
-#if DECIMAL
     using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
 #else
+namespace QuantitativeWorld.Interfaces
+{
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public interface ILinearQuantityFactory<TQuantity, TUnit>

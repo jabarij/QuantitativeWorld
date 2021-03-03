@@ -1,14 +1,14 @@
 ﻿using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Angular
+{
+    using Math = MathDecimal;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-    using Math = QuantitativeWorld.MathDecimal;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using number = Double;
 #endif
 
     public static class MathA

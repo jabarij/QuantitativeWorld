@@ -1,20 +1,22 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using QuantitativeWorld.TestAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using QuantitativeWorld.Angular;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests.Angular
+{
+    using DecimalQuantitativeWorld.Angular;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Tests.Angular
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Angular;
+    using QuantitativeWorld.TestAbstractions;
+    using number = Double;
 #endif
 
     partial class AngularEnumerableExtensionsTests
@@ -60,7 +62,7 @@ namespace QuantitativeWorld.Tests.Angular
                     // arrange
                     var source = Fixture.CreateMany<Angle>(3);
 
-                    number expectedResultInTurns = source.Average(e => e.Turns);
+                    number expectedResultInTurns = Enumerable.Average(source, e => e.Turns);
                     var expectedResult = new Angle(expectedResultInTurns);
 
                     // act
@@ -126,7 +128,7 @@ namespace QuantitativeWorld.Tests.Angular
                     var source = Fixture.CreateMany<Angle>(3).Select(e => new TestObject<Angle>(e));
                     Func<TestObject<Angle>, Angle> selector = e => e.Property;
 
-                    number expectedResultInTurns = source.Average(e => e.Property.Turns);
+                    number expectedResultInTurns = Enumerable.Average(source, e => e.Property.Turns);
                     var expectedResult = new Angle(expectedResultInTurns);
 
                     // act
@@ -396,12 +398,12 @@ namespace QuantitativeWorld.Tests.Angular
                 public void ShouldReturnValidResult()
                 {
                     // arrange
-                    var angles = Fixture.CreateMany<Angle>(3);
-                    number expectedResultInTurns = angles.Sum(e => e.Turns);
+                    var source = Fixture.CreateMany<Angle>(3);
+                    number expectedResultInTurns = Enumerable.Sum(source, e => e.Turns);
                     var expectedResult = new Angle(expectedResultInTurns);
 
                     // act
-                    var result = AngularEnumerableExtensions.Sum(angles);
+                    var result = AngularEnumerableExtensions.Sum(source);
 
                     // assert
                     result.Turns.Should().Be(expectedResult.Turns);
@@ -459,12 +461,12 @@ namespace QuantitativeWorld.Tests.Angular
                 public void ShouldReturnValidResult()
                 {
                     // arrange
-                    var objects = Fixture.CreateMany<Angle>(3).Select(e => new TestObject<Angle>(e));
-                    number expectedResultInMetres = objects.Sum(e => e.Property.Turns);
+                    var source = Fixture.CreateMany<Angle>(3).Select(e => new TestObject<Angle>(e));
+                    number expectedResultInMetres = Enumerable.Sum(source, e => e.Property.Turns);
                     var expectedResult = new Angle(expectedResultInMetres);
 
                     // act
-                    var result = AngularEnumerableExtensions.Sum(objects, e => e.Property);
+                    var result = AngularEnumerableExtensions.Sum(source, e => e.Property);
 
                     // assert
                     result.Turns.Should().Be(expectedResult.Turns);

@@ -1,15 +1,16 @@
-﻿using QuantitativeWorld.DotNetExtensions;
-using QuantitativeWorld.Interfaces;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Parsing
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using number = Decimal;
+#else
 namespace QuantitativeWorld.Text.Parsing
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using QuantitativeWorld.Interfaces;
+    using number = Double;
 #endif
 
     public class FormattedQuantityParser<TQuantity, TUnit> : IFormattedParser<TQuantity>

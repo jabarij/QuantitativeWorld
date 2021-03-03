@@ -1,15 +1,19 @@
 ﻿using AutoFixture;
-using QuantitativeWorld.Interfaces;
-using QuantitativeWorld.TestAbstractions;
 
-namespace QuantitativeWorld.Tests
-{
 #if DECIMAL
-    using Constants = QuantitativeWorld.DecimalConstants;
+namespace DecimalQuantitativeWorld.Tests
+{
+    using DecimalQuantitativeWorld.Interfaces;
+    using DecimalQuantitativeWorld.TestAbstractions;
+    using Constants = DecimalConstants;
     using number = System.Decimal;
 #else
+namespace QuantitativeWorld.Tests
+{
+    using QuantitativeWorld.Interfaces;
+    using QuantitativeWorld.TestAbstractions;
+    using Constants = DoubleConstants;
     using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public partial class EnumerableExtensionsTests : TestsBase

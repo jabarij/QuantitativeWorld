@@ -1,5 +1,10 @@
-﻿namespace QuantitativeWorld.Text.Formatting
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Formatting
 {
+#else
+namespace QuantitativeWorld.Text.Formatting
+{
+#endif
     public static class StandardFormats
     {
         public const string CGS = nameof(CGS);

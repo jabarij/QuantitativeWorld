@@ -6,14 +6,12 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.TestAbstractions
+{
+#else
 namespace QuantitativeWorld.TestAbstractions
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-#else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
 #endif
 
     public class TestsBase : IClassFixture<TestFixture>

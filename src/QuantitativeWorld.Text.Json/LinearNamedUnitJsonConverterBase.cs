@@ -1,9 +1,16 @@
 ﻿using Newtonsoft.Json;
-using QuantitativeWorld.Interfaces;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld.Text.Json
+{
+    using DecimalQuantitativeWorld.Interfaces;
+#else
 namespace QuantitativeWorld.Text.Json
 {
+    using QuantitativeWorld.Interfaces;
+#endif
+
     public abstract class LinearNamedUnitJsonConverterBase<TUnit> : JsonConverter<TUnit>
         where TUnit : ILinearUnit, INamedUnit
     {

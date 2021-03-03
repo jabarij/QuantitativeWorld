@@ -1,14 +1,17 @@
-﻿using QuantitativeWorld.Angular;
-using QuantitativeWorld.DotNetExtensions;
+﻿using Common.Internals.DotNetExtensions;
 using System;
 
+#if DECIMAL
+namespace DecimalQuantitativeWorld
+{
+    using DecimalQuantitativeWorld.Angular;
+    using number = System.Decimal;
+    using Constants = DecimalQuantitativeWorld.DecimalConstants;
+    using Math = DecimalQuantitativeWorld.MathDecimal;
+#else
 namespace QuantitativeWorld
 {
-#if DECIMAL
-    using number = System.Decimal;
-    using Constants = QuantitativeWorld.DecimalConstants;
-    using Math = QuantitativeWorld.MathDecimal;
-#else
+    using QuantitativeWorld.Angular;
     using number = System.Double;
     using Constants = QuantitativeWorld.DoubleConstants;
 #endif

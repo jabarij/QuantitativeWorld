@@ -1,5 +1,10 @@
-﻿namespace QuantitativeWorld.Tests
+﻿#if DECIMAL
+namespace DecimalQuantitativeWorld.Tests
 {
+#else
+namespace QuantitativeWorld.Tests
+{
+#endif
     public class ConversionTestData<T>
     {
         public ConversionTestData(T originalValue, T expectedValue)
