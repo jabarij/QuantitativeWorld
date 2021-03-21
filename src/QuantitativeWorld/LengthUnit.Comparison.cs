@@ -11,7 +11,7 @@ namespace QuantitativeWorld
     partial struct LengthUnit : IEquatable<LengthUnit>
     {
         public bool IsEquivalentOf(LengthUnit other) =>
-            ValueInMetres.Equals(other.ValueInMetres);
+            ValueInMetres == other.ValueInMetres;
 
         public bool Equals(LengthUnit other) =>
             string.Equals(Name, other.Name, StringComparison.Ordinal)
@@ -23,6 +23,9 @@ namespace QuantitativeWorld
             new HashCode()
             .Append(Name, Abbreviation, ValueInMetres)
             .CurrentHash;
+
+        public static bool AreEquivalent(LengthUnit left, LengthUnit right) =>
+            left.IsEquivalentOf(right);
 
         public static bool operator ==(LengthUnit left, LengthUnit right) =>
             Equality.AreEqualStructures(left, right);

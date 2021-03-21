@@ -137,6 +137,38 @@ namespace QuantitativeWorld.Tests
                 result2.Value.Metres.Should().Be(length.Metres);
                 result2.Value.Unit.Should().Be(length.Unit);
             }
+
+            [Fact]
+            public void LengthsOfEquivalentUnits_ShouldConserveValue()
+            {
+                // arrange
+                number leftValue = Fixture.Create<number>();
+                number rightValue = Fixture.Create<number>();
+                var left = new Length(leftValue, MetricPrefix.Yocto * LengthUnit.Metre);
+                var right = new Length(rightValue, new LengthUnit("some unit", "su", MetricPrefix.Yocto.Factor));
+
+                // act
+                var result = left + right;
+
+                // assert
+                result.Unit.Should().Be(left.Unit);
+                result.Value.Should().Be(leftValue + rightValue);
+            }
+
+            [Fact]
+            public void LengthsOfNotEquivalentUnits_ShouldConserveMetresAndLeftUnit()
+            {
+                // arrange
+                var left = new Length(Fixture.Create<number>(), MetricPrefix.Yotta * LengthUnit.Metre);
+                var right = new Length(Fixture.Create<number>(), MetricPrefix.Yocto * LengthUnit.Metre);
+
+                // act
+                var result = left + right;
+
+                // assert
+                result.Unit.Should().Be(left.Unit);
+                result.Metres.Should().Be(left.Metres + right.Metres);
+            }
         }
 
         public class Operator_Subtract : LengthTests
