@@ -66,7 +66,7 @@ namespace QuantitativeWorld.Tests
             public void SpecificEnergysConvertedToDifferentUnitsEqualInJoulesPerKilogram_ShouldBeEqual()
             {
                 // arrange
-                var specificEnergy1 = new SpecificEnergy(Fixture.Create<number>()).Convert(Fixture.Create<SpecificEnergyUnit>());
+                var specificEnergy1 = new SpecificEnergy(Fixture.Create<number>()).Convert(CreateUnitOtherThan(SpecificEnergyUnit.JoulePerKilogram));
                 var specificEnergy2 = new SpecificEnergy(specificEnergy1.JoulesPerKilogram).Convert(CreateUnitOtherThan(specificEnergy1.Unit));
 
                 // act
