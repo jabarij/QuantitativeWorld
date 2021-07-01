@@ -14,6 +14,11 @@ namespace QuantitativeWorld
         public const double Half = 0.5d;
         public const double Quarter = 0.25d;
         public const double One = 1d;
+        public const double OneThousandth = 0.001d;
+        public const double Ten = 10d;
+        public const double TenThousand = 10000d;
+        public const double TenThousandth = 0.0001d;
+        public const double OneMillionth = 0.000001d;
         public const double Thousand = 1000d;
         public const double Million = 1000000d;
         public const double Billion = 1000000000d;
