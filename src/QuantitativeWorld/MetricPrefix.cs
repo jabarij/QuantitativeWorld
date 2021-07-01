@@ -9,10 +9,9 @@ namespace QuantitativeWorld
 {
 #endif
 #if DECIMAL
-    using number = System.Decimal;
+    using number = Decimal;
 #else
-    using number = System.Double;
-    using Constants = QuantitativeWorld.DoubleConstants;
+    using number = Double;
 #endif
 
     public struct MetricPrefix
@@ -103,6 +102,22 @@ namespace QuantitativeWorld
                 abbreviation: string.Concat(prefix.Symbol, unit.Abbreviation),
                 valueInKilograms: unit.ValueInKilograms * prefix);
         public static WeightUnit operator *(MetricPrefix prefix, WeightUnit unit) =>
+            unit * prefix;
+
+        public static EnergyUnit operator *(EnergyUnit unit, MetricPrefix prefix) =>
+            new EnergyUnit(
+                name: string.Concat(prefix.Name, unit.Name),
+                abbreviation: string.Concat(prefix.Symbol, unit.Abbreviation),
+                valueInJoules: unit.ValueInJoules * prefix);
+        public static EnergyUnit operator *(MetricPrefix prefix, EnergyUnit unit) =>
+            unit * prefix;
+
+        public static SpecificEnergyUnit operator *(SpecificEnergyUnit unit, MetricPrefix prefix) =>
+            new SpecificEnergyUnit(
+                name: string.Concat(prefix.Name, unit.Name),
+                abbreviation: string.Concat(prefix.Symbol, unit.Abbreviation),
+                valueInJoulesPerKilogram: unit.ValueInJoulesPerKilogram * prefix);
+        public static SpecificEnergyUnit operator *(MetricPrefix prefix, SpecificEnergyUnit unit) =>
             unit * prefix;
     }
 }

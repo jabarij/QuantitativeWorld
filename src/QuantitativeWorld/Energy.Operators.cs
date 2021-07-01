@@ -66,6 +66,8 @@ namespace QuantitativeWorld
             return new Time(
                 totalSeconds: energy.Joules / power.Watts);
         }
+        public static SpecificEnergy operator /(Energy energy, Weight weight) =>
+            new SpecificEnergy(energy.Joules / weight.Kilograms);
 
         public static Energy? operator +(Energy? left, Energy? right) =>
             left.HasValue || right.HasValue
@@ -89,5 +91,7 @@ namespace QuantitativeWorld
             (energy ?? default(Energy)) / (time ?? default(Time));
         public static Time? operator /(Energy? energy, Power? power) =>
             (energy ?? default(Energy)) / (power ?? default(Power));
+        public static SpecificEnergy? operator /(Energy? energy, Weight? weight) =>
+            (energy ?? default(Energy)) / (weight ?? default(Weight));
     }
 }

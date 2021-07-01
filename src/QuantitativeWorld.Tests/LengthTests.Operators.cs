@@ -377,9 +377,9 @@ namespace QuantitativeWorld.Tests
             }
         }
 
-        public class Operator_DivideByDouble : LengthTests
+        public class Operator_DivideByNumber : LengthTests
         {
-            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+            public Operator_DivideByNumber(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void DivideByZero_ShouldThrow()

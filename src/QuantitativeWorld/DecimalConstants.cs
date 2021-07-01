@@ -1,6 +1,4 @@
-﻿using System;
-
-#if DECIMAL
+﻿#if DECIMAL
 namespace DecimalQuantitativeWorld
 {
 #else
@@ -14,6 +12,11 @@ namespace QuantitativeWorld
         public const decimal Half = 0.5m;
         public const decimal Quarter = 0.25m;
         public const decimal One = 1m;
+        public const decimal OneThousandth = 0.001m;
+        public const decimal Ten = 10m;
+        public const decimal TenThousand = 10000m;
+        public const decimal TenThousandth = 0.0001m;
+        public const decimal OneMillionth = 0.000001m;
         public const decimal Thousand = 1000m;
         public const decimal Million = 1000000m;
         public const decimal Billion = 1000000000m;

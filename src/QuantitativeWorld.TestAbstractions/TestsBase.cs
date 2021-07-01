@@ -119,5 +119,22 @@ namespace QuantitativeWorld.TestAbstractions
             Fixture.CreateFromSet(SpeedUnit.GetPredefinedUnits().Except(new[] { unitToExclude }.Union(unitsToExclude)));
 
         #endregion
+
+        #region SpecificEnergy
+
+        protected SpecificEnergy CreateSpecificEnergyInUnit(SpecificEnergyUnit unit) =>
+            Fixture
+            .Create<SpecificEnergy>()
+            .Convert(unit);
+
+        protected SpecificEnergy CreateSpecificEnergyInUnitOtherThan(SpecificEnergyUnit unitToExclude, params SpecificEnergyUnit[] unitsToExclude) =>
+            Fixture
+            .Create<SpecificEnergy>()
+            .Convert(CreateUnitOtherThan(unitToExclude, unitsToExclude));
+
+        protected SpecificEnergyUnit CreateUnitOtherThan(SpecificEnergyUnit unitToExclude, params SpecificEnergyUnit[] unitsToExclude) =>
+            Fixture.CreateFromSet(SpecificEnergyUnit.GetPredefinedUnits().Except(new[] { unitToExclude }.Union(unitsToExclude)));
+
+        #endregion
     }
 }
