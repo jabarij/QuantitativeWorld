@@ -47,7 +47,7 @@ jobs:
       run: dotnet build ./src/QuantitativeWorld.Text.Json/QuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
         
     - name: Build QuantitativeWorld.FluentAssertions
-      run: dotnet build ./src/QuantitativeWorld.FluentAssertions/QuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      run: dotnet build ./src/QuantitativeWorld.FluentAssertions/QuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netcoreapp2.1 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
         
     - name: Build DecimalQuantitativeWorld
       run: dotnet build ./src/QuantitativeWorld/DecimalQuantitativeWorld.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
@@ -59,7 +59,7 @@ jobs:
       run: dotnet build ./src/QuantitativeWorld.Text.Json/DecimalQuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
         
     - name: Build DecimalQuantitativeWorld.FluentAssertions
-      run: dotnet build ./src/QuantitativeWorld.FluentAssertions/DecimalQuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      run: dotnet build ./src/QuantitativeWorld.FluentAssertions/DecimalQuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netcoreapp2.1 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v1
