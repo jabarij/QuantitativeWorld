@@ -267,9 +267,9 @@ namespace QuantitativeWorld.Tests.Angular
             }
         }
 
-        public class Operator_DivideByDouble : AngleTests
+        public class Operator_DivideByNumber : AngleTests
         {
-            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+            public Operator_DivideByNumber(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void DivideByZero_ShouldThrow()

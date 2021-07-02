@@ -53,14 +53,8 @@ namespace QuantitativeWorld.Text.Formatting
                     index += separator.Length;
                     continue;
                 }
-                else if (MatchesToken(format, index, "g", out token))
-                    weightConverter = e => e.Convert(WeightUnit.Gram);
-                else if (MatchesToken(format, index, "t", out token))
-                    weightConverter = e => e.Convert(WeightUnit.Ton);
-                else if (MatchesToken(format, index, "kg", out token))
-                    weightConverter = e => e.Convert(WeightUnit.Kilogram);
-                else if (MatchesToken(format, index, "oz", out token))
-                    weightConverter = e => e.Convert(WeightUnit.Ounce);
+                else if (MatchesAnyUnitToken(format, index, out token, out var unit))
+                    weightConverter = e => e.Convert(unit);
                 else if (MatchesToken(format, index, "lbs", out token))
                     weightConverter = e => e.Convert(WeightUnit.Pound);
                 else if (MatchesTokenBegin(format, index, "v", CanReadTokenUntilNextSeparator, out token))
@@ -79,24 +73,6 @@ namespace QuantitativeWorld.Text.Formatting
 
         private bool IsTokenSeparator(string format, int position, out string tokenSeparator) =>
             MatchesToken(format, position, FormatTokenSeparator, out tokenSeparator);
-
-        private bool MatchesAnyFormattableUnitToken(string format, int position, out string token, out WeightUnit unit)
-        {
-            for (int index = 0; index < _formattableUnitKeys.Count; index++)
-            {
-                string currentToken = _formattableUnitKeys[index];
-                if (MatchesToken(format, position, currentToken, out var realToken))
-                {
-                    token = realToken;
-                    unit = _formattableUnits[index];
-                    return true;
-                }
-            }
-
-            token = null;
-            unit = default(WeightUnit);
-            return false;
-        }
 
         private bool MatchesToken(string format, int position, string tokenCandidate, out string realToken)
         {

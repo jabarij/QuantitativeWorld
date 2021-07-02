@@ -238,9 +238,9 @@ namespace QuantitativeWorld.Tests
             }
         }
 
-        public class Operator_DivideByDouble : TimeTests
+        public class Operator_DivideByNumber : TimeTests
         {
-            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+            public Operator_DivideByNumber(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void DivideByZero_ShouldThrow()

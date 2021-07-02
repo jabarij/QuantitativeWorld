@@ -30,7 +30,14 @@ namespace QuantitativeWorld
             Equality.IsStructureLowerThanOrEqual(left, right);
 
         public static Length operator +(Length left, Length right) =>
-            new Length(metres: left.Metres + right.Metres,value:null, unit: left._unit ?? right.Unit);
+            left.Unit.IsEquivalentOf(right.Unit)
+            ? new Length(
+                value: left.Value + right.Value,
+                unit: left.Unit)
+            : new Length(
+                metres: left.Metres + right.Metres,
+                value: null,
+                unit: left._unit ?? right.Unit);
         public static Length operator -(Length left, Length right) =>
             new Length(metres: left.Metres - right.Metres, value: null, unit: left._unit ?? right.Unit);
         public static Length operator -(Length length) =>

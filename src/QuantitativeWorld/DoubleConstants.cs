@@ -14,6 +14,11 @@ namespace QuantitativeWorld
         public const double Half = 0.5d;
         public const double Quarter = 0.25d;
         public const double One = 1d;
+        public const double OneThousandth = 0.001d;
+        public const double Ten = 10d;
+        public const double TenThousand = 10000d;
+        public const double TenThousandth = 0.0001d;
+        public const double OneMillionth = 0.000001d;
         public const double Thousand = 1000d;
         public const double Million = 1000000d;
         public const double Billion = 1000000000d;
@@ -33,10 +38,14 @@ namespace QuantitativeWorld
         public const double KilogramsPerQuintal = 100d;
         public const double KilogramsPerTon = 1000d;
         public const double MilligramsPerGram = 1000d;
+        public const double MicrogramsPerGram = 1000000d;
         public const double GramsPerDecagram = 10d;
 
         public const double KilogramsPerPound = 0.45359237d;
         public const double OuncesPerPound = 16d;
+        public const double GrainsPerTroyOunce = 480d;
+        public const double GrainsPerTroyPound = 5760d;
+        public const double GrainsPerPound = 7000d;
         public const double PoundsPerStone = 14d;
         public const double PoundsPerCental = 100d;
         public const double StonesPerHundredweight = 8d;

@@ -281,9 +281,9 @@ namespace QuantitativeWorld.Tests
 #endif
         }
 
-        public class Operator_DivideByDouble : EnergyTests
+        public class Operator_DivideByNumber : EnergyTests
         {
-            public Operator_DivideByDouble(TestFixture testFixture) : base(testFixture) { }
+            public Operator_DivideByNumber(TestFixture testFixture) : base(testFixture) { }
 
             [Fact]
             public void DivideByZero_ShouldThrow()

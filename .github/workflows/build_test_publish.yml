@@ -46,11 +46,20 @@ jobs:
     - name: Build QuantitativeWorld.Text.Json
       run: dotnet build ./src/QuantitativeWorld.Text.Json/QuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
         
+    - name: Build QuantitativeWorld.FluentAssertions
+      run: dotnet build ./src/QuantitativeWorld.FluentAssertions/QuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netcoreapp2.1 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+        
     - name: Build DecimalQuantitativeWorld
       run: dotnet build ./src/QuantitativeWorld/DecimalQuantitativeWorld.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
       
+    - name: Build DecimalQuantitativeWorld.Text
+      run: dotnet build ./src/QuantitativeWorld.Text/DecimalQuantitativeWorld.Text.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      
     - name: Build DecimalQuantitativeWorld.Text.Json
       run: dotnet build ./src/QuantitativeWorld.Text.Json/DecimalQuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+        
+    - name: Build DecimalQuantitativeWorld.FluentAssertions
+      run: dotnet build ./src/QuantitativeWorld.FluentAssertions/DecimalQuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netcoreapp2.1 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v1
@@ -78,6 +87,9 @@ jobs:
           
     - name: Test DecimalQuantitativeWorld
       run: dotnet test ./src/QuantitativeWorld.Tests/DecimalQuantitativeWorld.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.TestsResults.trx"
+      
+    - name: Test DecimalQuantitativeWorld.Text
+      run: dotnet test ./src/QuantitativeWorld.Text.Tests/DecimalQuantitativeWorld.Text.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.TestsResults.trx"
       
     - name: Test DecimalQuantitativeWorld.Text.Json
       run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/DecimalQuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.Json.TestsResults.trx"
@@ -108,8 +120,11 @@ jobs:
         cp ./build/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.QuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.DecimalQuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         ls ./published
 
     - name: Upload published packages
@@ -132,9 +147,18 @@ jobs:
         
     - name: Publish QuantitativeWorld.Text.Json
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
+    - name: Publish QuantitativeWorld.FluentAssertions
+      run: nuget push "./published/SoterDevelopment.QuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
       
     - name: Publish DecimalQuantitativeWorld
       run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
         
+    - name: Publish DecimalQuantitativeWorld.Text
+      run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
     - name: Publish DecimalQuantitativeWorld.Text.Json
       run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
+    - name: Publish DecimalQuantitativeWorld.FluentAssertions
+      run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
