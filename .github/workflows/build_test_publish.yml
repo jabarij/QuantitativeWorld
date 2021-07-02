@@ -49,6 +49,9 @@ jobs:
     - name: Build DecimalQuantitativeWorld
       run: dotnet build ./src/QuantitativeWorld/DecimalQuantitativeWorld.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
       
+    - name: Build DecimalQuantitativeWorld.Text
+      run: dotnet build ./src/QuantitativeWorld.Text/DecimalQuantitativeWorld.Text.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      
     - name: Build DecimalQuantitativeWorld.Text.Json
       run: dotnet build ./src/QuantitativeWorld.Text.Json/DecimalQuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
@@ -78,6 +81,9 @@ jobs:
           
     - name: Test DecimalQuantitativeWorld
       run: dotnet test ./src/QuantitativeWorld.Tests/DecimalQuantitativeWorld.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.TestsResults.trx"
+      
+    - name: Test DecimalQuantitativeWorld.Text
+      run: dotnet test ./src/QuantitativeWorld.Text.Tests/DecimalQuantitativeWorld.Text.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.TestsResults.trx"
       
     - name: Test DecimalQuantitativeWorld.Text.Json
       run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/DecimalQuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.Json.TestsResults.trx"
@@ -109,6 +115,7 @@ jobs:
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         ls ./published
 
