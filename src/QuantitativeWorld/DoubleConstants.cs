@@ -38,10 +38,14 @@ namespace QuantitativeWorld
         public const double KilogramsPerQuintal = 100d;
         public const double KilogramsPerTon = 1000d;
         public const double MilligramsPerGram = 1000d;
+        public const double MicrogramsPerGram = 1000000d;
         public const double GramsPerDecagram = 10d;
 
         public const double KilogramsPerPound = 0.45359237d;
         public const double OuncesPerPound = 16d;
+        public const double GrainsPerTroyOunce = 480d;
+        public const double GrainsPerTroyPound = 5760d;
+        public const double GrainsPerPound = 7000d;
         public const double PoundsPerStone = 14d;
         public const double PoundsPerCental = 100d;
         public const double StonesPerHundredweight = 8d;

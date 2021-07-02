@@ -23,6 +23,8 @@ namespace QuantitativeWorld
         [Predefined]
         public static readonly WeightUnit Milligram = new WeightUnit(name: "milligram", abbreviation: "mg", valueInKilograms: Gram.ValueInKilograms / Constants.MilligramsPerGram);
         [Predefined]
+        public static readonly WeightUnit Microgram = new WeightUnit(name: "microgram", abbreviation: "μg", valueInKilograms: Gram.ValueInKilograms / Constants.MicrogramsPerGram);
+        [Predefined]
         public static readonly WeightUnit Decagram = new WeightUnit(name: "decagram", abbreviation: "dag", valueInKilograms: Gram.ValueInKilograms * Constants.GramsPerDecagram);
         [Predefined]
         public static readonly WeightUnit Ton = new WeightUnit(name: "ton", abbreviation: "t", valueInKilograms: Constants.KilogramsPerTon);
@@ -30,9 +32,15 @@ namespace QuantitativeWorld
         public static readonly WeightUnit Quintal = new WeightUnit(name: "quintal", abbreviation: "q", valueInKilograms: Constants.KilogramsPerQuintal);
 
         [Predefined]
-        public static readonly WeightUnit Pound = new WeightUnit(name: "pound", abbreviation: "lbs", valueInKilograms: Constants.KilogramsPerPound);
+        public static readonly WeightUnit Pound = new WeightUnit(name: "pound", abbreviation: "lb", valueInKilograms: Constants.KilogramsPerPound);
         [Predefined]
         public static readonly WeightUnit Ounce = new WeightUnit(name: "ounce", abbreviation: "oz", valueInKilograms: Pound.ValueInKilograms / Constants.OuncesPerPound);
+        [Predefined]
+        public static readonly WeightUnit Grain = new WeightUnit(name: "grain", abbreviation: "gr", valueInKilograms: Pound.ValueInKilograms / Constants.GrainsPerPound);
+        [Predefined]
+        public static readonly WeightUnit TroyOunce = new WeightUnit(name: "troy ounce", abbreviation: "oz t", valueInKilograms: Grain.ValueInKilograms * Constants.GrainsPerTroyOunce);
+        [Predefined]
+        public static readonly WeightUnit TroyPound = new WeightUnit(name: "troy pound", abbreviation: "lb t", valueInKilograms: Grain.ValueInKilograms * Constants.GrainsPerTroyPound);
         [Predefined]
         public static readonly WeightUnit Stone = new WeightUnit(name: "stone", abbreviation: "st", valueInKilograms: Pound.ValueInKilograms * Constants.PoundsPerStone);
         [Predefined]
