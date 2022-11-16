@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeWorld.Json.Newt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeWorld.Json.Newtonsoft.Tests", "QuantitativeWorld.Json.Newtonsoft.Tests\QuantitativeWorld.Json.Newtonsoft.Tests.csproj", "{EA1E5FBE-211F-460D-B4CA-C08B0E770682}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeWorld.Json.Tests", "QuantitativeWorld.Json.Tests\QuantitativeWorld.Json.Tests.csproj", "{D9C83422-5D25-4601-A960-FF3C93134FE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeWorld.Json", "QuantitativeWorld.Json\QuantitativeWorld.Json.csproj", "{AE85398C-4E88-43D4-B2E7-41501F388AC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +83,14 @@ Global
 		{EA1E5FBE-211F-460D-B4CA-C08B0E770682}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA1E5FBE-211F-460D-B4CA-C08B0E770682}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA1E5FBE-211F-460D-B4CA-C08B0E770682}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9C83422-5D25-4601-A960-FF3C93134FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9C83422-5D25-4601-A960-FF3C93134FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9C83422-5D25-4601-A960-FF3C93134FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9C83422-5D25-4601-A960-FF3C93134FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE85398C-4E88-43D4-B2E7-41501F388AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE85398C-4E88-43D4-B2E7-41501F388AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE85398C-4E88-43D4-B2E7-41501F388AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE85398C-4E88-43D4-B2E7-41501F388AC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +101,7 @@ Global
 		{B0192EAA-4F91-4CD6-A0D8-F2ADC580333D} = {6C22BF23-5A7C-44D7-942E-D7FD70EB1308}
 		{7595B135-BAEC-4CCE-A64C-0C930471D830} = {6C22BF23-5A7C-44D7-942E-D7FD70EB1308}
 		{EA1E5FBE-211F-460D-B4CA-C08B0E770682} = {6C22BF23-5A7C-44D7-942E-D7FD70EB1308}
+		{D9C83422-5D25-4601-A960-FF3C93134FE8} = {6C22BF23-5A7C-44D7-942E-D7FD70EB1308}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DF712BE-0391-49CA-A60C-23498F62BE19}
