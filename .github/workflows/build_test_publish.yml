@@ -45,6 +45,9 @@ jobs:
       
     - name: Build QuantitativeWorld.Text.Json
       run: dotnet build ./src/QuantitativeWorld.Text.Json/QuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      
+    - name: Build QuantitativeWorld.Json.Newtonsoft
+      run: dotnet build ./src/QuantitativeWorld.Json.Newtonsoft/QuantitativeWorld.Json.Newtonsoft.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
         
     - name: Build QuantitativeWorld.FluentAssertions
       run: dotnet build ./src/QuantitativeWorld.FluentAssertions/QuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netcoreapp2.1 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
@@ -57,6 +60,9 @@ jobs:
       
     - name: Build DecimalQuantitativeWorld.Text.Json
       run: dotnet build ./src/QuantitativeWorld.Text.Json/DecimalQuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      
+    - name: Build DecimalQuantitativeWorld.Json.Newtonsoft
+      run: dotnet build ./src/QuantitativeWorld.Json.Newtonsoft/DecimalQuantitativeWorld.Json.Newtonsoft.csproj --configuration Release --framework netstandard2.0 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
         
     - name: Build DecimalQuantitativeWorld.FluentAssertions
       run: dotnet build ./src/QuantitativeWorld.FluentAssertions/DecimalQuantitativeWorld.FluentAssertions.csproj --configuration Release --framework netcoreapp2.1 --output ../../build /p:Version=${{ steps.gitversion.outputs.SemVer }}
@@ -84,6 +90,9 @@ jobs:
       
     - name: Test QuantitativeWorld.Text.Json
       run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/QuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Text.Json.TestsResults.trx"
+      
+    - name: Test QuantitativeWorld.Json.Newtonsoft
+      run: dotnet test ./src/QuantitativeWorld.Json.Newtonsoft.Tests/QuantitativeWorld.Json.Newtonsoft.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Json.Newtonsoft.TestsResults.trx"
           
     - name: Test DecimalQuantitativeWorld
       run: dotnet test ./src/QuantitativeWorld.Tests/DecimalQuantitativeWorld.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.TestsResults.trx"
@@ -93,6 +102,9 @@ jobs:
       
     - name: Test DecimalQuantitativeWorld.Text.Json
       run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/DecimalQuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.Json.TestsResults.trx"
+      
+    - name: Test DecimalQuantitativeWorld.Json.Newtonsoft
+      run: dotnet test ./src/QuantitativeWorld.Json.Newtonsoft.Tests/DecimalQuantitativeWorld.Json.Newtonsoft.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Json.Newtonsoft.TestsResults.trx"
 
     - name: Upload test results
       uses: actions/upload-artifact@v1
@@ -120,10 +132,12 @@ jobs:
         cp ./build/SoterDevelopment.QuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.QuantitativeWorld.Json.Newtonsoft.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.QuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
+        cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Json.Newtonsoft.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg ./published
         ls ./published
 
@@ -148,6 +162,9 @@ jobs:
     - name: Publish QuantitativeWorld.Text.Json
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
         
+    - name: Publish QuantitativeWorld.Json.Newtonsoft
+      run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Json.Newtonsoft.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
     - name: Publish QuantitativeWorld.FluentAssertions
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
       
@@ -159,6 +176,9 @@ jobs:
         
     - name: Publish DecimalQuantitativeWorld.Text.Json
       run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
+        
+    - name: Publish DecimalQuantitativeWorld.Json.Newtonsoft
+      run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Json.Newtonsoft.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
         
     - name: Publish DecimalQuantitativeWorld.FluentAssertions
       run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.FluentAssertions.${{ steps.gitversion.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate

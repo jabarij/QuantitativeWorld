@@ -40,12 +40,12 @@ namespace QuantitativeWorld.Text.Json.Tests
                 value: testValue,
                 format: SpeedJsonSerializationFormat.AsMetresPerSecond,
                 unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                expectedJsonPattern: "{\"MetresPerSecond\":13\\.88888888888888+90*}");
+                expectedJsonPattern: "{\"MetresPerSecond\":13\\.8888888888888+\\d*}");
             yield return new SpeedSerializeTestData(
                 value: testValue,
                 format: SpeedJsonSerializationFormat.AsMetresPerSecondWithUnit,
                 unitFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                expectedJsonPattern: "{\"MetresPerSecond\":13\\.88888888888888+90*,\"Unit\":\"km/h\"}");
+                expectedJsonPattern: "{\"MetresPerSecond\":13\\.8888888888888+\\d*,\"Unit\":\"km/h\"}");
             yield return new SpeedSerializeTestData(
                 value: testValue,
                 format: SpeedJsonSerializationFormat.AsValueWithUnit,
@@ -55,12 +55,12 @@ namespace QuantitativeWorld.Text.Json.Tests
                 value: testValue,
                 format: SpeedJsonSerializationFormat.AsMetresPerSecondWithUnit,
                 unitFormat: LinearUnitJsonSerializationFormat.AlwaysFull,
-                expectedJsonPattern: "{\"MetresPerSecond\":13\\.88888888888888+90*,\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0\\.2777777777777777+(80*|9*)}}");
+                expectedJsonPattern: "{\"MetresPerSecond\":13\\.8888888888888+\\d*,\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0\\.277777777777777+\\d*}}");
             yield return new SpeedSerializeTestData(
                 value: testValue,
                 format: SpeedJsonSerializationFormat.AsValueWithUnit,
                 unitFormat: LinearUnitJsonSerializationFormat.AlwaysFull,
-                expectedJsonPattern: "{\"Value\":50(\\.0+),\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0\\.2777777777777777+(80*|9*)}}");
+                expectedJsonPattern: "{\"Value\":50(\\.0+),\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0\\.277777777777777+\\d*}}");
         }
         public class SpeedSerializeTestData : QuantitySerializeTestData<Speed>
         {
