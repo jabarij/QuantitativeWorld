@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>SoterDevelopment.QuantitativeWorld.FluentAssersions</PackageId>
+    <PackageId>SoterDevelopment.QuantitativeWorld.FluentAssertions</PackageId>
     <Authors>Bartłomiej Soter (soter.development@gmail.com)</Authors>
     <Company>SoterDevelopment</Company>
     <Description>Library containing FluentAssertions tools for testing QuantitativeWorld's structures.</Description>

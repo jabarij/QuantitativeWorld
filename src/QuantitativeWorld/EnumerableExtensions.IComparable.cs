@@ -1,8 +1,6 @@
 ﻿using Common.Internals.DotNetExtensions;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 
 #if DECIMAL
 namespace DecimalQuantitativeWorld
