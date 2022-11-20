@@ -38,9 +38,6 @@ jobs:
     - name: Build QuantitativeWorld.Text
       run: dotnet build ./src/QuantitativeWorld.Text/QuantitativeWorld.Text.csproj --configuration Release --framework netstandard2.0 --output ./build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
-    - name: Build QuantitativeWorld.Text.Json
-      run: dotnet build ./src/QuantitativeWorld.Text.Json/QuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ./build /p:Version=${{ steps.gitversion.outputs.SemVer }}
-
     - name: Build QuantitativeWorld.Json
       run: dotnet build ./src/QuantitativeWorld.Json/QuantitativeWorld.Json.csproj --configuration Release --framework net6.0 --output ./build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
@@ -55,9 +52,6 @@ jobs:
 
     - name: Build DecimalQuantitativeWorld.Text
       run: dotnet build ./src/QuantitativeWorld.Text/DecimalQuantitativeWorld.Text.csproj --configuration Release --framework netstandard2.0 --output ./build /p:Version=${{ steps.gitversion.outputs.SemVer }}
-
-    - name: Build DecimalQuantitativeWorld.Text.Json
-      run: dotnet build ./src/QuantitativeWorld.Text.Json/DecimalQuantitativeWorld.Text.Json.csproj --configuration Release --framework netstandard2.0 --output ./build /p:Version=${{ steps.gitversion.outputs.SemVer }}
 
     - name: Build DecimalQuantitativeWorld.Json
       run: dotnet build ./src/QuantitativeWorld.Json/DecimalQuantitativeWorld.Json.csproj --configuration Release --framework net6.0 --output ./build /p:Version=${{ steps.gitversion.outputs.SemVer }}
@@ -89,9 +83,6 @@ jobs:
     - name: Test QuantitativeWorld.Text
       run: dotnet test ./src/QuantitativeWorld.Text.Tests/QuantitativeWorld.Text.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Text.TestsResults.trx"
 
-    - name: Test QuantitativeWorld.Text.Json
-      run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/QuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Text.Json.TestsResults.trx"
-
     - name: Test QuantitativeWorld.Json
       run: dotnet test ./src/QuantitativeWorld.Json.Tests/QuantitativeWorld.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=QuantitativeWorld.Json.TestsResults.trx"
 
@@ -103,9 +94,6 @@ jobs:
 
     - name: Test DecimalQuantitativeWorld.Text
       run: dotnet test ./src/QuantitativeWorld.Text.Tests/DecimalQuantitativeWorld.Text.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.TestsResults.trx"
-
-    - name: Test DecimalQuantitativeWorld.Text.Json
-      run: dotnet test ./src/QuantitativeWorld.Text.Json.Tests/DecimalQuantitativeWorld.Text.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Text.Json.TestsResults.trx"
 
     - name: Test DecimalQuantitativeWorld.Json
       run: dotnet test ./src/QuantitativeWorld.Json.Tests/DecimalQuantitativeWorld.Json.Tests.csproj --configuration Release --results-directory ./tests --logger "trx;LogFileName=DecimalQuantitativeWorld.Json.TestsResults.trx"
@@ -140,7 +128,6 @@ jobs:
         cp ./build/SoterDevelopment.QuantitativeWorld.FluentAssertions.${{ needs.build.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.${{ needs.build.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.${{ needs.build.outputs.SemVer }}.nupkg ./published
-        cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ needs.build.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Json.${{ needs.build.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.Json.Newtonsoft.${{ needs.build.outputs.SemVer }}.nupkg ./published
         cp ./build/SoterDevelopment.DecimalQuantitativeWorld.FluentAssertions.${{ needs.build.outputs.SemVer }}.nupkg ./published
@@ -164,9 +151,6 @@ jobs:
     - name: Publish QuantitativeWorld.Text
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.${{ needs.build.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
 
-    - name: Publish QuantitativeWorld.Text.Json
-      run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Text.Json.${{ needs.build.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
-
     - name: Publish QuantitativeWorld.Json
       run: nuget push "./published/SoterDevelopment.QuantitativeWorld.Json.${{ needs.build.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
 
@@ -181,9 +165,6 @@ jobs:
 
     - name: Publish DecimalQuantitativeWorld.Text
       run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Text.${{ needs.build.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
-
-    - name: Publish DecimalQuantitativeWorld.Text.Json
-      run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Text.Json.${{ needs.build.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
 
     - name: Publish DecimalQuantitativeWorld.Json
       run: nuget push "./published/SoterDevelopment.DecimalQuantitativeWorld.Json.${{ needs.build.outputs.SemVer }}.nupkg" -source nuget.org -SkipDuplicate
