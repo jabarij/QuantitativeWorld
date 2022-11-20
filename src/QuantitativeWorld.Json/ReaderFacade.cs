@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Text;
 
 #if DECIMAL
@@ -14,7 +15,8 @@ internal static class ReaderFacade
            && reader.ValueTextEquals(Encoding.UTF8.GetBytes(propertyName));
 
     public delegate T? ReadNullable<T>(ref Utf8JsonReader reader) where T : struct;
-    public delegate T Read<T>(ref Utf8JsonReader reader);
+
+    public delegate T Read<out T>(ref Utf8JsonReader reader);
 
     public static bool TryReadNullable<T>(ref Utf8JsonReader reader, string name, ReadNullable<T> read, out T result)
         where T : struct
@@ -30,24 +32,32 @@ internal static class ReaderFacade
         return false;
     }
 
-    public static bool TryRead<T>(ref Utf8JsonReader reader, string name, Read<T> read, out T result)
+    public static bool TryRead<T>(
+        ref Utf8JsonReader reader,
+        string name,
+        Read<T> read,
+        [NotNullWhen(true)] out T? result)
     {
         if (IsPropertyName(ref reader, name) && reader.Read())
         {
             result = read(ref reader);
-            return true;
+            return result is not null;
         }
 
         result = default;
         return false;
     }
 
-    public static bool TryDeserialize<T>(ref Utf8JsonReader reader, string name, JsonSerializerOptions options, out T result)
+    public static bool TryDeserialize<T>(
+        ref Utf8JsonReader reader,
+        string name,
+        JsonSerializerOptions options,
+        [NotNullWhen(true)]out T? result)
     {
         if (IsPropertyName(ref reader, name) && reader.Read())
         {
             result = JsonSerializer.Deserialize<T>(ref reader, options);
-            return true;
+            return result is not null;
         }
 
         result = default;

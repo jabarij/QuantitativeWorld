@@ -14,8 +14,13 @@ public sealed class LengthUnitJsonConverter : LinearNamedUnitJsonConverterBase<L
 
     public LengthUnitJsonConverter(
         LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull,
-        TryParseDelegate<LengthUnit> tryReadCustomPredefinedUnit = null)
-        : base(serializationFormat, tryReadCustomPredefinedUnit)
+        TryParseDelegate<LengthUnit>? tryReadCustomPredefinedUnit = null)
+        : base(
+            serializationFormat,
+            tryReadCustomPredefinedUnit,
+            predefinedUnits: LengthUnit.GetPredefinedUnits()
+                .ToDictionary(e => e.Abbreviation)
+        )
     {
         _predefinedUnits = LengthUnit.GetPredefinedUnits()
             .ToDictionary(e => e.Abbreviation);
@@ -27,16 +32,12 @@ public sealed class LengthUnitJsonConverter : LinearNamedUnitJsonConverterBase<L
     protected override ILinearNamedUnitBuilder<LengthUnit> CreateBuilder()
         => new LengthUnitBuilder();
 
-    protected override bool TryReadPredefinedUnit(string value, out LengthUnit predefinedUnit)
-        => _predefinedUnits.TryGetValue(value, out predefinedUnit)
-           || base.TryReadPredefinedUnit(value, out predefinedUnit);
-
     protected override bool TryWritePredefinedUnit(
         Utf8JsonWriter writer,
         LengthUnit value,
         JsonSerializerOptions options)
     {
-        if (_predefinedUnits.ContainsKey(value.Abbreviation))
+        if (PredefinedUnits.ContainsKey(value.Abbreviation))
         {
             writer.WriteStringValue(value.Abbreviation);
             return true;

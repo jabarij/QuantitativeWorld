@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <PackageId>SoterDevelopment.QuantitativeWorld.Json</PackageId>
     <Authors>Bartłomiej Soter (soter.development@gmail.com)</Authors>
     <Company>SoterDevelopment</Company>
@@ -13,6 +13,8 @@
     <PackageTags>quantity weight length json</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Configurations>Debug;Release</Configurations>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

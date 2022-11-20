@@ -3,7 +3,7 @@ namespace DecimalQuantitativeWorld.Json;
 
 using number = System.Decimal;
 #else
-namespace QuantitativeWorld.Json
+namespace QuantitativeWorld.Json;
 
 using number = System.Double;
 #endif

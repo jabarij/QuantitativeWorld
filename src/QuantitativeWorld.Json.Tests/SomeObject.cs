@@ -7,6 +7,6 @@ namespace QuantitativeWorld.Json.Tests
 #endif
     class SomeUnitOwner<T>
     {
-        public T Unit { get; set; }
+        public T? Unit { get; init; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Encodings.Web;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using AutoFixture;
@@ -32,16 +33,18 @@ namespace QuantitativeWorld.Json.Tests
         }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"square millimetre\",\"Abbreviation\":\"mm\\\\u00B2\",\"ValueInSquareMetres\":(0\\.000001|1E-06)}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull,
+            "{\"Unit\":{\"Name\":\"square millimetre\",\"Abbreviation\":\"mm\\\\u00B2\",\"ValueInSquareMetres\":(0\\.000001|1E-06)}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"mm\\\\u00B2\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat,
+            string expectedJsonPattern)
         {
             // arrange
             var unit = AreaUnit.SquareMillimetre;
             var converter = new AreaUnitJsonConverter(serializationFormat);
 
             // act
-            string actualJson = Serialize(new SomeUnitOwner<AreaUnit> { Unit = unit }, converter);
+            string actualJson = Serialize(new SomeUnitOwner<AreaUnit> {Unit = unit}, converter);
 
             // assert
             actualJson.Should().MatchRegex(expectedJsonPattern);
@@ -61,7 +64,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<AreaUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(expectedUnit);
+            result!.Unit.Should().Be(expectedUnit);
         }
 
         [Fact]
@@ -81,7 +84,7 @@ namespace QuantitativeWorld.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInSquareMetres.Should().Be((number)123.456m);
+            result.ValueInSquareMetres.Should().Be((number) 123.456m);
         }
 
         [Fact]
@@ -91,13 +94,13 @@ namespace QuantitativeWorld.Json.Tests
             var someUnit = new AreaUnit(
                 name: "some unit",
                 abbreviation: "su",
-                valueInSquareMetres: (number)123.456m);
+                valueInSquareMetres: (number) 123.456m);
             string json = @"{
   ""Unit"": ""su""
 }";
             var converter = new AreaUnitJsonConverter(
                 serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                tryReadCustomPredefinedUnit: (string value, out AreaUnit predefinedUnit) =>
+                tryReadCustomPredefinedUnit: (string? value, out AreaUnit predefinedUnit) =>
                 {
                     if (value == someUnit.Abbreviation)
                     {
@@ -105,7 +108,7 @@ namespace QuantitativeWorld.Json.Tests
                         return true;
                     }
 
-                    predefinedUnit = default(AreaUnit);
+                    predefinedUnit = default;
                     return false;
                 });
 
@@ -113,7 +116,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<AreaUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(someUnit);
+            result!.Unit.Should().Be(someUnit);
         }
 
         [Theory]
@@ -122,7 +125,7 @@ namespace QuantitativeWorld.Json.Tests
         public void SerializeAndDeserialize_ShouldBeIdempotent(LinearUnitJsonSerializationFormat serializationFormat)
         {
             // arrange
-            var obj = new SomeUnitOwner<AreaUnit> { Unit = Fixture.Create<AreaUnit>() };
+            var obj = new SomeUnitOwner<AreaUnit> {Unit = Fixture.Create<AreaUnit>()};
             var converter = new AreaUnitJsonConverter(serializationFormat);
 
             // act
@@ -132,8 +135,8 @@ namespace QuantitativeWorld.Json.Tests
             var deserializedObj2 = Deserialize<SomeUnitOwner<AreaUnit>>(serializedObj2, converter);
 
             // assert
-            deserializedObj1.Unit.Should().Be(obj.Unit);
-            deserializedObj2.Unit.Should().Be(obj.Unit);
+            deserializedObj1!.Unit.Should().Be(obj.Unit);
+            deserializedObj2!.Unit.Should().Be(obj.Unit);
 
             deserializedObj2.Unit.Should().Be(deserializedObj1.Unit);
             serializedObj2.Should().Be(serializedObj1);

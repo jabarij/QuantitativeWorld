@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using Xunit;
 
@@ -7,6 +8,7 @@ namespace DecimalQuantitativeWorld.Json.Tests
 {
     using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
+
 #else
 namespace QuantitativeWorld.Json.Tests
 {
@@ -16,19 +18,23 @@ namespace QuantitativeWorld.Json.Tests
 
     public class LengthUnitJsonConverterTests : TestsBase
     {
-        public LengthUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
+        public LengthUnitJsonConverterTests(TestFixture testFixture) : base(testFixture)
+        {
+        }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"kilometre\",\"Abbreviation\":\"km\",\"ValueInMetres\":1000(\\.0+)?}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull,
+            "{\"Unit\":{\"Name\":\"kilometre\",\"Abbreviation\":\"km\",\"ValueInMetres\":1000(\\.0+)?}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"km\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat,
+            string expectedJsonPattern)
         {
             // arrange
             var unit = LengthUnit.Kilometre;
             var converter = new LengthUnitJsonConverter(serializationFormat);
 
             // act
-            string actualJson = Serialize(new SomeUnitOwner<LengthUnit> { Unit = unit }, converter);
+            string actualJson = Serialize(new SomeUnitOwner<LengthUnit> {Unit = unit}, converter);
 
             // assert
             actualJson.Should().MatchRegex(expectedJsonPattern);
@@ -48,7 +54,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<LengthUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(expectedUnit);
+            result!.Unit.Should().Be(expectedUnit);
         }
 
         [Fact]
@@ -68,7 +74,7 @@ namespace QuantitativeWorld.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInMetres.Should().Be((number)123.456m);
+            result.ValueInMetres.Should().Be((number) 123.456m);
         }
 
         [Fact]
@@ -78,13 +84,13 @@ namespace QuantitativeWorld.Json.Tests
             var someUnit = new LengthUnit(
                 name: "some unit",
                 abbreviation: "su",
-                valueInMetres: (number)123.456m);
+                valueInMetres: (number) 123.456m);
             string json = @"{
   ""Unit"": ""su""
 }";
             var converter = new LengthUnitJsonConverter(
                 serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                tryReadCustomPredefinedUnit: (string value, out LengthUnit predefinedUnit) =>
+                tryReadCustomPredefinedUnit: (string? value, out LengthUnit predefinedUnit) =>
                 {
                     if (value == someUnit.Abbreviation)
                     {
@@ -100,7 +106,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<LengthUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(someUnit);
+            result!.Unit.Should().Be(someUnit);
         }
 
         [Theory]
@@ -109,7 +115,7 @@ namespace QuantitativeWorld.Json.Tests
         public void SerializeAndDeserialize_ShouldBeIdempotent(LinearUnitJsonSerializationFormat serializationFormat)
         {
             // arrange
-            var obj = new SomeUnitOwner<LengthUnit> { Unit = Fixture.Create<LengthUnit>() };
+            var obj = new SomeUnitOwner<LengthUnit> {Unit = Fixture.Create<LengthUnit>()};
             var converter = new LengthUnitJsonConverter(serializationFormat);
 
             // act
@@ -119,8 +125,8 @@ namespace QuantitativeWorld.Json.Tests
             var deserializedObj2 = Deserialize<SomeUnitOwner<LengthUnit>>(serializedObj2, converter);
 
             // assert
-            deserializedObj1.Unit.Should().Be(obj.Unit);
-            deserializedObj2.Unit.Should().Be(obj.Unit);
+            deserializedObj1!.Unit.Should().Be(obj.Unit);
+            deserializedObj2!.Unit.Should().Be(obj.Unit);
 
             deserializedObj2.Unit.Should().Be(deserializedObj1.Unit);
             serializedObj2.Should().Be(serializedObj1);

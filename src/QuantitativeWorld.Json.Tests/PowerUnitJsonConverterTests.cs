@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using Xunit;
 
@@ -7,6 +8,7 @@ namespace DecimalQuantitativeWorld.Json.Tests
 {
     using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
+
 #else
 namespace QuantitativeWorld.Json.Tests
 {
@@ -16,19 +18,23 @@ namespace QuantitativeWorld.Json.Tests
 
     public class PowerUnitJsonConverterTests : TestsBase
     {
-        public PowerUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
+        public PowerUnitJsonConverterTests(TestFixture testFixture) : base(testFixture)
+        {
+        }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"kilowatt\",\"Abbreviation\":\"kW\",\"ValueInWatts\":1000(\\.0+)?}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull,
+            "{\"Unit\":{\"Name\":\"kilowatt\",\"Abbreviation\":\"kW\",\"ValueInWatts\":1000(\\.0+)?}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"kW\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat,
+            string expectedJsonPattern)
         {
             // arrange
             var unit = PowerUnit.Kilowatt;
             var converter = new PowerUnitJsonConverter(serializationFormat);
 
             // act
-            string actualJson = Serialize(new SomeUnitOwner<PowerUnit> { Unit = unit }, converter);
+            string actualJson = Serialize(new SomeUnitOwner<PowerUnit> {Unit = unit}, converter);
 
             // assert
             actualJson.Should().MatchRegex(expectedJsonPattern);
@@ -48,7 +54,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<PowerUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(expectedUnit);
+            result!.Unit.Should().Be(expectedUnit);
         }
 
         [Fact]
@@ -68,7 +74,7 @@ namespace QuantitativeWorld.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInWatts.Should().Be((number)123.456m);
+            result.ValueInWatts.Should().Be((number) 123.456m);
         }
 
         [Fact]
@@ -78,13 +84,13 @@ namespace QuantitativeWorld.Json.Tests
             var someUnit = new PowerUnit(
                 name: "some unit",
                 abbreviation: "su",
-                valueInWatts: (number)123.456m);
+                valueInWatts: (number) 123.456m);
             string json = @"{
   ""Unit"": ""su""
 }";
             var converter = new PowerUnitJsonConverter(
                 serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                tryReadCustomPredefinedUnit: (string value, out PowerUnit predefinedUnit) =>
+                tryReadCustomPredefinedUnit: (string? value, out PowerUnit predefinedUnit) =>
                 {
                     if (value == someUnit.Abbreviation)
                     {
@@ -92,7 +98,7 @@ namespace QuantitativeWorld.Json.Tests
                         return true;
                     }
 
-                    predefinedUnit = default(PowerUnit);
+                    predefinedUnit = default;
                     return false;
                 });
 
@@ -100,7 +106,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<PowerUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(someUnit);
+            result!.Unit.Should().Be(someUnit);
         }
 
         [Theory]
@@ -109,7 +115,7 @@ namespace QuantitativeWorld.Json.Tests
         public void SerializeAndDeserialize_ShouldBeIdempotent(LinearUnitJsonSerializationFormat serializationFormat)
         {
             // arrange
-            var obj = new SomeUnitOwner<PowerUnit> { Unit = Fixture.Create<PowerUnit>() };
+            var obj = new SomeUnitOwner<PowerUnit> {Unit = Fixture.Create<PowerUnit>()};
             var converter = new PowerUnitJsonConverter(serializationFormat);
 
             // act
@@ -119,8 +125,8 @@ namespace QuantitativeWorld.Json.Tests
             var deserializedObj2 = Deserialize<SomeUnitOwner<PowerUnit>>(serializedObj2, converter);
 
             // assert
-            deserializedObj1.Unit.Should().Be(obj.Unit);
-            deserializedObj2.Unit.Should().Be(obj.Unit);
+            deserializedObj1!.Unit.Should().Be(obj.Unit);
+            deserializedObj2!.Unit.Should().Be(obj.Unit);
 
             deserializedObj2.Unit.Should().Be(deserializedObj1.Unit);
             serializedObj2.Should().Be(serializedObj1);

@@ -1,9 +1,10 @@
 ﻿using AutoFixture;
-using DecimalQuantitativeWorld.Json.Angular;
 using FluentAssertions;
 using Xunit;
 
 #if DECIMAL
+using DecimalQuantitativeWorld.Json.Angular;
+
 namespace DecimalQuantitativeWorld.Json.Tests.Angular
 {
     using DecimalQuantitativeWorld.Angular;
@@ -11,6 +12,8 @@ namespace DecimalQuantitativeWorld.Json.Tests.Angular
     using number = System.Decimal;
     using TestsBase = DecimalQuantitativeWorld.Json.Tests.TestsBase;
 #else
+using QuantitativeWorld.Json.Angular;
+
 namespace QuantitativeWorld.Json.Tests.Angular
 {
     using QuantitativeWorld.Angular;

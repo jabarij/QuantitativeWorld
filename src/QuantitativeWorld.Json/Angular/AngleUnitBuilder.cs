@@ -3,7 +3,6 @@ namespace DecimalQuantitativeWorld.Json.Angular;
 
 using DecimalQuantitativeWorld.Angular;
 using number = System.Decimal;
-
 #else
 namespace QuantitativeWorld.Json.Angular;
 
@@ -11,16 +10,12 @@ using QuantitativeWorld.Angular;
 using number = System.Double;
 #endif
 
-internal class AngleUnitBuilder
+internal struct AngleUnitBuilder
 {
     private string _name;
     private string _abbreviation;
     private string _symbol;
     private number? _unitsPerTurn;
-
-    public AngleUnitBuilder()
-    {
-    }
 
     public AngleUnitBuilder(AngleUnit unit)
     {
