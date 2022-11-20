@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 #if DECIMAL
@@ -10,37 +11,34 @@ namespace DecimalQuantitativeWorld.Json.Angular;
 using DecimalQuantitativeWorld.Angular;
 
 #else
-namespace QuantitativeWorld.Json;
+namespace QuantitativeWorld.Json.Angular;
 
 using QuantitativeWorld.Angular;
 #endif
 
-public class AngleUnitJsonConverter : JsonConverter<AngleUnit>
+public sealed class AngleUnitJsonConverter : JsonConverter<AngleUnit>
 {
     private readonly Dictionary<string, AngleUnit> _predefinedUnits;
     private readonly LinearUnitJsonSerializationFormat _serializationFormat;
-    private readonly TryParseDelegate<AngleUnit> _tryReadCustomPredefinedUnit;
+    private readonly TryParseDelegate<AngleUnit>? _tryReadCustomPredefinedUnit;
 
     public AngleUnitJsonConverter(
         LinearUnitJsonSerializationFormat serializationFormat = LinearUnitJsonSerializationFormat.AlwaysFull,
-        TryParseDelegate<AngleUnit> tryReadCustomPredefinedUnit = null)
+        TryParseDelegate<AngleUnit>? tryReadCustomPredefinedUnit = null)
     {
         _predefinedUnits = AngleUnit.GetPredefinedUnits()
             .ToDictionary(e => e.Abbreviation);
         _serializationFormat = serializationFormat;
-        _tryReadCustomPredefinedUnit =
-            tryReadCustomPredefinedUnit
-            ?? TryReadCustomPredefinedUnit;
+        _tryReadCustomPredefinedUnit = tryReadCustomPredefinedUnit;
     }
 
     public override AngleUnit Read(ref Utf8JsonReader reader, Type objectType, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.String)
-            return
-                TryReadPredefinedUnit(reader.GetString(), out var predefinedUnit)
-                    ? predefinedUnit
-                    : throw new InvalidOperationException(
-                        $"Could not read predefined {typeof(AngleUnit)} from JSON.");
+            return TryReadPredefinedUnit(reader.GetString(), out var predefinedUnit)
+                ? predefinedUnit
+                : throw new InvalidOperationException(
+                    $"Could not read predefined {typeof(AngleUnit)} from JSON.");
 
         var builder = new AngleUnitBuilder();
         if (reader.TokenType == JsonTokenType.StartObject)
@@ -111,14 +109,30 @@ public class AngleUnitJsonConverter : JsonConverter<AngleUnit>
         writer.WriteEndObject();
     }
 
-    protected virtual bool TryReadPredefinedUnit(string value, out AngleUnit predefinedUnit)
-        => _predefinedUnits.TryGetValue(value, out predefinedUnit)
-           || _tryReadCustomPredefinedUnit(value, out predefinedUnit);
+    private bool TryReadPredefinedUnit(string? value, out AngleUnit predefinedUnit)
+    {
+        if (_tryReadCustomPredefinedUnit?.Invoke(value, out predefinedUnit) is true)
+            return true;
 
-    protected virtual bool TryWritePredefinedUnit(
-        Utf8JsonWriter writer,
-        AngleUnit unit,
-        JsonSerializerOptions options)
+        if (value is null)
+        {
+            predefinedUnit = default;
+            return false;
+        }
+
+        return _predefinedUnits.TryGetValue(value, out predefinedUnit);
+    }
+
+    private bool TryReadCustomPredefinedUnit(string? value, [NotNullWhen(true)] out AngleUnit predefinedUnit)
+    {
+        if (value is not null)
+            return _predefinedUnits.TryGetValue(value, out predefinedUnit);
+
+        predefinedUnit = default;
+        return false;
+    }
+
+    private bool TryWritePredefinedUnit(Utf8JsonWriter writer, AngleUnit unit, JsonSerializerOptions options)
     {
         if (_predefinedUnits.TryGetValue(unit.Abbreviation, out _))
         {
@@ -126,12 +140,6 @@ public class AngleUnitJsonConverter : JsonConverter<AngleUnit>
             return true;
         }
 
-        return false;
-    }
-
-    private static bool TryReadCustomPredefinedUnit(string value, out AngleUnit predefinedUnit)
-    {
-        predefinedUnit = default;
         return false;
     }
 }

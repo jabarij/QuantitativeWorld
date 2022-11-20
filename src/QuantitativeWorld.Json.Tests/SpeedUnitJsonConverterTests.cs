@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using Xunit;
 
@@ -7,6 +8,7 @@ namespace DecimalQuantitativeWorld.Json.Tests
 {
     using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
+
 #else
 namespace QuantitativeWorld.Json.Tests
 {
@@ -16,19 +18,23 @@ namespace QuantitativeWorld.Json.Tests
 
     public class SpeedUnitJsonConverterTests : TestsBase
     {
-        public SpeedUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
+        public SpeedUnitJsonConverterTests(TestFixture testFixture) : base(testFixture)
+        {
+        }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0\\.277777777777777+\\d*}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull,
+            "{\"Unit\":{\"Name\":\"kilometre per hour\",\"Abbreviation\":\"km/h\",\"ValueInMetresPerSecond\":0\\.277777777777777+\\d*}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"km/h\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat,
+            string expectedJsonPattern)
         {
             // arrange
             var unit = SpeedUnit.KilometrePerHour;
             var converter = new SpeedUnitJsonConverter(serializationFormat);
 
             // act
-            string actualJson = Serialize(new SomeUnitOwner<SpeedUnit> { Unit = unit }, converter);
+            string actualJson = Serialize(new SomeUnitOwner<SpeedUnit> {Unit = unit}, converter);
 
             // assert
             actualJson.Should().MatchRegex(expectedJsonPattern);
@@ -48,7 +54,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<SpeedUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(expectedUnit);
+            result!.Unit.Should().Be(expectedUnit);
         }
 
         [Fact]
@@ -68,7 +74,7 @@ namespace QuantitativeWorld.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInMetresPerSecond.Should().Be((number)123.456d);
+            result.ValueInMetresPerSecond.Should().Be((number) 123.456d);
         }
 
         [Fact]
@@ -78,13 +84,13 @@ namespace QuantitativeWorld.Json.Tests
             var someUnit = new SpeedUnit(
                 name: "some unit",
                 abbreviation: "su",
-                valueInMetresPerSecond: (number)123.456m);
+                valueInMetresPerSecond: (number) 123.456m);
             string json = @"{
   ""Unit"": ""su""
 }";
             var converter = new SpeedUnitJsonConverter(
                 serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                tryReadCustomPredefinedUnit: (string value, out SpeedUnit predefinedUnit) =>
+                tryReadCustomPredefinedUnit: (string? value, out SpeedUnit predefinedUnit) =>
                 {
                     if (value == someUnit.Abbreviation)
                     {
@@ -92,7 +98,7 @@ namespace QuantitativeWorld.Json.Tests
                         return true;
                     }
 
-                    predefinedUnit = default(SpeedUnit);
+                    predefinedUnit = default;
                     return false;
                 });
 
@@ -100,7 +106,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<SpeedUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(someUnit);
+            result!.Unit.Should().Be(someUnit);
         }
 
         [Theory]
@@ -109,7 +115,7 @@ namespace QuantitativeWorld.Json.Tests
         public void SerializeAndDeserialize_ShouldBeIdempotent(LinearUnitJsonSerializationFormat serializationFormat)
         {
             // arrange
-            var obj = new SomeUnitOwner<SpeedUnit> { Unit = Fixture.Create<SpeedUnit>() };
+            var obj = new SomeUnitOwner<SpeedUnit> {Unit = Fixture.Create<SpeedUnit>()};
             var converter = new SpeedUnitJsonConverter(serializationFormat);
 
             // act
@@ -119,8 +125,8 @@ namespace QuantitativeWorld.Json.Tests
             var deserializedObj2 = Deserialize<SomeUnitOwner<SpeedUnit>>(serializedObj2, converter);
 
             // assert
-            deserializedObj1.Unit.Should().Be(obj.Unit);
-            deserializedObj2.Unit.Should().Be(obj.Unit);
+            deserializedObj1!.Unit.Should().Be(obj.Unit);
+            deserializedObj2!.Unit.Should().Be(obj.Unit);
 
             deserializedObj2.Unit.Should().Be(deserializedObj1.Unit);
             serializedObj2.Should().Be(serializedObj1);

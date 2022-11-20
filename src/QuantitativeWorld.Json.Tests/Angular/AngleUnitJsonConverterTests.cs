@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using Xunit;
 
@@ -10,6 +11,7 @@ namespace DecimalQuantitativeWorld.Json.Tests.Angular
     using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
     using TestsBase = DecimalQuantitativeWorld.Json.Tests.TestsBase;
+
 #else
 namespace QuantitativeWorld.Json.Tests.Angular
 {
@@ -22,19 +24,23 @@ namespace QuantitativeWorld.Json.Tests.Angular
 
     public class AngleUnitJsonConverterTests : TestsBase
     {
-        public AngleUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
+        public AngleUnitJsonConverterTests(TestFixture testFixture) : base(testFixture)
+        {
+        }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"degree\",\"Abbreviation\":\"deg\",\"Symbol\":\"\\\\u00B0\",\"UnitsPerTurn\":360(\\.0+)?}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull,
+            "{\"Unit\":{\"Name\":\"degree\",\"Abbreviation\":\"deg\",\"Symbol\":\"\\\\u00B0\",\"UnitsPerTurn\":360(\\.0+)?}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"deg\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat,
+            string expectedJsonPattern)
         {
             // arrange
             var unit = AngleUnit.Degree;
             var converter = new AngleUnitJsonConverter(serializationFormat);
 
             // act
-            string actualJson = Serialize(new SomeUnitOwner<AngleUnit> { Unit = unit }, converter);
+            string actualJson = Serialize(new SomeUnitOwner<AngleUnit> {Unit = unit}, converter);
 
             // assert
             actualJson.Should().MatchRegex(expectedJsonPattern);
@@ -54,7 +60,7 @@ namespace QuantitativeWorld.Json.Tests.Angular
             var result = Deserialize<SomeUnitOwner<AngleUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(expectedUnit);
+            result!.Unit.Should().Be(expectedUnit);
         }
 
         [Fact]
@@ -76,7 +82,7 @@ namespace QuantitativeWorld.Json.Tests.Angular
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
             result.Symbol.Should().Be("?");
-            result.UnitsPerTurn.Should().Be((number)123.456m);
+            result.UnitsPerTurn.Should().Be((number) 123.456m);
         }
 
         [Fact]
@@ -87,13 +93,13 @@ namespace QuantitativeWorld.Json.Tests.Angular
                 name: "some unit",
                 abbreviation: "su",
                 symbol: "?",
-                unitsPerTurn: (number)123.456m);
+                unitsPerTurn: (number) 123.456m);
             string json = @"{
   ""Unit"": ""su""
 }";
             var converter = new AngleUnitJsonConverter(
                 serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                tryReadCustomPredefinedUnit: (string value, out AngleUnit predefinedUnit) =>
+                tryReadCustomPredefinedUnit: (string? value, out AngleUnit predefinedUnit) =>
                 {
                     if (value == someUnit.Abbreviation)
                     {
@@ -101,7 +107,7 @@ namespace QuantitativeWorld.Json.Tests.Angular
                         return true;
                     }
 
-                    predefinedUnit = default(AngleUnit);
+                    predefinedUnit = default;
                     return false;
                 });
 
@@ -109,7 +115,7 @@ namespace QuantitativeWorld.Json.Tests.Angular
             var result = Deserialize<SomeUnitOwner<AngleUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(someUnit);
+            result!.Unit.Should().Be(someUnit);
         }
 
         [Theory]
@@ -118,7 +124,7 @@ namespace QuantitativeWorld.Json.Tests.Angular
         public void SerializeAndDeserialize_ShouldBeIdempotent(LinearUnitJsonSerializationFormat serializationFormat)
         {
             // arrange
-            var obj = new SomeUnitOwner<AngleUnit> { Unit = Fixture.Create<AngleUnit>() };
+            var obj = new SomeUnitOwner<AngleUnit> {Unit = Fixture.Create<AngleUnit>()};
             var converter = new AngleUnitJsonConverter(serializationFormat);
 
             // act
@@ -128,8 +134,8 @@ namespace QuantitativeWorld.Json.Tests.Angular
             var deserializedObj2 = Deserialize<SomeUnitOwner<AngleUnit>>(serializedObj2, converter);
 
             // assert
-            deserializedObj1.Unit.Should().Be(obj.Unit);
-            deserializedObj2.Unit.Should().Be(obj.Unit);
+            deserializedObj1!.Unit.Should().Be(obj.Unit);
+            deserializedObj2!.Unit.Should().Be(obj.Unit);
 
             deserializedObj2.Unit.Should().Be(deserializedObj1.Unit);
             serializedObj2.Should().Be(serializedObj1);

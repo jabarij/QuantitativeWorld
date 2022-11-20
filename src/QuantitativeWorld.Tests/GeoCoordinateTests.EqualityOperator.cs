@@ -28,9 +28,11 @@ namespace QuantitativeWorld.Tests
                 var sut = Fixture.Create<GeoCoordinate>();
 
                 // act
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 bool result = sut == null;
 
                 // assert
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 result.Should().BeFalse();
             }
 

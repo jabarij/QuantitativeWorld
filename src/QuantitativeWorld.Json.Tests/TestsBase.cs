@@ -1,10 +1,13 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using DecimalQuantitativeWorld.TestAbstractions;
 
 #if DECIMAL
+using DecimalQuantitativeWorld.TestAbstractions;
+
 namespace DecimalQuantitativeWorld.Json.Tests;
 #else
+using QuantitativeWorld.TestAbstractions;
+
 namespace QuantitativeWorld.Json.Tests;
 #endif
 
@@ -35,7 +38,7 @@ public class TestsBase : QuantitativeWorld.TestAbstractions.TestsBase
         return JsonSerializer.Serialize(value, options);
     }
 
-    protected T Deserialize<T>(string json, params JsonConverter[] converters)
+    protected T? Deserialize<T>(string json, params JsonConverter[] converters)
     {
         var options = new JsonSerializerOptions();
         Configure(options);

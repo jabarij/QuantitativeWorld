@@ -1,7 +1,8 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using System;
-using System.Buffers;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 #if DECIMAL
 namespace DecimalQuantitativeWorld.Json;
@@ -18,21 +19,22 @@ public abstract class LinearNamedUnitJsonConverterBase<TUnit> : JsonConverter<TU
     where TUnit : ILinearUnit, INamedUnit
 {
     private readonly LinearUnitJsonSerializationFormat _serializationFormat;
-    private readonly TryParseDelegate<TUnit> _tryReadCustomPredefinedUnit;
+    private readonly TryParseDelegate<TUnit>? _tryReadCustomPredefinedUnit;
+    protected readonly IReadOnlyDictionary<string, TUnit> PredefinedUnits;
 
     protected LinearNamedUnitJsonConverterBase(
         LinearUnitJsonSerializationFormat serializationFormat,
-        TryParseDelegate<TUnit> tryReadCustomPredefinedUnit)
+        TryParseDelegate<TUnit>? tryReadCustomPredefinedUnit,
+        IReadOnlyDictionary<string, TUnit> predefinedUnits)
     {
         _serializationFormat = serializationFormat;
-        _tryReadCustomPredefinedUnit =
-            tryReadCustomPredefinedUnit
-            ?? TryReadCustomPredefinedUnit;
+        _tryReadCustomPredefinedUnit = tryReadCustomPredefinedUnit;
+        PredefinedUnits = predefinedUnits;
     }
 
     protected abstract string ValueInBaseUnitPropertyName { get; }
 
-    public override TUnit Read(ref Utf8JsonReader reader, Type objectType, JsonSerializerOptions options)
+    public override TUnit? Read(ref Utf8JsonReader reader, Type objectType, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.String)
             return TryReadPredefinedUnit(reader.GetString(), out var predefinedUnit)
@@ -65,7 +67,6 @@ public abstract class LinearNamedUnitJsonConverterBase<TUnit> : JsonConverter<TU
                     .TryRead(ref reader, abbreviationProperty, JsonFunctions.GetString, out var abbreviation))
                 {
                     builder.SetAbbreviation(abbreviation);
-                    continue;
                 }
             }
         }
@@ -91,16 +92,25 @@ public abstract class LinearNamedUnitJsonConverterBase<TUnit> : JsonConverter<TU
         writer.WriteEndObject();
     }
 
-    protected virtual bool TryReadPredefinedUnit(string value, out TUnit predefinedUnit)
-        => _tryReadCustomPredefinedUnit(value, out predefinedUnit);
+    private bool TryReadPredefinedUnit(string? value, [NotNullWhen(true)] out TUnit? predefinedUnit)
+    {
+        if (_tryReadCustomPredefinedUnit is not null)
+            return _tryReadCustomPredefinedUnit(value, out predefinedUnit)
+                || TryReadCustomPredefinedUnit(value, out predefinedUnit);
+
+        return TryReadCustomPredefinedUnit(value, out predefinedUnit);
+    }
 
     protected virtual bool TryWritePredefinedUnit(Utf8JsonWriter writer, TUnit value, JsonSerializerOptions options)
         => false;
 
     protected abstract ILinearNamedUnitBuilder<TUnit> CreateBuilder();
 
-    private static bool TryReadCustomPredefinedUnit(string value, out TUnit predefinedUnit)
+    private bool TryReadCustomPredefinedUnit(string? value, [NotNullWhen(true)] out TUnit? predefinedUnit)
     {
+        if (value is not null)
+            return PredefinedUnits.TryGetValue(value, out predefinedUnit);
+
         predefinedUnit = default;
         return false;
     }

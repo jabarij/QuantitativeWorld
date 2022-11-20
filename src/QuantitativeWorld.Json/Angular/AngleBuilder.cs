@@ -11,15 +11,11 @@ using QuantitativeWorld.Angular;
 using number = System.Double;
 #endif
 
-internal class AngleBuilder : ILinearQuantityBuilder<Angle, AngleUnit>
+internal struct AngleBuilder : ILinearQuantityBuilder<Angle, AngleUnit>
 {
     private number? _turns;
     private number? _value;
     private AngleUnit? _unit;
-
-    public AngleBuilder()
-    {
-    }
 
     public AngleBuilder(Angle angle)
     {

@@ -1,4 +1,5 @@
-﻿using System.Text.Encodings.Web;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using AutoFixture;
@@ -10,6 +11,7 @@ namespace DecimalQuantitativeWorld.Json.Tests
 {
     using DecimalQuantitativeWorld.TestAbstractions;
     using number = System.Decimal;
+
 #else
 namespace QuantitativeWorld.Json.Tests
 {
@@ -19,7 +21,9 @@ namespace QuantitativeWorld.Json.Tests
 
     public class VolumeUnitJsonConverterTests : TestsBase
     {
-        public VolumeUnitJsonConverterTests(TestFixture testFixture) : base(testFixture) { }
+        public VolumeUnitJsonConverterTests(TestFixture testFixture) : base(testFixture)
+        {
+        }
 
         protected override void Configure(JsonSerializerOptions options)
         {
@@ -29,16 +33,18 @@ namespace QuantitativeWorld.Json.Tests
         }
 
         [Theory]
-        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull, "{\"Unit\":{\"Name\":\"cubic centimetre\",\"Abbreviation\":\"cm\\\\u00B3\",\"ValueInCubicMetres\":(0\\.000001|1E-06)}}")]
+        [InlineData(LinearUnitJsonSerializationFormat.AlwaysFull,
+            "{\"Unit\":{\"Name\":\"cubic centimetre\",\"Abbreviation\":\"cm\\\\u00B3\",\"ValueInCubicMetres\":(0\\.000001|1E-06)}}")]
         [InlineData(LinearUnitJsonSerializationFormat.PredefinedAsString, "{\"Unit\":\"cm\\\\u00B3\"}")]
-        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat, string expectedJsonPattern)
+        public void SerializePredefinedUnit_ShouldReturnValidJson(LinearUnitJsonSerializationFormat serializationFormat,
+            string expectedJsonPattern)
         {
             // arrange
             var unit = VolumeUnit.CubicCentimetre;
             var converter = new VolumeUnitJsonConverter(serializationFormat);
 
             // act
-            string actualJson = Serialize(new SomeUnitOwner<VolumeUnit> { Unit = unit }, converter);
+            string actualJson = Serialize(new SomeUnitOwner<VolumeUnit> {Unit = unit}, converter);
 
             // assert
             actualJson.Should().MatchRegex(expectedJsonPattern);
@@ -58,7 +64,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<VolumeUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(expectedUnit);
+            result!.Unit.Should().Be(expectedUnit);
         }
 
         [Fact]
@@ -78,7 +84,7 @@ namespace QuantitativeWorld.Json.Tests
             // assert
             result.Name.Should().Be("some unit");
             result.Abbreviation.Should().Be("su");
-            result.ValueInCubicMetres.Should().Be((number)123.456m);
+            result.ValueInCubicMetres.Should().Be((number) 123.456m);
         }
 
         [Fact]
@@ -88,13 +94,13 @@ namespace QuantitativeWorld.Json.Tests
             var someUnit = new VolumeUnit(
                 name: "some unit",
                 abbreviation: "su",
-                valueInCubicMetres: (number)123.456m);
+                valueInCubicMetres: (number) 123.456m);
             string json = @"{
   ""Unit"": ""su""
 }";
             var converter = new VolumeUnitJsonConverter(
                 serializationFormat: LinearUnitJsonSerializationFormat.PredefinedAsString,
-                tryReadCustomPredefinedUnit: (string value, out VolumeUnit predefinedUnit) =>
+                tryReadCustomPredefinedUnit: (string? value, out VolumeUnit predefinedUnit) =>
                 {
                     if (value == someUnit.Abbreviation)
                     {
@@ -110,7 +116,7 @@ namespace QuantitativeWorld.Json.Tests
             var result = Deserialize<SomeUnitOwner<VolumeUnit>>(json, converter);
 
             // assert
-            result.Unit.Should().Be(someUnit);
+            result!.Unit.Should().Be(someUnit);
         }
 
         [Theory]
@@ -119,7 +125,7 @@ namespace QuantitativeWorld.Json.Tests
         public void SerializeAndDeserialize_ShouldBeIdempotent(LinearUnitJsonSerializationFormat serializationFormat)
         {
             // arrange
-            var obj = new SomeUnitOwner<VolumeUnit> { Unit = Fixture.Create<VolumeUnit>() };
+            var obj = new SomeUnitOwner<VolumeUnit> {Unit = Fixture.Create<VolumeUnit>()};
             var converter = new VolumeUnitJsonConverter(serializationFormat);
 
             // act
@@ -129,8 +135,8 @@ namespace QuantitativeWorld.Json.Tests
             var deserializedObj2 = Deserialize<SomeUnitOwner<VolumeUnit>>(serializedObj2, converter);
 
             // assert
-            deserializedObj1.Unit.Should().Be(obj.Unit);
-            deserializedObj2.Unit.Should().Be(obj.Unit);
+            deserializedObj1!.Unit.Should().Be(obj.Unit);
+            deserializedObj2!.Unit.Should().Be(obj.Unit);
 
             deserializedObj2.Unit.Should().Be(deserializedObj1.Unit);
             serializedObj2.Should().Be(serializedObj1);
